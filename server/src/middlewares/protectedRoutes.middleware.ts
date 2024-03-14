@@ -1,20 +1,19 @@
-import { FastifyInstance } from "fastify";
-import { verifyToken } from "./auth.middleware";
+import { Router, Request, Response, NextFunction } from 'express';
 
-export const protectedRoutes = async (
-  app: FastifyInstance,
-  routesToProtect: any
+export const protectedRoutes = (
+  router: Router, // Change the type to Router
+  routesToProtect: string[] // Adjust the type as necessary
 ) => {
-  app.addHook("onRequest", async (request, reply) => {
+  router.use((req: Request, res: Response, next: NextFunction) => {
     try {
-      const requestPath: string = request.routerPath;
-      if (routesToProtect[requestPath]) {
-        await verifyToken(request);
+      const requestPath: string = req.path;
+      if (routesToProtect.includes(requestPath)) {
+        // Add your protection logic here
+        console.log(`Route ${requestPath} is protected.`);
       }
+      next();
     } catch (error) {
-      reply.send(error);
+      res.status(500).send(error);
     }
   });
 };
-
-export default { protectedRoutes };

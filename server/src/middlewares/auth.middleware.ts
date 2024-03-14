@@ -1,36 +1,35 @@
-import { FastifyRequest } from "fastify";
+import { Request } from "express";
 import { verify } from "jsonwebtoken";
 import customError from "../utils/customError";
 import config from "../config/config";
 import { ITokenDecoded } from "../interfaces/types/middlewares/auth.middleware.types";
 import authErrors from "../utils/errors/auth.errors";
-
-export const validateHeadersAuth = (req: FastifyRequest): string => {
+import { CustomRequest } from 'c:/Users/User/Desktop/nodejs-nextjs-starter-template-main/server/src/interfaces/types/middlewares/request.middleware.types';
+export const validateHeadersAuth = (req: Request): string => {
   const header: string | undefined = req.headers.authorization;
   if (!header) {
-    customError(authErrors.AuthMissingHeaders);
+    throw customError(authErrors.AuthMissingHeaders);
   }
-  const accessToken: string = header!.split(" ")[1];
+  const accessToken: string = header.split(" ")[1];
   if (!accessToken) {
-    customError(authErrors.AuthMissingHeaders);
+    throw customError(authErrors.AuthMissingHeaders);
   }
   return accessToken;
 };
 
-export const verifyToken = async (
-  request: FastifyRequest
-): Promise<boolean> => {
+export const verifyToken = async (req: CustomRequest): Promise<boolean> => {
   try {
-    const token = validateHeadersAuth(request);
-    const decoded: ITokenDecoded = Object(
-      verify(token, config.webtoken as string)
-    );
+    const token = validateHeadersAuth(req);
+    const decoded: ITokenDecoded = verify(
+      token,
+      config.webtoken as string
+    ) as ITokenDecoded;
 
-    request.UserId = decoded.aud;
+    // You may need to cast request to any and add properties to it
+    (req as any).UserId = decoded.aud;
     return true;
   } catch (err) {
-    customError(authErrors.AuthJWTError);
-    return false;
+    throw customError(authErrors.AuthJWTError);
   }
 };
 

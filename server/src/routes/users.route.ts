@@ -1,22 +1,68 @@
-import { FastifyInstance } from "fastify";
-import { usersController } from "../controllers";
-import { protectedRoutes } from "../middlewares";
-import { profileRouteSchema } from "./swaggerSchema/users.route.schema";
+import express, { Express } from 'express';
+import articlesController from '../controllers/article.controller';
+import { protectedRoutes } from '../middlewares';
+// import {
+//   getArticleRouteSchema,
+//   getArticleListRouteSchema,
+//   createArticleRouteSchema,
+//   updateArticleRouteSchema,
+//   deleteArticleRouteSchema,
+//   getAllArticleRouteSchema,
+// } from './swaggerSchema/article.route.schema';
 
-export const userRouter = async (app: FastifyInstance) => {
-  app.get(
-    "/profile",
-    { schema: profileRouteSchema },
-    usersController.handleUserProfile
+const articleRouter = (app: Express) => {
+  const router = express.Router();
+
+  router.get(
+    '/',
+    
+    articlesController.handleGetArticles
   );
 
-  // routes want to protect
-  const Routes: object = {
-    "/api/users/profile": true,
-  };
+  router.get(
+    '/get',
+    
+    articlesController.handleGetArticleById
+  );
 
-  // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
-  protectedRoutes(app, Routes);
+  router.get(
+    '/get/author',
+    
+    articlesController.handleGetByAuthor
+  );
+
+  router.post(
+    '/create',
+    articlesController.handleCreate
+  );
+
+  router.patch(
+    '/update/:id',
+   
+    articlesController.handleUpdate
+  );
+
+  router.delete(
+    '/delete/:id',
+    
+    articlesController.handleDelete
+  );
+
+  // routes to protect
+  const routesToProtect = [
+    '/api/articles/get',
+    '/api/articles',
+    '/api/articles/get/author',
+    '/api/articles/create',
+    '/api/articles/update/:id',
+    '/api/articles/delete/:id',
+  ];
+
+  // Add middleware to protect routes
+  protectedRoutes(router, routesToProtect);
+
+  // Register the router with the main app
+  app.use('/api/articles', router);
 };
 
-export default userRouter;
+export default articleRouter;
