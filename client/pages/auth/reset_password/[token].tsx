@@ -123,9 +123,9 @@ export default function ResetPassword({}: Props) {
 
                           <div className="px-4 float-end mt-4">
                             <Link href="/auth/signin">
-                              <a>
+                           
                                 <span className="btn text-primary">Cancel</span>
-                              </a>
+                             
                             </Link>
                           </div>
                         </div>

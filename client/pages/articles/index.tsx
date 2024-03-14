@@ -82,7 +82,7 @@ const Articles = ({}: Props) => {
 
             <div className="text-end">
               <Link href="/articles/create">
-                <a className="btn btn-primary">new article</a>
+                <span className="btn btn-primary">new article</span>
               </Link>
             </div>
 

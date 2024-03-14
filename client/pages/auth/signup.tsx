@@ -191,11 +191,11 @@ export default function SignUp({}: Props) {
                           <div className="px-4 float-end mt-4">
                             <span>Already have an account ?</span>
                             <Link href="/auth/signin">
-                              <a>
+                            
                                 <span className="btn text-primary">
                                   Sign In
                                 </span>
-                              </a>
+                              
                             </Link>
                           </div>
                         </div>
