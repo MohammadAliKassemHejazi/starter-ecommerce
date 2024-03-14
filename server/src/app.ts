@@ -1,55 +1,50 @@
-import fastify, { FastifyRequest, FastifyServerOptions } from "fastify";
-import { CustomError } from "utils/customError";
-import config from "./config/config"
-import fastifySwagger from "@fastify/swagger";
-import { swaggerOption } from "./config/swagger";
-import {authRouter, userRouter, articleRouter} from "./routes";
+import express, { Express, Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerOption } from './config/swagger';
+import { authRouter, userRouter, articleRouter } from './routes';
+import { CustomError } from './utils/customError';
 
-declare module "fastify" {
-	interface FastifyRequest {
-		UserId?: string;
-	}
-}
+const App = (options: any): Express => {
+    const app: Express = express();
 
-const App = (options: FastifyServerOptions) => {
-	const app = fastify(options)
+    // Enable CORS
+    app.use(cors({
+        origin: (origin:any, callback:any) => {
+            // Allow requests from localhost
+            if (!origin || origin.includes('localhost')) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        }
+    }));
 
-	app.register(require('@fastify/cors'), (instance) => {
-		return (req:any, callback:any) => {
-		  const corsOptions = {
-			// This is NOT recommended for production as it enables reflection exploits
-			origin: true
-		  };
-	  
-		  // do not include CORS headers for requests from localhost
-		  if (/^localhost$/m.test(req.headers.origin)) {
-			corsOptions.origin = false
-		  }
-	  
-		  // callback expects two parameters: error and options
-		  callback(null, corsOptions)
-		}
-	  })
+    // Swagger API documentation
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOption.options));
 
-	// swagger api documentation
-	app.register(fastifySwagger, swaggerOption.options);
+    // Routes
+    app.get('/', (req: Request, res: Response) => {
+        res.send('SERVER');
+    });
 
-	app.get("/", async () => "SERVER");
-	app.register(authRouter, { prefix: "/api/auth" });
-	app.register(userRouter, { prefix: "/api/users" });
-	app.register(articleRouter, { prefix: "/api/articles" });
+    app.use('/api/auth', authRouter);
+    app.use('/api/users', userRouter);
+    app.use('/api/articles', articleRouter);
 
-	app.setErrorHandler((error, request, reply) => {
-		const customError: CustomError = error;
-		reply.status(customError.statusCode || 500).send({
-			error: {
-				message: customError.message,
-				code: customError.code,
-				data: customError.data,
-			}
-		})
-	})
-	return app
-}
+    // Error handler
+    app.use((error: CustomError, req: Request, res: Response, next: NextFunction) => {
+        const customError: CustomError = error;
+        res.status(customError.statusCode || 500).json({
+            error: {
+                message: customError.message,
+                code: customError.code,
+                data: customError.data,
+            }
+        });
+    });
+
+    return app;
+};
 
 export default App;

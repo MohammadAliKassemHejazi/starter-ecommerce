@@ -1,23 +1,24 @@
-import { FastifyInstance, FastifyServerOptions } from "fastify"
-import App from "./src/app"
-import config from "./src/config/config"
-import db from "./src/models"
+import express, { Express } from 'express';
+import { Server } from 'http';
+import config from './src/config/config';
+import db from './src/models';
+import App from './src/app';
 
-const options: FastifyServerOptions = {
-	logger: true
-}
+// Create an Express application
+const app: Express = express();
 
-// Application
-const app: FastifyInstance = App(options)
+// Initialize your application
+App(app);
 
-// serve
-const PORT: string | number = config.port
+// Set up the server
+const PORT: string | number = config.port;
+const server: Server = app.listen(Number(PORT), () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+// Sync the database
 db.sequelize.sync().then(() => {
-	app.listen({port:Number(PORT)}, (err) => {
-		if (err) {
-			app.log.error(err);
-			process.exit(1)
-		}
-		app.log.info(`server listening on ${PORT}`)
-	})
-})
+    console.log('Database synced');
+}).catch((err: Error) => {
+    console.error('Error syncing database:', err);
+});

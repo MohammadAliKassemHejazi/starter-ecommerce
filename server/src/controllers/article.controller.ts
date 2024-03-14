@@ -1,77 +1,125 @@
-import { FastifyRequest } from "fastify";
+import {  Response } from "express";
 import { articleService } from "../services";
 import {
   ArticleCreateBodyRequest,
-  ArticleUpdateBodyRequest,
   ArticleGetRequest,
-  ArticleDeleteRequest,
   IArticlesBodyResponse,
 } from "../interfaces/types/controllers/article.controller.types";
 import customError from "../utils/customError";
 import { IArticleAttributes } from "../interfaces/types/models/article.model.types";
 import articleErrors from "../utils/errors/article.errors";
+import { CustomRequest } from 'c:/Users/User/Desktop/nodejs-nextjs-starter-template-main/server/src/interfaces/types/middlewares/request.middleware.types';
 
 export const handleCreate = async (
-  request: ArticleCreateBodyRequest
-): Promise<IArticleAttributes> => {
-  const { UserId } = request;
-  const { title, text, type } = request.body;
-  const article: IArticleAttributes = await articleService
-    .createArticle({ title, text, type, UserId })
-    .catch((err) => {
-      // console.error(["- DEBUG ERROR ON article -", err, "- DEBUG -"]);
-      customError(articleErrors.ArticleCreateFailure);
-      throw new Error();
+  request: ArticleCreateBodyRequest,
+  response: Response
+): Promise<void> => {
+  const { userId, title, text, type } = request.body;
+  try {
+    const article: IArticleAttributes = await articleService.createArticle({
+      title,
+      text,
+      type,
+      userId,
     });
-  return article;
+    response.status(201).json(article);
+  } catch (error) {
+    customError(articleErrors.ArticleCreateFailure);
+  }
 };
 
-export const handleGetArticles = async () => {
-  const response = await articleService.fetchArticles()
-  return response
-}
-
-export const handleGetByAuthor = async (request: FastifyRequest) => {
-  const { UserId } = request;
-  if (UserId) {
-    const data: IArticlesBodyResponse = await articleService.fetchArticleByAuthor(UserId);
-    const response = { data: data };
-    return response;
+export const handleGetArticles = async (
+  request: ArticleGetRequest,
+  response: Response
+): Promise<void> => {
+  try {
+    const articles = await articleService.fetchArticles();
+    response.json(articles);
+  } catch (error) {
+    response.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
+
+export const handleGetByAuthor = async (
+  request: CustomRequest,
+  response: Response
+): Promise<void> => {
+  const UserId = request.UserId; // Assuming UserId is accessible via middleware
+  if (UserId) {
+    try {
+      const data: IArticlesBodyResponse = await articleService.fetchArticleByAuthor(
+        UserId
+      );
+      const responseData = { data };
+      response.json(responseData);
+    } catch (error) {
+      response.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+};
 
 export const handleGetArticleById = async (
-  request: ArticleGetRequest
-): Promise<IArticleAttributes> => {
-  const id = request.query.id;
-  const article: IArticleAttributes = await articleService.fetchArticleById(id);
-  return article;
+  request: ArticleGetRequest,
+  response: Response
+): Promise<void> => {
+  const id = request.query.id as string; // Assuming id is always a string in your case
+  if (!id) {
+    response.status(400).json({ error: "Article ID is required" });
+    return;
+  }
+  try {
+    const article: IArticleAttributes = await articleService.fetchArticleById(
+      id
+    );
+    response.json(article);
+  } catch (error) {
+    response.status(500).json({ error: "Internal Server Error" });
+  }
 };
+
+
 
 export const handleUpdate = async (
-  request: ArticleUpdateBodyRequest
-): Promise<Number[]> => {
+  request: CustomRequest,
+  response: Response
+): Promise<void> => {
+  const UserId = request.UserId; // Access UserId from request object
+  if (!UserId) {
+    response.status(401).json({ error: "User ID not found" });
+    return;
+  }
+
   const { title, text, type } = request.body;
   const id = request.params.id;
-  const { UserId } = request;
-  const article: Number[] = await articleService.updateArticle(
-    id!,
-    title!,
-    text!,
-    type!,
-    UserId!
-  );
-  return article;
+  
+  try {
+    const article: Number[] = await articleService.updateArticle(
+      id!,
+      title!,
+      text!,
+      type!,
+      UserId
+    );
+    response.json(article);
+  } catch (error) {
+    response.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
+
+
 export const handleDelete = async (
-  request: ArticleDeleteRequest
-): Promise<number> => {
-  const { UserId } = request;
+  request: CustomRequest,
+  response: Response
+): Promise<void> => {
   const id = request.params.id;
-  console.log(id)
-  const article: number = await articleService.deleteArticle(id, UserId!);
-  return article;
+  const UserId = request.UserId; // Assuming UserId is accessible via middleware
+  try {
+    const result: number = await articleService.deleteArticle(id, UserId!);
+    response.json(result);
+  } catch (error) {
+    response.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 export default {
@@ -80,5 +128,5 @@ export default {
   handleUpdate,
   handleDelete,
   handleGetByAuthor,
-  handleGetArticles
+  handleGetArticles,
 };

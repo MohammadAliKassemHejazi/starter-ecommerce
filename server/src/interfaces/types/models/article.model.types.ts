@@ -3,7 +3,7 @@ export interface IArticleAttributes {
   title?: string;
   text?: string;
   type?: string;
-  UserId?: string;
+  userId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
