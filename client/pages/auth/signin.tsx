@@ -137,9 +137,9 @@ const SignIn = ({}: Props) => {
                         </div>
                         <div className="col-sm-6">
                           <Link href="/auth/forgot_password">
-                            <a className="float-end text-primary">
+                            <span className="float-end text-primary">
                               Forgot Password?
-                            </a>
+                            </span>
                           </Link>
                         </div>
 
@@ -153,11 +153,11 @@ const SignIn = ({}: Props) => {
                           <div className="px-4 float-end mt-4">
                             <span>have no account ?</span>
                             <Link href="/auth/signup">
-                              <a>
+                              
                                 <span className="btn text-primary">
                                   sign up
                                 </span>
-                              </a>
+                           
                             </Link>
                           </div>
                         </div>

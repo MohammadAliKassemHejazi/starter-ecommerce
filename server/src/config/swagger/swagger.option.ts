@@ -1,4 +1,3 @@
-import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import config from "../config";
 
 exports.options = {
@@ -19,7 +18,6 @@ exports.options = {
     produces: ["application/json"],
     tags: [
       { name: "user", description: "User related end-points" },
-      { name: "cart", description: "cart related end-points" },
       { name: "article", description: "article related end-points" },
       { name: "auth", description: "auth related end-points" },
     ],

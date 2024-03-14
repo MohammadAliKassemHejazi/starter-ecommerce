@@ -81,18 +81,18 @@ export default function ForgotPassword({}: Props) {
                             send mail
                           </button>
                           <Link href="/auth/signup">
-                            <a>
+                           
                               <span className="btn text-primary float-start mt-4">
                                 Sign Up
                               </span>
-                            </a>
+                           
                           </Link>
                           <Link href="/auth/signin">
-                            <a>
+                            
                               <span className="btn text-primary float-start mt-4">
                                 Sign In
                               </span>
-                            </a>
+                          
                           </Link>
                         </div>
                       </div>

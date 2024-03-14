@@ -38,7 +38,7 @@ export default function Navbar({}: Props) {
     <nav className="navbar navbar-expand-md fixed-top bg-light">
       <div className="container-fluid">
         <Link href="/">
-          <a className="navbar-brand">Next.js Redux Starter Template</a>
+          <span className="navbar-brand">Next.js Redux Starter Template</span>
         </Link>
         <button
           className="navbar-toggler"
