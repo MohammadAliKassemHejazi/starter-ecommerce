@@ -1,19 +1,18 @@
 import express, { Express } from 'express';
-import { verifyToken } from "../middlewares";
+
 import authController from "../controllers/auth.controller";
-import { loginRouteSchema, registerRouteSchema, isAuthenticatedRouteSchema } from "./swaggerSchema/auth.route.schema";
 
+import { protectedRoutes } from "../middlewares";
+const router = express.Router();
+  const Routes = [
+    "/isauthenticated",
+  ];
 
-	const router = express.Router();
-	router.post("/login", authController.handleLogin);
-	router.post("/register",
-	
-		authController.handleRegister);
+  // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
+protectedRoutes(router, Routes); 
 
-		router.get("/isauthenticated",
-		authController.isAuthenticated
-	)
-
-
+router.post("/login", authController.handleLogin);
+router.post("/register",authController.handleRegister);
+router.get("/isauthenticated", authController.isAuthenticated);
 
 export default router;

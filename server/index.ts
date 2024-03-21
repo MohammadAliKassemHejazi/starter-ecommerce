@@ -13,6 +13,7 @@ import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
 
+
 // Set up Winston for logging
 const logger = winston.createLogger({
     level: 'info',
@@ -34,6 +35,9 @@ const app: Express = express();
 
 // Apply middleware
 app.use(helmet()); // Security middleware
+app.use(express.json());
+app.use(express.urlencoded()); 
+
 app.use(cors({
     origin: (origin, callback) => {
         const allowedOrigins = ['http://localhost:3000']; // Add more origins as needed
@@ -44,7 +48,9 @@ app.use(cors({
         }
     }
 }));
-app.use(express.json()); // Built-in body-parser middleware
+
+
+
 app.use(morgan('combined', { stream: { write: (message: string) => logger.info(message.trim()) }})); // HTTP logging
 
 // Set up rate limiting

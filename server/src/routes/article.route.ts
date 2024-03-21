@@ -3,7 +3,18 @@ import articlesController from "../controllers/article.controller";
 import { protectedRoutes } from "../middlewares";
 
 
-  const router = express.Router();
+const router = express.Router();
+    // routes want to protect
+  const Routes  = [
+    "/get",
+    "/get/author",
+    "/create",
+    "/update/:id",
+    "/delete/:id",
+  ];
+
+  // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
+protectedRoutes(router, Routes);
   router.get(
     "/",
     articlesController.handleGetArticles
@@ -29,22 +40,10 @@ import { protectedRoutes } from "../middlewares";
   );
   router.delete(
     "/delete/:id",
-
     articlesController.handleDelete
   );
 
-  // routes want to protect
-  const Routes  = [
-    "/api/articles/get",
-    "/api/articles",
-    "/api/articles/get/author",
-    "/api/articles/create",
-    "/api/articles/update/:id",
-    "/api/articles/delete/:id",
-  ];
 
-  // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
-protectedRoutes(router, Routes);
 
 
 export default router;

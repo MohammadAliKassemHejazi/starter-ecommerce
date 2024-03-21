@@ -1,29 +1,20 @@
 "use strict";
-import * as Sequelize from "sequelize";
 import { Model, UUIDV4 } from "sequelize";
 import { IArticleAttributes } from "../interfaces/types/models/article.model.types";
 
-export interface IArticleInstance extends IArticleAttributes {}
-
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Article
-    extends Model<IArticleAttributes>
-    implements IArticleAttributes
-  {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Article extends Model<IArticleAttributes> implements IArticleAttributes {
     id!: string;
     title!: string;
     text!: string;
     type!: string;
+
     static associate(models: any) {
-      // define association here
+      // Define associations here
       Article.belongsTo(models.User);
     }
   }
+
   Article.init(
     {
       id: {
@@ -46,5 +37,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       modelName: "Article",
     }
   );
+  
   return Article;
 };

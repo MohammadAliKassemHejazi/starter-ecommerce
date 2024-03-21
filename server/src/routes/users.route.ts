@@ -19,6 +19,6 @@ import { usersController } from "../controllers";
   ];
 
   // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
-  protectedRoutes(router, Routes);
+protectedRoutes(router, Routes);
 export  default router;
 
