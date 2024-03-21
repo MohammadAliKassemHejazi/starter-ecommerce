@@ -1,0 +1,38 @@
+/* Shop.module.css */
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50px; /* Height for the badges */
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  z-index: 1; /* Ensure badges appear above the image */
+}
+
+.badge {
+  background-color: #f00; /* Adjust as needed */
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.image-container {
+  width: 100%;
+  position: relative;
+  z-index: 0; /* Ensure image is below the badges */
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure cards take the full height */
+}
+
+.card-body {
+  flex-grow: 1; /* Allow card body to expand */
+}

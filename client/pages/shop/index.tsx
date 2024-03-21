@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
+import styles from './Shop.module.css';
 
 type Props = {};
 
@@ -34,7 +35,7 @@ const Shop = ({}: Props) => {
               <div className="col-lg-3 col-md-6 col-sm-6">
                 <div className="card my-2 shadow-0">
                   <div className="position-relative">
-                    <div className="mask">
+                    <div className={styles.mask}>
                       
                         <h6>
                           <span className="badge bg-danger pt-1 position-absolute top-0 start-0">
