@@ -3,8 +3,9 @@ import { RootState } from "@/store/store"
 import { UserState } from "@/interfaces/types/store/slices/userSlices.types";
 import * as authService from "@/services/authService"
 import httpClient from "@/utils/httpClient";
-import { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
+
 import Router from "next/router";
+import axios, { InternalAxiosRequestConfig } from 'axios';
 
 interface SignAction {
 	email: string
