@@ -2,33 +2,32 @@ import express, { Express } from 'express';
 import articlesController from "../controllers/article.controller";
 import { protectedRoutes } from "../middlewares";
 
-const articleRouter = async (app: Express) => {
-  // route api app.method("path", {option}, handler)
+
   const router = express.Router();
-  app.get(
+  router.get(
     "/",
     articlesController.handleGetArticles
   );
 
-  app.get(
+  router.get(
     "/get",
     articlesController.handleGetArticleById
   );
 
-  app.get(
+  router.get(
     "/get/author",
     articlesController.handleGetByAuthor
   );
 
-  app.post(
+  router.post(
     "/create",
     articlesController.handleCreate
   );
-  app.patch(
+  router.patch(
     "/update/:id",
     articlesController.handleUpdate
   );
-  app.delete(
+  router.delete(
     "/delete/:id",
 
     articlesController.handleDelete
@@ -45,7 +44,7 @@ const articleRouter = async (app: Express) => {
   ];
 
   // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
-  protectedRoutes(app, Routes);
-};
+protectedRoutes(router, Routes);
 
-export default articleRouter;
+
+export default router;

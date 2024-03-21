@@ -4,7 +4,7 @@ import customError from "../utils/customError";
 import config from "../config/config";
 import { ITokenDecoded } from "../interfaces/types/middlewares/auth.middleware.types";
 import authErrors from "../utils/errors/auth.errors";
-import { CustomRequest } from 'c:/Users/User/Desktop/nodejs-nextjs-starter-template-main/server/src/interfaces/types/middlewares/request.middleware.types';
+import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 export const validateHeadersAuth = (req: Request): string => {
   const header: string | undefined = req.headers.authorization;
   if (!header) {
