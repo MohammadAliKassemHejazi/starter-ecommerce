@@ -1,24 +1,26 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
-import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerOption } from './config/swagger';
 import { authRouter, userRouter, articleRouter } from './routes';
 import { CustomError } from './utils/customError';
+const bodyParser = require("body-parser");
 
-const App = (options: any): Express => {
+export const App = (options: any): Express => {
     const app: Express = express();
 
+    // Parse JSON bodies
+    app.use(bodyParser.json());
+
     // Enable CORS
-    app.use(cors({
-        origin: (origin:any, callback:any) => {
-            // Allow requests from localhost
-            if (!origin || origin.includes('localhost')) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
-        }
-    }));
+    app.use((req, res, next) => {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader(
+            "Access-Control-Allow-Methods",
+            "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+        );
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        next();
+    });
 
     // Swagger API documentation
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOption.options));
@@ -46,5 +48,3 @@ const App = (options: any): Express => {
 
     return app;
 };
-
-export default App;

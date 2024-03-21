@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IAuthLoginBodyResponse } from "../interfaces/types/controllers/auth.controller.types";
 import { userService } from "../services";
-import { CustomRequest } from 'c:/Users/User/Desktop/nodejs-nextjs-starter-template-main/server/src/interfaces/types/middlewares/request.middleware.types';
+import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 
 export const handleUserProfile = async (
   request: CustomRequest,

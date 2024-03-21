@@ -3,7 +3,7 @@ import { RootState } from "@/store/store"
 import { UserState } from "@/interfaces/types/store/slices/userSlices.types";
 import * as authService from "@/services/authService"
 import httpClient from "@/utils/httpClient";
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import Router from "next/router";
 
 interface SignAction {
@@ -31,7 +31,7 @@ export const signIn = createAsyncThunk(
 			throw new Error("login failed");
 		}
 		// set access token
-		httpClient.interceptors.request.use((config?: AxiosRequestConfig) => {
+		httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 			if (config && config.headers) {
 				config.headers["Authorization"] = `Bearer ${resp.accessToken}`;
 			}
@@ -58,7 +58,7 @@ export const fetchSession = createAsyncThunk("user/fetchSession", async () => {
 	const response = await authService.getSession();
 	// set access token
 	if (response) {
-		httpClient.interceptors.request.use((config?: AxiosRequestConfig) => {
+		httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 			if (config && config.headers && response.email) {
 				config.headers["Authorization"] = `Bearer ${response.accessToken}`;
 			}

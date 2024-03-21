@@ -8,7 +8,7 @@ import {
 import customError from "../utils/customError";
 import { IArticleAttributes } from "../interfaces/types/models/article.model.types";
 import articleErrors from "../utils/errors/article.errors";
-import { CustomRequest } from 'c:/Users/User/Desktop/nodejs-nextjs-starter-template-main/server/src/interfaces/types/middlewares/request.middleware.types';
+import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 
 export const handleCreate = async (
   request: ArticleCreateBodyRequest,

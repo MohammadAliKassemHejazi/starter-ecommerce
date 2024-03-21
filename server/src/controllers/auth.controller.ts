@@ -7,7 +7,7 @@ import {
 import authErrors from "../utils/errors/auth.errors";
 import customError from "../utils/customError";
 import { IUserAttributes } from "../interfaces/types/models/user.model.types";
-import { CustomRequest } from 'c:/Users/User/Desktop/nodejs-nextjs-starter-template-main/server/src/interfaces/types/middlewares/request.middleware.types';
+import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 
 export const handleLogin = async (request: IAuthLoginBodyRequest, response: Response) => {
   const { email, password } = request.body;

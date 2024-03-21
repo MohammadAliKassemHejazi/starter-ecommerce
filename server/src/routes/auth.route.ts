@@ -3,16 +3,17 @@ import { verifyToken } from "../middlewares";
 import authController from "../controllers/auth.controller";
 import { loginRouteSchema, registerRouteSchema, isAuthenticatedRouteSchema } from "./swaggerSchema/auth.route.schema";
 
-const authRouter = async (app: Express) => {
-	app.post("/login", authController.handleLogin);
-	app.post("/register",
+
+	const router = express.Router();
+	router.post("/login", authController.handleLogin);
+	router.post("/register",
 	
 		authController.handleRegister);
 
-	app.get("/isauthenticated",
+		router.get("/isauthenticated",
 		authController.isAuthenticated
 	)
-}
 
 
-export default authRouter;
+
+export default router;
