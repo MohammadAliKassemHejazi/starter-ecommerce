@@ -1,2 +1,2 @@
 # nodejs-nextjs-starter-template
-Node.js - fastify sequleize redis swagger | Nextjs - redux - axios 
+Node.js - Express sequleize redis swagger | Nextjs - redux - axios 
