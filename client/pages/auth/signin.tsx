@@ -1,3 +1,4 @@
+import { useForm } from 'react-hook-form';
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 import { fetchSession, signIn } from "@/store/slices/userSlice";
@@ -7,8 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-
-type Props = {};
+import styles from "./signin.module.css";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -22,31 +22,30 @@ const Toast = Swal.mixin({
   },
 });
 
-const SignIn = ({}: Props) => {
+const SignIn = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const [eye, setEye] = useState(true);
-  const handleTogglePassword = (e: any) => {
+
+  const handleTogglePassword = (e:any) => {
     e.preventDefault();
     setEye(!eye);
-    // const togglePassword = document.querySelector("#togglePassword");
-    const password: any = document.querySelector("#password");
+    const password = document.querySelector("#password");
 
     let type;
-    if (password.getAttribute("type") === "password") {
+    if (password?.getAttribute("type") === "password") {
       type = "text";
       setEye(false);
     } else {
       type = "password";
     }
-    password.setAttribute("type", type);
+    password?.setAttribute("type", type);
   };
 
-  const handleLogin = async (e: any) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+  const handleLogin = async (data : any) => {
+    const { email, password } = data;
     const response = await dispatch(signIn({ email, password }));
     if (response.meta.requestStatus === "fulfilled") {
       Toast.fire({
@@ -73,7 +72,7 @@ const SignIn = ({}: Props) => {
                 <div className="row">
                   <div className="col-md-7 pe-0">
                     <div className="form-left h-100 py-5 px-5">
-                      <form onSubmit={handleLogin} className="row g-4">
+                      <form onSubmit={handleSubmit(handleLogin)} className="row g-4">
                         <div className="col-12">
                           <label>
                             Email<span className="text-danger">*</span>
@@ -87,9 +86,10 @@ const SignIn = ({}: Props) => {
                               id="email"
                               className="form-control"
                               placeholder="Enter email"
-                              required
+                              {...register('email', { required: true })}
                             />
                           </div>
+                          {errors.email && <p>Email is required.</p>}
                         </div>
                         <div className="col-12">
                           <label>
@@ -104,7 +104,7 @@ const SignIn = ({}: Props) => {
                               id="password"
                               className="form-control"
                               placeholder="Enter Password"
-                              required
+                              {...register('password', { required: true })}
                             />
                             <button
                               className="btn"
@@ -119,6 +119,7 @@ const SignIn = ({}: Props) => {
                               )}
                             </button>
                           </div>
+                          {errors.password && <p>Password is required.</p>}
                         </div>
                         <div className="col-sm-6">
                           <div className="form-check">
@@ -148,16 +149,14 @@ const SignIn = ({}: Props) => {
                             type="submit"
                             className="btn btn-primary px-4 float-end mt-4"
                           >
-                            sign in
+                            Sign In
                           </button>
                           <div className="px-4 float-end mt-4">
-                            <span>have no account ?</span>
+                            <span>Do not have an account?</span>
                             <Link href="/auth/signup">
-                              
-                                <span className="btn text-primary">
-                                  sign up
-                                </span>
-                           
+                              <span className="btn text-primary">
+                                Sign Up
+                              </span>
                             </Link>
                           </div>
                         </div>
@@ -165,25 +164,24 @@ const SignIn = ({}: Props) => {
                     </div>
                   </div>
                   <div className="col-md-5 ps-0 d-none d-md-block">
-                    <div className="form-right h-100 bg-login text-white text-center pt-5">
+                    <div className="styles.bg-loginform-right h-100 bg-login text-white text-center pt-5">
                       <Image
                         alt="logo"
-                        className="logo "
+                        className={styles.logo}
                         src="/resources/static/img/billowdev-logo.png"
                         height={150}
                         width={150}
+                        priority 
                       />
                       <h2 className="mt-3">billowdev&apos;s example</h2>
                     </div>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
-
       <style jsx global>
         {`
           a {

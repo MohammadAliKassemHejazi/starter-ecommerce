@@ -1,16 +1,17 @@
 import { Request } from "express";
 import { IArticleAttributes } from "../models/article.model.types";
+import { CustomRequest } from "../middlewares/request.middleware.types";
 
-export interface ArticleCreateBodyRequest extends Request {
+export interface ArticleCreateBodyRequest extends CustomRequest {
   body: {
     title?: string | undefined;
     text?: string | undefined;
     type?: string | undefined;
-    userId?: string | undefined;
+    UserId?: string | undefined;
   };
 }
 
-export interface ArticleUpdateBodyRequest extends Request {
+export interface ArticleUpdateBodyRequest extends CustomRequest {
   params: { id: string };
   body: {
     id?: string;
@@ -20,11 +21,11 @@ export interface ArticleUpdateBodyRequest extends Request {
   };
 }
 
-export interface ArticleGetRequest extends Request {
+export interface ArticleGetRequest extends CustomRequest {
   query: { id: string };
 }
 
-export interface ArticleDeleteRequest extends Request {
+export interface ArticleDeleteRequest extends CustomRequest {
   params: { id: string };
 }
 

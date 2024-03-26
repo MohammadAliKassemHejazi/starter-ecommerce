@@ -52,7 +52,7 @@ export const signUp = createAsyncThunk(
 
 export const signOut = createAsyncThunk("user/signout", async () => {
 	await authService.signOut();
-	Router.push("/auth/signin");
+  //	Router.push("/auth/signin");
 });
 
 export const fetchSession = createAsyncThunk("user/fetchSession", async () => {

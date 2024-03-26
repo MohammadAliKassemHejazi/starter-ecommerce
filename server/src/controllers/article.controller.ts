@@ -14,13 +14,14 @@ export const handleCreate = async (
   request: ArticleCreateBodyRequest,
   response: Response
 ): Promise<void> => {
-  const { userId, title, text, type } = request.body;
+  const UserId = request.UserId
+  const {title, text, type } = request.body;
   try {
     const article: IArticleAttributes = await articleService.createArticle({
       title,
       text,
       type,
-      userId,
+      UserId,
     });
     response.status(201).json(article);
   } catch (error) {

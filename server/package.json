@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-fastify-mrcs-starter-template",
+  "name": "nodejs-express-mrcs-starter-template",
   "version": "1.0.0",
-  "description": "backend node.js fastify starter structure template",
+  "description": "backend node.js express starter structure template",
   "main": "index.ts",
   "scripts": {
     "start": "pm2 start --interpreter ts-node index.ts --name server",
@@ -22,6 +22,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "path-to-regexp": "^6.2.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.21.2",

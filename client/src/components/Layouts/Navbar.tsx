@@ -5,7 +5,7 @@ import Script from "next/script";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
-
+import Router from "next/router";
 type Props = {};
 
 export default function Navbar({}: Props) {
@@ -27,6 +27,7 @@ export default function Navbar({}: Props) {
   const handleSignOut = async () => {
     const response = await dispatch(signOut());
     if (response.meta.requestStatus === "fulfilled") {
+      Router.push("/auth/signin");
       Toast.fire({
         icon: "success",
         title: "Signed out successfully",
