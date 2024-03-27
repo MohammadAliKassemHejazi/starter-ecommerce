@@ -71,7 +71,7 @@ export const fetchArticles = async (
       {
         model: db.User,
         attributes: [
-          'id', 'name', 'surname'
+          'id', 'name', 'address'
         ]
       }
     ]

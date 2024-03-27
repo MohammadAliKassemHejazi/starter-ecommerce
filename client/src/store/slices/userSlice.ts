@@ -10,13 +10,21 @@ import axios, { InternalAxiosRequestConfig } from 'axios';
 interface SignAction {
 	email: string
 	password: string
+
+}
+interface SignupAction {
+	email: string
+	password: string
+	name: string
+	address: string
+	phone: string
 }
 
 const initialState: UserState = {
 	id: "",
 	email: "",
 	name: "",
-	surname: "",
+	address: "",
 	phone: "",
 	accessToken: "",
 	isAuthenticated: false,
@@ -26,6 +34,7 @@ const initialState: UserState = {
 export const signIn = createAsyncThunk(
 	"auth/signin",
 	async (credential: SignAction) => {
+		alert({...credential})
 		const resp = await authService.signIn(credential);
 
 		if (resp.accessToken === "") {
@@ -44,7 +53,7 @@ export const signIn = createAsyncThunk(
 
 export const signUp = createAsyncThunk(
 	"user/signup",
-	async (credential: SignAction) => {
+	async (credential: SignupAction) => {
 		const response = await authService.signUp(credential);
 		return response;
 	}
@@ -80,7 +89,7 @@ export const userSlice = createSlice({
 			state.accessToken = "";
 			state.email = action.payload.email;
 			state.name = action.payload.name;
-			state.surname = action.payload.surname;
+			state.address = action.payload.address;
 			state.phone = action.payload.phone;
 			state.isAuthenticated = false;
 		});
@@ -88,7 +97,7 @@ export const userSlice = createSlice({
 			state.accessToken = action.payload.accessToken;
 			state.email = action.payload.email;
 			state.name = action.payload.name;
-			state.surname = action.payload.surname;
+			state.address = action.payload.address;
 			state.isAuthenticated = true;
 			state.isAuthenticating = false;
 		});
@@ -98,7 +107,7 @@ export const userSlice = createSlice({
 			state.isAuthenticating = false;
 			state.email = "";
 			state.name = "";
-			state.surname = "";
+			state.address = "";
 		});
 		builder.addCase(fetchSession.fulfilled, (state, action) => {
 			state.isAuthenticating = false;
@@ -107,7 +116,7 @@ export const userSlice = createSlice({
 				state.id = action.payload.id;
 				state.email = action.payload.email;
 				state.name = action.payload.name;
-				state.surname = action.payload.surname;
+				state.address = action.payload.address;
 				state.isAuthenticated = true;
 			}
 		});
@@ -117,7 +126,7 @@ export const userSlice = createSlice({
 			state.id = "";
 			state.email = "";
 			state.name = "";
-			state.surname = "";
+			state.address = "";
 			state.accessToken = "";
 			
 		});

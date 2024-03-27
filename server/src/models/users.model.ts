@@ -12,10 +12,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     id!: string;
     name!: string;
-    surname!: string;
     email!: string;
     password!: string;
     phone!: string;
+    address!: string;
     static associate(models: any) {
       // define association here
       User.hasMany(models.Article);
@@ -45,7 +45,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING(100),
         allowNull: true,
       },
-      surname: {
+      address: {
         type: DataTypes.STRING(100),
         allowNull: true,
       },

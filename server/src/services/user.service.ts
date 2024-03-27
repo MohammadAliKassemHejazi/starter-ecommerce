@@ -38,7 +38,7 @@ const mapUserResponseObject = (
     id: userId,
     email: user.email,
     name: user.name || "",
-    surname: user.surname || "",
+    address: user.address || "",
     phone: user.phone || "",
     accessToken,
   };

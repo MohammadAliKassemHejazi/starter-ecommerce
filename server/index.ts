@@ -92,7 +92,7 @@ const server: Server = app.listen(Number(PORT), () => {
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
-    db.sequelize.sync().then(() => {
+    db.sequelize.sync({ force: true }).then(() => {
         logger.info('Database synced');
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);
