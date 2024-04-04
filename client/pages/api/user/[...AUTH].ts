@@ -12,7 +12,8 @@ import { store } from "@/store/store";
 import { fetchSession } from "@/store/slices/userSlice";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-	const action = req.query["AUTH"][1];
+     const action = req.query["AUTH"] ? req.query["AUTH"][1] : undefined;
+
 	if (req.method === HTTP_METHOD_POST && action === "signin") {
 		return signIn(req, res);
 	} else if (req.method === HTTP_METHOD_GET && action === "signout") {
