@@ -44,6 +44,4 @@ protectedRoutes(router, Routes);
   );
 
 
-
-
 export default router;

@@ -60,7 +60,12 @@ export default function SignUp({}: Props) {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    const response = await dispatch(signUp({ email, password }));
+    const name = e.target.name.value; // Retrieve name from the form
+    const address = e.target.address.value; // Retrieve address from the form
+    const phone = e.target.phone.value; // Retrieve phone from the form
+    
+    const response = await dispatch(signUp({ email, password, name, address, phone }));
+  
 
     if (response.meta.requestStatus === "fulfilled") {
       Swal.fire({
@@ -80,14 +85,14 @@ export default function SignUp({}: Props) {
   return (
     <Layout>
       <div className="login-page bg-light">
-        <div className="container">
+        <div className="container py-5">
           <div className="row">
-            <div className="col-lg-10 offset-lg-1">
+            <div className="col-lg-12 ">
               <h3 className="mb-3">Sign Up</h3>
               <div className="bg-white shadow rounded">
                 <div className="row">
                   <div className="col-md-7 pe-0">
-                    <div className="form-left h-100 py-5 px-5">
+                    <div className="form-left py-5 px-5">
                       <form onSubmit={handleRegister} className="row g-4">
                         <div className="col-12">
                           <label>
@@ -106,6 +111,53 @@ export default function SignUp({}: Props) {
                             />
                           </div>
                         </div>
+                        <div className="col-12">
+                          <label>Name <span className="text-danger">*</span></label>
+                          <div className="input-group">
+                            <div className="input-group-text">
+                              <i className="fas fa-user" />
+                            </div>
+                            <input
+                              type="text"
+                              id="name"
+                              className="form-control"
+                              placeholder="Enter Name"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-12">
+                          <label>Address <span className="text-danger">*</span></label>
+                          <div className="input-group">
+                            <div className="input-group-text">
+                              <i className="fas fa-map-marker-alt" />
+                            </div>
+                            <input
+                              type="text"
+                              id="address"
+                              className="form-control"
+                              placeholder="Enter Address"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-12">
+                          <label>Phone <span className="text-danger">*</span></label>
+                          <div className="input-group">
+                            <div className="input-group-text">
+                              <i className="fas fa-phone" />
+                            </div>
+                            <input
+                              type="text"
+                              id="phone"
+                              className="form-control"
+                              placeholder="Enter Phone"
+                            />
+                          </div>
+                        </div>
+
                         <div className="col-12">
                           <label>
                             Password
@@ -191,11 +243,7 @@ export default function SignUp({}: Props) {
                           <div className="px-4 float-end mt-4">
                             <span>Already have an account ?</span>
                             <Link href="/auth/signin">
-                            
-                                <span className="btn text-primary">
-                                  Sign In
-                                </span>
-                              
+                              <span className="btn text-primary">Sign In</span>
                             </Link>
                           </div>
                         </div>
@@ -228,7 +276,7 @@ export default function SignUp({}: Props) {
           }
           .login-page {
             width: 100%;
-            height: 100vh;
+            
             display: inline-block;
             display: flex;
             align-items: center;

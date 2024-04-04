@@ -2,7 +2,7 @@ export interface UserState {
 	id:string;
 	email: string;
 	name: string;
-	surname: string;
+	address: string;
 	phone: string;
 	isAuthenticated: boolean;
 	isAuthenticating: boolean;

@@ -12,7 +12,7 @@ export interface IAuthRegisterBodyRequest extends Request {
     email: string;
     password: string;
     name: string;
-    surname: string;
+    address: string;
     phone: string;
   };
 }
@@ -21,7 +21,7 @@ export interface IAuthLoginBodyResponse {
   id: string;
   email: string;
   name: string;
-  surname: string;
+  address: string;
   phone: string;
   accessToken?: string;
 }

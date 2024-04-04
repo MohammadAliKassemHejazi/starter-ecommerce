@@ -16,7 +16,6 @@ export const handleLogin = async (request: IAuthLoginBodyRequest, response: Resp
     response.json(login);
   } catch (error) {
     customError(authErrors.AuthInvalidEmail);
-    throw error
   }
 };
 
@@ -24,13 +23,13 @@ export const handleRegister = async (
   request: IAuthRegisterBodyRequest,
   response: Response
 ): Promise<void> => {
-  const { email, password, name, surname, phone } = request.body;
+  const { email, password, name, address, phone } = request.body;
   try {
     const user: IUserAttributes = await userService.createUser({
       email,
       password,
       name,
-      surname,
+      address,
       phone,
     });
     response.status(201).json(user);
