@@ -39,7 +39,13 @@ export default function Navbar({}: Props) {
     <nav className="navbar navbar-expand-md fixed-top bg-light">
       <div className="container-fluid">
         <Link href="/">
-          <span className="navbar-brand">Next.js Redux Starter Template</span>
+          <span className="navbar-brand">
+            {user.isAuthenticated && (
+              <React.Fragment>
+                <span className="nav-link me-3">Welcome {user.name}</span>
+              </React.Fragment>
+            )}
+          </span>
         </Link>
         <button
           className="navbar-toggler"
@@ -59,41 +65,24 @@ export default function Navbar({}: Props) {
             </li>
             <li className="nav-item">
               {user.isAuthenticated && (
-                  // eslint-disable-next-line @next/next/no-html-link-for-pages
-                  <a href="/articles" className="nav-link">
-                    articles
-                  </a>
-                  
+                // eslint-disable-next-line @next/next/no-html-link-for-pages
+                <a href="/articles" className="nav-link">
+                  articles
+                </a>
               )}
             </li>
             <li className="nav-item">
-              {user.isAuthenticated && (
-                  // eslint-disable-next-line @next/next/no-html-link-for-pages
-                  <a href="/shop" className="nav-link">
-                    shop
-                  </a>
-                  
-              )}
+              <a href="/shop" className="nav-link">
+                shop
+              </a>
             </li>
           </ul>
           <div className="d-flex me-5">
-            {!user.isAuthenticated && (
-              <React.Fragment>
-                <button className="btn btn-outline-primary me-1">
-                  <Link href="/auth/signin">SignIn</Link>
-                </button>
-                <button className="btn btn-outline-primary me-1">
-                  <Link href="/auth/signup">SignUp</Link>
-                </button>
-              </React.Fragment>
-            )}
-
             {user.isAuthenticated && (
               <React.Fragment>
-                <span className="nav-link me-3">
-                  Welcome {user.name} {user.surname}
-                </span>
-
+                <a href="/shop/create" className="nav-link">
+                  Create Shop
+                </a>
                 <button
                   className="btn btn-outline-primary"
                   onClick={() => {
@@ -101,6 +90,17 @@ export default function Navbar({}: Props) {
                   }}
                 >
                   Sign Out
+                </button>
+              </React.Fragment>
+            )}
+
+            {!user.isAuthenticated && (
+              <React.Fragment>
+                <button className="btn btn-outline-primary me-1">
+                  <Link href="/auth/signin">SignIn</Link>
+                </button>
+                <button className="btn btn-outline-primary me-1">
+                  <Link href="/auth/signup">SignUp</Link>
                 </button>
               </React.Fragment>
             )}

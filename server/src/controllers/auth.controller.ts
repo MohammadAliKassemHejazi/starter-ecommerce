@@ -9,13 +9,13 @@ import customError from "../utils/customError";
 import { IUserAttributes } from "../interfaces/types/models/user.model.types";
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 
-export const handleLogin = async (request: IAuthLoginBodyRequest, response: Response) => {
+export const handleLogin = async (request: IAuthLoginBodyRequest, response: Response,next:any) => {
   const { email, password } = request.body;
   try {
     const login = await userService.userLogin(email, password);
     response.json(login);
   } catch (error) {
-    customError(authErrors.AuthInvalidEmail);
+    next(authErrors.AuthInvalidEmail);
   }
 };
 

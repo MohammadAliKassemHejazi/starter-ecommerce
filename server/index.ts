@@ -8,10 +8,12 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import winston from 'winston';
 import { swaggerOption } from './src/config/swagger';
-import { authRouter, userRouter, articleRouter } from './src/routes';
+import { authRouter, userRouter, articleRouter ,shopRouter } from './src/routes';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
+import multer from 'multer';
+
 
 
 // Set up Winston for logging
@@ -63,6 +65,19 @@ app.use(limiter);
 // Swagger API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOption.options));
 
+//Storage
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Destination folder for uploaded files
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname); // Use the original filename for uploaded files
+  }
+});
+
+const upload = multer({ storage: storage });
+
 // Routes
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.send('SERVER');
@@ -71,6 +86,8 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/articles', articleRouter);
+app.use('/api/shop', upload.array('images', 5),shopRouter);
+
 
 // Error handling middleware
 app.use((error: CustomError, req: Request, res: Response, next: NextFunction) => {

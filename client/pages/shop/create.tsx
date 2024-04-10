@@ -124,6 +124,7 @@ function CreateProduct() {
                             src={image["data_url"]}
                             alt={`Product Photo ${index}`}
                             width="100"
+                             height="100"
                           />
                         </div>
                       ))}

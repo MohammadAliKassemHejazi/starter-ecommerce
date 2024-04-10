@@ -1,5 +1,4 @@
-import { Request } from "express";
-import { IArticleAttributes } from "../models/article.model.types";
+
 import { CustomRequest } from "../middlewares/request.middleware.types";
 
 export interface ArticleCreateBodyRequest extends CustomRequest {

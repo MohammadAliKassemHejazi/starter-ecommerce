@@ -211,3 +211,82 @@
 {"level":"info","message":"Database synced"}
 {"level":"info","message":"Server is running on port 5300 in development mode"}
 {"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:12:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 500 56 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:12:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 500 56 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:12:58 +0000] \"POST /api/auth/register HTTP/1.1\" 201 270 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:26:51 +0000] \"POST /api/auth/login HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:27:32 +0000] \"POST /api/auth/register HTTP/1.1\" 201 273 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36\""}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:27:52 +0000] \"POST /api/auth/login HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:28:03 +0000] \"POST /api/auth/login HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:28:06 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:28:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:28:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:31:22 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:31:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:31:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:31:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:35:39 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:35:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:35:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:35:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:37:02 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [04/Apr/2024:17:37:03 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 326 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [06/Apr/2024:14:03:37 +0000] \"POST /api/auth/register HTTP/1.1\" 201 290 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/Apr/2024:14:03:46 +0000] \"POST /api/auth/login HTTP/1.1\" 200 343 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/Apr/2024:14:03:47 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/Apr/2024:14:03:51 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 343 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/Apr/2024:14:03:51 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 343 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
