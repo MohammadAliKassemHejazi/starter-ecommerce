@@ -4,6 +4,7 @@ export interface IProductAttributes {
   description: string;
   price: number;
   stockQuantity?: number;
+  ownerId?:string;
   isActive?: boolean;
   createdAt?: Date;
   updatedAt?: Date;

@@ -36,9 +36,13 @@ if (process.env.NODE_ENV !== 'production') {
 const app: Express = express();
 
 // Apply middleware
-app.use(helmet()); // Security middleware
-app.use(express.json());
-app.use(express.urlencoded()); 
+app.use(helmet()); // Apply helmet for security headers
+
+// Increase the request body size limit for JSON bodies
+app.use(express.json({ limit: '50mb' }));
+
+// Increase the request body size limit for URL-encoded bodies
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -86,7 +90,7 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/articles', articleRouter);
-app.use('/api/shop', upload.array('images', 5),shopRouter);
+app.use('/api/shop', upload.array('photos', 5),shopRouter);
 
 
 // Error handling middleware
@@ -109,7 +113,7 @@ const server: Server = app.listen(Number(PORT), () => {
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
-    db.sequelize.sync({ force: true }).then(() => {
+    db.sequelize.sync().then(() => {
         logger.info('Database synced');
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);

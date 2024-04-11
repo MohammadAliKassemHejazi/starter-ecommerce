@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import {  Response } from "express";
 import { userService } from "../services";
 import {
   IAuthLoginBodyRequest,
@@ -21,7 +21,8 @@ export const handleLogin = async (request: IAuthLoginBodyRequest, response: Resp
 
 export const handleRegister = async (
   request: IAuthRegisterBodyRequest,
-  response: Response
+  response: Response,
+  next:any
 ): Promise<void> => {
   const { email, password, name, address, phone } = request.body;
   try {
@@ -34,17 +35,22 @@ export const handleRegister = async (
     });
     response.status(201).json(user);
   } catch (error) {
-    customError(authErrors.AuthRegisterFailure);
+    next(customError(authErrors.AuthRegisterFailure));
   }
 };
 
 export const isAuthenticated = async (
   request: CustomRequest,
-  response: Response
+  response: Response,
+  next:any,
 ): Promise<void> => {
+  try{
   const UserId = request.UserId; // Assuming UserId is accessible via middleware
   const userSession = await userService.userSession(UserId!);
   response.json(userSession);
+  }catch(e){
+    next(e)
+  }
 };
 
 export const loggedOut = async (

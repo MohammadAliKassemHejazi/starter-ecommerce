@@ -6,9 +6,12 @@ export interface IShopCreateProduct extends CustomRequest {
 
     body: {
         productData: {
-            name?: string;
-            description?: string;
-            price?: number;
+    name?: string;
+    description?: string;
+    price?: number;
+    stockQuantity?: number; // Can be number or undefined
+    isActive?: boolean; // Can be boolean or undefined
+    ownerId?:string
         };
     };
 }

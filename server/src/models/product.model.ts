@@ -1,7 +1,8 @@
 "use strict";
-import * as Sequelize from "sequelize";
-import { Model, UUIDV4 } from "sequelize";
+import { Model, UUIDV4, ForeignKey } from "sequelize";
 import { IProductAttributes } from "../interfaces/types/models/product.model.types";
+// Assuming IUserAttributes is your User model interface
+import { IUserAttributes } from "../interfaces/types/models/user.model.types";
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Product extends Model<IProductAttributes> implements IProductAttributes {
@@ -11,17 +12,27 @@ module.exports = (sequelize: any, DataTypes: any) => {
     price!: number;
     stockQuantity?: number;
     isActive?: boolean;
+    // Adding the ownerId field
+    ownerId!: ForeignKey<IUserAttributes['id']>;
 
     static associate(models: any) {
-      Product.hasMany(models.ProductImage); // Establishing one-to-many relationship
+      // Other associations
+      Product.hasMany(models.ProductImage);
       Product.hasMany(models.CartItem);
       Product.hasMany(models.Favorite);
       Product.hasMany(models.OrderItem);
+
+      // Association to User
+      Product.belongsTo(models.User, {
+        foreignKey: 'ownerId', // Ensure this matches the name of the field added
+        as: 'owner', // Optional: Alias for the association
+      });
     }
   }
 
   Product.init(
     {
+      // Other fields...
       id: {
         type: DataTypes.UUID,
         defaultValue: UUIDV4,
@@ -46,6 +57,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
       isActive: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
+      },
+      // Define the ownerId field
+      ownerId: {
+        type: DataTypes.UUID,
+        allowNull: false,
       },
     },
     {

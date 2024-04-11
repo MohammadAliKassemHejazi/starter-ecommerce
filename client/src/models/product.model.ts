@@ -1,7 +1,7 @@
 import  { ImageListType } from 'react-images-uploading';
 
-export interface Product {
-    id: string;
+export interface IProductModel {
+    id?: string;
     name: string;
     description: string;
     price: number;

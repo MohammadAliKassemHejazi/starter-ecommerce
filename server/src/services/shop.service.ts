@@ -2,11 +2,11 @@
 import { IShopCreateProduct } from 'interfaces/types/controllers/shop.controller.types';
 import { IProductAttributes } from 'interfaces/types/models/product.model.types';
 import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
-import db from 'models';
+import db from '../models/index';
 
 
 
- const createProductWithImages = async (productData: any, files: Express.Multer.File[]): Promise<any> => {
+ const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<any> => {
   try {
      const product = await db.Product.create(productData);
 
@@ -17,7 +17,7 @@ import db from 'models';
     // Replace this with your actual image data saving logic
     for (const file of files) {
       await db.ProductImage.create({
-        productId: product.id,
+        productId: product.dataValues.id,
         imageUrl: `/uploads/${file.filename}`
       });
     }
@@ -29,7 +29,7 @@ import db from 'models';
     };
   } catch (error) {
     // Handle errors appropriately
-    return error;
+    throw error;
     
   }
 };

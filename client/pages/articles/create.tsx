@@ -25,6 +25,7 @@ const CreateArticle = () => {
   
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+
   const handleCreateArticle = async (e: any) => {
     e.preventDefault();
     const response = await dispatch(createArticles({ title, text }));
@@ -33,9 +34,6 @@ const CreateArticle = () => {
         icon: "success",
         title: "create article successfully",
       });
-      router.push("/articles")
-      setTitle("");
-      setText("");
     } else {
       Toast.fire({
         icon: "error",
@@ -43,6 +41,7 @@ const CreateArticle = () => {
       });
     }
   };
+
   return (
     <Layout>
       <div className="container">

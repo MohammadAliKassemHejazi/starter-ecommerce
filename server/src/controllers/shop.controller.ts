@@ -5,12 +5,15 @@ import { userService } from "../services"
 import { shopService } from "../services"
 
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
+import { IShopCreateProduct } from "interfaces/types/controllers/shop.controller.types";
 
 
-export const handleCreateProduct = async (request: Request, response: Response, next: NextFunction) => {
+export const handleCreateProduct = async (request: CustomRequest, response: Response, next: NextFunction) => {
     try {
-        const productData = request.body.productData;
-        const files = request.files as  Express.Multer.File[];;
+      const UserId = request.UserId
+        const productData = {...request.body ,"ownerId":UserId} as IShopCreateProduct;
+        const files = request.files as  Express.Multer.File[];
+        
 
         // Process product creation with data and files
         const results =  await shopService.createProductWithImages(productData, files);

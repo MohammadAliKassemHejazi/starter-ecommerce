@@ -4,20 +4,68 @@ import ImageUploading, {
   ImageType,
 } from "react-images-uploading";
 import Image from "next/image";
-import { Product } from "../../src/models/product.model";
+import { IProductModel } from "../../src/models/product.model";
+import Swal from "sweetalert2";
+import { useRouter } from "next/router";
+import { useAppDispatch } from "@/store/store";
+import { createProduct } from "@/store/slices/shopSlice";
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 function CreateProduct() {
-  const [product, setProduct] = useState<Product>({
-    id: "",
+  const dispatch = useAppDispatch();
+  const router = useRouter()
+  const [product, setProduct] = useState<IProductModel>({
     name: "",
     description: "",
     price: 0,
     photos: [],
   });
 
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+    const formData = new FormData();
+
+    Object.entries(product).forEach(([key, value]) => {
+      if (key !== 'photos') {
+        formData.append(key, typeof value === 'boolean' ? value.toString() : value);
+      }
+    });
+
+    product.photos.forEach((photo, index) => {
+      if (photo.file) {
+        formData.append(`photos`, photo.file);
+      }
+    });
+
+    try {
+      const response = await dispatch(createProduct(formData)).unwrap();
+      
+      Toast.fire({
+        icon: 'success',
+        title: 'Product created successfully',
+      });
+    } catch (error : any) {
+      Toast.fire({
+        icon: 'error',
+        title: `Failed to create product: ${error.message}`,
+      });
+    }
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    e.preventDefault();
     const { name, value } = e.target;
     setProduct((prevProduct) => ({
       ...prevProduct,
@@ -32,12 +80,7 @@ function CreateProduct() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Here you can perform the logic to submit the product data
-    console.log(product);
-    // You can send an HTTP request to your backend to save the product data
-  };
+
 
   return (
     <section>
@@ -142,3 +185,5 @@ function CreateProduct() {
 }
 
 export default CreateProduct;
+
+
