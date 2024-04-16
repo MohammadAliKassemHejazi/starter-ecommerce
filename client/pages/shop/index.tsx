@@ -25,262 +25,241 @@ const Shop = ({}: Props) => {
 
   return (
     <Layout>
-      <div className="container mt-5">
-        <section>
-          <div className="container my-5">
-            <header className="mb-4">
-              <h3>New products</h3>
-            </header>
-            <div className="row">
-              <div className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card my-2 shadow-0">
-                  <div className="position-relative">
-                    <div className={styles.mask}>
-                      
-                        <h6>
-                          <span className="badge bg-danger pt-1 position-absolute top-0 start-0">
-                            New
-                          </span>
-                        </h6>
-                    
-                    </div>
-                    <div className="image-container">
-                      <Image
-                        src="/fakeimages/shoes.jpg"
-                        alt="shoes"
-                        layout="responsive"
-                        width={400}
-                        height={300}
-                        className="card-img-top rounded-2"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-body p-0 pt-3">
-                    <a
-                      href="#!"
-                      className="btn btn-light border px-2 pt-2 float-end icon-hover"
-                    >
-                      <i className="fas fa-heart fa-lg px-1 text-secondary"></i>
-                    </a>
-                    <h5 className="card-title">$29.95</h5>
-                    <p className="card-text mb-0">GoPro action camera 4K</p>
-                    <p className="text-muted">Model: X-200</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card my-2 shadow-0">
-                  <div className="position-relative">
-                    <div className="mask">
-                      
-                        <h6>
-                          <span className="badge bg-selective pt-1 position-absolute top-0 start-0">
-                            offer
-                          </span>
-                        </h6>
-                  
-                    </div>
-                    <div className="image-container">
-                      <Image
-                        src="/fakeimages/shoes.jpg"
-                        alt="shoes"
-                        layout="responsive"
-                        width={400}
-                        height={300}
-                        className="card-img-top rounded-2"
-                      />
-                    </div>
-                  </div>
-                  <div className="card-body p-0 pt-3">
-                    <a
-                      href="#!"
-                      className="btn btn-light border px-2 pt-2 float-end icon-hover"
-                    >
-                      <i className="fas fa-heart fa-lg px-1 text-secondary"></i>
-                    </a>
-                    <h5 className="card-title">$29.95</h5>
-                    <p className="card-text mb-0">GoPro action camera 4K</p>
-                    <p className="text-muted">Model: X-200</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card my-2 shadow-0">
-                  <div className="image-container">
-                    <Image
-                      src="/fakeimages/shoes.jpg"
-                      alt="shoes"
-                      layout="responsive"
-                      width={400}
-                      height={300}
-                      className="card-img-top rounded-2"
-                    />
-                  </div>
-                  <div className="card-body p-0 pt-2">
-                    <a
-                      href="#!"
-                      className="btn btn-light border px-2 pt-2 float-end icon-hover"
-                    >
-                      <i className="fas fa-heart fa-lg px-1 text-secondary"></i>
-                    </a>
-                    <h5 className="card-title">$29.95</h5>
-                    <p className="card-text mb-0">Modern product name here</p>
-                    <p className="text-muted">Sizes: S, M, XL</p>
-                  </div>
-                </div>
-              </div>
-                  <div className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card my-2 shadow-0">
-                  <div className="image-container">
-                    <Image
-                      src="/fakeimages/shoes.jpg"
-                      alt="shoes"
-                      layout="responsive"
-                      width={400}
-                      height={300}
-                      className="card-img-top rounded-2"
-                    />
-                  </div>
-                  <div className="card-body p-0 pt-2">
-                    <a
-                      href="#!"
-                      className="btn btn-light border px-2 pt-2 float-end icon-hover"
-                    >
-                      <i className="fas fa-heart fa-lg px-1 text-secondary"></i>
-                    </a>
-                    <h5 className="card-title">$29.95</h5>
-                    <p className="card-text mb-0">Modern product name here</p>
-                    <p className="text-muted">Sizes: S, M, XL</p>
-                  </div>
-                </div>
-              </div>
-                  <div className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card my-2 shadow-0">
-                  <div className="image-container">
-                    <Image
-                      src="/fakeimages/shoes.jpg"
-                      alt="shoes"
-                      layout="responsive"
-                      width={400}
-                      height={300}
-                      className="card-img-top rounded-2"
-                    />
-                  </div>
-                  <div className="card-body p-0 pt-2">
-                    <a
-                      href="#!"
-                      className="btn btn-light border px-2 pt-2 float-end icon-hover"
-                    >
-                      <i className="fas fa-heart fa-lg px-1 text-secondary"></i>
-                    </a>
-                    <h5 className="card-title">$29.95</h5>
-                    <p className="card-text mb-0">Modern product name here</p>
-                    <p className="text-muted">Sizes: S, M, XL</p>
-                  </div>
-                </div>
-              </div>
-                  <div className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card my-2 shadow-0">
-                  <div className="image-container">
-                    <Image
-                      src="/fakeimages/shoes.jpg"
-                      alt="shoes"
-                      layout="responsive"
-                      width={400}
-                      height={300}
-                      className="card-img-top rounded-2"
-                    />
-                  </div>
-                  <div className="card-body p-0 pt-2">
-                    <a
-                      href="#!"
-                      className="btn btn-light border px-2 pt-2 float-end icon-hover"
-                    >
-                      <i className="fas fa-heart fa-lg px-1 text-secondary"></i>
-                    </a>
-                    <h5 className="card-title">$29.95</h5>
-                    <p className="card-text mb-0">Modern product name here</p>
-                    <p className="text-muted">Sizes: S, M, XL</p>
-                  </div>
-                </div>
-              </div>
-                  <div className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card my-2 shadow-0">
-                  <div className="image-container">
-                    <Image
-                      src="/fakeimages/iphone.jpg"
-                      alt="shoes"
-                      layout="responsive"
-                      width={400}
-                      height={300}
-                      className="card-img-top rounded-2"
-                    />
-                  </div>
-                  <div className="card-body p-0 pt-2">
-                    <a
-                      href="#!"
-                      className="btn btn-light border px-2 pt-2 float-end icon-hover"
-                    >
-                      <i className="fas fa-heart fa-lg px-1 text-secondary"></i>
-                    </a>
-                    <h5 className="card-title">$29.95</h5>
-                    <p className="card-text mb-0">Modern product name here</p>
-                    <p className="text-muted">Sizes: S, M, XL</p>
-                  </div>
-                </div>
-              </div>
+      
+      <section id={styles["feature"]} className={` container pt-5 ` }>
+  <div className={styles["fe-box"]}>
+    <Image src="/products/f1.png" alt="free shipping" width={100} height={100}/>
+    <h6>Free Shipping</h6>
+  </div>
+  
+  <div className={styles["fe-box"]}>
+    <Image src="/products/f2.png" alt="Online Order" width={100} height={100}/>
+    <h6>Online Order</h6>
+  </div>
+  
+  <div className={styles["fe-box"]}>
+    <Image src="/products/f3.png" alt="Save Money" width={100} height={100}/>
+    <h6>Save Money</h6>
+  </div>
+  
+  <div className={styles["fe-box"]}>
+    <Image src="/products/f4.png" alt="Promotions" width={100} height={100}/>
+    <h6>Promotions</h6>
+  </div>
+  
+  <div className={styles["fe-box"]}>
+    <Image src="/products/f5.png" alt="Happy Sell" width={100} height={100}/>
+    <h6>Happy Sell</h6>
+  </div>
+  
+  <div className={styles["fe-box"]}>
+    <Image src="/products/f6.png" alt="F24/7 Support" width={100} height={100}/>
+    <h6>F24/7 Support</h6>
+  </div>
+  
+</section>
+
+<div className="container bg-white">
+   
+    <div className="row">
+        <div className="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+            <div className="product">
+               <img src="https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
+                <ul className="d-flex align-items-center justify-content-center list-unstyled icons">
+                    <li className="icon"><span className="fas fa-expand-arrows-alt"></span></li>
+                    <li className="icon mx-3"><span className="far fa-heart"></span></li>
+                    <li className="icon"><span className="fas fa-shopping-bag"></span></li>
+                </ul>
             </div>
-          </div>
-        </section>
-      </div>
-      <style jsx>
-  {`
-    /* Styles for the mask */
-    .mask {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 50px; /* Height for the badges */
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding: 0.5rem;
-      box-sizing: border-box;
-      z-index: 1; /* Ensure badges appear above the image */
-    }
-
-    /* Styles for the badge */
-    .badge {
-      background-color: #f00; /* Adjust as needed */
-      color: #fff;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.25rem;
-    }
-
-    /* Styles for the image container */
-    .image-container {
-      width: 100%;
-    
-      position: relative;
-      z-index: 0; /* Ensure image is below the badges */
-    }
-
-    /* Styles for the card */
-    .card {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      height: 100%; /* Ensure cards take the full height */
-    }
-
-    /* Styles for the card body */
-    .card-body {
-      flex-grow: 1; /* Allow card body to expand */
-    }
-  `}
-</style>
-
+            <div className="tag bg-red">sale</div>
+            <div className="title pt-4 pb-1">Winter Sweater</div>
+            <div className="d-flex align-content-center justify-content-center">
+               <span className="fas fa-star"></span> 
+               <span className="fas fa-star"></span>
+             <span className="fas fa-star"></span>
+              <span className="fas fa-star"></span> 
+              <span className="fas fa-star"></span> </div>
+            <div className="price">$ 60.0</div>
+        </div>
+        <div className="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+            <div className="product">
+               <img src="https://images.pexels.com/photos/6764040/pexels-photo-6764040.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
+                <ul className="d-flex align-items-center justify-content-center list-unstyled icons">
+                    <li className="icon"><span className="fas fa-expand-arrows-alt"></span></li>
+                    <li className="icon mx-3"><span className="far fa-heart"></span></li>
+                    <li className="icon"><span className="fas fa-shopping-bag"></span></li>
+                </ul>
+            </div>
+            <div className="tag bg-black">out of stock</div>
+            <div className="title pt-4 pb-1">Denim Dresses</div>
+            <div className="d-flex align-content-center justify-content-center"> 
+            <span className="fas fa-star"></span> 
+            <span className="fas fa-star"></span> 
+            <span className="fas fa-star"></span> 
+            <span className="fas fa-star"></span> 
+            <span className="fas fa-star"></span> </div>
+            <div className="price">$ 55.0</div>
+        </div>
+        <div className="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+            <div className="product">
+               <img src="https://images.pexels.com/photos/914668/pexels-photo-914668.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
+                <ul className="d-flex align-items-center justify-content-center list-unstyled icons">
+                    <li className="icon">
+                      <span className="fas fa-expand-arrows-alt"></span></li>
+                    <li className="icon mx-3">
+                      <span className="far fa-heart"></span></li>
+                    <li className="icon"><span className="fas fa-shopping-bag"></span></li>
+                </ul>
+            </div>
+            <div className="tag bg-green">new</div>
+            <div className="title pt-4 pb-1"> Empire Waist Dresses</div>
+            <div className="d-flex align-content-center justify-content-center"> 
+            <span className="fas fa-star"></span> 
+            <span className="fas fa-star"></span> 
+            <span className="fas fa-star"></span> 
+            <span className="fas fa-star"></span> 
+            <span className="fas fa-star"></span> </div>
+            <div className="price">$ 70.0</div>
+        </div>
+        <div className="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
+            <div className="product">
+               <img src="https://images.pexels.com/photos/6311392/pexels-photo-6311392.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
+                <ul className="d-flex align-items-center justify-content-center list-unstyled icons">
+                    <li className="icon"><span className="fas fa-expand-arrows-alt"></span></li>
+                    <li className="icon mx-3"><span className="far fa-heart"></span></li>
+                    <li className="icon"><span className="fas fa-shopping-bag"></span></li>
+                </ul>
+            </div>
+            <div className="title pt-4 pb-1">Pinafore Dresses</div>
+            <div className="d-flex align-content-center justify-content-center"> <span className="fas fa-star">
+              </span> <span className="fas fa-star"></span> 
+              <span className="fas fa-star"></span> <span className="fas fa-star"></span> <span className="fas fa-star"></span> </div>
+            <div className="price">$ 60.0</div>
+        </div>
+    </div>
+  
+</div>
+<style jsx global>
+        {`
+         .container .product-item {
+          min-height: 450px;
+          border: none;
+          overflow: hidden;
+          position: relative;
+          border-radius: 0
+        }
+        
+        .container .product-item .product {
+          width: 100%;
+          height: 350px;
+          position: relative;
+          overflow: hidden;
+          cursor: pointer
+        }
+        
+        .container .product-item .product img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover
+        }
+        
+        .container .product-item .product .icons .icon {
+          width: 40px;
+          height: 40px;
+          background-color: #fff;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: transform 0.6s ease;
+          transform: rotate(180deg);
+          cursor: pointer
+        }
+        
+        .container .product-item .product .icons .icon:hover {
+          background-color: #b71c1c;
+          color: #fff
+        }
+        
+        .container .product-item .product .icons .icon:nth-last-of-type(3) {
+          transition-delay: 0.2s
+        }
+        
+        .container .product-item .product .icons .icon:nth-last-of-type(2) {
+          transition-delay: 0.15s
+        }
+        
+        .container .product-item .product .icons .icon:nth-last-of-type(1) {
+          transition-delay: 0.1s
+        }
+        
+        .container .product-item:hover .product .icons .icon {
+          transform: translateY(-60px)
+        }
+        
+        .container .product-item .tag {
+          text-transform: uppercase;
+          font-size: 0.75rem;
+          font-weight: 500;
+          position: absolute;
+          top: 10px;
+          left: 20px;
+          padding: 0 0.4rem
+        }
+        
+        .container .product-item .title {
+          font-size: 0.95rem;
+          letter-spacing: 0.5px
+        }
+        
+        .container .product-item .fa-star {
+          font-size: 0.65rem;
+          color: goldenrod
+        }
+        
+        .container .product-item .price {
+          margin-top: 10px;
+          margin-bottom: 10px;
+          font-weight: 600
+        }
+        
+        .fw-800 {
+          font-weight: 800
+        }
+        
+        .bg-green {
+          background-color: #208f20 !important;
+          color: #fff
+        }
+        
+        .bg-black {
+          background-color: #1f1d1d;
+          color: #fff
+        }
+        
+        .bg-red {
+          background-color: #bb3535;
+          color: #fff
+        }
+        
+        @media (max-width: 767.5px) {
+        
+          .navbar-nav .nav-link.active,
+          .navbar-nav .nav-link:hover {
+              background-color: #b71c1c;
+              color: #fff !important
+          }
+        
+          .navbar-nav .nav-link {
+              border: 3px solid transparent;
+              margin: 0.8rem 0;
+              display: flex;
+              border-radius: 10px;
+              justify-content: center
+          }
+        }
+        `}
+      </style>
     </Layout>
   );
 };
