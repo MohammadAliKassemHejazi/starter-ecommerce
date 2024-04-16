@@ -1,10 +1,10 @@
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
-import Image from "next/image";
+
 import React from "react";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import styles from './Shop.module.css';
+
 
 type Props = {};
 
@@ -26,38 +26,7 @@ const Shop = ({}: Props) => {
   return (
     <Layout>
       
-      <section id={styles["feature"]} className={` container pt-5 ` }>
-  <div className={styles["fe-box"]}>
-    <Image src="/products/f1.png" alt="free shipping" width={100} height={100}/>
-    <h6>Free Shipping</h6>
-  </div>
   
-  <div className={styles["fe-box"]}>
-    <Image src="/products/f2.png" alt="Online Order" width={100} height={100}/>
-    <h6>Online Order</h6>
-  </div>
-  
-  <div className={styles["fe-box"]}>
-    <Image src="/products/f3.png" alt="Save Money" width={100} height={100}/>
-    <h6>Save Money</h6>
-  </div>
-  
-  <div className={styles["fe-box"]}>
-    <Image src="/products/f4.png" alt="Promotions" width={100} height={100}/>
-    <h6>Promotions</h6>
-  </div>
-  
-  <div className={styles["fe-box"]}>
-    <Image src="/products/f5.png" alt="Happy Sell" width={100} height={100}/>
-    <h6>Happy Sell</h6>
-  </div>
-  
-  <div className={styles["fe-box"]}>
-    <Image src="/products/f6.png" alt="F24/7 Support" width={100} height={100}/>
-    <h6>F24/7 Support</h6>
-  </div>
-  
-</section>
 
 <div className="container bg-white">
    
