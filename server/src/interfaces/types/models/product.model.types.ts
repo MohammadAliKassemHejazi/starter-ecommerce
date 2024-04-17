@@ -1,11 +1,26 @@
+// interfaces/types/models/product.model.types.ts
+
+import { ForeignKey } from "sequelize";
+import { IUserAttributes } from "./user.model.types";
+import { ICategoryAttributes } from "./category.model.types";
+import { ISubcategoryAttributes } from "./subcategory.model.types";
+
+/**
+ * Interface for Product attributes.
+ */
 export interface IProductAttributes {
-  id?: string;
-  name: string;
-  description: string;
-  price: number;
-  stockQuantity?: number;
-  ownerId?:string;
-  isActive?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  id: string;                          // Unique identifier for the product
+  name: string;                        // Product name
+  description: string;                 // Product description
+  price: number;                       // Price of the product
+  stockQuantity?: number;              // Optional stock quantity
+  isActive?: boolean;                  // Optional active status
+  ownerId: ForeignKey<IUserAttributes['id']>; // Foreign key to owner (user)
+  categoryId: ForeignKey<ICategoryAttributes['id']>; // Foreign key to category
+  subcategoryId?: ForeignKey<ISubcategoryAttributes['id']>; // Optional foreign key to subcategory
+  metaTitle?: string;                  // Optional meta title for SEO
+  metaDescription?: string;            // Optional meta description for SEO
+  slug?: string;                       // Optional SEO friendly URL slug
+  tags?: string;                       // Optional tags for the product
+  inventoryStatus?: string;            // Optional inventory status
 }

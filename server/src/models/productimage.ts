@@ -1,9 +1,9 @@
 "use strict";
 
-import { Model, DataTypes } from "sequelize";
+import { Model } from "sequelize";
 import { IProductImageAttributes } from "../interfaces/types/models/productimage.model.types";
 
-module.exports = (sequelize: any) => {
+module.exports = (sequelize: any, DataTypes: any) => {
   class ProductImage extends Model<IProductImageAttributes> implements IProductImageAttributes {
     id!: string;
     productId!: string;
@@ -13,8 +13,9 @@ module.exports = (sequelize: any) => {
       ProductImage.belongsTo(models.Product, { foreignKey: 'productId' }); // Specify the foreign key
     }
   }
-
+  
   ProductImage.init({
+
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,

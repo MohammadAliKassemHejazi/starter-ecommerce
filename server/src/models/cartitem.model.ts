@@ -1,9 +1,9 @@
 "use strict";
 
-import { Model, DataTypes } from "sequelize";
+import { Model } from "sequelize";
 import { ICartItemAttributes } from "../interfaces/types/models/cartitem.model.types";
 
-module.exports = (sequelize: any) => {
+module.exports = (sequelize: any, DataTypes: any) => {
   class CartItem extends Model<ICartItemAttributes> implements ICartItemAttributes {
     id!: string;
     cartId!: string;

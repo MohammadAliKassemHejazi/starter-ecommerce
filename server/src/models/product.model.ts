@@ -1,8 +1,9 @@
 "use strict";
-import { Model, UUIDV4, ForeignKey } from "sequelize";
+import { Model,UUIDV4, ForeignKey } from "sequelize";
 import { IProductAttributes } from "../interfaces/types/models/product.model.types";
-// Assuming IUserAttributes is your User model interface
 import { IUserAttributes } from "../interfaces/types/models/user.model.types";
+import { ICategoryAttributes } from "../interfaces/types/models/category.model.types";
+import { ISubcategoryAttributes } from "../interfaces/types/models/subcategory.model.types";
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Product extends Model<IProductAttributes> implements IProductAttributes {
@@ -12,63 +13,90 @@ module.exports = (sequelize: any, DataTypes: any) => {
     price!: number;
     stockQuantity?: number;
     isActive?: boolean;
-    // Adding the ownerId field
     ownerId!: ForeignKey<IUserAttributes['id']>;
+    categoryId!: ForeignKey<ICategoryAttributes['id']>;
+    subcategoryId!: ForeignKey<ISubcategoryAttributes['id']>;
+    metaTitle?: string;
+    metaDescription?: string;
+    slug?: string;
+    tags?: string;
+    inventoryStatus?: string;
 
     static associate(models: any) {
-      // Other associations
+      // Existing associations
       Product.hasMany(models.ProductImage);
       Product.hasMany(models.CartItem);
       Product.hasMany(models.Favorite);
       Product.hasMany(models.OrderItem);
-
-      // Association to User
-      Product.belongsTo(models.User, {
-        foreignKey: 'ownerId', // Ensure this matches the name of the field added
-        as: 'owner', // Optional: Alias for the association
-      });
+      Product.belongsTo(models.User, { foreignKey: 'ownerId'});
+      Product.belongsTo(models.Category, { foreignKey: 'categoryId'});
+      Product.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId'});
     }
   }
 
-  Product.init(
-    {
-      // Other fields...
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: UUIDV4,
-        allowNull: false,
-        primaryKey: true,
-      },
-      name: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-      description: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      price: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      stockQuantity: {
-        type: DataTypes.INTEGER,
-      },
-      isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
-      // Define the ownerId field
-      ownerId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
+  Product.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
+      allowNull: false,
+      primaryKey: true,
     },
-    {
-      sequelize,
-      modelName: "Product",
-    }
-  );
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    stockQuantity: {
+      type: DataTypes.INTEGER,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    ownerId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    categoryId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    subcategoryId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    metaTitle: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    metaDescription: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    tags: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    inventoryStatus: {
+      type: DataTypes.STRING,
+      allowNull: true,
+     
+    },
+  }, {
+    sequelize,
+    modelName: "Product",
+  });
 
   return Product;
 };

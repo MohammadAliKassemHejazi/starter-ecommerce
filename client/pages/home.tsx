@@ -5,7 +5,7 @@ import { requestAllArticles } from "@/services/articleService";
 import { GetServerSideProps } from "next";
 import React from "react";
 import Image from "next/image";
-import styles from "./Shop.module.css";
+import styles from "./Home.module.css";
 type Props = {
   articles?: IArticleModelWithUser[];
 };

@@ -586,3 +586,9 @@
 {"level":"info","message":"::1 - - [16/Apr/2024:12:53:04 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36\""}
 {"level":"info","message":"::1 - - [16/Apr/2024:12:53:06 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 345 \"-\" \"axios/1.6.7\""}
 {"level":"info","message":"::1 - - [16/Apr/2024:12:53:06 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 345 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
