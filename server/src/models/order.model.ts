@@ -1,5 +1,5 @@
 "use strict";
-import * as Sequelize from "sequelize";
+
 import { Model, UUIDV4 } from "sequelize";
 import { IOrderAttributes } from "../interfaces/types/models/order.model.types";
 

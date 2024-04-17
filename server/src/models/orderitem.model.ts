@@ -1,9 +1,9 @@
 "use strict";
 
-import { Model, DataTypes } from "sequelize";
+import { Model } from "sequelize";
 import { IOrderItemAttributes } from "../interfaces/types/models/orderitem.model.types";
 
-module.exports = (sequelize: any) => {
+module.exports = (sequelize: any, DataTypes: any) => {
   class OrderItem extends Model<IOrderItemAttributes> implements IOrderItemAttributes {
     id!: string;
     orderId!: string;

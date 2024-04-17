@@ -8,7 +8,7 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <div>
+    <div className="position-relative">
       <Navbar />
       <main>{children}</main>
       <Footer />

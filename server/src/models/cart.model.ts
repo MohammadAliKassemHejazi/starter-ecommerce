@@ -1,5 +1,5 @@
 "use strict";
-import * as Sequelize from "sequelize";
+
 import { Model, UUIDV4 } from "sequelize";
 import { ICartAttributes } from "../interfaces/types/models/cart.model.types";
 
