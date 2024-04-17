@@ -24,8 +24,7 @@ import db from '../models/index';
 
     // Return response with product and image URLs
     return {
-      product: product,
-      images: imageUrls
+      product
     };
   } catch (error) {
     // Handle errors appropriately

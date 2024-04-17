@@ -17,7 +17,7 @@ const router = express.Router();
 
 protectedRoutes(router, Routes); 
 
-router.post("/create", shopController.handleCreateProduct);
+router.post("/create",shopController.handleCreateProduct);
 router.post("/update",shopController.handleUpdate);
 router.get("/get/:id", shopController.handelgetsingleitem);
 router.get("/getall", shopController.handelgetall);

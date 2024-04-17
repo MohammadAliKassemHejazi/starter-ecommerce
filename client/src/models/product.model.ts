@@ -8,4 +8,5 @@ export interface IProductModel {
     stockQuantity?: number;
     isActive?: boolean;
     photos: ImageListType;
+    croppedPhotos: ImageListType ;
   }

@@ -4,10 +4,12 @@ import { useDispatch } from "react-redux";
 
 import userReducer from "./slices/userSlice";
 import articleReducer from "./slices/articleSlice";
+import shopReducer from "./slices/shopSlice";
 
 const reducer = {
 	user: userReducer,
 	article: articleReducer,
+	products:shopReducer
 };
 
 export const store = configureStore({

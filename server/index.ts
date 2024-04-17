@@ -12,9 +12,10 @@ import { authRouter, userRouter, articleRouter ,shopRouter } from './src/routes'
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
-import multer from 'multer';
-
-
+import multer, { FileFilterCallback } from 'multer';
+import sharp from 'sharp';
+import path from 'node:path';
+import fs from 'fs';
 
 // Set up Winston for logging
 const logger = winston.createLogger({
@@ -35,14 +36,19 @@ if (process.env.NODE_ENV !== 'production') {
 // Create an Express application
 const app: Express = express();
 
+//static paths
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
+
 // Apply middleware
 app.use(helmet()); // Apply helmet for security headers
 
 // Increase the request body size limit for JSON bodies
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ limit: '5mb' }));
 
 // Increase the request body size limit for URL-encoded bodies
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -76,11 +82,28 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/'); // Destination folder for uploaded files
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname); // Use the original filename for uploaded files
+    const random = Math.floor(Math.random() * 100001) + 1;
+    cb(null, random + "-" + file.originalname);
   }
 });
 
-const upload = multer({ storage: storage });
+const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "application/pdf"
+  ) {
+    cb(null, true); // Accept the file
+  } else {
+    cb(null, false); // Reject the file
+  }
+};
+
+const upload = multer({ storage: storage,fileFilter: fileFilter,limits: {
+    fileSize: 5 * 1024 * 1024, 
+    files: 5 
+  } });
 
 // Routes
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
@@ -90,7 +113,59 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/articles', articleRouter);
-app.use('/api/shop', upload.array('photos', 5),shopRouter);
+app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const files = req.files as Express.Multer.File[];
+
+    // Process each uploaded file (resize and compress if it's an image)
+    const processedFiles = await Promise.all(
+      files.map(async (file) => {
+        const filePath = file.path; // Get the path of the uploaded file
+        const fileName = file.filename;
+        const outputPath = path.join(__dirname, 'compressed', fileName); // Specify output path for compressed file
+
+        if (file.mimetype.startsWith('image/')) {
+          // Read file buffer from file path
+          const fileBuffer = fs.readFileSync(filePath);
+
+          // Resize and compress image using sharp
+          const compressedImageBuffer = await sharp(fileBuffer)
+            .resize({ width: 800 }) // Resize image to a maximum width of 800px
+            .jpeg({ quality: 80 }) // Convert image to JPEG format with 80% quality (adjust as needed)
+            .toBuffer(); // Get the compressed image buffer
+
+          // Write the compressed image buffer to the output path (optional)
+          fs.writeFileSync(outputPath, compressedImageBuffer);
+
+          // Delete the original uploaded file
+          fs.unlinkSync(filePath);
+
+          return {
+            originalname: fileName,
+            mimetype: 'image/jpeg', // Set the MIME type to JPEG after compression
+            buffer: compressedImageBuffer
+          };
+        } else {
+          // For non-image files, return the original file buffer without compression
+          const fileBuffer = fs.readFileSync(filePath);
+
+          // Delete the original uploaded file
+          fs.unlinkSync(filePath);
+
+          return {
+            originalname: fileName,
+            mimetype: file.mimetype,
+            buffer: fileBuffer
+          };
+        }
+      })
+    );
+
+  } catch (error) {
+    next(error);
+  }
+  next()
+},shopRouter);
 
 
 // Error handling middleware
@@ -107,7 +182,7 @@ app.use((error: CustomError, req: Request, res: Response, next: NextFunction) =>
 
 // Set up the server
 const PORT = process.env.PORT || config.port;
-const server: Server = app.listen(Number(PORT), () => {
+app.listen(Number(PORT), () => {
     logger.info(`Server is running on port ${PORT} in ${app.get('env')} mode`);
 });
 

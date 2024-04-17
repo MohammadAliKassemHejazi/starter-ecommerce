@@ -1,11 +1,9 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/store/store"
 import { UserState } from "@/interfaces/types/store/slices/userSlices.types";
 import * as authService from "@/services/authService"
 import httpClient from "@/utils/httpClient";
-
-import Router from "next/router";
-import axios, { InternalAxiosRequestConfig } from 'axios';
+import  { InternalAxiosRequestConfig } from 'axios';
 
 interface SignAction {
 	email: string

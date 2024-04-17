@@ -1,4 +1,4 @@
-import {  Request,Response,NextFunction } from "express";
+import {  Response,NextFunction } from "express";
 
 
 import { userService } from "../services"
@@ -13,12 +13,12 @@ export const handleCreateProduct = async (request: CustomRequest, response: Resp
       const UserId = request.UserId
         const productData = {...request.body ,"ownerId":UserId} as IShopCreateProduct;
         const files = request.files as  Express.Multer.File[];
-        
+ 
 
         // Process product creation with data and files
         const results =  await shopService.createProductWithImages(productData, files);
      
-        response.status(200).json({ message: 'Product created successfully' });
+        response.status(200).json({ message: results });
     } catch (error) {
         next(error); // Pass error to Express error handling middleware
     }
@@ -64,6 +64,7 @@ export default {
   handelgetall,
   handelgetsingleitem,
 };
+
 
 
 

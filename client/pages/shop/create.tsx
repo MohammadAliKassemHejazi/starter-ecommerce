@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import ImageUploading, {
-  ImageListType,
-  ImageType,
-} from "react-images-uploading";
-import Image from "next/image";
 import { IProductModel } from "../../src/models/product.model";
-import Swal from "sweetalert2";
-import { useRouter } from "next/router";
 import { useAppDispatch } from "@/store/store";
 import { createProduct } from "@/store/slices/shopSlice";
+import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
+import ImageViewer from "../../src/components/UI/imageViewer/imageViewer";
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
+import { ImageListType } from "react-images-uploading";
+
 
 const Toast = Swal.mixin({
   toast: true,
@@ -21,51 +20,69 @@ const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   },
 });
+
+
+
 function CreateProduct() {
+  
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const router = useRouter()
   const [product, setProduct] = useState<IProductModel>({
     name: "",
     description: "",
     price: 0,
-    photos: [],
+    photos: [], // Original uploaded photos
+    croppedPhotos: [], // Cropped images
   });
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
 
     Object.entries(product).forEach(([key, value]) => {
-      if (key !== 'photos') {
-        formData.append(key, typeof value === 'boolean' ? value.toString() : value);
+      if (key !== "photos") {
+        formData.append(
+          key,
+          typeof value === "boolean" ? value.toString() : value
+        );
       }
     });
 
-    product.photos.forEach((photo, index) => {
-      if (photo.file) {
-        formData.append(`photos`, photo.file);
+    product.croppedPhotos.forEach((photo, index) => {
+      if (photo) {
+        formData.append(`photos`, photo);
       }
     });
 
     try {
       const response = await dispatch(createProduct(formData)).unwrap();
-      
+      // Redirect to the newly created product page
+      // Modify the router.push according to your application structure
+      router.push(`/shop/${response.id}`);
+      // Show success message
       Toast.fire({
-        icon: 'success',
-        title: 'Product created successfully',
+        icon: "success",
+        title: "Product created successfully",
       });
-    } catch (error : any) {
+    } catch (error: any) {
+      // Handle error
       Toast.fire({
-        icon: 'error',
+        icon: "error",
         title: `Failed to create product: ${error.message}`,
       });
     }
   };
 
+  const handlePhotoChange = (croppedImages: ImageListType[]) => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      croppedPhotos: croppedImages,
+    }));
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    e.preventDefault();
     const { name, value } = e.target;
     setProduct((prevProduct) => ({
       ...prevProduct,
@@ -73,117 +90,62 @@ function CreateProduct() {
     }));
   };
 
-  const handlePhotoChange = (imageList: ImageListType) => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      photos: imageList,
-    }));
-  };
-
-
-
   return (
     <section>
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <h2 className="h1 muted">Create Product</h2>
-          </div>
+      <h2>Create Product</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={product.name}
+            onChange={handleChange}
+          />
         </div>
-      </div>
-      <div className="container">
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-lg-6 col-md-6 col-sm-12">
-              <div>
-                <label htmlFor="name">Name:</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={product.name}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="description">Description:</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={product.description}
-                  onChange={handleChange}
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="price">Price:</label>
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  value={product.price.toString()}
-                  onChange={handleChange}
-                />
-              </div>
+        <div>
+          <label htmlFor="description">Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            value={product.description}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+        <div>
+          <label htmlFor="price">Price:</label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            value={product.price.toString()}
+            onChange={handleChange}
+          />
+        </div>
 
-              <div>
-                <label htmlFor="stockQuantity">Stock Quantity:</label>
-                <input
-                  type="number"
-                  id="stockQuantity"
-                  name="stockQuantity"
-                  value={product.stockQuantity?.toString() || ""}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="isActive">Is Active:</label>
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  name="isActive"
-                  checked={product.isActive || false}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div>
-              <div className="col-lg-6 col-md-6 col-sm-12">
-                <label className="muted">Photos:</label>
-                <ImageUploading
-                  multiple
-                  value={product.photos}
-                  onChange={handlePhotoChange}
-                  dataURLKey="data_url"
-                >
-                  {({ imageList, onImageUpload, onImageRemoveAll }) => (
-                    <div>
-                      <button onClick={onImageUpload}>Upload Photos</button>
-                      <button onClick={onImageRemoveAll}>
-                        Remove All Photos
-                      </button>
-                      {imageList.map((image: ImageType, index: number) => (
-                        <div key={index}>
-                          <Image
-                            src={image["data_url"]}
-                            alt={`Product Photo ${index}`}
-                            width="100"
-                             height="100"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </ImageUploading>
-              </div>
-            </div>
-            <button type="submit">Create</button>
-          </div>
-        </form>
-      </div>
+        <div>
+          <label htmlFor="isActive">Is Active:</label>
+          <input
+            type="checkbox"
+            id="isActive"
+            name="isActive"
+            checked={product.isActive || false}
+            onChange={handleChange}
+          />
+        </div>
+
+        <button type="submit">Create Product</button>
+      </form>
+
+        <ImageUploadComponent onImagesChange={handlePhotoChange}  defaultImages={product.photos}/>
+
+        <div>
+          <h3>Cropped Images</h3>
+          <ImageViewer croppedPhotos={product.croppedPhotos} />
+        </div>
     </section>
   );
 }
 
 export default CreateProduct;
-
-
