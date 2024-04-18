@@ -45,10 +45,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(helmet()); // Apply helmet for security headers
 
 // Increase the request body size limit for JSON bodies
-app.use(express.json({ limit: '5mb' }));
+app.use(express.json({ limit: '10mb' }));
 
 // Increase the request body size limit for URL-encoded bodies
-app.use(express.urlencoded({ extended: true, limit: '5mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -101,7 +101,7 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
 };
 
 const upload = multer({ storage: storage,fileFilter: fileFilter,limits: {
-    fileSize: 5 * 1024 * 1024, 
+    fileSize: 10 * 1024 * 1024, 
     files: 5 
   } });
 
