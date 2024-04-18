@@ -31,8 +31,8 @@ function CreateProduct() {
     name: "",
     description: "",
     price: 0,
-    photos: [], // Original uploaded photos
-    croppedPhotos: [], // Cropped images
+    photos: [], 
+    croppedPhotos: [], 
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,11 +48,12 @@ function CreateProduct() {
       }
     });
 
-    product.croppedPhotos.forEach((photo, index) => {
-      if (photo) {
-        formData.append(`photos`, photo);
+    product.croppedPhotos.forEach((file, index) => {
+      if (file && file.file instanceof File) {
+        formData.append(`photos`, file.file, file.file.name);
       }
     });
+    
 
     try {
       const response = await dispatch(createProduct(formData)).unwrap();
@@ -73,7 +74,7 @@ function CreateProduct() {
     }
   };
 
-  const handlePhotoChange = (croppedImages: ImageListType[]) => {
+  const handlePhotoChange = (croppedImages: ImageListType) => {
     setProduct((prevProduct) => ({
       ...prevProduct,
       croppedPhotos: croppedImages,

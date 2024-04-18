@@ -19,39 +19,54 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({ onImagesChange, defa
     setUploadedImages(defaultImages);
   }, [defaultImages]);
 
+  useEffect(() => {
+    onImagesChange(croppedImages);
+  }, [croppedImages]);
+  
+
   const handlePhotoChange = async (imageList: ImageListType) => {
   const newCropData: { [key: number]: Crop } = {};
-  const updatedCroppedImages: ImageListType[] = [];
+  const updatedCroppedImages: ImageListType = [];
 
   for (let index = 0; index < imageList.length; index++) {
     const image = imageList[index];
     const crop = cropData[index];
-
+  
     if (image.file && crop) {
       try {
-        const croppedBlob = await getCroppedFile(image.file, crop) ;
-        newCropData[index] = crop; // Save crop data for the uploaded image
-        updatedCroppedImages.push(croppedBlob as unknown as ImageListType) ; // Add cropped blob to the updated cropped images
+        const croppedFile = await getCroppedFile(image.file, crop);
+        newCropData[index] = crop;
+  
+        // Create a new ImageType object
+        const newImage: ImageType = {
+          ...image,  // spread other properties to keep them if needed
+          file: croppedFile,
+          data_url: URL.createObjectURL(croppedFile)  // Create a new data URL for the cropped image
+        };
+  
+        updatedCroppedImages.push(newImage); // push the ImageType object
       } catch (error) {
         console.error("Error cropping image:", error);
       }
     }
   }
+  
 
   // Update crop data state
   setCropData(newCropData);
 
   // Remove cropped images from uploadedImages and trigger callback with updated cropped images
   setUploadedImages((prevImages) =>
-    prevImages.filter((img, idx) => !newCropData[idx]) // Filter out images with crop data
+    prevImages.filter((img, idx) => !newCropData[idx]) 
   );
 
-  // Update the croppedImages state with the accumulated new cropped images
-  setCroppedImages((prevCroppedImages) => [...prevCroppedImages, ...updatedCroppedImages]);
+  setCroppedImages((prevCroppedImages) => {
+    const newCroppedImages = [...prevCroppedImages, ...updatedCroppedImages];
+    return newCroppedImages;
+  });
 
-  // Trigger callback with all cropped images (excluding undefined blobs)
-  const filteredCroppedImages = croppedImages.filter((blob) => blob !== undefined);
-  onImagesChange(filteredCroppedImages);
+  
+
 };
 
 
@@ -90,18 +105,17 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({ onImagesChange, defa
           crop.height!
         );
 
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              // Create a new File object with the original filename
-              const croppedFile = new File([blob], imageFile.name, { type: blob.type });
-              resolve(croppedFile);
-            } else {
-              reject(new Error("Failed to crop image"));
-            }
-          },
-          imageFile.type || "image/jpeg"
-        );
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const dataURL = URL.createObjectURL(blob);
+            console.log("Blob created, dataURL:", dataURL); // Check if the URL is valid
+            const croppedFile = new File([blob], imageFile.name, { type: blob.type });
+            resolve(croppedFile);
+          } else {
+            reject(new Error("Failed to crop image"));
+          }
+        }, imageFile.type || "image/jpeg");
+        
       } else {
         reject(new Error("Failed to initialize canvas context"));
       }
@@ -129,7 +143,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({ onImagesChange, defa
                     minWidth={100}
                     minHeight={100}
                   >
-                    <Image src={image.data_url} alt={`Image ${index}`} width={800} height={600} />
+                  <Image src={image.data_url} alt={`Image ${index}`} width={800} height={600} />
                   </ReactCrop>
                   <button onClick={() => handlePhotoChange([image])}>Confirm Crop</button>
                 </div>

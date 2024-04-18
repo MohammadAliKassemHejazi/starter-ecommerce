@@ -8,8 +8,9 @@ import { Navigation, Pagination } from 'swiper/modules';
 import styles from "./style.module.css"
 import Image from 'next/image';
 import DynamicSizedImage from '../dynamicSizeImage/dynamicSizeImage';
+import { ImageListType, ImageType } from 'react-images-uploading';
 interface ImageViewerProps {
-  croppedPhotos: Blob[];
+  croppedPhotos: ImageListType;
 }
 
 
@@ -30,10 +31,10 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ croppedPhotos }) => {
 
   return (
     <div className={styles["image-container"]}>
-      {croppedPhotos.map((blob, index) => (
+      {croppedPhotos.map((image: ImageType, index) => (
         <div key={index} onClick={() => handleImageClick(index)}>
           <Image
-            src={URL.createObjectURL(blob)}
+            src={image.data_url ?? ""}
             alt={`Cropped Image ${index}`}
             className={styles["thumbnail-image"]}
             width={800}
@@ -50,10 +51,10 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ croppedPhotos }) => {
             navigation
             pagination={{ clickable: true }}
           >
-            {croppedPhotos.map((blob, index) => (
+            {croppedPhotos.map((image: ImageType, index) => (
               <SwiperSlide key={index}  className={styles["swiper-slide"]}>
                 <DynamicSizedImage
-                  blob={blob}
+                  file={image}
                   index = {index}
                 />
               </SwiperSlide>
