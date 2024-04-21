@@ -8,10 +8,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
     title!: string;
     text!: string;
     type!: string;
-
+    userId!: string; 
     static associate(models: any) {
       // Define associations here
-      Article.belongsTo(models.User);
+      Article.belongsTo(models.User, { foreignKey: 'userId' }); 
     }
   }
 

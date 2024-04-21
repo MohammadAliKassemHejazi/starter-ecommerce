@@ -1,4 +1,4 @@
-import {  Response } from "express";
+import {  NextFunction, Response } from "express";
 import { articleService } from "../services";
 import {
   ArticleCreateBodyRequest,
@@ -31,13 +31,14 @@ export const handleCreate = async (
 
 export const handleGetArticles = async (
   request: ArticleGetRequest,
-  response: Response
+  response: Response,
+  next : NextFunction
 ): Promise<void> => {
   try {
     const articles = await articleService.fetchArticles();
     response.json(articles);
   } catch (error) {
-    response.status(500).json({ error: "Internal Server Error" });
+    next(error);
   }
 };
 

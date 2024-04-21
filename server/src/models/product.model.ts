@@ -4,6 +4,7 @@ import { IProductAttributes } from "../interfaces/types/models/product.model.typ
 import { IUserAttributes } from "../interfaces/types/models/user.model.types";
 import { ICategoryAttributes } from "../interfaces/types/models/category.model.types";
 import { ISubcategoryAttributes } from "../interfaces/types/models/subcategory.model.types";
+import { IStoreAttributes } from "../interfaces/types/models/store.model.types"; 
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Product extends Model<IProductAttributes> implements IProductAttributes {
@@ -21,6 +22,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     slug?: string;
     tags?: string;
     inventoryStatus?: string;
+    storeId!: ForeignKey<IStoreAttributes['id']>; // Add storeId to link to Store
 
     static associate(models: any) {
       // Existing associations
@@ -30,7 +32,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Product.hasMany(models.OrderItem);
       Product.belongsTo(models.User, { foreignKey: 'ownerId'});
       Product.belongsTo(models.Category, { foreignKey: 'categoryId'});
-      Product.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId'});
+      Product.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId' });
+          Product.belongsTo(models.Store, { foreignKey: 'storeId' });
     }
   }
 
