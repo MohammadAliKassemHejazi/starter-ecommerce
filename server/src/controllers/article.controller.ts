@@ -14,14 +14,14 @@ export const handleCreate = async (
   request: ArticleCreateBodyRequest,
   response: Response
 ): Promise<void> => {
-  const UserId = request.UserId
+  const userId = request.UserId
   const {title, text, type } = request.body;
   try {
     const article: IArticleAttributes = await articleService.createArticle({
       title,
       text,
       type,
-      UserId,
+      userId,
     });
     response.status(201).json(article);
   } catch (error) {
@@ -46,11 +46,11 @@ export const handleGetByAuthor = async (
   request: CustomRequest,
   response: Response
 ): Promise<void> => {
-  const UserId = request.UserId; // Assuming UserId is accessible via middleware
-  if (UserId) {
+  const userId = request.UserId; // Assuming UserId is accessible via middleware
+  if (userId) {
     try {
       const data: IArticlesBodyResponse = await articleService.fetchArticleByAuthor(
-        UserId
+        userId
       );
       const responseData = { data };
       response.json(responseData);
@@ -85,8 +85,8 @@ export const handleUpdate = async (
   request: CustomRequest,
   response: Response
 ): Promise<void> => {
-  const UserId = request.UserId; // Access UserId from request object
-  if (!UserId) {
+  const userId = request.UserId; // Access UserId from request object
+  if (!userId) {
     response.status(401).json({ error: "User ID not found" });
     return;
   }
@@ -100,7 +100,7 @@ export const handleUpdate = async (
       title!,
       text!,
       type!,
-      UserId
+      userId
     );
     response.json(article);
   } catch (error) {
@@ -115,9 +115,9 @@ export const handleDelete = async (
   response: Response
 ): Promise<void> => {
   const id = request.params.id;
-  const UserId = request.UserId; // Assuming UserId is accessible via middleware
+  const userId = request.UserId; // Assuming UserId is accessible via middleware
   try {
-    const result: number = await articleService.deleteArticle(id, UserId!);
+    const result: number = await articleService.deleteArticle(id, userId!);
     response.json(result);
   } catch (error) {
     response.status(500).json({ error: "Internal Server Error" });

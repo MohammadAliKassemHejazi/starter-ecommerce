@@ -1,4 +1,4 @@
-import {  IArticleModel } from "@/models/article.model"
+
 import httpClient from "@/utils/httpClient"
 
 export interface IArticleProps {

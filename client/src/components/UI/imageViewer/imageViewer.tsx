@@ -33,13 +33,10 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ croppedPhotos }) => {
     <div className={styles["image-container"]}>
       {croppedPhotos.map((image: ImageType, index) => (
         <div key={index} onClick={() => handleImageClick(index)}>
-          <Image
-            src={image.data_url ?? ""}
-            alt={`Cropped Image ${index}`}
-            className={styles["thumbnail-image"]}
-            width={800}
-            height={600} // Adjust dimensions as needed
-          />
+            <DynamicSizedImage
+                  file={image}
+                  index = {index}
+                />
         </div>
       ))}
 

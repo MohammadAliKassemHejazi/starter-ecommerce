@@ -57,9 +57,9 @@ export const deleteArticle = async (
 
 
 export const fetchArticleByAuthor = async (
-  UserId: string
+  userId: string
 ): Promise<IArticlesBodyResponse> => {
-  const response: IArticlesBodyResponse = await db.Article.findAll({ where: { UserId }, raw: true });
+  const response: IArticlesBodyResponse = await db.Article.findAll({ where: { userId }, raw: true });
   return response
 }
 

@@ -14,11 +14,11 @@ export interface IArticleModelWithUser {
   text: string
   createdAt: string
   updatedAt: string
-  User: IArticleAuthor
+  User: IArticleAuthor | undefined
 }
 
 export interface IArticleAuthor {
   id: string
-  name: string
-  surname: string
+  name: string 
+
 }

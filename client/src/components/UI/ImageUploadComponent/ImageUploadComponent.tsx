@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import ImageUploading, { ImageListType, ImageType } from "react-images-uploading";
+import ImageUploading, {
+  ImageListType,
+  ImageType,
+} from "react-images-uploading";
 import ReactCrop, { Crop } from "react-image-crop";
 import Image from "next/image";
 import "react-image-crop/dist/ReactCrop.css";
@@ -9,10 +12,13 @@ interface ImageUploadProps {
   defaultImages?: ImageListType;
 }
 
-const ImageUploadComponent: React.FC<ImageUploadProps> = ({ onImagesChange, defaultImages = [] }) => {
-  
+const ImageUploadComponent: React.FC<ImageUploadProps> = ({
+  onImagesChange,
+  defaultImages = [],
+}) => {
   const [cropData, setCropData] = useState<{ [key: number]: Crop }>({});
-  const [uploadedImages, setUploadedImages] = useState<ImageListType>(defaultImages);
+  const [uploadedImages, setUploadedImages] =
+    useState<ImageListType>(defaultImages);
   const [croppedImages, setCroppedImages] = useState<ImageListType>([]);
 
   useEffect(() => {
@@ -22,56 +28,50 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({ onImagesChange, defa
   useEffect(() => {
     onImagesChange(croppedImages);
   }, [croppedImages]);
-  
 
   const handlePhotoChange = async (imageList: ImageListType) => {
-  const newCropData: { [key: number]: Crop } = {};
-  const updatedCroppedImages: ImageListType = [];
+    const newCropData: { [key: number]: Crop } = {};
+    const updatedCroppedImages: ImageListType = [];
 
-  for (let index = 0; index < imageList.length; index++) {
-    const image = imageList[index];
-    const crop = cropData[index];
-  
-    if (image.file && crop) {
-      try {
-        const croppedFile = await getCroppedFile(image.file, crop);
-        newCropData[index] = crop;
-  
-        // Create a new ImageType object
-        const newImage: ImageType = {
-          ...image,  // spread other properties to keep them if needed
-          file: croppedFile,
-          data_url: URL.createObjectURL(croppedFile)  // Create a new data URL for the cropped image
-        };
-  
-        updatedCroppedImages.push(newImage); // push the ImageType object
-      } catch (error) {
-        console.error("Error cropping image:", error);
+    for (let index = 0; index < imageList.length; index++) {
+      const image = imageList[index];
+      const crop = cropData[index];
+
+      if (image.file && crop) {
+        try {
+          const croppedFile = await getCroppedFile(image.file, crop);
+          newCropData[index] = crop;
+
+          // Create a new ImageType object
+          const newImage: ImageType = {
+            ...image, // spread other properties to keep them if needed
+            file: croppedFile,
+            data_url: URL.createObjectURL(croppedFile), // Create a new data URL for the cropped image
+          };
+
+          updatedCroppedImages.push(newImage); // push the ImageType object
+        } catch (error) {
+          console.error("Error cropping image:", error);
+        }
       }
     }
-  }
-  
 
-  // Update crop data state
-  setCropData(newCropData);
+    // Update crop data state
+    setCropData(newCropData);
 
-  // Remove cropped images from uploadedImages and trigger callback with updated cropped images
-  setUploadedImages((prevImages) =>
-    prevImages.filter((img, idx) => !newCropData[idx]) 
-  );
+    // Remove cropped images from uploadedImages and trigger callback with updated cropped images
+    setUploadedImages((prevImages) =>
+      prevImages.filter((img, idx) => !newCropData[idx])
+    );
 
-  setCroppedImages((prevCroppedImages) => {
-    const newCroppedImages = [...prevCroppedImages, ...updatedCroppedImages];
-    return newCroppedImages;
-  });
+    setCroppedImages((prevCroppedImages) => {
+      const newCroppedImages = [...prevCroppedImages, ...updatedCroppedImages];
+      return newCroppedImages;
+    });
+  };
 
-  
-
-};
-
-
-    const handleCropChange = (newCrop: Crop, imageIndex: number) => {
-        console.log(newCrop);
+  const handleCropChange = (newCrop: Crop, imageIndex: number) => {
+    console.log(newCrop);
     setCropData((prevData) => ({
       ...prevData,
       [imageIndex]: newCrop,
@@ -79,57 +79,75 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({ onImagesChange, defa
   };
 
   const getCroppedFile = (imageFile: File, crop: Crop): Promise<File> => {
-  return new Promise((resolve, reject) => {
-    const image = document.createElement("img");
-    image.src = URL.createObjectURL(imageFile);
+    return new Promise((resolve, reject) => {
+      const image = document.createElement("img");
+      image.src = URL.createObjectURL(imageFile);
 
-    image.onload = () => {
-      const canvas = document.createElement("canvas");
-      const scaleX = image.naturalWidth / image.width;
-      const scaleY = image.naturalHeight / image.height;
-      const ctx = canvas.getContext("2d");
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
 
-      if (ctx) {
-        canvas.width = crop.width!;
-        canvas.height = crop.height!;
+        if (!crop || !canvas || !image) {
+          return;
+        }
 
-        ctx.drawImage(
-          image,
-          crop.x! * scaleX,
-          crop.y! * scaleY,
-          crop.width! * scaleX,
-          crop.height! * scaleY,
-          0,
-          0,
-          crop.width!,
-          crop.height!
-        );
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        const ctx = canvas.getContext("2d");
 
-        canvas.toBlob((blob) => {
-          if (blob) {
-            const dataURL = URL.createObjectURL(blob);
-            console.log("Blob created, dataURL:", dataURL); // Check if the URL is valid
-            const croppedFile = new File([blob], imageFile.name, { type: blob.type });
-            resolve(croppedFile);
-          } else {
-            reject(new Error("Failed to crop image"));
-          }
-        }, imageFile.type || "image/jpeg");
-        
-      } else {
-        reject(new Error("Failed to initialize canvas context"));
-      }
-    };
+        if (ctx) {
+          // refer https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
+          const pixelRatio = window.devicePixelRatio;
 
-    image.onerror = (error) => {
-      reject(new Error("Failed to load image"));
-    };
-  });
-};
+          canvas.width = crop.width * pixelRatio * scaleX;
+          canvas.height = crop.height * pixelRatio * scaleY;
 
+          // refer https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
+          ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+          ctx.imageSmoothingQuality = "high";
+
+          // refer https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+          ctx.drawImage(
+            image,
+            crop.x * scaleX,
+            crop.y * scaleY,
+            crop.width * scaleX,
+            crop.height * scaleY,
+            0,
+            0,
+            crop.width * scaleX,
+            crop.height * scaleY
+          );
+          
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const dataURL = URL.createObjectURL(blob);
+              console.log("Blob created, dataURL:", dataURL); // Check if the URL is valid
+              const croppedFile = new File([blob], imageFile.name, {
+                type: blob.type,
+              });
+              resolve(croppedFile);
+            } else {
+              reject(new Error("Failed to crop image"));
+            }
+          }, imageFile.type || "image/jpeg");
+        } else {
+          reject(new Error("Failed to initialize canvas context"));
+        }
+      };
+
+      image.onerror = (error) => {
+        reject(new Error("Failed to load image"));
+      };
+    });
+  };
 
   return (
-    <ImageUploading multiple value={uploadedImages} onChange={setUploadedImages} dataURLKey="data_url">
+    <ImageUploading
+      multiple
+      value={uploadedImages}
+      onChange={setUploadedImages}
+      dataURLKey="data_url"
+    >
       {({ imageList, onImageUpload }) => (
         <div>
           <button onClick={onImageUpload}>Upload Photos</button>
@@ -143,9 +161,16 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({ onImagesChange, defa
                     minWidth={100}
                     minHeight={100}
                   >
-                  <Image src={image.data_url} alt={`Image ${index}`} width={800} height={600} />
+                    <Image
+                      src={image.data_url}
+                      alt={`Image ${index}`}
+                      width={800}
+                      height={600}
+                    />
                   </ReactCrop>
-                  <button onClick={() => handlePhotoChange([image])}>Confirm Crop</button>
+                  <button onClick={() => handlePhotoChange([image])}>
+                    Confirm Crop
+                  </button>
                 </div>
               )}
             </div>

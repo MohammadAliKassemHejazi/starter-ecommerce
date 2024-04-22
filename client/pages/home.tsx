@@ -202,6 +202,35 @@ const Home = ({ articles }: Props) => {
           </div>
         </div>
       </div>
+
+      <div className="container">
+        <div className="row">
+          <React.Fragment>
+            {(articles?.length ?? 0) > 0 && articles?.map((article, idx) => {
+              return (
+                <div className="col-lg-4" key={article.id}>
+                  <div className="card mb-4">
+                    <div className="card-body" key={idx}>
+                      <div className="small text-muted">
+                        {article.createdAt}
+                      </div>
+                      <h2 className="card-title h4">{article.title}</h2>
+                      <p className="card-text">{article.text}</p>
+                      <p className="card-text">
+                        author: {article.User?.name ?? ""}
+                      </p>
+
+                      <a className="btn btn-primary mt-3" href="./articles/">
+                        Read more →
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </React.Fragment>
+        </div>
+        </div>
     </Layout>
   );
 };

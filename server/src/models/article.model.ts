@@ -1,6 +1,7 @@
 "use strict";
-import { Model, UUIDV4 } from "sequelize";
+import { ForeignKey, Model, UUIDV4 } from "sequelize";
 import { IArticleAttributes } from "../interfaces/types/models/article.model.types";
+import { IUserAttributes } from "interfaces/types/models/user.model.types";
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Article extends Model<IArticleAttributes> implements IArticleAttributes {
@@ -8,9 +9,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
     title!: string;
     text!: string;
     type!: string;
-    userId!: string; 
+    userId!: ForeignKey<IUserAttributes['id']>; 
     static associate(models: any) {
-      // Define associations here
+ 
       Article.belongsTo(models.User, { foreignKey: 'userId' }); 
     }
   }
@@ -29,6 +30,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       text: {
         type: DataTypes.STRING(500),
+        allowNull: true,
+      },
+       userId: {
+        type: DataTypes.UUID,
         allowNull: true,
       },
     },

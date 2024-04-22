@@ -197,3 +197,168 @@
 {"level":"info","message":"::1 - - [21/Apr/2024:15:41:24 +0000] \"POST /api/articles/create HTTP/1.1\" 201 182 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
 {"level":"info","message":"::1 - - [21/Apr/2024:15:41:35 +0000] \"POST /api/articles/create HTTP/1.1\" 201 182 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
 {"level":"info","message":"::1 - - [21/Apr/2024:15:42:06 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [21/Apr/2024:18:42:14 +0000] \"POST /api/auth/login HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [21/Apr/2024:18:42:14 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:02:39 +0000] \"POST /api/auth/login HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:02:40 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:02:54 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:03:11 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:03:11 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:03:33 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:03:34 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:03:34 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:04:12 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:04:17 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:04:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:04:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:05:18 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:05:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:05:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:05:28 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:05:29 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:05:29 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:06:35 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:06:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:06:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:07:02 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:07:03 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:07:03 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:07:13 +0000] \"GET /api/articles HTTP/1.1\" 200 785 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:07:14 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:07:14 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:11 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:11 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:12 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:12 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:15 +0000] \"POST /api/articles/create HTTP/1.1\" 201 170 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:18 +0000] \"GET /api/articles HTTP/1.1\" 200 968 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:25 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:08:25 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:11:58 +0000] \"POST /api/articles/create HTTP/1.1\" 201 205 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:07 +0000] \"GET /api/articles HTTP/1.1\" 200 1469 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:24 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:24 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:24 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:32 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:33 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:33 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:33 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:41 +0000] \"GET /api/articles HTTP/1.1\" 200 1469 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:51 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:53 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:12:53 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:14:42 +0000] \"POST /api/auth/login HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:14:43 +0000] \"GET /api/articles HTTP/1.1\" 200 1469 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:14:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:14:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:14:51 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:14:51 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:15:00 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:15:00 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:17:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:17:27 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 365 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:17:27 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:17:28 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"error","message":"Error syncing database: foreign key constraint \"Articles_userId_fkey\" cannot be implemented","name":"SequelizeDatabaseError","original":{"code":"42804","detail":"Key columns \"userId\" and \"id\" are of incompatible types: character varying and uuid.","file":"tablecmds.c","length":227,"line":"9423","name":"error","routine":"ATAddForeignKeyConstraint","severity":"ERROR","sql":"CREATE TABLE IF NOT EXISTS \"Articles\" (\"id\" UUID NOT NULL , \"title\" VARCHAR(255), \"text\" VARCHAR(500), \"userId\" VARCHAR(255) REFERENCES \"Users\" (\"id\") ON DELETE SET NULL ON UPDATE CASCADE, \"createdAt\" TIMESTAMP WITH TIME ZONE NOT NULL, \"updatedAt\" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY (\"id\"));"},"parameters":{},"parent":{"code":"42804","detail":"Key columns \"userId\" and \"id\" are of incompatible types: character varying and uuid.","file":"tablecmds.c","length":227,"line":"9423","name":"error","routine":"ATAddForeignKeyConstraint","severity":"ERROR","sql":"CREATE TABLE IF NOT EXISTS \"Articles\" (\"id\" UUID NOT NULL , \"title\" VARCHAR(255), \"text\" VARCHAR(500), \"userId\" VARCHAR(255) REFERENCES \"Users\" (\"id\") ON DELETE SET NULL ON UPDATE CASCADE, \"createdAt\" TIMESTAMP WITH TIME ZONE NOT NULL, \"updatedAt\" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY (\"id\"));"},"sql":"CREATE TABLE IF NOT EXISTS \"Articles\" (\"id\" UUID NOT NULL , \"title\" VARCHAR(255), \"text\" VARCHAR(500), \"userId\" VARCHAR(255) REFERENCES \"Users\" (\"id\") ON DELETE SET NULL ON UPDATE CASCADE, \"createdAt\" TIMESTAMP WITH TIME ZONE NOT NULL, \"updatedAt\" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY (\"id\"));","stack":"Error\n    at Query.run (C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\dialects\\postgres\\query.js:76:25)\n    at C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\sequelize.js:650:28\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async PostgresQueryInterface.createTable (C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\dialects\\abstract\\query-interface.js:229:12)\n    at async Function.sync (C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\model.js:1353:7)\n    at async Sequelize.sync (C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\sequelize.js:825:9)"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"error","message":"Error syncing database: foreign key constraint \"Articles_userId_fkey\" cannot be implemented","name":"SequelizeDatabaseError","original":{"code":"42804","detail":"Key columns \"userId\" and \"id\" are of incompatible types: character varying and uuid.","file":"tablecmds.c","length":227,"line":"9423","name":"error","routine":"ATAddForeignKeyConstraint","severity":"ERROR","sql":"CREATE TABLE IF NOT EXISTS \"Articles\" (\"id\" UUID NOT NULL , \"title\" VARCHAR(255), \"text\" VARCHAR(500), \"userId\" VARCHAR(255) REFERENCES \"Users\" (\"id\") ON DELETE SET NULL ON UPDATE CASCADE, \"createdAt\" TIMESTAMP WITH TIME ZONE NOT NULL, \"updatedAt\" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY (\"id\"));"},"parameters":{},"parent":{"code":"42804","detail":"Key columns \"userId\" and \"id\" are of incompatible types: character varying and uuid.","file":"tablecmds.c","length":227,"line":"9423","name":"error","routine":"ATAddForeignKeyConstraint","severity":"ERROR","sql":"CREATE TABLE IF NOT EXISTS \"Articles\" (\"id\" UUID NOT NULL , \"title\" VARCHAR(255), \"text\" VARCHAR(500), \"userId\" VARCHAR(255) REFERENCES \"Users\" (\"id\") ON DELETE SET NULL ON UPDATE CASCADE, \"createdAt\" TIMESTAMP WITH TIME ZONE NOT NULL, \"updatedAt\" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY (\"id\"));"},"sql":"CREATE TABLE IF NOT EXISTS \"Articles\" (\"id\" UUID NOT NULL , \"title\" VARCHAR(255), \"text\" VARCHAR(500), \"userId\" VARCHAR(255) REFERENCES \"Users\" (\"id\") ON DELETE SET NULL ON UPDATE CASCADE, \"createdAt\" TIMESTAMP WITH TIME ZONE NOT NULL, \"updatedAt\" TIMESTAMP WITH TIME ZONE NOT NULL, PRIMARY KEY (\"id\"));","stack":"Error\n    at Query.run (C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\dialects\\postgres\\query.js:76:25)\n    at C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\sequelize.js:650:28\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async PostgresQueryInterface.createTable (C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\dialects\\abstract\\query-interface.js:229:12)\n    at async Function.sync (C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\model.js:1353:7)\n    at async Sequelize.sync (C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\node_modules\\sequelize\\src\\sequelize.js:825:9)"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:20:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:20:27 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:20:41 +0000] \"POST /api/auth/register HTTP/1.1\" 201 288 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:20:49 +0000] \"POST /api/auth/login HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:20:52 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:00 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:00 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:04 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:04 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:14 +0000] \"POST /api/articles/create HTTP/1.1\" 201 207 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:17 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:17 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:19 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:19 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:22 +0000] \"GET /api/articles HTTP/1.1\" 200 309 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:25 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:25 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:48 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:48 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:48 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:21:48 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:22:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:22:01 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:22:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:22:01 +0000] \"GET /api/articles/get/author HTTP/1.1\" 500 33 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:22:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:22:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 341 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:23:29 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:23:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:23:52 +0000] \"POST /api/auth/register HTTP/1.1\" 201 287 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:23:58 +0000] \"POST /api/auth/login HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:04 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:09 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:09 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:17 +0000] \"GET /api/articles/get/author HTTP/1.1\" 200 11 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:24 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:32 +0000] \"POST /api/articles/create HTTP/1.1\" 201 207 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:40 +0000] \"GET /api/articles/get/author HTTP/1.1\" 200 218 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:42 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:24:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:28:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:28:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:28:33 +0000] \"GET /api/articles HTTP/1.1\" 200 308 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:28:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:28:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"code":"ENOENT","errno":-4058,"level":"error","path":"C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\uploads\\45000-meeting screen shot.PNG","storageErrors":[],"syscall":"open"}
+{"level":"info","message":"::1 - - [22/Apr/2024:16:32:59 +0000] \"POST /api/shop/create HTTP/1.1\" 500 191 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:27:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:27:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:27:01 +0000] \"GET /api/articles HTTP/1.1\" 200 308 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:27:04 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:27:04 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:27:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:27:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:31:34 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:31:34 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:47:47 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:47:47 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:48:44 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:48:44 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:49:16 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:49:16 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:52:08 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:52:08 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:57:46 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:57:46 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:58:24 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/Apr/2024:17:58:24 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 340 \"-\" \"axios/1.6.7\""}

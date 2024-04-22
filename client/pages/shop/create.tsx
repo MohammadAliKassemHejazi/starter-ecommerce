@@ -7,6 +7,7 @@ import ImageViewer from "../../src/components/UI/imageViewer/imageViewer";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
+import Layout from "@/components/Layouts/Layout";
 
 
 const Toast = Swal.mixin({
@@ -92,6 +93,7 @@ function CreateProduct() {
   };
 
   return (
+     <Layout>
     <section>
       <h2>Create Product</h2>
       <form onSubmit={handleSubmit}>
@@ -145,7 +147,8 @@ function CreateProduct() {
           <h3>Cropped Images</h3>
           <ImageViewer croppedPhotos={product.croppedPhotos} />
         </div>
-    </section>
+      </section>
+      </Layout>
   );
 }
 
