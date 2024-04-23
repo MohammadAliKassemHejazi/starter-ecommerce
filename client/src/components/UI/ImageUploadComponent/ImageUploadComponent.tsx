@@ -4,8 +4,8 @@ import ImageUploading, {
   ImageType,
 } from "react-images-uploading";
 import ReactCrop, { Crop } from "react-image-crop";
-import Image from "next/image";
 import "react-image-crop/dist/ReactCrop.css";
+import DynamicSizedImage from "../dynamicSizeImage/dynamicSizeImage";
 
 interface ImageUploadProps {
   onImagesChange: (images: ImageListType) => void;
@@ -160,13 +160,12 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
                     onChange={(newCrop) => handleCropChange(newCrop, index)}
                     minWidth={100}
                     minHeight={100}
+                    aspect={500/720}
                   >
-                    <Image
-                      src={image.data_url}
-                      alt={`Image ${index}`}
-                      width={800}
-                      height={600}
-                    />
+                     <DynamicSizedImage
+                  file={image}
+                  index = {index}
+                />
                   </ReactCrop>
                   <button onClick={() => handlePhotoChange([image])}>
                     Confirm Crop
