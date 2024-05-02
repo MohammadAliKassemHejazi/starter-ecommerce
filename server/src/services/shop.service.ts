@@ -11,7 +11,7 @@ import db from '../models/index';
      const product = await db.Product.create(productData);
 
 
-    const imageUrls = files.map(file => `/uploads/${file.filename}`);
+    // const imageUrls = files.map(file => `/uploads/${file.filename}`);
     
     // You can also save the image data to your database if needed
     // Replace this with your actual image data saving logic
