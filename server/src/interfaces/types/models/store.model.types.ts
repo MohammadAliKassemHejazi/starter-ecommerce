@@ -3,4 +3,6 @@ export interface IStoreAttributes {
   name: string;
   userId: string;
   categoryId: string;
+  description: string;
+  imgUrl: string;
 }

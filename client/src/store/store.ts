@@ -5,11 +5,13 @@ import { useDispatch } from "react-redux";
 import userReducer from "./slices/userSlice";
 import articleReducer from "./slices/articleSlice";
 import shopReducer from "./slices/shopSlice";
+import storeReducer from "./slices/storeSlice";
 
 const reducer = {
 	user: userReducer,
 	article: articleReducer,
-	products:shopReducer
+	products: shopReducer,
+	store : storeReducer
 };
 
 export const store = configureStore({

@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {shopController} from "../controllers/index";
+import { storeController } from "../controllers/index";
 
 import { protectedRoutes } from "../middlewares";
 
@@ -17,9 +17,9 @@ const router = express.Router();
 
 protectedRoutes(router, Routes); 
 
-router.post("/create",shopController.handleCreateProduct);
-router.post("/update",shopController.handleUpdate);
-router.get("/get/:id", shopController.handelgetsingleitem);
-router.get("/getall", shopController.handelgetall);
+router.post("/create",storeController.handleCreateStore);
+router.post("/update",storeController.handleUpdate);
+router.get("/get/:id", storeController.handelgetsingleitem);
+router.get("/getall", storeController.handelgetall);
 
 export default router;

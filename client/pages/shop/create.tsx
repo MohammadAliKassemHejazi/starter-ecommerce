@@ -61,7 +61,7 @@ function CreateProduct() {
       }
     });
 
-    values.croppedPhotos.forEach((file, index) => {
+    product.croppedPhotos.forEach((file, index) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }

@@ -83,5 +83,7 @@ export const articleSlice = createSlice({
 	}
 })
 
+export const productSelector = (store: RootState): IProductModel[] | undefined => store.products.products;
+
 
 export default articleSlice.reducer;

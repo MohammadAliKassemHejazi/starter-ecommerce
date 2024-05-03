@@ -7,6 +7,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     public name!: string;
     public userId!: string;
     public categoryId!: string;
+    public description!: string; // Add description property
+    public imgUrl!: string; // Add imgUrl property
 
     static associate(models: any) {
       Store.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
@@ -14,32 +16,39 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
   }
 
-      Store.init(
-        {
-          id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true,
-          },
-         name: {
+  Store.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
         type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT, // Define description as TEXT type
         allowNull: true,
       },
-          userId: {
-            type: DataTypes.UUID,
-            allowNull: false,
-          },
-          categoryId: {
-            type: DataTypes.UUID,
-            allowNull: false,
-          },
-        },
-        {
-          sequelize,
-          modelName: 'Store',
-        }
-      );
-
+      imgUrl: {
+        type: DataTypes.STRING, // Define imgUrl as STRING type
+        allowNull: true,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      categoryId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Store',
+    }
+  );
 
   return Store;
 }
