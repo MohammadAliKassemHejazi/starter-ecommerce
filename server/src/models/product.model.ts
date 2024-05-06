@@ -33,7 +33,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Product.belongsTo(models.User, { foreignKey: 'ownerId'});
       Product.belongsTo(models.Category, { foreignKey: 'categoryId'});
       Product.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId' });
-          Product.belongsTo(models.Store, { foreignKey: 'storeId' });
+      Product.belongsTo(models.Store, { foreignKey: 'storeId' });
     }
   }
 

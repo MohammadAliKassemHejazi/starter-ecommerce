@@ -35,3 +35,11 @@
 {"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
 {"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
 {"code":"ENOENT","errno":-4058,"level":"error","path":"C:\\Users\\User\\Desktop\\nodejs-nextjs-starter-template-main\\server\\uploads\\45000-meeting screen shot.PNG","storageErrors":[],"syscall":"open"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}

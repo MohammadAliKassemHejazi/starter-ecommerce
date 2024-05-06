@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { IProductModel, IProductModelErrors } from "../../src/models/product.model";
+import {
+  IProductModel,
+  IProductModelErrors,
+} from "../../src/models/product.model";
 import { useAppDispatch } from "@/store/store";
 import { createProduct } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
@@ -30,13 +33,23 @@ function CreateProduct() {
     name: "",
     description: "",
     price: 0,
-    photos: [], 
-    croppedPhotos: [], 
+    isActive: false,
+    subcategoryId: "",
+    storeId : "", 
+    metaTitle: "", 
+    metaDescription: "", 
+    photos: [],
+    croppedPhotos: [],
   });
   const initialValues: IProductModel = {
     name: "",
     description: "",
     price: 0,
+    isActive: false,
+    subcategoryId: "", 
+    storeId : "", 
+    metaTitle: "",
+    metaDescription: "", 
     photos: [],
     croppedPhotos: [],
   };
@@ -47,7 +60,6 @@ function CreateProduct() {
       croppedPhotos: croppedImages,
     }));
   };
-  
 
   const handleSubmit = async (values: IProductModel) => {
     const formData = new FormData();
@@ -97,9 +109,8 @@ function CreateProduct() {
             if (values.price && (values.price <= 0 || isNaN(values.price))) {
               errors.price = "Price must be a positive number";
             }
-          
+
             return errors;
-           
           }}
         >
           {({ isSubmitting }) => (
@@ -119,10 +130,68 @@ function CreateProduct() {
                 <Field type="number" id="price" name="price" />
                 <ErrorMessage name="price" component="div" />
               </div>
+             
               <div>
                 <label htmlFor="isActive">Is Active:</label>
                 <Field type="checkbox" id="isActive" name="isActive" />
               </div>
+              <div>
+                <label htmlFor="storeId">Store:</label>
+                <Field as="select" id="storeId" name="storeId">
+                  <option value="">Select Category</option>
+                  <option value="1">Category 1</option>
+                  <option value="2">Category 2</option>
+                </Field>
+                <ErrorMessage name="storeId" component="div" />
+              </div>
+
+              <div>
+                <label htmlFor="subcategoryId">Subcategory:</label>
+                <Field as="select" id="subcategoryId" name="subcategoryId">
+                  <option value="">Select Subcategory</option>
+                  <option value="1">Subcategory 1</option>
+                  <option value="2">Subcategory 2</option>
+                </Field>
+                <ErrorMessage name="subcategoryId" component="div" />
+              </div>
+
+              <div>
+                <label htmlFor="inventoryStatus">Inventory Status:</label>
+                <Field as="select" id="inventoryStatus" name="inventoryStatus">
+                  <option value="">Select Status</option>
+                  <option value="in_stock">sale</option>
+                  <option value="out_of_stock">new</option>
+                </Field>
+                <ErrorMessage name="inventoryStatus" component="div" />
+              </div>
+              
+              <div>
+                <label htmlFor="price">Sale Price:</label>
+                <Field type="number" id="price" name="price" />
+                <ErrorMessage name="price" component="div" />
+              </div>
+
+              <div>
+                <label htmlFor="tags">Tags:</label>
+                <Field type="text" id="tags" name="tags" />
+                <ErrorMessage name="tags" component="div" />
+              </div>
+              <div>
+                <label htmlFor="metaTitle">Meta Title:</label>
+                <Field type="text" id="metaTitle" name="metaTitle" />
+                <ErrorMessage name="metaTitle" component="div" />
+              </div>
+
+              <div>
+                <label htmlFor="metaDescription">Meta Description:</label>
+                <Field
+                  as="textarea"
+                  id="metaDescription"
+                  name="metaDescription"
+                />
+                <ErrorMessage name="metaDescription" component="div" />
+              </div>
+
               <button type="submit" disabled={isSubmitting}>
                 Create Product
               </button>
@@ -130,7 +199,10 @@ function CreateProduct() {
           )}
         </Formik>
 
-        <ImageUploadComponent onImagesChange={handlePhotoChange} defaultImages={product.photos} />
+        <ImageUploadComponent
+          onImagesChange={handlePhotoChange}
+          defaultImages={product.photos}
+        />
 
         <div>
           <h3>Cropped Images</h3>
@@ -142,4 +214,3 @@ function CreateProduct() {
 }
 
 export default CreateProduct;
-
