@@ -30,7 +30,7 @@ const Home = ({articles}: Props) => {
                       <h2 className="card-title h4">{article.title}</h2>
                       <p className="card-text">{article.text}</p>
                       <p className="card-text">
-                        author: {article?.User?.name ?? ""} {article?.User?.surname ?? ""}
+                        author: {article?.User?.name ?? ""} 
                       </p>
 
                       <a className="btn btn-primary mt-3" href="./articles/">

@@ -812,3 +812,5 @@
 {"level":"info","message":"::1 - - [06/May/2024:12:35:47 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
 {"level":"info","message":"::1 - - [06/May/2024:12:35:47 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
 {"level":"info","message":"::1 - - [06/May/2024:12:35:48 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}

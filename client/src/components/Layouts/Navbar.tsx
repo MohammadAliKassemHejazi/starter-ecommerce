@@ -1,4 +1,4 @@
-import { fetchSession, signOut, userSelector } from "@/store/slices/userSlice";
+import {  signOut, userSelector } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
 import Link from "next/link";
 import Script from "next/script";
@@ -36,7 +36,7 @@ export default function Navbar({}: Props) {
   };
 
   return (
-    <nav className="navbar navbar-expand-md fixed-top bg-light">
+    <nav className="navbar navbar-expand-md sticky-top bg-light">
       <div className="container-fluid">
         <Link href="/">
           <span className="navbar-brand">
@@ -75,14 +75,33 @@ export default function Navbar({}: Props) {
               <a href="/shop" className="nav-link">
                 shop
               </a>
+            
             </li>
+            <li className="nav-item">
+            <a href="/store" className="nav-link">
+                  stores
+              </a>
+            
+            </li>
+            <li className="nav-item">
+            <a href="/store/create" className="nav-link">
+                  Create store
+                </a>
+            </li>
+      
+            <li className="nav-item">
+            <a href="/shop/create" className="nav-link">
+                  Create Shop
+                </a>
+            </li>
+                
           </ul>
           <div className="d-flex me-5">
             {user.isAuthenticated && (
               <React.Fragment>
-                <a href="/shop/create" className="nav-link">
-                  Create Shop
-                </a>
+
+              
+
                 <button
                   className="btn btn-outline-primary"
                   onClick={() => {

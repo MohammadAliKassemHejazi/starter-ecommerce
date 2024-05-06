@@ -28,18 +28,21 @@ const CreateArticle = () => {
 
   const handleCreateArticle = async (e: any) => {
     e.preventDefault();
-    const response = await dispatch(createArticles({ title, text }));
-    if (response.meta.requestStatus === "fulfilled") {
-      Toast.fire({
-        icon: "success",
-        title: "create article successfully",
-      });
-    } else {
-      Toast.fire({
-        icon: "error",
-        title: "create article failed",
-      });
-    }
+    try{
+    const response = await dispatch(createArticles({ title, text })).unwrap();
+    Toast.fire({
+      icon: "success",
+      title: "create article successfully",
+    });
+    router.push(`/article/${response.id}`);
+  }catch(error: any){
+    Toast.fire({
+      icon: "error",
+      title: "create article failed",
+    });
+  }
+      
+  
   };
 
   return (

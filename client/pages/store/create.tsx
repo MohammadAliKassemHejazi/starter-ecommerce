@@ -29,6 +29,7 @@ function CreateStore() {
   const [store, setStore] = useState<IStoreModel>({
     name: "",
     description: "",
+    categoryId : 0,
 photos : [],
     croppedImages: [],
   });
@@ -36,7 +37,7 @@ photos : [],
   const initialValues: IStoreModel = {
     name: "",
     description: "",
-
+    categoryId : 0,
       photos: [],
       croppedImages: [],
   };
@@ -109,7 +110,17 @@ photos : [],
                 <Field as="textarea" id="description" name="description" />
                 <ErrorMessage name="description" component="div" />
               </div>
-            
+
+              <div>
+                <label htmlFor="categoryId">Subcategory:</label>
+                <Field as="select" id="categoryId" name="categoryId">
+                  <option value="">Select Subcategory</option>
+                  <option value="1">Subcategory 1</option>
+                  <option value="2">Subcategory 2</option>
+                </Field>
+                <ErrorMessage name="categoryId" component="div" />
+              </div>
+
               <button type="submit" disabled={isSubmitting}>
                 Create Store
               </button>
