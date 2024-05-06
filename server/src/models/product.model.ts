@@ -6,6 +6,7 @@ import { ICategoryAttributes } from "../interfaces/types/models/category.model.t
 import { ISubcategoryAttributes } from "../interfaces/types/models/subcategory.model.types";
 import { IStoreAttributes } from "../interfaces/types/models/store.model.types"; 
 
+
 module.exports = (sequelize: any, DataTypes: any) => {
   class Product extends Model<IProductAttributes> implements IProductAttributes {
     id!: string;
