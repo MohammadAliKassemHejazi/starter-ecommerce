@@ -668,3 +668,147 @@
 {"level":"info","message":"Database synced"}
 {"level":"info","message":"Server is running on port 5300 in development mode"}
 {"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [06/May/2024:12:04:04 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [06/May/2024:12:04:04 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [06/May/2024:12:04:09 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [06/May/2024:12:04:09 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [06/May/2024:12:04:12 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [06/May/2024:12:04:12 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}
+{"level":"info","message":"::1 - - [06/May/2024:12:09:29 +0000] \"POST /api/auth/login HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:09:38 +0000] \"POST /api/auth/register HTTP/1.1\" 201 293 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:09:40 +0000] \"POST /api/auth/login HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:09:41 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:09 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:09 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:11 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:12 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:12 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:14 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:14 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:19 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:19 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:20 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:20 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:44 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:44 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:46 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:46 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:46 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:46 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:48 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:48 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:12:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:15:51 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:15:51 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:15:53 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:16:31 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:16:31 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:16:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:16:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:16:50 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:16:50 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:16:52 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:19:20 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:19:29 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:19:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:19:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:20:05 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:20:06 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:20:06 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:22:00 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:22:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:22:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:07 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:07 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:08 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:08 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:10 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:10 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:23:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:33 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:33 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:36 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:39 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:39 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:41 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:41 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:33:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:12 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:12 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:14 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:14 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:17 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:17 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:20 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:20 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:23 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:51 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:51 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:55 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:55 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:56 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:56 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:34:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:22 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:22 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:22 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:22 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:43 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:43 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:44 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:46 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:46 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:46 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:46 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:47 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:47 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [06/May/2024:12:35:48 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
