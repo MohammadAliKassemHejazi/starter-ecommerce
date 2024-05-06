@@ -1,33 +1,26 @@
 
-import { IShopCreateProduct } from 'interfaces/types/controllers/shop.controller.types';
+import { IStoreCreateProduct } from 'interfaces/types/controllers/store.controller.types';
 import { IProductAttributes } from 'interfaces/types/models/product.model.types';
 import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 import db from '../models/index';
 
 
 
- const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<any> => {
-  try {
-     const product = await db.Product.create(productData);
+ const createStoreWithImages = async (storeData: IStoreCreateProduct, files: Express.Multer.File[]): Promise<any> => {
+     try {
+          var Store =  storeData
+         if (files.length > 0) {
+              Store = await db.Store.create({ storeData , imgUrl :`/uploads/${files[0].filename}`  });
+         }
+         else {
+             throw Error
+         }
 
-
-    // const imageUrls = files.map(file => `/uploads/${file.filename}`);
-    
-    // You can also save the image data to your database if needed
-    // Replace this with your actual image data saving logic
-    for (const file of files) {
-      await db.ProductImage.create({
-        productId: product.dataValues.id,
-        imageUrl: `/uploads/${file.filename}`
-      });
-    }
-
-    // Return response with product and image URLs
     return {
-      product
+      Store
     };
   } catch (error) {
-    // Handle errors appropriately
+
     throw error;
     
   }
@@ -56,6 +49,6 @@ import db from '../models/index';
 
 
 export default {
-  createProductWithImages,
+  createStoreWithImages,
   getProductById,
 };

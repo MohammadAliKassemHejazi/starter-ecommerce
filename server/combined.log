@@ -396,3 +396,158 @@
 {"level":"info","message":"::1 - - [24/Apr/2024:09:30:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 339 \"-\" \"axios/1.6.7\""}
 {"level":"info","message":"Server is running on port 5300 in development mode"}
 {"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"::1 - - [02/May/2024:10:16:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 345 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:10:17:17 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:10:17:17 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:17:32 +0000] \"POST /api/auth/register HTTP/1.1\" 201 289 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:17:34 +0000] \"POST /api/auth/login HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:17:34 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:17:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:17:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:19:38 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:24:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:24:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:24:55 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:24:55 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:25:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:25:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:25:03 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:25:03 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:26:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [02/May/2024:10:26:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 342 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:15:46:14 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:15:46:14 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:17:03 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:17:03 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:24:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:24:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:29:56 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:29:56 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:35:37 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:35:37 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:36:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [02/May/2024:16:36:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:32 +0000] \"POST /api/auth/login HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:40 +0000] \"POST /api/auth/register HTTP/1.1\" 201 291 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:42 +0000] \"POST /api/auth/login HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:43 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:59 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:12:59 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"errors":[{"instance":{"createdAt":"2024-05-03T19:13:56.001Z","description":"sdasd","id":"d7ca9df6-6871-406e-a959-d59a2d29c52f","isActive":true,"name":"asda","ownerId":"59aef164-33f8-4342-80af-7689e1baf116","updatedAt":"2024-05-03T19:13:56.001Z"},"message":"Product.price cannot be null","origin":"CORE","path":"price","type":"notNull Violation","validatorArgs":[],"validatorKey":"is_null","validatorName":null,"value":null},{"instance":{"createdAt":"2024-05-03T19:13:56.001Z","description":"sdasd","id":"d7ca9df6-6871-406e-a959-d59a2d29c52f","isActive":true,"name":"asda","ownerId":"59aef164-33f8-4342-80af-7689e1baf116","updatedAt":"2024-05-03T19:13:56.001Z"},"message":"Product.categoryId cannot be null","origin":"CORE","path":"categoryId","type":"notNull Violation","validatorArgs":[],"validatorKey":"is_null","validatorName":null,"value":null},{"instance":{"createdAt":"2024-05-03T19:13:56.001Z","description":"sdasd","id":"d7ca9df6-6871-406e-a959-d59a2d29c52f","isActive":true,"name":"asda","ownerId":"59aef164-33f8-4342-80af-7689e1baf116","updatedAt":"2024-05-03T19:13:56.001Z"},"message":"Product.subcategoryId cannot be null","origin":"CORE","path":"subcategoryId","type":"notNull Violation","validatorArgs":[],"validatorKey":"is_null","validatorName":null,"value":null}],"level":"error","name":"SequelizeValidationError"}
+{"level":"info","message":"::1 - - [03/May/2024:19:13:56 +0000] \"POST /api/shop/create HTTP/1.1\" 500 184 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:14:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:14:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:16:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:16:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:17:09 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:17:15 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:17:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:17:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:18:29 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:18:35 +0000] \"POST /api/store/create HTTP/1.1\" 404 156 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:18:37 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:18:37 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:18:58 +0000] \"POST /api/store/create HTTP/1.1\" 404 156 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [03/May/2024:19:19:44 +0000] \"POST /api/auth/register HTTP/1.1\" 201 291 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:19:46 +0000] \"POST /api/auth/login HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:19:47 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:19:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:19:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:19:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:19:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 344 \"-\" \"axios/1.6.7\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [03/May/2024:19:20:06 +0000] \"POST /api/store/create HTTP/1.1\" 500 12 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [03/May/2024:19:21:19 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:21:27 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:21:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:21:47 +0000] \"POST /api/auth/register HTTP/1.1\" 201 293 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:21:56 +0000] \"POST /api/auth/login HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:21:57 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:22:04 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:22:04 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:22:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:22:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.6.7\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [03/May/2024:19:23:19 +0000] \"POST /api/store/create HTTP/1.1\" 500 12 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:27:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:27:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:27:50 +0000] \"POST /api/auth/register HTTP/1.1\" 201 290 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:27:52 +0000] \"POST /api/auth/login HTTP/1.1\" 200 343 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:27:52 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:27:59 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 343 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [03/May/2024:19:27:59 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 343 \"-\" \"axios/1.6.7\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [03/May/2024:19:28:44 +0000] \"POST /api/store/create HTTP/1.1\" 500 12 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"error"}
+{"level":"info","message":"::1 - - [03/May/2024:19:29:30 +0000] \"POST /api/store/create HTTP/1.1\" 500 12 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:31:34 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:31:34 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:31:55 +0000] \"POST /api/shop/create HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:32:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:32:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:32:39 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:32:39 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:33:14 +0000] \"POST /api/store/create HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:33:20 +0000] \"POST /api/store/create HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:35:11 +0000] \"POST /api/store/create HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:35:17 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:35:17 +0000] \"POST /api/store/create HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [03/May/2024:19:35:17 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 78 \"-\" \"axios/1.6.7\""}

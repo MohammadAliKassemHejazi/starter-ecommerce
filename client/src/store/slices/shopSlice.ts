@@ -10,10 +10,10 @@ const initialState: ProductsState = {
 	error: "",
 };
 
-export const fetchArticleById = createAsyncThunk(
-	"articles/by-id",
+export const fetchProductById = createAsyncThunk(
+	"product/by-id",
 	async (id: string) => {
-		const response = await shopService.requestArticleById(id)
+		const response = await shopService.requestProductById(id)
 		return response;
 	}
 
@@ -67,6 +67,14 @@ export const articleSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 
+		builder.addCase(fetchProductById.fulfilled, (state, action) => {
+			state.product = action.payload;
+		})
+
+		builder.addCase(fetchProductById.rejected, (state, action) => {
+			state.product = undefined;
+		})
+
 		builder.addCase(createProduct.fulfilled, (state, action) => {
 			state.product = action.payload
 		})
@@ -74,6 +82,8 @@ export const articleSlice = createSlice({
 
 	}
 })
+
+export const productSelector = (store: RootState): IProductModel[] | undefined => store.products.products;
 
 
 export default articleSlice.reducer;

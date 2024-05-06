@@ -3,6 +3,6 @@ export interface IStoreAttributes {
   name: string;
   userId: string;
   categoryId: string;
-  description?: string; // Optional description field
-  image?: string; // Optional image field (URL or file path)
+  description: string;
+  imgUrl: string;
 }

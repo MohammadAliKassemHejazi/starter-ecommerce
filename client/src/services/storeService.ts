@@ -30,8 +30,8 @@ export const requestArticleByAuthor = async () => {
 	return response;
 }
 
-export const requestCreateProducts = async (Products: FormData) => {
-	const { data: response } = await httpClient.post("/shop/create", Products)
+export const requestCreateStore = async (Store: FormData) => {
+	const { data: response } = await httpClient.post("/store/create", Store)
 	return response
 }
 

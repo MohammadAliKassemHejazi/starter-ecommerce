@@ -10,8 +10,8 @@ module.exports = (sequelize: any) => {
     public name!: string;
     public userId!: string;
     public categoryId!: string;
-    public description?: string; // Define description field
-    public image?: string; // Define image field
+    public description!: string; // Add description property
+    public imgUrl!: string; // Add imgUrl property
 
     static associate(models: any) {
       Store.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
@@ -30,6 +30,14 @@ module.exports = (sequelize: any) => {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
+      description: {
+        type: DataTypes.TEXT, // Define description as TEXT type
+        allowNull: true,
+      },
+      imgUrl: {
+        type: DataTypes.STRING, // Define imgUrl as STRING type
+        allowNull: true,
+      },
       userId: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -37,14 +45,6 @@ module.exports = (sequelize: any) => {
       categoryId: {
         type: DataTypes.UUID,
         allowNull: false,
-      },
-      description: {
-        type: DataTypes.TEXT, // Define description as TEXT type
-        allowNull: true,
-      },
-      image: {
-        type: DataTypes.STRING, // Define image as STRING type (URL or file path)
-        allowNull: true,
       },
     },
     {
@@ -54,4 +54,4 @@ module.exports = (sequelize: any) => {
   );
 
   return Store;
-};
+}
