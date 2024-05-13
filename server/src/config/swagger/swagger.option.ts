@@ -1,11 +1,12 @@
 import config from "../config";
 
 exports.options = {
+  openapi: '3.0.0', // Specify the OpenAPI version
   routePrefix: "/api/documentation",
   swagger: {
     info: {
-      title: "node fastify app init - swagger",
-      description: "Testing the Fastify swagger API",
+      title: "node express app init - swagger",
+      description: "Testing the express swagger API",
       version: "1.0.0",
     },
     externalDocs: {

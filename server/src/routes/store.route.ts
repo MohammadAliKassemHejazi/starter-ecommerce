@@ -19,7 +19,7 @@ protectedRoutes(router, Routes);
 
 router.post("/create",storeController.handleCreateStore);
 router.post("/update",storeController.handleUpdate);
-router.get("/get/:id", storeController.handelgetsingleitem);
-router.get("/getall", storeController.handelgetall);
-
+router.get("/get/:id", storeController.handelGetSingleItem);
+router.get("/getall", storeController.handelGetAllStores);
+router.get("/categories", storeController.handelGetAllCategories);
 export default router;

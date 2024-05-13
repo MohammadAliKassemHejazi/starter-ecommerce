@@ -7,6 +7,7 @@ export interface IStoreModel {
     categoryId : Number;
     photos: ImageListType;
     croppedImages: ImageListType;
+    
 }
 
 export interface IStoreModelErrors {
@@ -16,4 +17,15 @@ export interface IStoreModelErrors {
     categoryId : string;
         photos: ImageListType;
     croppedImages: string;
+}
+
+
+export interface IStoreModel {
+    id?: string;
+    name: string;
+    description: string;
+    categoryId : Number;
+    photos: ImageListType;
+    croppedImages: ImageListType;
+
 }

@@ -6,12 +6,14 @@ import userReducer from "./slices/userSlice";
 import articleReducer from "./slices/articleSlice";
 import shopReducer from "./slices/shopSlice";
 import storeReducer from "./slices/storeSlice";
+import utilsReducer from "./slices/utilsSlice";
 
 const reducer = {
 	user: userReducer,
 	article: articleReducer,
 	products: shopReducer,
-	store : storeReducer
+	store : storeReducer,
+	utils : utilsReducer,
 };
 
 export const store = configureStore({

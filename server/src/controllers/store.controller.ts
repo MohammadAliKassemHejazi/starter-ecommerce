@@ -35,7 +35,7 @@ export const handleUpdate = async (
   response.json(userSession);
 };
 
-export const handelgetall = async (
+export const handelGetAllStores = async (
   request: CustomRequest,
   response: Response
 ): Promise<void> => {
@@ -45,15 +45,29 @@ export const handelgetall = async (
 };
 
 
+export const handelGetAllCategories = async (
+  request: CustomRequest,
+  response: Response,
+  next :NextFunction
+): Promise<void> => {
+  try {
+    const categories = await storeService.getAllCategories();
+    response.json(categories);
+  } catch (error) {
+    next(error);
+  }
+
+};
 
 
-
-export const handelgetsingleitem = async (
+export const handelGetSingleItem = async (
   request: CustomRequest,
   response: Response
 ): Promise<void> => {
   const UserId = request.UserId; // Assuming UserId is accessible via middleware
   const userSession = await userService.userSession(UserId!);
+  
+
   response.json(userSession);
 };
 
@@ -61,8 +75,9 @@ export const handelgetsingleitem = async (
 export default {
   handleCreateStore,
   handleUpdate,
-  handelgetall,
-  handelgetsingleitem,
+  handelGetAllStores,
+  handelGetAllCategories,
+  handelGetSingleItem,
 };
 
 

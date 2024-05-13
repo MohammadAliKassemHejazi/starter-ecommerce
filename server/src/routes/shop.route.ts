@@ -11,6 +11,7 @@ const router = express.Router();
       "/update",
       "/get/:id",
       "/getall",
+      
   ];
 
 // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)

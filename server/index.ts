@@ -116,7 +116,9 @@ app.use('/api/articles', articleRouter);
 app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {
   try {
     const files = req.files as Express.Multer.File[];
-
+    if(!files){
+      next();
+    }
     // Process each uploaded file (resize and compress if it's an image)
     const processedFiles = await Promise.all(
       files.map(async (file) => {
@@ -170,7 +172,9 @@ app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Respons
 app.use('/api/store', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {
   try {
     const files = req.files as Express.Multer.File[];
-
+    if(!files || files === undefined){
+    
+    }else{
     // Process each uploaded file (resize and compress if it's an image)
     const processedFiles = await Promise.all(
       files.map(async (file) => {
@@ -214,11 +218,11 @@ app.use('/api/store', upload.array('photos', 5),async (req: Request, res: Respon
         }
       })
     );
-  next()
+  }
   } catch (error) {
     next(error);
   }
-
+  next()
 },storeRouter);
 
 
