@@ -32,7 +32,7 @@ function CreateStore() {
   const categoriesList = useSelector(utileSelector);
 
   React.useEffect(() => {
-    dispatch(fetchAllCategories()).then(response=>{
+    dispatch(fetchAllCategories()).then((response: any)=>{
       console.log(response,"response");
          console.log(categoriesList,"categoriesList");
     });

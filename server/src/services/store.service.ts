@@ -1,4 +1,3 @@
-
 import { IStoreCreateProduct } from 'interfaces/types/controllers/store.controller.types';
 import { IProductAttributes } from 'interfaces/types/models/product.model.types';
 import {ICategoryAttributes} from 'interfaces/types/models/category.model.types';

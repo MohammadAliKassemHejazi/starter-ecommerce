@@ -11,10 +11,17 @@ const initialState: CategoriesState = {
 };
 
 
-
-
 export const fetchAllCategories = createAsyncThunk(
-	"/store/categories",
+	"/utile/categories",
+	async () => {
+		const response = await utileService.requestAllCategories();
+		return response
+	}
+)
+
+
+export const fetchAllStores = createAsyncThunk(
+	"/utile/categories",
 	async () => {
 		const response = await utileService.requestAllCategories();
 		return response
@@ -34,7 +41,7 @@ export const utilsSlice = createSlice({
 	extraReducers: (builder) => {
 
 		builder.addCase(fetchAllCategories.fulfilled, (state, action) => {
-			state.Categories = action.payload.data;
+			state.Categories = action.payload.data.categories;
 		})
 
 		builder.addCase(fetchAllCategories.rejected, (state, action) => {

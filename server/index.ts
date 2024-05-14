@@ -8,7 +8,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import winston from 'winston';
 import { swaggerOption } from './src/config/swagger';
-import { authRouter, userRouter, articleRouter ,shopRouter , storeRouter } from './src/routes';
+import { authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter } from './src/routes';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
@@ -111,6 +111,7 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     next();
 });
 app.use('/api/auth', authRouter);
+app.use('/api/utile', utileRouter);
 app.use('/api/users', userRouter);
 app.use('/api/articles', articleRouter);
 app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {

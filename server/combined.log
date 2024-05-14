@@ -1203,3 +1203,54 @@
 {"level":"info","message":"::1 - - [11/May/2024:19:49:26 +0000] \"GET /api/store/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\""}
 {"level":"info","message":"::1 - - [11/May/2024:19:49:26 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
 {"level":"info","message":"::1 - - [11/May/2024:19:49:26 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [14/May/2024:05:40:25 +0000] \"POST /api/auth/login HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:40:26 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:40:30 +0000] \"GET /api/store/categories HTTP/1.1\" 200 181 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:40:30 +0000] \"GET /api/store/categories HTTP/1.1\" 200 181 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:40:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:40:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:41:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:41:36 +0000] \"GET /api/store/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:41:36 +0000] \"GET /api/store/categories HTTP/1.1\" 200 181 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:41:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:41:42 +0000] \"GET /api/store/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:41:42 +0000] \"GET /api/store/categories HTTP/1.1\" 200 181 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:41:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:41:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:42:55 +0000] \"GET /api/store/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:42:55 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:43:08 +0000] \"GET /api/store/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:43:08 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:43:08 +0000] \"GET /api/store/categories HTTP/1.1\" 200 181 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:43:08 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:43:37 +0000] \"GET /api/store/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:43:42 +0000] \"GET /api/store/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::ffff:127.0.0.1 - - [14/May/2024:05:43:42 +0000] \"GET /api/store/categories HTTP/1.1\" 200 181 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:43:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [14/May/2024:05:43:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
