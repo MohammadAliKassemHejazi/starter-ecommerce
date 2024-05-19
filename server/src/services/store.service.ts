@@ -10,15 +10,13 @@ import db from '../models/index';
      try {
           var Store =  storeData
          if (files.length > 0) {
-              Store = await db.Store.create({ storeData , imgUrl :`/uploads/${files[0].filename}`  });
+              Store = await db.Store.create({ ...storeData , imgUrl :`/uploads/${files[0].filename}`});
          }
          else {
              throw Error
          }
 
-    return {
-      Store
-    };
+    return  Store  ;
   } catch (error) {
 
     throw error;

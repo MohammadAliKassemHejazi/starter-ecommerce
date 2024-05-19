@@ -7,7 +7,8 @@ export interface IStoreCreateProduct extends CustomRequest {
         storeData: {
     name?: string;
     description?: string;
-    ownerId?:string
+            userId?: string;
+    categoryId? :string
         };
     };
 }

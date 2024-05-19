@@ -11,14 +11,14 @@ import { IStoreCreateProduct } from "interfaces/types/controllers/store.controll
 export const handleCreateStore = async (request: CustomRequest, response: Response, next: NextFunction) => {
     try {
       const UserId = request.UserId
-        const productData = {...request.body ,"userid":UserId} as IStoreCreateProduct;
+        const StoreData = {...request.body ,"userId":UserId} as IStoreCreateProduct;
         const files = request.files as  Express.Multer.File[];
  
 
         // Process product creation with data and files
-        const results =  await storeService.createStoreWithImages(productData, files);
+        const results: IStoreCreateProduct =  await storeService.createStoreWithImages(StoreData, files);
      
-        response.status(200).json({ message: results });
+        response.status(200).json(results);
     } catch (error) {
         next(error); // Pass error to Express error handling middleware
     }
