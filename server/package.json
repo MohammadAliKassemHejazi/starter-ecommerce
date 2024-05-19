@@ -29,6 +29,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.21.2",
     "sharp": "^0.33.3",
+    "spdy": "^4.0.2",
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.12.0"
   },
@@ -40,6 +41,7 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^18.0.3",
     "@types/sequelize": "^4.28.14",
+    "@types/spdy": "^3.4.9",
     "@types/swagger-ui-express": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",

@@ -1,6 +1,5 @@
 // Import necessary modules
 import express, { Express, Request, Response, NextFunction } from 'express';
-import { Server } from 'http';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -16,7 +15,7 @@ import multer, { FileFilterCallback } from 'multer';
 import sharp from 'sharp';
 import path from 'node:path';
 import fs from 'fs';
-
+import * as  spdy from 'spdy';
 // Set up Winston for logging
 const logger = winston.createLogger({
     level: 'info',
@@ -236,9 +235,21 @@ app.use((error: CustomError, req: Request, res: Response, next: NextFunction) =>
 
 // Set up the server
 const PORT = process.env.PORT || config.port;
-app.listen(Number(PORT), () => {
-    logger.info(`Server is running on port ${PORT} in ${app.get('env')} mode`);
-});
+// app.listen(Number(PORT), () => {
+//     logger.info(`Server is running on port ${PORT} in ${app.get('env')} mode`);
+// });
+
+const options = {
+  key: fs.readFileSync('path/to/server.key'),
+  cert:  fs.readFileSync('path/to/server.crt')
+};
+
+spdy
+  .createServer(options, app)
+  .listen(Number(PORT), () => {
+    console.log('Listening on port: ' + PORT + '.');
+  })
+  ;
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
