@@ -77,6 +77,7 @@ export const articleSlice = createSlice({
 
 		builder.addCase(createStore.fulfilled, (state, action) => {
 			state.store = action.payload
+			console.log(state.store,"state.store")
         })
         
        builder.addCase(createStore.rejected, (state, action) => {

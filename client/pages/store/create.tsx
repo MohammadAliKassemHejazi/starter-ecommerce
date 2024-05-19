@@ -87,6 +87,7 @@ function CreateStore() {
 
     try {
       const response = await dispatch(createStore(formData)).unwrap();
+      console.log(response,"response")
       router.push(`/shop/${response.id}`);
       Toast.fire({
         icon: "success",
