@@ -10,6 +10,10 @@ import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 
+import { useSelector } from "react-redux";
+import {utileSelector,
+fetchAllCategories
+} from "@/store/slices/utilsSlice";
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -25,21 +29,36 @@ const Toast = Swal.mixin({
 function CreateStore() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const categoriesList = useSelector(utileSelector);
+
+  React.useEffect(() => {
+    dispatch(fetchAllCategories()).then((response: any)=>{
+      console.log(response,"response");
+         console.log(categoriesList,"categoriesList");
+    });
+    
+  }, [dispatch]);
 
   const [store, setStore] = useState<IStoreModel>({
     name: "",
     description: "",
-photos : [],
+    categoryId : 0,
+    photos : [],
     croppedImages: [],
   });
+
+
 
   const initialValues: IStoreModel = {
     name: "",
     description: "",
-
+    categoryId : 0,
       photos: [],
       croppedImages: [],
+    
   };
+
+
 
   const handlePhotoChange = (croppedImages: ImageListType) => {
     setStore((prevStore) => ({
@@ -84,6 +103,7 @@ photos : [],
   return (
     <Layout >
       <section className="mt-5">
+      <p>{categoriesList?.length}</p>
         <h2>Create Store</h2>
         <Formik
           initialValues={initialValues}
@@ -93,7 +113,7 @@ photos : [],
             if (!values.name) {
               errors.name = "Required";
             }
-            // Add other validation rules as needed
+          
             return errors;
           }}
         >
@@ -109,7 +129,21 @@ photos : [],
                 <Field as="textarea" id="description" name="description" />
                 <ErrorMessage name="description" component="div" />
               </div>
-            
+
+              <div>
+                <label htmlFor="categoryId">categoryId:</label>
+                <Field as="select" id="categoryId" name="categoryId">
+                  <option value="">Select categoryId</option>
+                  {categoriesList?.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </Field>
+              
+                <ErrorMessage name="categoryId" component="div" />
+              </div>
+
               <button type="submit" disabled={isSubmitting}>
                 Create Store
               </button>

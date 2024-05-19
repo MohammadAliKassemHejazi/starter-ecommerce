@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import winston from 'winston';
 import { swaggerOption } from './src/config/swagger';
-import { authRouter, userRouter, articleRouter ,shopRouter , storeRouter } from './src/routes';
+import { authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter } from './src/routes';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
@@ -110,12 +110,15 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     next();
 });
 app.use('/api/auth', authRouter);
+app.use('/api/utile', utileRouter);
 app.use('/api/users', userRouter);
 app.use('/api/articles', articleRouter);
 app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {
   try {
     const files = req.files as Express.Multer.File[];
-
+    if(!files){
+      next();
+    }
     // Process each uploaded file (resize and compress if it's an image)
     const processedFiles = await Promise.all(
       files.map(async (file) => {
@@ -169,7 +172,9 @@ app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Respons
 app.use('/api/store', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {
   try {
     const files = req.files as Express.Multer.File[];
-
+    if(!files || files === undefined){
+    
+    }else{
     // Process each uploaded file (resize and compress if it's an image)
     const processedFiles = await Promise.all(
       files.map(async (file) => {
@@ -213,11 +218,11 @@ app.use('/api/store', upload.array('photos', 5),async (req: Request, res: Respon
         }
       })
     );
-  next()
+  }
   } catch (error) {
     next(error);
   }
-
+  next()
 },storeRouter);
 
 
@@ -253,7 +258,7 @@ spdy
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
-    db.sequelize.sync( { force : true } ).then(() => {
+    db.sequelize.sync().then(() => {
         logger.info('Database synced');
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);

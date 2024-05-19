@@ -113,4 +113,4 @@ const Shop = ({}: Props) => {
   );
 };
 
-export default protectedRoute(Shop);
+export default Shop;

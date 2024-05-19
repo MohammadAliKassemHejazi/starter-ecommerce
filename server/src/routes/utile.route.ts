@@ -7,19 +7,13 @@ import { protectedRoutes } from "../middlewares";
 const router = express.Router();
 
   const Routes = [
-      "/create",
-      "/update",
-      "/get/:id",
-      "/getall",
+      "/categories",
   ];
 
 // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
 
 protectedRoutes(router, Routes); 
 
-router.post("/create",storeController.handleCreateStore);
-router.post("/update",storeController.handleUpdate);
-router.get("/get/:id", storeController.handelGetSingleItem);
-router.get("/getall", storeController.handelGetAllStores);
+
 router.get("/categories", storeController.handelGetAllCategories);
 export default router;

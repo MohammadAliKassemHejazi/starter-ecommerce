@@ -3,5 +3,5 @@ import authRouter from "./auth.route";
 import articleRouter from "./article.route";
 import shopRouter from "./shop.route";
 import storeRouter from "./store.route";
-
-export { userRouter, authRouter, articleRouter,shopRouter,storeRouter};
+import utileRouter from "./utile.route"
+export { userRouter, authRouter, articleRouter,shopRouter,storeRouter,utileRouter};

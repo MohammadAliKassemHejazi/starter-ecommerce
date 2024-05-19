@@ -4,16 +4,28 @@ export interface IStoreModel {
     id?: string;
     name: string;
     description: string;
-    
+    categoryId : Number;
     photos: ImageListType;
     croppedImages: ImageListType;
+    
 }
 
 export interface IStoreModelErrors {
     id?: string;
     name: string;
     description: string;
-   
+    categoryId : string;
         photos: ImageListType;
     croppedImages: string;
+}
+
+
+export interface IStoreModel {
+    id?: string;
+    name: string;
+    description: string;
+    categoryId : Number;
+    photos: ImageListType;
+    croppedImages: ImageListType;
+
 }

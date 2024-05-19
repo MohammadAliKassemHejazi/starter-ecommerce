@@ -8,8 +8,7 @@ import { clearCookie, setCookie } from "@/utils/cookiesUtil";
 import httpClient from "@/utils/httpClient";
 import type { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
-import { store } from "@/store/store";
-import { fetchSession } from "@/store/slices/userSlice";
+
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
      const action = req.query["AUTH"] ? req.query["AUTH"][1] : undefined;

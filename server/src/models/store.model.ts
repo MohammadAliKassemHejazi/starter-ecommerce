@@ -1,7 +1,10 @@
+// src/models/store.ts
+
 import { Model } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import { IStoreAttributes } from "../interfaces/types/models/store.model.types"
 
-module.exports = (sequelize: any, DataTypes: any) => {
+module.exports = (sequelize: any) => {
   class Store extends Model<IStoreAttributes> implements IStoreAttributes {
     public id!: string;
     public name!: string;

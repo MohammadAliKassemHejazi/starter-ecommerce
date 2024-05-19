@@ -30,14 +30,14 @@ export const updateArticle = async (
   title: string,
   text: string,
   type: string,
-  UserId: string
+  userId: string
 ): Promise<Number[]> => {
   const isValid = await db.Article.findOne({ where: { id }, raw: true });
   if (isValid == null) {
     customError(articleErrors.ArticleInvalid);
   }
   const response: Number[] = await db.Article.update(
-    { id, title, text, type, UserId },
+    { id, title, text, type, userId },
     { where: { id } }
   ).catch((error: Error) => {
     customError(articleErrors.ArticleUpdateFailure);
@@ -49,9 +49,9 @@ export const updateArticle = async (
 
 export const deleteArticle = async (
   id: string,
-  UserId: string
+  userId: string
 ): Promise<number> => {
-  const response: number = await db.Article.destroy({ where: { id, UserId } });
+  const response: number = await db.Article.destroy({ where: { id, userId } });
   return response;
 };
 

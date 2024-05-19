@@ -115,7 +115,7 @@ export const handleDelete = async (
   response: Response
 ): Promise<void> => {
   const id = request.params.id;
-  const userId = request.UserId; // Assuming UserId is accessible via middleware
+  const userId = request.UserId;
   try {
     const result: number = await articleService.deleteArticle(id, userId!);
     response.json(result);

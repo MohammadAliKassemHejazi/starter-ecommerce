@@ -1,5 +1,5 @@
 export interface IStoreAttributes {
-  id: string;
+  id?: string;
   name: string;
   userId: string;
   categoryId: string;
