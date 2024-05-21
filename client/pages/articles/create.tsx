@@ -20,6 +20,7 @@ const Toast = Swal.mixin({
 });
 
 const CreateArticle = () => {
+
   const dispatch = useAppDispatch();
   const router = useRouter()
   
@@ -34,7 +35,7 @@ const CreateArticle = () => {
       icon: "success",
       title: "create article successfully",
     });
-    router.push(`/article/${response.id}`);
+    router.push(`/articles/${response.id}`);
   }catch(error: any){
     Toast.fire({
       icon: "error",

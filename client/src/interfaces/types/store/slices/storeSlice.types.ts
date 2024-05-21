@@ -1,7 +1,7 @@
-import { IStoreModel } from "@/models/store.model";
+import {  IStoreResponseModel } from "@/models/store.model";
 
 export interface StoresState {
-    store?: IStoreModel;
-	stores?: IStoreModel[];
+    store?: IStoreResponseModel;
+	stores?: IStoreResponseModel[];
 	error?: string;
 }

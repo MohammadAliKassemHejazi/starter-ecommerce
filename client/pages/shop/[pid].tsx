@@ -1,5 +1,7 @@
 
+import Layout from '@/components/Layouts/Layout';
 import MySwiperComponent from '@/components/UI/ImagesSlider/MySwiperComponent';
+import { useRouter } from 'next/router';
 import React from 'react'
 
 const imageLinks = [
@@ -15,7 +17,10 @@ const imageLinks = [
 ];
 
 function singleItem() {
+  const router = useRouter();
+  const { id } = router.query;
   return (
+    <Layout>
    <section className="bg-light">
   <div className="container pb-5">
     <div className="row">
@@ -24,13 +29,7 @@ function singleItem() {
           <img className="card-img img-fluid" src="https://technext.github.io/zay-shop/assets/img/product_single_10.jpg" alt="Card image cap" id="product-detail"/>
         </div>
         <div className="row">
-     
-       
-        
           <MySwiperComponent imageLinks ={imageLinks}></MySwiperComponent>
-   
-      
-     
         </div>
       </div>
 
@@ -120,6 +119,7 @@ function singleItem() {
     </div>
   </div>
 </section>
+</Layout>
   )
 }
 

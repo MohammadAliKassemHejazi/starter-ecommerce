@@ -33,8 +33,7 @@ function CreateStore() {
 
   React.useEffect(() => {
     dispatch(fetchAllCategories()).then((response: any)=>{
-      console.log(response,"response");
-         console.log(categoriesList,"categoriesList");
+   
     });
     
   }, [dispatch]);
@@ -88,7 +87,7 @@ function CreateStore() {
     try {
       const response = await dispatch(createStore(formData)).unwrap();
       console.log(response,"response")
-      router.push(`/shop/${response.id}`);
+      router.push(`/store/${response.id}`);
       Toast.fire({
         icon: "success",
         title: "Store created successfully",

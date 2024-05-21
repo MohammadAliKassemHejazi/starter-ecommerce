@@ -14,7 +14,7 @@ export interface IProductProps {
 
 export const requestProductById = async (id: string) => {
 	const { data: response } = await httpClient.get(
-		`/shop/get?id=${id}`
+		`/store/get?id=${id}`
 	)
 	return response
 }

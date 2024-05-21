@@ -29,3 +29,12 @@ export interface IStoreModel {
     croppedImages: ImageListType;
 
 }
+
+
+export interface IStoreResponseModel {
+    id?: string;
+    name: string;
+    description: string;
+    category : String;
+    imgUrl: String;
+}
