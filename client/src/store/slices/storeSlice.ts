@@ -10,7 +10,7 @@ const initialState: StoresState = {
 	error: "",
 };
 
-export const fetchProductById = createAsyncThunk(
+export const fetchStoreById = createAsyncThunk(
 	"store/by-id",
 	async (id: string) => {
 		const response = await storeService.requestProductById(id)
@@ -27,7 +27,7 @@ export const fetchArticleByAuthor = createAsyncThunk(
 	}
 )
 
-export const fetchAllArticles = createAsyncThunk(
+export const fetchAllStores = createAsyncThunk(
 	"store/fetch",
 	async () => {
 		const response = await storeService.requestAllArticles();
@@ -67,11 +67,11 @@ export const articleSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 
-		builder.addCase(fetchProductById.fulfilled, (state, action) => {
+		builder.addCase(fetchStoreById.fulfilled, (state, action) => {
 			state.store = action.payload;
 		})
 
-		builder.addCase(fetchProductById.rejected, (state, action) => {
+		builder.addCase(fetchStoreById.rejected, (state, action) => {
 			state.store = undefined;
 		})
 

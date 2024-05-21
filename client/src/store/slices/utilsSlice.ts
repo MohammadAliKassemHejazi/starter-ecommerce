@@ -20,13 +20,7 @@ export const fetchAllCategories = createAsyncThunk(
 )
 
 
-export const fetchAllStores = createAsyncThunk(
-	"/utile/categories",
-	async () => {
-		const response = await utileService.requestAllCategories();
-		return response
-	}
-)
+
 
 
 
