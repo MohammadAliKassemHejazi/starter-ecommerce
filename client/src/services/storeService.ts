@@ -12,16 +12,16 @@ export interface IProductProps {
     photos: ImageListType;
 }
 
-export const requestProductById = async (id: string) => {
+export const requestStoreById = async (id: string) => {
 	const { data: response } = await httpClient.get(
 		`/store/get?id=${id}`
 	)
 	return response
 }
 
-export const requestAllArticles = async () => {
-	const { data: response } = await httpClient.get("/articles");
-	console.log(response)
+export const requestAllStores = async () => {
+	const { data: response } = await httpClient.get("/store/getall");
+
 	return response.data
 }
 

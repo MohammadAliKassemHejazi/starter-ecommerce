@@ -4932,3 +4932,473 @@
 {"level":"info","message":"::1 - - [21/May/2024:12:35:03 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"-\" \"axios/1.6.7\""}
 {"level":"info","message":"::1 - - [21/May/2024:12:48:35 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"-\" \"axios/1.6.7\""}
 {"level":"info","message":"::1 - - [21/May/2024:12:48:35 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:45 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:45 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:46 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:59 +0000] \"GET /api/utile/categories HTTP/1.1\" 200 181 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:59 +0000] \"GET /api/utile/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:59 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:17:59 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:18:40 +0000] \"GET /api/utile/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:18:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:19:04 +0000] \"GET /api/utile/categories HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:19:05 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"error"}
+{"level":"info","message":"::1 - - [22/May/2024:06:28:06 +0000] \"POST /api/store/create HTTP/1.1\" 500 12 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:28:14 +0000] \"POST /api/store/create HTTP/1.1\" 200 307 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:31:28 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:31:28 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:31:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:31:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:31:45 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:31:45 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:31:45 +0000] \"GET /api/articles HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:31:45 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:06:38:06 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:38:06 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:38:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:38:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:20 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:20 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:20 +0000] \"GET /api/store/getall HTTP/1.1\" 200 635 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:20 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:25 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:25 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:31 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:31 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:31 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:39:31 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:50 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:50 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:54 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:54 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:55 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:40:55 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:00 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:44 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:44 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:44 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:44 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:52 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:52 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:58 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:58 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:58 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:41:58 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:42:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:42:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:42:01 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:06:42:21 +0000] \"GET /api/store/getall HTTP/1.1\" 200 631 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:07 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:10 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:10 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:20 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:20 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:24 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:46:24 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:00 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:00 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:00 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:00 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:50 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:50 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:50 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:53 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:53 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:47:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:25 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:25 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:25 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:27 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:27 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:27 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:43 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:43 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:48:43 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:49:30 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:49:30 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:49:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/May/2024:11:51:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:51:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:51:54 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:52:04 +0000] \"GET /api/store/getall HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:11:52:21 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:11:52:21 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:52:21 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:52:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:52:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:53:48 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:54:09 +0000] \"GET /api/store/getall HTTP/1.1\" 200 631 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:54:09 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:29 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:31 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:33 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:33 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:36 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:42 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:55:50 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:56:25 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:56:28 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:56:29 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:56:29 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:56:30 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:56:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:59:16 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:59:16 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:11:59:16 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:11:59:16 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:36 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:36 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:38 +0000] \"GET /api/articles/get/author HTTP/1.1\" 200 212 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:38 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:41 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:41 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:46 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:46 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:46 +0000] \"GET /api/store/getall HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:02:46 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:04:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:04:13 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:41 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:41 +0000] \"GET /api/store/getall HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:42 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:47 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:47 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:49 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:05:49 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:07:42 +0000] \"GET /api/store/get?id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 404 152 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:12:08:00 +0000] \"GET /api/store/get/id=2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 401 53 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:08:00 +0000] \"GET /favicon.ico HTTP/1.1\" 404 150 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:10:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:10:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:10:35 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 200 317 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:10:41 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:31:56 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:31:56 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:02 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:03 +0000] \"GET /api/store/getall HTTP/1.1\" 200 631 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:06 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:07 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:45 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:45 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:52 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:52 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:57 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:32:59 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:34:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:34:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:34:11 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:34:11 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:34:14 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:34:14 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:36:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:36:30 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:36:36 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:36:36 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:36:39 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:36:39 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:37:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:37:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:37:51 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:38:04 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:39:55 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:39:55 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:40:01 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:40:01 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:40:06 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:40:06 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:40:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:40:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:41:05 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:41:10 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:41:13 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:41:14 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:43:27 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:43:27 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:43:32 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:43:33 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:43:35 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:43:36 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:43:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:43:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:00 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:01 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:03 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:04 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:26 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:26 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:30 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:44:30 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:45:27 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:45:27 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:45:32 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:45:34 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:45:35 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:45:37 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:48:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:48:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:48:40 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:48:41 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:48:43 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:48:44 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:55:48 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:55:48 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:55:54 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:55:54 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:55:57 +0000] \"GET /api/store/get/2279fbc4-80ba-4aff-a401-32765e9d0da7 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:55:58 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:56:36 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:57:18 +0000] \"GET /api/articles HTTP/1.1\" 200 306 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:57:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:57:23 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:57:23 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:12:57:23 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:10:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:10:38 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:10:39 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:10:39 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:10:40 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:10:40 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:14:35 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:16:27 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:17:04 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:17:56 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:17:57 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:17:58 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:17:59 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:19:11 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:19:16 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:19:38 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:19:54 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:21:11 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:18 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:18 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:19 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:20 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:24 +0000] \"POST /api/articles/create HTTP/1.1\" 201 201 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:31 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:31 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:31 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:33 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:33 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:33 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:34 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:34 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:34 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:39 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:39 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:39 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:41 +0000] \"GET /api/articles HTTP/1.1\" 200 602 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:42 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:42 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:43 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:44 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:44 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:45 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:45 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:48 +0000] \"POST /api/articles/create HTTP/1.1\" 201 206 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:52 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:52 +0000] \"GET /api/articles/get/author HTTP/1.1\" - - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:52 +0000] \"GET /api/articles HTTP/1.1\" 200 903 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:22:57 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [22/May/2024:13:23:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:23:28 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:23:28 +0000] \"GET /api/articles/get/author HTTP/1.1\" 200 621 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:23:28 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:23:30 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:23:31 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:25:00 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:25:00 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:25:00 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:25:00 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:25:14 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:25:39 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:25:39 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:26:01 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:26:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:26:46 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:28:14 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:41:47 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:42:06 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:42:17 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:42:20 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:42:24 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:42:24 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:48:15 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:48:17 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:48:21 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:48:24 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:48:26 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:51:25 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:51:29 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:57:24 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:57:30 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:58:15 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:58:34 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"http://localhost:3000/articles/edit?id=3aaead7f-76e3-48d4-879c-f23a59d61966\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:13:58:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:58:52 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:13:59:11 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:14:00:49 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"http://localhost:3000/articles/edit?id=3aaead7f-76e3-48d4-879c-f23a59d61966\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:14:00:50 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"http://localhost:3000/articles/edit?id=3aaead7f-76e3-48d4-879c-f23a59d61966\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:14:01:29 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"http://localhost:3000/articles/edit?id=3aaead7f-76e3-48d4-879c-f23a59d61966\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:02:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:02:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:02:07 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:02:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:02:52 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:02:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:02:54 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:02:55 +0000] \"GET /api/articles HTTP/1.1\" 200 903 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:03:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:03:01 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:03:01 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:03:01 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:14:03:59 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"http://localhost:3000/articles/edit?id=3aaead7f-76e3-48d4-879c-f23a59d61966\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [22/May/2024:14:04:00 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 401 53 \"http://localhost:3000/articles/edit?id=3aaead7f-76e3-48d4-879c-f23a59d61966\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:09:34 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 200 201 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:09:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:09:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:10:10 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 200 201 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:10:10 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 200 201 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:10:11 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:10:11 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:13:35 +0000] \"GET /api/articles/get?id=3aaead7f-76e3-48d4-879c-f23a59d61966 HTTP/1.1\" 200 201 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:13:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}
+{"level":"info","message":"::1 - - [22/May/2024:14:13:36 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 347 \"-\" \"axios/1.6.7\""}

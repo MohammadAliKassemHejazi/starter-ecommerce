@@ -4,6 +4,7 @@ import { IArticleModel } from "@/models/article.model";
 import { requestArticleById } from "@/services/articleService";
 import { updateArticles } from "@/store/slices/articleSlice";
 import { useAppDispatch } from "@/store/store";
+import { setAuthHeaders } from "@/utils/httpClient";
 import moment from "moment";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Link from "next/link";
@@ -61,14 +62,14 @@ const EditArticle = ({ article }: Props) => {
             <form className="mt-5">
               <h1>Update Article</h1>
               <div className="form-group">
-                <label htmlFor="InputArticleTitle">ID</label>
+                <label htmlFor="InputArticleID">ID</label>
                 <input
               
                   readOnly
                   value={article?.id}
                   type="text"
                   className="form-control"
-                  id="InputArticleTitle"
+                  id="InputArticleID"
                   aria-describedby="articleTitleHelp"
                   placeholder="Enter title"
                 />
@@ -105,13 +106,13 @@ const EditArticle = ({ article }: Props) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="InputArticleTitle">Last update</label>
+                <label htmlFor="InputArticleLastupdate">Last update</label>
                 <input
                   readOnly
                   value={moment(article?.updatedAt).format("DD/MM/YYYY HH:mm")}
                   type="text"
                   className="form-control"
-                  id="InputArticleTitle"
+                  id="InputArticleLastupdate"
                   aria-describedby="articleTitleHelp"
                   placeholder="Enter title"
                 />
@@ -142,6 +143,11 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const { id }: any = context.query;
+  const headers = context.req.headers;
+
+  
+  setAuthHeaders(headers);
+  
   if (id) {
     const article = await requestArticleById(id);
     return {

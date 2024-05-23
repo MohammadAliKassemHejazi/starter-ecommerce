@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
+import protectedRoute from "@/components/protectedRoute";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -213,4 +214,4 @@ function CreateProduct() {
   );
 }
 
-export default CreateProduct;
+export default protectedRoute(CreateProduct);

@@ -19,13 +19,6 @@ export const fetchAllCategories = createAsyncThunk(
 	}
 )
 
-
-
-
-
-
-
-
 export const utilsSlice = createSlice({
 	name: "utils",
 	initialState: initialState,

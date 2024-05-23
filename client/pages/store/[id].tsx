@@ -2,38 +2,45 @@ import Layout from '@/components/Layouts/Layout'
 import React, { useEffect } from 'react'
 import { useAppDispatch } from "@/store/store";
 import { useRouter } from 'next/router';
-import { fetchStoreById ,fetchAllStores} from '@/store/slices/storeSlice';
-import { IStoreResponseModel } from '@/models/store.model';
-import { storeSelector } from '@/store/slices/storeSlice';
+import { fetchStoreById, fetchAllStores, storeSelector, singleStoreSelector } from '@/store/slices/storeSlice';
 import { useSelector } from 'react-redux';
+import protectedRoute from '@/components/protectedRoute';
 
-
-function singelStore() {
+const SingleStore = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const { id } = router.query;
-  const dispatch = useAppDispatch();
-  var store  = useSelector(singelStore);
-  var listofproducts = useSelector(storeSelector);
- 
-  React.useEffect(() => {
+  
+  // Correctly using the selector to get single store data
+  const listOfStores= useSelector(storeSelector);
+  const store = useSelector(singleStoreSelector);
+
+
+  useEffect(() => {
     if (id) {
+
       const storeId = Array.isArray(id) ? id[0] : id;
+
       dispatch(fetchStoreById(storeId)).then((response) => {
+    
        
       });
-      dispatch(fetchAllStores()).then(() => {
-       
+
+      dispatch(fetchAllStores()).then((response) => {
+    
+      
       });
+     
     }
   }, [id, dispatch]);
 
   return (
     <Layout>
-      <p>{store}</p>
-      <div>{listofproducts?.length}</div>
-    <div>singelStore</div>
+      <p>{store ? JSON.stringify(store) : 'Loading store data...'}</p>
+      <div>Number of Stores: {listOfStores?.length}</div>
+      <div>SingleStore Component</div>
     </Layout>
   )
 }
 
-export default singelStore
+export default protectedRoute(SingleStore);

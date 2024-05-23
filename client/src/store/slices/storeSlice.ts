@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as storeService from "@/services/storeService";
 
 import { RootState } from "../store";
-import { IStoreModel, IStoreResponseModel } from "@/models/store.model";
+import { IStoreResponseModel } from "@/models/store.model";
 
 const initialState: StoresState = {
 	stores: [],
@@ -13,10 +13,9 @@ const initialState: StoresState = {
 export const fetchStoreById = createAsyncThunk(
 	"store/by-id",
 	async (id: string) => {
-		const response = await storeService.requestProductById(id)
+		const response = await storeService.requestStoreById(id)
 		return response;
 	}
-
 )
 
 export const fetchArticleByAuthor = createAsyncThunk(
@@ -30,7 +29,8 @@ export const fetchArticleByAuthor = createAsyncThunk(
 export const fetchAllStores = createAsyncThunk(
 	"store/fetch",
 	async () => {
-		const response = await storeService.requestAllArticles();
+		const response = await storeService.requestAllStores();
+		console.log(response,"store/fetch")
 		return response
 	}
 )
@@ -60,7 +60,7 @@ export const deleteArticles = createAsyncThunk(
 )
 
 export const articleSlice = createSlice({
-	name: "products",
+	name: "store",
 	initialState: initialState,
 	reducers: {
 
@@ -68,6 +68,7 @@ export const articleSlice = createSlice({
 	extraReducers: (builder) => {
 
 		builder.addCase(fetchStoreById.fulfilled, (state, action) => {
+
 			state.store = action.payload;
 		})
 
@@ -77,11 +78,19 @@ export const articleSlice = createSlice({
 
 		builder.addCase(createStore.fulfilled, (state, action) => {
 			state.store = action.payload
-			console.log(state.store,"state.store")
         })
         
        builder.addCase(createStore.rejected, (state, action) => {
 			state.store = undefined
+		})
+
+		builder.addCase(fetchAllStores.fulfilled, (state, action) => {
+			
+			state.stores = action.payload.stores;
+		})
+
+		builder.addCase(fetchAllStores.rejected, (state, action) => {
+			state.stores = undefined;
 		})
 
 
@@ -89,7 +98,7 @@ export const articleSlice = createSlice({
 })
 
 export const storeSelector = (store: RootState): IStoreResponseModel[] | undefined => store.store.stores;
-export const singleStore = (store: RootState): IStoreResponseModel | undefined => store.store.store;
+export const singleStoreSelector = (store: RootState): IStoreResponseModel | undefined => store.store.store;
 
 
 export default articleSlice.reducer;

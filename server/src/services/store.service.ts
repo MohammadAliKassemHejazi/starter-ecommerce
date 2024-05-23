@@ -3,6 +3,7 @@ import { IProductAttributes } from 'interfaces/types/models/product.model.types'
 import {ICategoryAttributes} from 'interfaces/types/models/category.model.types';
 import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 import db from '../models/index';
+import { IStoreAttributes } from 'interfaces/types/models/store.model.types';
 
 
 
@@ -25,38 +26,30 @@ import db from '../models/index';
 };
 
 
- const getProductById = async (
-  productId: string
-): Promise<{ product: IProductAttributes; images: IProductImageAttributes[] } | null> => {
-  const product: IProductAttributes | null = await db.Product.findOne({
-    where: { id: productId },
+ const getStoreById = async (
+  StoretId: string
+): Promise<{ store: IStoreAttributes } | null> => {
+  const store: IStoreAttributes  = await db.Store.findOne({
+    where: { id: StoretId },
     raw: true,
   });
-  if (!product) {
-    return null;
-  }
-
-  const images: IProductImageAttributes[] = await db.ProductImage.findAll({
-    where: { productId },
-    raw: true,
-  });
-
-  return { product, images };
+ 
+  return  { store };
 };
 
-const getAllCategories = async (): Promise<{ categories: ICategoryAttributes[] } | null> => {
-  const categories: ICategoryAttributes[] | null = await db.Category.findAll();
-  if (!categories) {
+const getAllStores = async (): Promise<{ stores: IStoreAttributes[] } | null> => {
+  const stores: IStoreAttributes[] | null = await db.Store.findAll();
+  if (!stores) {
     return null;
   }
 
 
 
-  return { categories };
+  return { stores };
 };
 
 export default {
   createStoreWithImages,
-  getProductById,
-  getAllCategories
+  getStoreById,
+  getAllStores
 };

@@ -37,11 +37,15 @@ export const handleUpdate = async (
 
 export const handelGetAllStores = async (
   request: CustomRequest,
-  response: Response
+  response: Response,
+  next :NextFunction
 ): Promise<void> => {
-  const UserId = request.UserId; // Assuming UserId is accessible via middleware
-  const userSession = await userService.userSession(UserId!);
-  response.json(userSession);
+  try {
+    const Stores = await storeService.getAllStores();
+    response.json(Stores);
+  } catch (error) {
+    next(error);
+  }
 };
 
 
@@ -51,8 +55,8 @@ export const handelGetAllCategories = async (
   next :NextFunction
 ): Promise<void> => {
   try {
-    const categories = await storeService.getAllCategories();
-    response.json(categories);
+    const Stores = await storeService.getAllStores();
+    response.json(Stores);
   } catch (error) {
     next(error);
   }
@@ -62,13 +66,17 @@ export const handelGetAllCategories = async (
 
 export const handelGetSingleItem = async (
   request: CustomRequest,
-  response: Response
+  response: Response,
+  next:NextFunction
 ): Promise<void> => {
-  const UserId = request.UserId; // Assuming UserId is accessible via middleware
-  const userSession = await userService.userSession(UserId!);
-  
-
+  const storeID = request.params.id; // Assuming UserId is accessible via middleware
+  try {
+  const userSession = await storeService.getStoreById(storeID!);
   response.json(userSession);
+} catch (error) {
+  next(error);
+}
+
 };
 
 

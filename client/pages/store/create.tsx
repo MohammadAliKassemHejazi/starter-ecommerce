@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import {utileSelector,
 fetchAllCategories
 } from "@/store/slices/utilsSlice";
+import protectedRoute from "@/components/protectedRoute";
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -165,4 +166,4 @@ function CreateStore() {
   );
 }
 
-export default CreateStore;
+export default protectedRoute(CreateStore);
