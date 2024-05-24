@@ -9,6 +9,28 @@ import styles from "./Home.module.css";
 type Props = {
   articles?: IArticleModelWithUser[];
 };
+const stores = [
+  { id: 1, name: 'Store 1' },
+  { id: 2, name: 'Store 2' },
+  { id: 3, name: 'Store 3' },
+  { id: 4, name: 'Store 4' },
+  { id: 5, name: 'Store 5' },
+  { id: 6, name: 'Store 6' },
+  { id: 7, name: 'Store 7' },
+  { id: 8, name: 'Store 8' },
+  { id: 9, name: 'Store 9' },
+  { id: 10, name: 'Store 10' },
+  { id: 101, name: 'Store 1' },
+  { id: 102, name: 'Store 2' },
+  { id: 103, name: 'Store 3' },
+  { id: 104, name: 'Store 4' },
+  { id: 105, name: 'Store 5' },
+  { id: 106, name: 'Store 6' },
+  { id: 107, name: 'Store 7' },
+  { id: 108, name: 'Store 8' },
+  { id: 109, name: 'Store 9' },
+  { id: 1010, name: 'Store 10' },
+];
 
 const Home = ({ articles }: Props) => {
   return (
@@ -18,8 +40,13 @@ const Home = ({ articles }: Props) => {
           <div className="text-center my-5">
             <h1 className="fw-bolder">Next.js Starter Template</h1>
             <p className="lead mb-0">Welcome to Next.js</p>
-            <input className={styles["bubble"]} type="checkbox" name="dummy" value="on"/>
-
+            
+            {stores.map((store) => (
+         
+              <input key={store.id} className={styles["bubble"]} type="checkbox" name="dummy" value="on"/>
+              
+        
+          ))}
           </div>
         </div>
         <section id={styles["feature"]} className={` container pt-5 `}>
