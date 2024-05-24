@@ -1,90 +1,64 @@
 
-/* products  */
-#feature .fe-box{
-  width: 180px;
-  text-align: center;
-  padding: 25px 15px;
-  box-shadow: 20px 20px 34px rgba(0, 0, 0, 0.03);
-  border: 1px solid #ccd8e7;
-  border-radius: 4px;
-  margin: 15px 0;
-}
-
-#feature .fe-box:hover {
-  box-shadow: 10px 10px 54px rgba(70, 62, 221, 0.1);
-}
-
-#feature .fe-box h6{
-  display: in-block;
-  padding: 9px 8px 6px 8px;
-  line-height: 1;
-  border-radius: 4px;
-  color: #086381;
-  background-color: #fddde4;
-}
-
-#feature .fe-box img{
-  width: 100%;
-  margin-bottom: 10px;
-    
-}
-  
-#feature{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-top: 5rem;
-}
-
-#feature .fe-box:nth-child(2) h6{
-  background-color: #cdebbc;
-}
-
-
-#feature .fe-box:nth-child(3) h6{
-  background-color: #d1e8f2;
-}
-
-#feature .fe-box:nth-child(4) h6{
-  background-color: #cdd4f8;
-}
-
-#feature .fe-box:nth-child(5) h6{
-  background-color: #f6dbf6;
-}
-
-#feature .fe-box:nth-child(6) h6{
-  background-color: #fff2e5;
-}
-
 /* bubble animation */
 
-.header {
-  height: calc(100vh - 100px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
-  margin-bottom: 1rem;
-}
 
-.bubbleContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 10px; /* Adjust gap between bubbles */
-  width: 100%;
-  height: 100%;
-  padding: 20px; /* Adjust padding if needed */
-}
+
+.circular-container {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr); /* 7 items per row */
+	justify-content: center;
+	align-items: center;
+	grid-auto-flow: dense;
+	gap: 0; /* No spacing between items */
+  }
+
+
+  .scaling-animation {
+	animation-name: scale;
+	animation-duration: 1s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite; /* Optional: makes the animation repeat infinitely */
+  }
   
+  @keyframes scale{
+	0% {
+	  transform: scale(1) ;
+	}
 
+	50% {
+	  transform: scale(2) ;
+	}
+
+	100% {
+	  transform: scale(1) ;
+	}
+  }
+
+/* for logo */
+  .bubble-logo {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 2em;
+	height:  2em;
+	z-index: 1;
+	pointer-events: none; 
+	opacity: 0.5;/* To ensure clicks go to the checkbox */
+  }
+  
+  .bubble-logo img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%;
+  }
+
+/* for logo */
 
 .bubble{
-  font-size: 30px;
+	font-size: 3vw; /* Adjust as needed */
 }
 .bubble, .bubble:before, .bubble:after  {
 	transition-duration: 0.2s;
@@ -103,11 +77,11 @@
 		radial-gradient(8% 8% at 28% 22%,hsl(0,0%,100%) 45%,hsla(0,0%,100%,0) 50%);
 	box-shadow:
 		0 -0.06em 0.1em hsl(0,90%,100%) inset,
-		0 -0.15em 0.4em hsl(0,90%,45%) inset,
-		0 0.05em 0.05em hsl(0,90%,45%) inset,
+		0 -0.15em 0.4em hsl(251, 90%, 45%) inset,
+		0 0.05em 0.05em hsl(245, 90%, 45%) inset,
 		0.05em 0 0.1em hsl(0,90%,100%) inset,
 		-0.05em 0 0.1em hsl(0,90%,100%) inset,
-		0 0.1em 0.4em hsl(0,90%,60%) inset;
+		0 0.1em 0.4em hsl(232, 90%, 60%) inset;
 	cursor: pointer;
 	position: relative;
 	width: 3em;
@@ -120,6 +94,7 @@
 	appearance: none;
 	z-index: 0;
 }
+
 .bubble:before, .bubble:after {
 	content: "";
 	display: block;
@@ -128,8 +103,7 @@
 }
 .bubble:before {
 	border-radius: 0.75em;
-	box-shadow:
-		0 0 0 0.5em hsl(0,0%,100%) inset;
+
 	filter: drop-shadow(0.6em 0.6em 4px hsla(0,0%,0%,0.2));
 	top: 50%;
 	left: 50%;
@@ -157,13 +131,11 @@
 	width: 3.6em;
 	height: 2.4em;
 }
-.bubble:focus:before, .bubble:hover:before {
-	filter: drop-shadow(0.75em 0.75em 4px hsla(0,0%,0%,0.2));
-}
+
 .bubble:focus:after, .bubble:hover:after {
 	transform: translate3d(0.15em,0.15em,-1px);
 }
-.bubble:checked {
+/* .bubble:checked {
 	box-shadow:
 		0 -0.06em 0.1em hsl(120,90%,100%) inset,
 		0 -0.15em 0.4em hsl(120,90%,45%) inset,
@@ -175,7 +147,7 @@
 .bubble:checked:before {
 	border-radius: 0.25em;
 	width: 0.5em;
-}
+} */
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
 
@@ -189,25 +161,8 @@
 		width: 3em;
 		height: 3em;
 	}
-	.bubble:focus:before, .bubble:hover:before {
-		filter: drop-shadow(0.6em 0.6em 4px hsla(0,0%,0%,0.2));
-	}
+	
 	.bubble:focus:after, .bubble:hover:after {
 		transform: translate3d(0,0,-1px);
-	}
-}
-/* Animations */
-@keyframes float {
-	from, to {
-		transform: translate(0,3%);
-	}
-	25% {
-		transform: translate(-3%,0);
-	}
-	50% {
-		transform: translate(0,-3%);
-	}
-	75% {
-		transform: translate(3%,0);
 	}
 }
