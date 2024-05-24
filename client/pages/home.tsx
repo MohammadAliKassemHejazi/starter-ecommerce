@@ -18,6 +18,8 @@ const Home = ({ articles }: Props) => {
           <div className="text-center my-5">
             <h1 className="fw-bolder">Next.js Starter Template</h1>
             <p className="lead mb-0">Welcome to Next.js</p>
+            <input className={styles["bubble"]} type="checkbox" name="dummy" value="on"/>
+
           </div>
         </div>
         <section id={styles["feature"]} className={` container pt-5 `}>

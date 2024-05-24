@@ -5,13 +5,9 @@ import { requestAllArticles } from "@/services/articleService";
 import { GetServerSideProps } from "next";
 import React from "react";
 
-
-
 type Props = {
   articles?: IArticleModelWithUser[];
 };
-
-
 
 const Home = ({articles}: Props) => {
   return (
