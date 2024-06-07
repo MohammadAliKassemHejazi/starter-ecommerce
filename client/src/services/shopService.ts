@@ -30,13 +30,13 @@ export const requestArticleByAuthor = async () => {
 	return response;
 }
 
-export const requestCreateProducts = async (Products: FormData) => {
-	const { data: response } = await httpClient.post("/shop/create", Products)
+export const requestCreateProducts = async (Product: FormData) => {
+	const { data: response } = await httpClient.post("/shop/create", Product)
 	return response
 }
 
-export const requestUpdateArticles = async (article: IProductModel): Promise<void> => {
-	const { data: response } = await httpClient.patch("/articles/update/" + article.id, article)
+export const requestUpdateArticles = async (Product: FormData): Promise<void> => {
+	const { data: response } = await httpClient.patch("/articles/update" , Product)
 	return response
 }
 

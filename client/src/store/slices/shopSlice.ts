@@ -11,7 +11,7 @@ const initialState: ProductsState = {
 };
 
 export const fetchProductById = createAsyncThunk(
-	"product/by-id",
+	"shop/by-id",
 	async (id: string) => {
 		const response = await shopService.requestProductById(id)
 		return response;
@@ -20,15 +20,15 @@ export const fetchProductById = createAsyncThunk(
 )
 
 export const fetchArticleByAuthor = createAsyncThunk(
-	"articles/by-author",
+	"shop/by-author",
 	async () => {
 		const response = await shopService.requestArticleByAuthor();
 		return response
 	}
 )
 
-export const fetchAllArticles = createAsyncThunk(
-	"articles/fetch",
+export const fetchAllProducts = createAsyncThunk(
+	"shop/fetch",
 	async () => {
 		const response = await shopService.requestAllArticles();
 		return response
@@ -37,22 +37,22 @@ export const fetchAllArticles = createAsyncThunk(
 
 export const createProduct = createAsyncThunk(
 	"shop/create",
-	async (product: FormData) => {
+	async (product : FormData) => {
 		const response: IProductModel = await shopService.requestCreateProducts(product);
 		return response
 	}
 )
 
-export const updateArticles = createAsyncThunk(
-	"articles/update",
-	async (article: IProductModel) => {
-		const response = await shopService.requestUpdateArticles(article);
+export const updateProduct = createAsyncThunk(
+	"shop/update",
+	async (product: FormData) => {
+		const response = await shopService.requestUpdateArticles(product);
 		return response
 	}
 )
 
 export const deleteArticles = createAsyncThunk(
-	"articles/delete",
+	"shop/delete",
 	async (id: string) => {
 		const response = await shopService.requestDeleteArticles(id);
 		return response
