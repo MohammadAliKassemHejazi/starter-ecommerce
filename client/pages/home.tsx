@@ -6,6 +6,7 @@ import { GetServerSideProps } from "next";
 import React from "react";
 import styles from "./Home.module.css";
 import Link from "next/link";
+import ParticleComponent from "@/components/UI/starsbackground/starsbackground";
 type Props = {
   articles?: IArticleModelWithUser[];
 };
@@ -20,14 +21,14 @@ const stores = [
   { id: 8, name: 'Store 8' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
   { id: 9, name: 'Store 9' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
   { id: 10, name: 'Store 10' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
-  { id: 101, name: 'Store 1',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 102, name: 'Store 2',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 103, name: 'Store 3' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
-  { id: 104, name: 'Store 4',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 105, name: 'Store 5',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 103, name: 'Store 3',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 104, name: 'Store 4',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 105, name: 'Store 5',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+  { id: 101, name: 'Store 11',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+  { id: 102, name: 'Store 12',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+  { id: 103, name: 'Store 13' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
+  { id: 104, name: 'Store 14',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+  { id: 105, name: 'Store 15',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+  { id: 107, name: 'Store 16',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+  { id: 108, name: 'Store 17',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+  { id: 111, name: 'Store 18',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
  
 ];
 const products =[
@@ -53,14 +54,15 @@ const products =[
 const Home = ({ articles }: Props) => {
   return (
     <Layout>
-      <header className="py-5 bg-light border-bottom mb-4">
+      <header className="py-5 bg-black border-bottom mb-4 overflow-hidden">
+            
+<ParticleComponent></ParticleComponent>
       <div className="container">
           <div className={`text-center  ${styles["circular-container"]}`}>
 
-            
-            {stores.map((store) => (
+            {stores.map((store, index) => (
          
-              <div key={store.id} className={`${styles["bubble"]} ${styles["scaling-animation"]}`}  style={{
+              <div key={index} className={`${styles["bubble"]} ${styles["scaling-animation"]}`}  style={{
                 animationDuration: `${Math.random() * 2 + 1}s`, // Random duration between 1 and 3 seconds
                 animationDelay: `${Math.random() * 2}s`, // Random delay between 0 and 2 seconds
               }}>
@@ -110,7 +112,7 @@ const Home = ({ articles }: Props) => {
             <div className="title pt-4 pb-1">{product.title}</div>
             <div className="d-flex align-content-center justify-content-center">
               {Array.from({ length: 5 }, (_, index) => (
-                <span key={index} className={`fas fa-star ${index < product.rating ? 'text-warning' : ''}`}></span>
+                <span key={index+Math.random()} className={`fas fa-star ${index < product.rating ? 'text-warning' : ''}`}></span>
               ))}
             </div>
             <div className="price">${product.price}</div>
@@ -147,6 +149,7 @@ const Home = ({ articles }: Props) => {
           </React.Fragment>
         </div>
         </div>
+
     </Layout>
   );
 };

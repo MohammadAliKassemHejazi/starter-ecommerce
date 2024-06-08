@@ -6,11 +6,12 @@
 .circular-container {
 	position: relative;
 	display: grid;
-	grid-template-columns: repeat(6, 1fr); /* 7 items per row */
+	grid-template-columns: repeat(6, 1fr); /* 6 items per row */
 	justify-content: center;
 	align-items: center;
 	grid-auto-flow: dense;
 	gap: 0; /* No spacing between items */
+
   }
 
 
