@@ -85,7 +85,7 @@ export const articleSlice = createSlice({
 		})
 
 		builder.addCase(fetchAllStores.fulfilled, (state, action) => {
-			
+			console.log(action)
 			state.stores = action.payload.stores;
 		})
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import {
   IProductModel,
@@ -55,12 +55,12 @@ function CreateProduct() {
     croppedPhotos: [],
   };
 
-  const handlePhotoChange = (croppedImages: ImageListType) => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      croppedPhotos: croppedImages,
-    }));
-  };
+const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
+  setProduct((prevProduct) => ({
+    ...prevProduct,
+    croppedPhotos: croppedImages,
+  }));
+}, []);
 
   const handleSubmit = async (values: IProductModel) => {
     const formData = new FormData();
@@ -167,9 +167,9 @@ function CreateProduct() {
               </div>
               
               <div>
-                <label htmlFor="price">Sale Price:</label>
-                <Field type="number" id="price" name="price" />
-                <ErrorMessage name="price" component="div" />
+                <label htmlFor="Discount">Sale Discount:</label>
+                <Field type="number" id="Discount" name="price" />
+                <ErrorMessage name="Discount" component="div" />
               </div>
 
               <div>

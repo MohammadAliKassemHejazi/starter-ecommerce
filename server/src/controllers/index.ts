@@ -3,4 +3,5 @@ import usersController from "./user.controller";
 import articlesController from "./article.controller";
 import shopController from "./shop.controller";
 import storeController from "./store.controller";
-export { authController, usersController, articlesController,shopController,storeController };
+import utileController from "./utile.controller";
+export { authController, usersController, articlesController,shopController,storeController,utileController };

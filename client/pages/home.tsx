@@ -7,34 +7,36 @@ import React from "react";
 import styles from "./Home.module.css";
 import Link from "next/link";
 import ParticleComponent from "@/components/UI/starsbackground/starsbackground";
+import { setAuthHeaders } from "@/utils/httpClient";
+import Image from "next/image";
 type Props = {
   articles?: IArticleModelWithUser[];
 };
 const stores = [
   { id: 1, name: 'Store 1' ,logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Gucci_logo.svg/512px-Gucci_logo.svg.png?20180702130155"},
-  { id: 2, name: 'Store 2',logo:"https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTNoD9oT_VnEYNKKeOor8U4qK5T1LF4bC2iRDD75fQdveQMHTUA" },
+  { id: 2, name: 'Store 2',logo:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg" },
   { id: 3, name: 'Store 3' ,logo:"https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg"},
-  { id: 4, name: 'Store 4' ,logo:"https://www.adidas-group.com/en/public/adidas-group/adidas-logo.svg"},
+  { id: 4, name: 'Store 4' ,logo:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg"},
   { id: 5, name: 'Store 5' ,logo:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg"},
-  { id: 6, name: 'Store 6' ,logo:"https://t0.gstatic.com/images?q=tbn:ANd9GcTeX7i9aVJwDDW3ongHKrM98KFlv_94sZJSN7OJoFkjiRNfejSE"},
+  { id: 6, name: 'Store 6' ,logo:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg"},
   { id: 7, name: 'Store 7' ,logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
-  { id: 8, name: 'Store 8' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
-  { id: 9, name: 'Store 9' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
-  { id: 10, name: 'Store 10' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
-  { id: 101, name: 'Store 11',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 102, name: 'Store 12',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 103, name: 'Store 13' ,logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
-  { id: 104, name: 'Store 14',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 105, name: 'Store 15',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 107, name: 'Store 16',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 108, name: 'Store 17',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
-  { id: 111, name: 'Store 18',logo:"https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" },
+  { id: 8, name: 'Store 8' ,logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
+  { id: 9, name: 'Store 9' ,logo:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg"},
+  { id: 10, name: 'Store 10' ,logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
+  { id: 101, name: 'Store 11',logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
+  { id: 102, name: 'Store 12',logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
+  { id: 103, name: 'Store 13' ,logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
+  { id: 104, name: 'Store 14',logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
+  { id: 105, name: 'Store 15',logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
+  { id: 107, name: 'Store 16',logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
+  { id: 108, name: 'Store 17',logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
+  { id: 111, name: 'Store 18',logo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
  
 ];
 const products =[
   {
     "id": 1,
-    "image": "https://images.pexels.com/photos/54203/pexels-photo-54203.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg",
     "title": "Winter Sweater",
     "tag": "sale",
     "tagColor": "red",
@@ -68,7 +70,7 @@ const Home = ({ articles }: Props) => {
               }}>
 
                  <div className={styles["bubble-logo"]}>
-              <img src={store.logo} alt={`${store.name} logo`} />
+              <Image src={store.logo} alt={`${store.name} logo`} width={100} height={100} />
             
             </div>
                 </div>
@@ -84,7 +86,7 @@ const Home = ({ articles }: Props) => {
         {products.map((product) => (
           <div key={product.id} className="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
             <div className="product">
-              <img src={product.image} alt={product.title} />
+              <Image src={product.image} alt={product.title} width={100} height={100} />
               <ul className="d-flex align-items-center justify-content-center list-unstyled icons">
            
                 <li className="icon">
@@ -156,7 +158,9 @@ const Home = ({ articles }: Props) => {
 
 export default protectedRoute(Home);
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context:any) => {
+    const headers = context.req.headers;
+ setAuthHeaders(headers);
   const articles = await requestAllArticles();
   return {
     props: {

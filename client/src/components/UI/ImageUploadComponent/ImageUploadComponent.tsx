@@ -27,7 +27,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
   useEffect(() => {
     onImagesChange(croppedImages);
-  }, [croppedImages]);
+  }, [croppedImages,onImagesChange]);
 
   const handlePhotoChange = async (imageList: ImageListType) => {
     const newCropData: { [key: number]: Crop } = {};

@@ -37,8 +37,10 @@ import { IStoreAttributes } from 'interfaces/types/models/store.model.types';
   return  { store };
 };
 
-const getAllStores = async (): Promise<{ stores: IStoreAttributes[] } | null> => {
-  const stores: IStoreAttributes[] | null = await db.Store.findAll();
+const getAllStores = async (UserID: string): Promise<{ stores: IStoreAttributes[] } | null> => {
+  const stores: IStoreAttributes[] | null = await db.Store.findAll({
+    where: { userId: UserID },
+  });
   if (!stores) {
     return null;
   }

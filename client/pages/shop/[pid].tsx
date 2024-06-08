@@ -3,7 +3,7 @@ import Layout from '@/components/Layouts/Layout';
 import MySwiperComponent from '@/components/UI/ImagesSlider/MySwiperComponent';
 import { useRouter } from 'next/router';
 import React from 'react'
-
+import Image from 'next/image';
 const imageLinks = [
   "https://technext.github.io/zay-shop/assets/img/product_single_01.jpg",
   "https://technext.github.io/zay-shop/assets/img/product_single_02.jpg",
@@ -16,7 +16,7 @@ const imageLinks = [
   "https://technext.github.io/zay-shop/assets/img/product_single_09.jpg"
 ];
 
-function singleItem() {
+const SingleItem  = () => {
   const router = useRouter();
   const { id } = router.query;
   return (
@@ -26,7 +26,7 @@ function singleItem() {
     <div className="row">
       <div className="col-lg-5 mt-5">
         <div className="card mb-3">
-          <img className="card-img img-fluid" src="https://technext.github.io/zay-shop/assets/img/product_single_10.jpg" alt="Card image cap" id="product-detail"/>
+          <Image className="card-img img-fluid" src="https://technext.github.io/zay-shop/assets/img/product_single_10.jpg" alt="Card image cap" id="product-detail" height={350} width={300}></Image>
         </div>
         <div className="row">
           <MySwiperComponent imageLinks ={imageLinks}></MySwiperComponent>
@@ -123,4 +123,4 @@ function singleItem() {
   )
 }
 
-export default singleItem
+export default SingleItem 

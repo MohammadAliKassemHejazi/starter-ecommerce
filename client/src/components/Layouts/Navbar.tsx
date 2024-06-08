@@ -61,38 +61,38 @@ export default function Navbar({}: Props) {
         <div className="collapse navbar-collapse" id="navbarCollapse">
           <ul className="navbar-nav me-auto mb-2 mb-md-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#"></a>
+              <Link className="nav-link active" aria-current="page" href="#"></Link>
             </li>
             <li className="nav-item">
               {user.isAuthenticated && (
                 // eslint-disable-next-line @next/next/no-html-link-for-pages
-                <a href="/articles" className="nav-link">
+                <Link href="/articles" className="nav-link">
                   articles
-                </a>
+                </Link>
               )}
             </li>
             <li className="nav-item">
-              <a href="/shop" className="nav-link">
+              <Link href="/shop" className="nav-link">
                 shop
-              </a>
+              </Link>
             
             </li>
             <li className="nav-item">
-            <a href="/store" className="nav-link">
+            <Link href="/store" className="nav-link">
                   stores
-              </a>
+              </Link>
             
             </li>
             <li className="nav-item">
-            <a href="/store/create" className="nav-link">
+            <Link href="/store/create" className="nav-link">
                   Create store
-                </a>
+                </Link>
             </li>
       
             <li className="nav-item">
-            <a href="/shop/create" className="nav-link">
-                  Create Shop
-                </a>
+            <Link href="/shop/create" className="nav-link">
+                  Create Product
+                </Link>
             </li>
                 
           </ul>

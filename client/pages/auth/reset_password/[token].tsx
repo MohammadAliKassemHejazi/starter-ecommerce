@@ -140,6 +140,7 @@ export default function ResetPassword({}: Props) {
                         src="/resources/static/img/billowdev-logo.png"
                         height={150}
                         width={150}
+                        priority
                       />
                       <h2 className="mt-3">billowdev&apos;s example</h2>
                     </div>

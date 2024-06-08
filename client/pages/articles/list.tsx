@@ -2,6 +2,7 @@ import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 import { IArticleModelWithUser } from "@/models/article.model";
 import { requestAllArticles } from "@/services/articleService";
+import { setAuthHeaders } from "@/utils/httpClient";
 import { GetServerSideProps } from "next";
 import React from "react";
 
@@ -46,7 +47,9 @@ const Home = ({articles}: Props) => {
 
 export default protectedRoute(Home);
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context:any) => {
+      const headers = context.req.headers;
+ setAuthHeaders(headers);
   const articles = await requestAllArticles();
   return {
     props: {

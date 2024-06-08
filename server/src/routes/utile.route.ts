@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { storeController } from "../controllers/index";
+import { utileController } from "../controllers/index";
 
 import { protectedRoutes } from "../middlewares";
 
@@ -15,5 +15,5 @@ const router = express.Router();
 protectedRoutes(router, Routes); 
 
 
-router.get("/categories", storeController.handelGetAllCategories);
+router.get("/categories", utileController.handelGetAllCategories);
 export default router;

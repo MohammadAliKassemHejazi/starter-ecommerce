@@ -22,7 +22,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     metaDescription?: string;
     slug?: string;
     tags?: string;
-    inventoryStatus?: string;
+    discount?: number;
     storeId!: ForeignKey<IStoreAttributes['id']>; // Add storeId to link to Store
 
     static associate(models: any) {
@@ -92,8 +92,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    inventoryStatus: {
-      type: DataTypes.STRING,
+    discount: {
+      type: DataTypes.INTEGER,
       allowNull: true,
      
     },

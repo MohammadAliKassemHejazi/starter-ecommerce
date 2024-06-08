@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { IStoreModel, IStoreModelErrors } from "../../src/models/store.model";
 import { useAppDispatch } from "@/store/store";
@@ -27,15 +27,14 @@ const Toast = Swal.mixin({
   },
 });
 
-function CreateStore() {
-  const router = useRouter();
+const CreateStore = ()=> {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const categoriesList = useSelector(utileSelector);
 
   React.useEffect(() => {
-    dispatch(fetchAllCategories()).then((response: any)=>{
-   
-    });
+console.log("useeggectexcution")
+    dispatch(fetchAllCategories())
     
   }, [dispatch]);
 
@@ -60,12 +59,12 @@ function CreateStore() {
 
 
 
-  const handlePhotoChange = (croppedImages: ImageListType) => {
+  const handlePhotoChange =  useCallback((croppedImages: ImageListType) => {
     setStore((prevStore) => ({
       ...prevStore,
       croppedImages: croppedImages,
     }));
-  };
+  },[]);
 
   const handleSubmit = async (values: IStoreModel) => {
     const formData = new FormData();

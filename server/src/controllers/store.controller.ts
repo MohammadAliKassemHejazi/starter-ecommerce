@@ -41,7 +41,8 @@ export const handelGetAllStores = async (
   next :NextFunction
 ): Promise<void> => {
   try {
-    const Stores = await storeService.getAllStores();
+    const UserId = request.UserId;
+    const Stores = await storeService.getAllStores(UserId!);
     response.json(Stores);
   } catch (error) {
     next(error);
@@ -49,19 +50,6 @@ export const handelGetAllStores = async (
 };
 
 
-export const handelGetAllCategories = async (
-  request: CustomRequest,
-  response: Response,
-  next :NextFunction
-): Promise<void> => {
-  try {
-    const Stores = await storeService.getAllStores();
-    response.json(Stores);
-  } catch (error) {
-    next(error);
-  }
-
-};
 
 
 export const handelGetSingleItem = async (
@@ -69,7 +57,7 @@ export const handelGetSingleItem = async (
   response: Response,
   next:NextFunction
 ): Promise<void> => {
-  const storeID = request.params.id; // Assuming UserId is accessible via middleware
+  const storeID = request.query.id as string; // Assuming storeID is accessible 
   try {
   const userSession = await storeService.getStoreById(storeID!);
   response.json(userSession);
@@ -84,7 +72,6 @@ export default {
   handleCreateStore,
   handleUpdate,
   handelGetAllStores,
-  handelGetAllCategories,
   handelGetSingleItem,
 };
 
