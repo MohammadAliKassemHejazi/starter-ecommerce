@@ -4,18 +4,18 @@ import { ISubcategoryAttributes } from '../interfaces/types/models/subcategory.m
 module.exports = (sequelize: any, DataTypes: any) => {
 
 
-  class Subcategory extends Model<ISubcategoryAttributes> implements ISubcategoryAttributes {
+  class SubCategory extends Model<ISubcategoryAttributes> implements ISubcategoryAttributes {
     id!: string;
     categoryId!: string;
     name!: string;
 
     static associate(models: any) {
-      Subcategory.belongsTo(models.Category, { foreignKey: 'categoryId', as: 'category' });
-      Subcategory.hasMany(models.Product, { as: 'products' });
+      SubCategory.belongsTo(models.Category, { foreignKey: 'categoryId', as: 'category' });
+      SubCategory.hasMany(models.Product, { as: 'products' });
     }
   }
 
-  Subcategory.init({
+  SubCategory.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -34,5 +34,5 @@ module.exports = (sequelize: any, DataTypes: any) => {
     modelName: 'Subcategory',
   });
 
-  return Subcategory;
+  return SubCategory;
 };

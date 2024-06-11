@@ -25,6 +25,7 @@ export const fetchAllSubCategoriesID = createAsyncThunk(
 	"/utile/subcategories",
 	async (id: string) => {
 		const response = await utileService.requestSubCategoriesId(id);
+		console.log(response)
 		return response
 	}
 )

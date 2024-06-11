@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { HtmlHTMLAttributes, useCallback, useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import {
   IProductModel,
@@ -15,6 +15,7 @@ import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 
 import {  fetchAllStores, storeSelector, } from '@/store/slices/storeSlice';
+import {   fetchAllSubCategoriesID, utileSubCategoriesSelector } from '@/store/slices/utilsSlice';
 import { useSelector } from 'react-redux';
 
 const Toast = Swal.mixin({
@@ -36,11 +37,17 @@ function CreateProduct() {
   
   // Correctly using the selector to get single store data
   const listOfStores= useSelector(storeSelector);
+  const listofsubCategories= useSelector(utileSubCategoriesSelector);
   useEffect(() => {
 
       dispatch(fetchAllStores())
 
   },[]);
+
+  const handleStoreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+    dispatch(fetchAllSubCategoriesID(value))
+  };
 
   const [product, setProduct] = useState<IProductModel>({
     name: "",
@@ -110,10 +117,8 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
 
   return (
     <Layout>
-      
       <section>
         <h2>Create Product</h2>
-       
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
@@ -153,7 +158,7 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
               </div>
               {listOfStores ? <div>
                 <label htmlFor="storeId">Store:</label>
-                <Field as="select" id="storeId" name="storeId">
+                <Field as="select" id="storeId" name="storeId"  onChange={handleStoreChange}>
                  { listOfStores?.map(store=>{
                  return <option key={store.id} value={store.id}>{store.name}</option>
                  })}
@@ -161,15 +166,15 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
                 <ErrorMessage name="storeId" component="div" />
               </div> : 'Loading store data...'}
 
-              <div>
-                <label htmlFor="subcategoryId">Subcategory:</label>
+              {listofsubCategories ?    <div>
+               <label htmlFor="subcategoryId">Subcategory:</label>
                 <Field as="select" id="subcategoryId" name="subcategoryId">
-                  <option value="">Select Subcategory</option>
-                  <option value="1">Subcategory 1</option>
-                  <option value="2">Subcategory 2</option>
+                { listofsubCategories?.map(subCategorie=>{
+                 return <option key={subCategorie.id} value={subCategorie.id}>{subCategorie.name}</option>
+                 })}
                 </Field>
                 <ErrorMessage name="subcategoryId" component="div" />
-              </div>
+              </div>: 'Loading subCategories data...'}
 
               <div>
                 <label htmlFor="inventoryStatus">Inventory Status:</label>
