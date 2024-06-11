@@ -12,6 +12,20 @@ const getAllCategories = async (): Promise<{ categories: ICategoryAttributes[] }
   return { categories };
 };
 
+const getSubCategories = async (categoryId:string): Promise<{ categories: ICategoryAttributes[] } | null> => {
+  const categories: ICategoryAttributes[] | null = await db.SubCategory.findAll({
+    where : {categoryId},
+    raw: true
+  });
+  if (!categories) {
+    return null;
+  }
+
+  return { categories };
+};
+
+
 export default {
-  getAllCategories
+  getAllCategories,
+  getSubCategories
 };

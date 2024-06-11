@@ -16,4 +16,5 @@ protectedRoutes(router, Routes);
 
 
 router.get("/categories", utileController.handelGetAllCategories);
+router.get("/getsubcategories", utileController.handelGetSubCategoriesByID);
 export default router;

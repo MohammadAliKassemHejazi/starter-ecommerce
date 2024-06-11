@@ -1,8 +1,8 @@
 import Layout from '@/components/Layouts/Layout'
 import React, { useEffect } from 'react'
 import { useAppDispatch } from "@/store/store";
-import { useRouter } from 'next/router';
-import {  fetchAllStores, storeSelector, singleStoreSelector } from '@/store/slices/storeSlice';
+
+import {  fetchAllStores, storeSelector, } from '@/store/slices/storeSlice';
 import { useSelector } from 'react-redux';
 import protectedRoute from '@/components/protectedRoute';
 
@@ -30,6 +30,7 @@ const Stores = () => {
 
       <div>Number of Stores: {listOfStores?.length}</div>
       <div>SingleStore Component</div>
+      <p>{listOfStores ? JSON.stringify(listOfStores) : 'Loading store data...'}</p>
     </Layout>
   )
 }

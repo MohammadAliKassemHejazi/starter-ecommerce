@@ -9,6 +9,13 @@ export const requestAllCategories = async () => {
 	return response
 }
 
+export const requestSubCategoriesId = async (id: string) => {
+	const { data: response } = await httpClient.get(
+		`/utile/getSubCategories?id=${id}`
+	)
+	return response
+}
+
 
 
 

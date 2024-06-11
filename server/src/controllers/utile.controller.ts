@@ -10,6 +10,7 @@ export const handelGetAllCategories = async (
   response: Response,
   next :NextFunction
 ): Promise<void> => {
+
   try {
     const categories = await utileService.getAllCategories();
     response.json(categories);
@@ -18,10 +19,24 @@ export const handelGetAllCategories = async (
   }
 
 };
+export const handelGetSubCategoriesByID = async (
+  request: CustomRequest,
+  response: Response,
+  next :NextFunction
+): Promise<void> => {
+  const id = request.query.id as string;
+  try {
+    const subcategories = await utileService.getSubCategories(id);
+    response.json(subcategories);
+  } catch (error) {
+    next(error);
+  }
 
+};
 
 export default {
   handelGetAllCategories,
+  handelGetSubCategoriesByID
 };
 
 

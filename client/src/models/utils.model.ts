@@ -7,6 +7,14 @@ export interface ICategories {
     updatedAt: string;
 }
 
+export interface ISubCategories {
+    id?: string;
+    name: string;
+    description:string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 export interface ICategoriesErrors {
     id?: string;
     name: string;

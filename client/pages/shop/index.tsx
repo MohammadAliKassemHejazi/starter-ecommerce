@@ -1,5 +1,4 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
 
 import React from "react";
 import { useRouter } from "next/router";

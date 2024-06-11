@@ -11,7 +11,7 @@ import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 
 import { useSelector } from "react-redux";
-import {utileSelector,
+import {utileCategoriesSelector,
 fetchAllCategories
 } from "@/store/slices/utilsSlice";
 import protectedRoute from "@/components/protectedRoute";
@@ -30,10 +30,10 @@ const Toast = Swal.mixin({
 const CreateStore = ()=> {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const categoriesList = useSelector(utileSelector);
+  const categoriesList = useSelector(utileCategoriesSelector);
 
   React.useEffect(() => {
-console.log("useeggectexcution")
+
     dispatch(fetchAllCategories())
     
   }, [dispatch]);
@@ -104,6 +104,7 @@ console.log("useeggectexcution")
     <Layout >
       <section className="mt-5">
       <p>{categoriesList?.length}</p>
+      
         <h2>Create Store</h2>
         <Formik
           initialValues={initialValues}
@@ -134,7 +135,7 @@ console.log("useeggectexcution")
                 <label htmlFor="categoryId">categoryId:</label>
                 <Field as="select" id="categoryId" name="categoryId">
                   <option value="">Select categoryId</option>
-                  {categoriesList?.map((category) => (
+                  {categoriesList?.map((category : any) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
                     </option>

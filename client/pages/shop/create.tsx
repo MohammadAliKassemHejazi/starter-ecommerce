@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import {
   IProductModel,
@@ -13,6 +13,9 @@ import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
+
+import {  fetchAllStores, storeSelector, } from '@/store/slices/storeSlice';
+import { useSelector } from 'react-redux';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -30,6 +33,15 @@ function CreateProduct() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  
+  // Correctly using the selector to get single store data
+  const listOfStores= useSelector(storeSelector);
+  useEffect(() => {
+
+      dispatch(fetchAllStores())
+
+  },[]);
+
   const [product, setProduct] = useState<IProductModel>({
     name: "",
     description: "",
@@ -42,6 +54,7 @@ function CreateProduct() {
     photos: [],
     croppedPhotos: [],
   });
+  
   const initialValues: IProductModel = {
     name: "",
     description: "",
@@ -97,8 +110,10 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
 
   return (
     <Layout>
+      
       <section>
         <h2>Create Product</h2>
+       
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}
@@ -136,15 +151,15 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
                 <label htmlFor="isActive">Is Active:</label>
                 <Field type="checkbox" id="isActive" name="isActive" />
               </div>
-              <div>
+              {listOfStores ? <div>
                 <label htmlFor="storeId">Store:</label>
                 <Field as="select" id="storeId" name="storeId">
-                  <option value="">Select Category</option>
-                  <option value="1">Category 1</option>
-                  <option value="2">Category 2</option>
+                 { listOfStores?.map(store=>{
+                 return <option key={store.id} value={store.id}>{store.name}</option>
+                 })}
                 </Field>
                 <ErrorMessage name="storeId" component="div" />
-              </div>
+              </div> : 'Loading store data...'}
 
               <div>
                 <label htmlFor="subcategoryId">Subcategory:</label>

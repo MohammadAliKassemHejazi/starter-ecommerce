@@ -39,6 +39,7 @@ const SingleStore = () => {
       <p>{store ? JSON.stringify(store) : 'Loading store data...'}</p>
       <div>Number of Stores: {listOfStores?.length}</div>
       <div>SingleStore Component</div>
+     
     </Layout>
   )
 }

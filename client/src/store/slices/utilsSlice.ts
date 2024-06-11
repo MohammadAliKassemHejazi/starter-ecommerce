@@ -3,10 +3,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as utileService from "@/services/utileService";
 
 import { RootState } from "../store";
-import { ICategories } from "@/models/utils.model";
+import { ICategories ,ISubCategories} from "@/models/utils.model";
 
 const initialState: CategoriesState = {
 	Categories: [],
+	SubCategories:[],
 	error: "",
 };
 
@@ -15,6 +16,15 @@ export const fetchAllCategories = createAsyncThunk(
 	"/utile/categories",
 	async () => {
 		const response = await utileService.requestAllCategories();
+		
+		return response
+	}
+)
+
+export const fetchAllSubCategoriesID = createAsyncThunk(
+	"/utile/subcategories",
+	async (id: string) => {
+		const response = await utileService.requestSubCategoriesId(id);
 		return response
 	}
 )
@@ -35,12 +45,21 @@ export const utilsSlice = createSlice({
 			state.Categories = [];
 		})
 
+		builder.addCase(fetchAllSubCategoriesID.fulfilled, (state, action) => {
+			state.SubCategories = action.payload.data.subcategories;
+		})
+
+		builder.addCase(fetchAllSubCategoriesID.rejected, (state, action) => {
+			state.SubCategories = [];
+		})
+
 	
 
 	}
 })
 
-export const utileSelector = (store: RootState): ICategories[] | undefined => store.utils.Categories;
+export const utileCategoriesSelector = (store: RootState): ICategories[] | undefined => store.utils.Categories;
+export const utileSubCategoriesSelector = (store: RootState): ISubCategories[] | undefined => store.utils.SubCategories;
 
 
 export default utilsSlice.reducer;
