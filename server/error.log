@@ -245,3 +245,14 @@
 {"level":"error"}
 {"level":"error"}
 {"level":"error"}
+{"level":"error"}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","data":{"success":false},"level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH001","level":"error","message":"Unauthorized","statusCode":401}

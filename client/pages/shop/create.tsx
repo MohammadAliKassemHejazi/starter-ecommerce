@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
-
+import { store } from "@/store/store";
 import {  fetchAllStores, storeSelector, } from '@/store/slices/storeSlice';
 import {   fetchAllSubCategoriesID, utileSubCategoriesSelector } from '@/store/slices/utilsSlice';
 import { useSelector } from 'react-redux';
@@ -38,9 +38,9 @@ function CreateProduct() {
   // Correctly using the selector to get single store data
   const listOfStores= useSelector(storeSelector);
   const listofsubCategories= useSelector(utileSubCategoriesSelector);
-  useEffect(() => {
+  React.useEffect(() => {
 
-      dispatch(fetchAllStores())
+    store.dispatch(fetchAllStores())
 
   },[]);
 
@@ -159,6 +159,7 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
               {listOfStores ? <div>
                 <label htmlFor="storeId">Store:</label>
                 <Field as="select" id="storeId" name="storeId"  onChange={handleStoreChange}>
+                <option value="">Select store</option>
                  { listOfStores?.map(store=>{
                  return <option key={store.id} value={store.id}>{store.name}</option>
                  })}
@@ -169,6 +170,7 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
               {listofsubCategories ?    <div>
                <label htmlFor="subcategoryId">Subcategory:</label>
                 <Field as="select" id="subcategoryId" name="subcategoryId">
+                <option value="">Select subcategory</option>
                 { listofsubCategories?.map(subCategorie=>{
                  return <option key={subCategorie.id} value={subCategorie.id}>{subCategorie.name}</option>
                  })}
@@ -177,18 +179,8 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
               </div>: 'Loading subCategories data...'}
 
               <div>
-                <label htmlFor="inventoryStatus">Inventory Status:</label>
-                <Field as="select" id="inventoryStatus" name="inventoryStatus">
-                  <option value="">Select Status</option>
-                  <option value="in_stock">sale</option>
-                  <option value="out_of_stock">new</option>
-                </Field>
-                <ErrorMessage name="inventoryStatus" component="div" />
-              </div>
-              
-              <div>
                 <label htmlFor="Discount">Sale Discount:</label>
-                <Field type="number" id="Discount" name="price" />
+                <Field type="number" id="Discount" name="Discount" />
                 <ErrorMessage name="Discount" component="div" />
               </div>
 

@@ -11,7 +11,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
     type!: string;
     userId!: ForeignKey<IUserAttributes['id']>; 
     static associate(models: any) {
- 
       Article.belongsTo(models.User, { foreignKey: 'userId' }); 
     }
   }

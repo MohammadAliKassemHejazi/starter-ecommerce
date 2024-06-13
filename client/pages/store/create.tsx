@@ -1,4 +1,6 @@
-import React, { useCallback, useState } from "react";
+
+import { useSelector } from "react-redux";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { IStoreModel, IStoreModelErrors } from "../../src/models/store.model";
 import { useAppDispatch } from "@/store/store";
@@ -9,12 +11,9 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
-
-import { useSelector } from "react-redux";
-import {utileCategoriesSelector,
-fetchAllCategories
-} from "@/store/slices/utilsSlice";
+import { utileCategoriesSelector, fetchAllCategories } from "@/store/slices/utilsSlice";
 import protectedRoute from "@/components/protectedRoute";
+import useRunOnce from "../../src/hooks/useRunOnce";
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -27,44 +26,40 @@ const Toast = Swal.mixin({
   },
 });
 
-const CreateStore = ()=> {
+const CreateStore = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const categoriesList = useSelector(utileCategoriesSelector);
+  const isMounted = useRef(false);
 
-  React.useEffect(() => {
+  useRunOnce(() => {
 
-    dispatch(fetchAllCategories())
-    
-  }, [dispatch]);
+      dispatch(fetchAllCategories());
+   
+  });
 
   const [store, setStore] = useState<IStoreModel>({
     name: "",
     description: "",
-    categoryId : 0,
-    photos : [],
+    categoryId: 0,
+    photos: [],
     croppedImages: [],
   });
-
-
 
   const initialValues: IStoreModel = {
     name: "",
     description: "",
-    categoryId : 0,
-      photos: [],
-      croppedImages: [],
-    
+    categoryId: 0,
+    photos: [],
+    croppedImages: [],
   };
 
-
-
-  const handlePhotoChange =  useCallback((croppedImages: ImageListType) => {
+  const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
     setStore((prevStore) => ({
       ...prevStore,
       croppedImages: croppedImages,
     }));
-  },[]);
+  }, []);
 
   const handleSubmit = async (values: IStoreModel) => {
     const formData = new FormData();
@@ -86,7 +81,7 @@ const CreateStore = ()=> {
 
     try {
       const response = await dispatch(createStore(formData)).unwrap();
-      console.log(response,"response")
+      console.log(response, "response");
       router.push(`/store/${response.id}`);
       Toast.fire({
         icon: "success",
@@ -101,10 +96,10 @@ const CreateStore = ()=> {
   };
 
   return (
-    <Layout >
+    <Layout>
       <section className="mt-5">
-      <p>{categoriesList?.length}</p>
-      
+        <p>{categoriesList?.length}</p>
+
         <h2>Create Store</h2>
         <Formik
           initialValues={initialValues}
@@ -114,7 +109,6 @@ const CreateStore = ()=> {
             if (!values.name) {
               errors.name = "Required";
             }
-          
             return errors;
           }}
         >
@@ -132,16 +126,15 @@ const CreateStore = ()=> {
               </div>
 
               <div>
-                <label htmlFor="categoryId">categoryId:</label>
+                <label htmlFor="categoryId">Category:</label>
                 <Field as="select" id="categoryId" name="categoryId">
-                  <option value="">Select categoryId</option>
-                  {categoriesList?.map((category : any) => (
+                  <option value="">Select Category</option>
+                  {categoriesList?.map((category: any) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
                     </option>
                   ))}
                 </Field>
-              
                 <ErrorMessage name="categoryId" component="div" />
               </div>
 
@@ -164,6 +157,6 @@ const CreateStore = ()=> {
       </section>
     </Layout>
   );
-}
+};
 
 export default protectedRoute(CreateStore);

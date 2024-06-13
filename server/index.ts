@@ -16,6 +16,7 @@ import sharp from 'sharp';
 import path from 'node:path';
 import fs from 'fs';
 import * as  spdy from 'spdy';
+import seedDatabase from './seedDataBase';
 // Set up Winston for logging
 const logger = winston.createLogger({
     level: 'info',
@@ -264,8 +265,11 @@ app.listen(Number(PORT), () => {
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
     db.sequelize.sync().then(() => {
+      // seedDatabase();
         logger.info('Database synced');
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);
     });
 }
+
+
