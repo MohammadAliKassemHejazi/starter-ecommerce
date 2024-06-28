@@ -35,6 +35,6 @@ export interface IStoreResponseModel {
     id?: string;
     name: string;
     description: string;
-    category : String;
-    imgUrl: String;
+    categoryId : string;
+    imgUrl: string;
 }

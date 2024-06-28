@@ -161,7 +161,7 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
                 <Field as="select" id="storeId" name="storeId"  onChange={handleStoreChange}>
                 <option value="">Select store</option>
                  { listOfStores?.map(store=>{
-                 return <option key={store.id} value={store.id}>{store.name}</option>
+                 return <option key={store.id} value={store.categoryId}>{store.name}</option>
                  })}
                 </Field>
                 <ErrorMessage name="storeId" component="div" />

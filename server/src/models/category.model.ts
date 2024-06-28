@@ -8,7 +8,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     description?: string;
 
     static associate(models: any) {
-      Category.hasMany(models.Subcategory, { as: 'subcategories' });
+      Category.hasMany(models.SubCategory, { as: 'subcategories' });
       Category.hasMany(models.Product, { as: 'products' });
     }
   }

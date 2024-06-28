@@ -47,7 +47,8 @@ export const utilsSlice = createSlice({
 		})
 
 		builder.addCase(fetchAllSubCategoriesID.fulfilled, (state, action) => {
-			state.SubCategories = action.payload.data.subcategories;
+			console.log(action)
+			state.SubCategories = action.payload.subcategories;
 		})
 
 		builder.addCase(fetchAllSubCategoriesID.rejected, (state, action) => {
