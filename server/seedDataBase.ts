@@ -10,27 +10,27 @@ async function seedDatabase() {
     ]);
 
     // Create subcategories for Electronics
-    const electronicsId = categories.find((category : any) => category._previousDataValues.name === 'Electronics')?.id;
+    
     await db.SubCategory.bulkCreate([
-      { name: 'Mobile Phones', categoryId: electronicsId },
-      { name: 'Laptops', categoryId: electronicsId },
-      { name: 'Cameras', categoryId: electronicsId }
+      { name: 'Mobile Phones', categoryId: categories[0].dataValues.id },
+      { name: 'Laptops', categoryId: categories[0].dataValues.id },
+      { name: 'Cameras', categoryId: categories[0].dataValues.id }
     ]);
 
     // Create subcategories for Clothing
-    const clothingId = categories.find((category:any) => category._previousDataValues.name === 'Clothing')?.id;
+    
     await db.SubCategory.bulkCreate([
-      { name: 'Men', categoryId: clothingId },
-      { name: 'Women', categoryId: clothingId },
-      { name: 'Children', categoryId: clothingId }
+      { name: 'Men', categoryId: categories[1].dataValues.id },
+      { name: 'Women', categoryId: categories[1].dataValues.id },
+      { name: 'Children', categoryId: categories[1].dataValues.id }
     ]);
 
     // Create subcategories for Books
-    const booksId = categories.find((category:any) => category._previousDataValues.name === 'Books')?.id;
+    
     await db.SubCategory.bulkCreate([
-      { name: 'Fiction', categoryId: booksId },
-      { name: 'Non-Fiction', categoryId: booksId },
-      { name: 'Educational', categoryId: booksId }
+      { name: 'Fiction', categoryId: categories[2].dataValues.id },
+      { name: 'Non-Fiction', categoryId: categories[2].dataValues.id },
+      { name: 'Educational', categoryId: categories[2].dataValues.id }
     ]);
 
     console.log('Database has been seeded.');

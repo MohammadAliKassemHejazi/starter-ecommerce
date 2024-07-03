@@ -13,8 +13,6 @@ export const handleCreateProduct = async (request: CustomRequest, response: Resp
       const UserId = request.UserId
         const productData = {...request.body ,"ownerId":UserId} as IShopCreateProduct;
         const files = request.files as  Express.Multer.File[];
- 
-
         // Process product creation with data and files
         const results =  await shopService.createProductWithImages(productData, files);
      

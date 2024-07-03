@@ -264,8 +264,9 @@ app.listen(Number(PORT), () => {
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
-    db.sequelize.sync({force : true}).then(() => {
-      seedDatabase();
+    db.sequelize.sync().then(() => {
+      
+     
         logger.info('Database synced');
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);

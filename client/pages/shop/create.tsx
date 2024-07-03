@@ -1,9 +1,6 @@
-import React, { HtmlHTMLAttributes, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import {
-  IProductModel,
-  IProductModelErrors,
-} from "../../src/models/product.model";
+import { IProductModel, IProductModelErrors } from "../../src/models/product.model";
 import { useAppDispatch } from "@/store/store";
 import { createProduct } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
@@ -14,9 +11,9 @@ import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 import { store } from "@/store/store";
-import {  fetchAllStores, storeSelector, } from '@/store/slices/storeSlice';
-import {   fetchAllSubCategoriesID, utileSubCategoriesSelector } from '@/store/slices/utilsSlice';
-import { useSelector } from 'react-redux';
+import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
+import { fetchAllSubCategoriesID, utileSubCategoriesSelector } from "@/store/slices/utilsSlice";
+import { useSelector } from "react-redux";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -34,19 +31,21 @@ function CreateProduct() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  
   // Correctly using the selector to get single store data
-  const listOfStores= useSelector(storeSelector);
-  const listofsubCategories= useSelector(utileSubCategoriesSelector);
+  const listOfStores = useSelector(storeSelector);
+  const listofsubCategories = useSelector(utileSubCategoriesSelector);
   React.useEffect(() => {
+    store.dispatch(fetchAllStores());
+  }, []);
 
-    store.dispatch(fetchAllStores())
-
-  },[]);
-
-  const handleStoreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStoreChange = (event: React.ChangeEvent<HTMLSelectElement>, setFieldValue: Function) => {
     const { value } = event.target;
-    dispatch(fetchAllSubCategoriesID(value))
+    setFieldValue("storeId", value);
+    const selectedStore = listOfStores?.find(store => store.id === value);
+    if (selectedStore) {
+      setFieldValue("categoryId", selectedStore.categoryId);
+    }
+    dispatch(fetchAllSubCategoriesID(value));
   };
 
   const [product, setProduct] = useState<IProductModel>({
@@ -55,32 +54,33 @@ function CreateProduct() {
     price: 0,
     isActive: false,
     subcategoryId: "",
-    storeId : "", 
-    metaTitle: "", 
-    metaDescription: "", 
+    storeId: "",
+    metaTitle: "",
+    metaDescription: "",
     photos: [],
     croppedPhotos: [],
   });
-  
+
   const initialValues: IProductModel = {
     name: "",
     description: "",
     price: 0,
     isActive: false,
-    subcategoryId: "", 
-    storeId : "", 
+    subcategoryId: "",
+    storeId: "",
+    categoryId: "",  // Added categoryId to initial values
     metaTitle: "",
-    metaDescription: "", 
+    metaDescription: "",
     photos: [],
     croppedPhotos: [],
   };
 
-const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
-  setProduct((prevProduct) => ({
-    ...prevProduct,
-    croppedPhotos: croppedImages,
-  }));
-}, []);
+  const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      croppedPhotos: croppedImages,
+    }));
+  }, []);
 
   const handleSubmit = async (values: IProductModel) => {
     const formData = new FormData();
@@ -134,7 +134,7 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
             return errors;
           }}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form>
               <div>
                 <label htmlFor="name">Name:</label>
@@ -151,32 +151,54 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
                 <Field type="number" id="price" name="price" />
                 <ErrorMessage name="price" component="div" />
               </div>
-             
+
               <div>
                 <label htmlFor="isActive">Is Active:</label>
                 <Field type="checkbox" id="isActive" name="isActive" />
               </div>
-              {listOfStores ? <div>
-                <label htmlFor="storeId">Store:</label>
-                <Field as="select" id="storeId" name="storeId"  onChange={handleStoreChange}>
-                <option value="">Select store</option>
-                 { listOfStores?.map(store=>{
-                 return <option key={store.id} value={store.categoryId}>{store.name}</option>
-                 })}
-                </Field>
-                <ErrorMessage name="storeId" component="div" />
-              </div> : 'Loading store data...'}
+              {listOfStores ? (
+                <div>
+                  <label htmlFor="storeId">Store:</label>
+                  <Field
+                    as="select"
+                    id="storeId"
+                    name="storeId"
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleStoreChange(event, setFieldValue)}
+                  >
+                    <option value="">Select store</option>
+                    {listOfStores?.map((store) => {
+                      return (
+                        <option key={store.id} value={store.id}>
+                          {store.name}
+                        </option>
+                      );
+                    })}
+                  </Field>
+                  <ErrorMessage name="storeId" component="div" />
+                  <Field type="hidden" id="categoryId" name="categoryId" />
+                </div>
+              ) : (
+                "Loading store data..."
+              )}
 
-              {listofsubCategories ?    <div>
-               <label htmlFor="subcategoryId">Subcategory:</label>
-                <Field as="select" id="subcategoryId" name="subcategoryId">
-                <option value="">Select subcategory</option>
-                { listofsubCategories?.map(subCategorie=>{
-                 return <option key={subCategorie.id} value={subCategorie.id}>{subCategorie.name}</option>
-                 })}
-                </Field>
-                <ErrorMessage name="subcategoryId" component="div" />
-              </div>: 'Loading subCategories data...'}
+              {listofsubCategories ? (
+                <div>
+                  <label htmlFor="subcategoryId">Subcategory:</label>
+                  <Field as="select" id="subcategoryId" name="subcategoryId">
+                    <option value="">Select subcategory</option>
+                    {listofsubCategories?.map((subCategorie) => {
+                      return (
+                        <option key={subCategorie.id} value={subCategorie.id}>
+                          {subCategorie.name}
+                        </option>
+                      );
+                    })}
+                  </Field>
+                  <ErrorMessage name="subcategoryId" component="div" />
+                </div>
+              ) : (
+                "Loading subCategories data..."
+              )}
 
               <div>
                 <label htmlFor="Discount">Sale Discount:</label>

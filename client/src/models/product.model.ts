@@ -8,6 +8,7 @@ export interface IProductModel {
   stockQuantity?: number;
   isActive?: boolean;
   subcategoryId?: string;
+  categoryId?:string;
   storeId?: string;
   metaTitle?: string;
   metaDescription?: string; 
