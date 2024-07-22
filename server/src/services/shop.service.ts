@@ -53,9 +53,25 @@ import db from '../models/index';
   return { product, images };
 };
 
+const getTopProductIds = async (
+  limit: number = 200
+): Promise<any> => {
+
+
+  const products = await db.Product.findAll({
+    attributes: ['id'],
+    limit: limit,
+    order: [['createdAt', 'DESC']],
+    raw: true,
+  });
+
+
+  return products;
+};
 
 
 export default {
   createProductWithImages,
   getProductById,
+  getTopProductIds,
 };

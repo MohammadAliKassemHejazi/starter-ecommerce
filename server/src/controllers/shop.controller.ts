@@ -1,6 +1,5 @@
 import {  Response,NextFunction } from "express";
 
-
 import { userService } from "../services"
 import { shopService } from "../services"
 
@@ -16,7 +15,7 @@ export const handleCreateProduct = async (request: CustomRequest, response: Resp
         // Process product creation with data and files
         const results =  await shopService.createProductWithImages(productData, files);
      
-        response.status(200).json({ message: results });
+        response.status(200).json({ message: results.dataValues });
     } catch (error) {
         next(error); // Pass error to Express error handling middleware
     }
@@ -35,11 +34,17 @@ export const handleUpdate = async (
 
 export const handelgetall = async (
   request: CustomRequest,
-  response: Response
+  response: Response,
+  next:NextFunction
 ): Promise<void> => {
-  const UserId = request.UserId; // Assuming UserId is accessible via middleware
-  const userSession = await userService.userSession(UserId!);
-  response.json(userSession);
+  try {
+   
+      const results =  await shopService.getTopProductIds();
+   
+      response.status(200).json({ message: results });
+  } catch (error) {
+      next(error); // Pass error to Express error handling middleware
+  }
 };
 
 

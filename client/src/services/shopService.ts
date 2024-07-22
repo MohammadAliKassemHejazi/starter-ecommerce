@@ -3,7 +3,7 @@ import httpClient from "@/utils/httpClient"
 import { ImageListType } from "react-images-uploading";
 
 export interface IProductProps {
-    id?: string; // Now allows string or undefined
+    id?: string; // Can be string or undefined
     name: string;
     description: string;
     price: number;
@@ -19,8 +19,8 @@ export const requestProductById = async (id: string) => {
 	return response
 }
 
-export const requestAllArticles = async () => {
-	const { data: response } = await httpClient.get("/articles");
+export const requestAllProductID = async () => {
+	const { data: response } = await httpClient.get("/shop/getall");
 	console.log(response)
 	return response.data
 }

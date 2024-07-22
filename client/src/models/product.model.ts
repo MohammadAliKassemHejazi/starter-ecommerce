@@ -1,10 +1,13 @@
 import { ImageListType } from "react-images-uploading";
+import { IStoreModel } from "./store.model";
+import { IComment } from "./comment.model";
+import { ISize } from "./size.model";
 
 export interface IProductModel {
   id?: string;
-  name: string;
-  description: string;
-  price: number;
+  name?: string;
+  description?: string;
+  price?: number;
   stockQuantity?: number;
   isActive?: boolean;
   subcategoryId?: string;
@@ -12,8 +15,13 @@ export interface IProductModel {
   storeId?: string;
   metaTitle?: string;
   metaDescription?: string; 
-  photos: ImageListType;
-  croppedPhotos: ImageListType;
+  photos?: ImageListType;
+  croppedPhotos?: ImageListType;
+  store? : IStoreModel;
+  rating ?:  number;
+  commentsCount? :   number;
+  comments ?: [IComment];
+  sizes ?: [ISize];
 }
 
 

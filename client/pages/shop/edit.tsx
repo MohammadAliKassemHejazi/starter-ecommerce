@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { IProductModel, IProductModelErrors } from "../../src/models/product.model";
 import { useAppDispatch } from "@/store/store";
 import { updateProduct, fetchProductById } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
 import ImageViewer from "../../src/components/UI/imageViewer/imageViewer";
-import { useRouter } from "next/router";
+
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
@@ -30,13 +30,23 @@ type EditProductProps = {
 };
 
 const EditshopItem = ({ product }: EditProductProps) => {
-  const router = useRouter();
+
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const [updatedProduct, setUpdatedProduct] = useState<IProductModel>({
     ...product!,
-    croppedPhotos: product?.photos || [], // Assuming `photos` and `croppedPhotos` are the same initially
+    croppedPhotos: product?.photos || [],
   });
+
+  useEffect(() => {
+    if (product) {
+      setUpdatedProduct({
+        ...product,
+        croppedPhotos: product.photos || [],
+      });
+    }
+  }, [product]);
 
   const initialValues: IProductModel = {
     ...product!,
@@ -50,8 +60,8 @@ const EditshopItem = ({ product }: EditProductProps) => {
   };
 
   const handleSubmit = async (values: IProductModel) => {
+    setLoading(true);
     const formData = new FormData();
-
     Object.entries(values).forEach(([key, value]) => {
       if (key !== "photos") {
         formData.append(
@@ -61,18 +71,17 @@ const EditshopItem = ({ product }: EditProductProps) => {
       }
     });
 
-   // Append the product ID
-   formData.append("id", (product!.id ?? 0).toString());
+    formData.append("id", (product!.id ?? 0).toString());
 
-    updatedProduct.croppedPhotos.forEach((file, index) => {
+    updatedProduct.croppedPhotos?.forEach((file, index) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
     });
 
     try {
-      const response = await await dispatch(updateProduct(formData)).unwrap();
-      router.push(`/shop/${response}`);
+      const response = await dispatch(updateProduct(formData)).unwrap();
+
       Toast.fire({
         icon: "success",
         title: "Product updated successfully",
@@ -82,6 +91,8 @@ const EditshopItem = ({ product }: EditProductProps) => {
         icon: "error",
         title: `Failed to update product: ${error.message}`,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,7 +111,6 @@ const EditshopItem = ({ product }: EditProductProps) => {
             if (values.price && (values.price <= 0 || isNaN(values.price))) {
               errors.price = "Price must be a positive number";
             }
-
             return errors;
           }}
         >
@@ -121,7 +131,6 @@ const EditshopItem = ({ product }: EditProductProps) => {
                 <Field type="number" id="price" name="price" />
                 <ErrorMessage name="price" component="div" />
               </div>
-             
               <div>
                 <label htmlFor="isActive">Is Active:</label>
                 <Field type="checkbox" id="isActive" name="isActive" />
@@ -135,7 +144,6 @@ const EditshopItem = ({ product }: EditProductProps) => {
                 </Field>
                 <ErrorMessage name="storeId" component="div" />
               </div>
-
               <div>
                 <label htmlFor="subcategoryId">Subcategory:</label>
                 <Field as="select" id="subcategoryId" name="subcategoryId">
@@ -145,7 +153,6 @@ const EditshopItem = ({ product }: EditProductProps) => {
                 </Field>
                 <ErrorMessage name="subcategoryId" component="div" />
               </div>
-
               <div>
                 <label htmlFor="inventoryStatus">Inventory Status:</label>
                 <Field as="select" id="inventoryStatus" name="inventoryStatus">
@@ -155,13 +162,11 @@ const EditshopItem = ({ product }: EditProductProps) => {
                 </Field>
                 <ErrorMessage name="inventoryStatus" component="div" />
               </div>
-              
               <div>
                 <label htmlFor="salePrice">Sale Price:</label>
                 <Field type="number" id="salePrice" name="salePrice" />
                 <ErrorMessage name="salePrice" component="div" />
               </div>
-
               <div>
                 <label htmlFor="tags">Tags:</label>
                 <Field type="text" id="tags" name="tags" />
@@ -172,32 +177,24 @@ const EditshopItem = ({ product }: EditProductProps) => {
                 <Field type="text" id="metaTitle" name="metaTitle" />
                 <ErrorMessage name="metaTitle" component="div" />
               </div>
-
               <div>
                 <label htmlFor="metaDescription">Meta Description:</label>
-                <Field
-                  as="textarea"
-                  id="metaDescription"
-                  name="metaDescription"
-                />
+                <Field as="textarea" id="metaDescription" name="metaDescription" />
                 <ErrorMessage name="metaDescription" component="div" />
               </div>
-
-              <button type="submit" disabled={isSubmitting}>
-                Update Product
+              <button type="submit" disabled={isSubmitting || loading}>
+                {loading ? "Updating..." : "Update Product"}
               </button>
             </Form>
           )}
         </Formik>
-
         <ImageUploadComponent
           onImagesChange={handlePhotoChange}
           defaultImages={updatedProduct.photos}
         />
-
         <div>
           <h3>Cropped Images</h3>
-          <ImageViewer croppedPhotos={updatedProduct.croppedPhotos} />
+          <ImageViewer croppedPhotos={updatedProduct.croppedPhotos ?? []} />
         </div>
       </section>
     </Layout>
@@ -216,7 +213,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   if (id) {
     try {
-      const product = await fetchProductById(id);
+      const product =  fetchProductById(id);
       return {
         props: {
           product,
