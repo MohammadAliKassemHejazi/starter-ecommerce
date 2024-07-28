@@ -9,8 +9,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: string;
 
     static associate(models: any) {
-      Favorite.belongsTo(models.User);
-      Favorite.belongsTo(models.Product);
+ Favorite.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+      Favorite.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' });
     }
   }
 

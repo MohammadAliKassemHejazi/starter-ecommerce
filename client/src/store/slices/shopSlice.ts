@@ -81,10 +81,12 @@ export const articleSlice = createSlice({
 		})
 
 		builder.addCase(createProduct.fulfilled, (state, action) => {
+			console.log(action)
 			state.product = action.payload
 		})
 
 		builder.addCase(createProduct.rejected, (state, action) => {
+				console.log(action)
 			state.product = undefined;
 		})
 

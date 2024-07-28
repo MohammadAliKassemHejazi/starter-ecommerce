@@ -8,7 +8,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: string;
 
     static associate(models: any) {
-      Order.belongsTo(models.User);
+      Order.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
       Order.hasMany(models.OrderItem);
     }
   }

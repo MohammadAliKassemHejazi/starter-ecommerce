@@ -244,7 +244,7 @@ app.use((error: CustomError, req: Request, res: Response, next: NextFunction) =>
 const PORT = process.env.PORT || config.port;
 
 app.listen(Number(PORT), () => {
-
+// seedDatabase()
   logger.info(`Server is running on port ${PORT} in ${app.get('env')} mode`);
   
 });
@@ -264,10 +264,10 @@ app.listen(Number(PORT), () => {
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
-    db.sequelize.sync().then(() => {
-      
-     
+
+  db.sequelize.sync().then(() => {
         logger.info('Database synced');
+        seedDatabase()
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);
     });

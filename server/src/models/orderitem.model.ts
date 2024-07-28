@@ -6,14 +6,14 @@ import { IOrderItemAttributes } from "../interfaces/types/models/orderitem.model
 module.exports = (sequelize: any, DataTypes: any) => {
   class OrderItem extends Model<IOrderItemAttributes> implements IOrderItemAttributes {
     id!: string;
-    orderId!: string;
-    productId!: string;
+    // orderId!: string;
+    // productId!: string;
     quantity!: number;
     price!: number;
 
     static associate(models: any) {
-      OrderItem.belongsTo(models.Order, { foreignKey: 'orderId' });
-      OrderItem.belongsTo(models.Product, { foreignKey: 'productId' });
+      OrderItem.belongsTo(models.Order, { foreignKey: 'orderId', targetKey: 'id' });
+      OrderItem.belongsTo(models.Product, { foreignKey: 'productId' , targetKey: 'id'});
     }
   }
 

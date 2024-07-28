@@ -1,13 +1,13 @@
 "use strict";
-import { Model,UUIDV4, ForeignKey } from "sequelize";
+
+import { Model, UUIDV4, DataTypes, ForeignKey, Sequelize } from "sequelize";
 import { IProductAttributes } from "../interfaces/types/models/product.model.types";
 import { IUserAttributes } from "../interfaces/types/models/user.model.types";
 import { ICategoryAttributes } from "../interfaces/types/models/category.model.types";
 import { ISubcategoryAttributes } from "../interfaces/types/models/subcategory.model.types";
-import { IStoreAttributes } from "../interfaces/types/models/store.model.types"; 
+import { IStoreAttributes } from "../interfaces/types/models/store.model.types";
 
-
-module.exports = (sequelize: any, DataTypes: any) => {
+module.exports = (sequelize: Sequelize) => {
   class Product extends Model<IProductAttributes> implements IProductAttributes {
     id!: string;
     name!: string;
@@ -15,26 +15,26 @@ module.exports = (sequelize: any, DataTypes: any) => {
     price!: number;
     stockQuantity?: number;
     isActive?: boolean;
-    ownerId!: ForeignKey<IUserAttributes['id']>;
-    categoryId!: ForeignKey<ICategoryAttributes['id']>;
-    subcategoryId!: ForeignKey<ISubcategoryAttributes['id']>;
+    // ownerId!: ForeignKey<IUserAttributes['id']>;
+    // categoryId!: ForeignKey<ICategoryAttributes['id']>;
+    // subcategoryId!: ForeignKey<ISubcategoryAttributes['id']>;
+    // storeId!: ForeignKey<IStoreAttributes['id']>;
     metaTitle?: string;
     metaDescription?: string;
     slug?: string;
     tags?: string;
     discount?: number;
-    storeId!: ForeignKey<IStoreAttributes['id']>; // Add storeId to link to Store
 
     static associate(models: any) {
-      // Existing associations
-      Product.hasMany(models.ProductImage);
-      Product.hasMany(models.CartItem);
-      Product.hasMany(models.Favorite);
-      Product.hasMany(models.OrderItem);
-      Product.belongsTo(models.User, { foreignKey: 'ownerId'});
-      Product.belongsTo(models.Category, { foreignKey: 'categoryId'});
-      Product.belongsTo(models.SubCategory, { foreignKey: 'subcategoryId' });
-      Product.belongsTo(models.Store, { foreignKey: 'storeId' });
+      Product.belongsTo(models.User, { foreignKey: 'ownerId', targetKey: 'id' });
+      Product.belongsTo(models.Category, { foreignKey: 'categoryId', targetKey: 'id' });
+      Product.belongsTo(models.SubCategory, { foreignKey: 'subcategoryId', targetKey: 'id' });
+      Product.belongsTo(models.Store, { foreignKey: 'storeId', targetKey: 'id' });
+
+      Product.hasMany(models.ProductImage, { foreignKey: 'productId' });
+      Product.hasMany(models.CartItem, { foreignKey: 'productId' });
+      Product.hasMany(models.Favorite, { foreignKey: 'productId' });
+      Product.hasMany(models.OrderItem, { foreignKey: 'productId' });
     }
   }
 
@@ -67,14 +67,22 @@ module.exports = (sequelize: any, DataTypes: any) => {
     ownerId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: 'ownerId',  // Explicit field name
     },
     categoryId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: 'categoryId',  // Explicit field name
     },
     subcategoryId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: 'subcategoryId',  // Explicit field name
+    },
+    storeId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: 'storeId',  // Explicit field name
     },
     metaTitle: {
       type: DataTypes.STRING,
@@ -95,11 +103,13 @@ module.exports = (sequelize: any, DataTypes: any) => {
     discount: {
       type: DataTypes.INTEGER,
       allowNull: true,
-     
     },
+    
   }, {
     sequelize,
     modelName: "Product",
+    tableName: "Products", // Ensure the table name is consistent
+    timestamps: true, // If you want timestamps like createdAt and updatedAt
   });
 
   return Product;

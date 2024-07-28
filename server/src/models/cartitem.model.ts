@@ -6,13 +6,13 @@ import { ICartItemAttributes } from "../interfaces/types/models/cartitem.model.t
 module.exports = (sequelize: any, DataTypes: any) => {
   class CartItem extends Model<ICartItemAttributes> implements ICartItemAttributes {
     id!: string;
-    cartId!: string;
-    productId!: string;
+    // cartId!: string;
+    // productId!: string;
     quantity!: number;
 
     static associate(models: any) {
-      CartItem.belongsTo(models.Cart, { foreignKey: 'cartId' });
-      CartItem.belongsTo(models.Product, { foreignKey: 'productId' });
+      CartItem.belongsTo(models.Cart, { foreignKey: 'cartId' , targetKey: 'id'});
+      CartItem.belongsTo(models.Product, { foreignKey: 'productId' , targetKey: 'id'});
     }
   }
 

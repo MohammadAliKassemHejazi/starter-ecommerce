@@ -13,7 +13,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Package.belongsToMany(models.User, {
         through: models.UserPackage,
         foreignKey: 'packageId',
-        as: 'users',
+         targetKey: 'id'
       });
     }
 

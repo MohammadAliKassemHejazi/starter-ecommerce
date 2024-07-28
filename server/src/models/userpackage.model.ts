@@ -3,14 +3,14 @@ import { IUserPackageAttributes } from "../interfaces/types/models/userpackage.m
 module.exports = (sequelize: any, DataTypes: any) => {
   class UserPackage extends Model<IUserPackageAttributes> implements IUserPackageAttributes {
     public id!: string;
-    public userId!: string;
-    public packageId!: string;
+    // public userId!: string;
+    // public packageId!: string;
     public purchaseDate!: Date;
     public expirationDate!: Date;
 
     static associate(models: any) {
-      UserPackage.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-      UserPackage.belongsTo(models.Package, { foreignKey: 'packageId', as: 'package' });
+      UserPackage.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+      UserPackage.belongsTo(models.Package, { foreignKey: 'packageId', targetKey: 'id' });
     }
 
   }

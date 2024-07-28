@@ -8,14 +8,12 @@ module.exports = (sequelize: any) => {
   class Store extends Model<IStoreAttributes> implements IStoreAttributes {
     public id!: string;
     public name!: string;
-    public userId!: string;
-    public categoryId!: string;
     public description!: string; // Add description property
     public imgUrl!: string; // Add imgUrl property
 
     static associate(models: any) {
-      Store.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-      Store.belongsTo(models.Category, { foreignKey: 'categoryId', as: 'category' });
+      Store.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+      Store.belongsTo(models.Category, { foreignKey: 'categoryId', targetKey: 'id' });
     }
   }
 

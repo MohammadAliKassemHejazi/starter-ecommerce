@@ -6,12 +6,12 @@ import { IFavoriteItemAttributes } from "../interfaces/types/models/favoriteitem
 module.exports = (sequelize: any, DataTypes: any) => {
   class FavoriteItem extends Model<IFavoriteItemAttributes> implements IFavoriteItemAttributes {
     id!: string;
-    favoriteId?: string;
-    productId?: string;
+    // favoriteId?: string;
+    // productId?: string;
 
     static associate(models: any) {
-      FavoriteItem.belongsTo(models.Favorite, { foreignKey: 'favoriteId' });
-      FavoriteItem.belongsTo(models.Product, { foreignKey: 'productId' });
+      FavoriteItem.belongsTo(models.Favorite, { foreignKey: 'favoriteId' , targetKey: 'id'});
+      FavoriteItem.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' });
     }
   }
 

@@ -6,11 +6,11 @@ import { IProductImageAttributes } from "../interfaces/types/models/productimage
 module.exports = (sequelize: any, DataTypes: any) => {
   class ProductImage extends Model<IProductImageAttributes> implements IProductImageAttributes {
     id!: string;
-    productId!: string;
+    // productId!: string;
     imageUrl!: string;
 
     static associate(models: any) {
-      ProductImage.belongsTo(models.Product, { foreignKey: 'productId' }); // Specify the foreign key
+      ProductImage.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' }); // Specify the foreign key
     }
   }
   
