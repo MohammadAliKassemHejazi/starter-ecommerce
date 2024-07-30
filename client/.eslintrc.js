@@ -21,14 +21,14 @@ module.exports = {
     // "comma-dangle": ["error", "always-multiline"], // Enforce consistent use of trailing commas
 
     // ECMAScript 6
-    "arrow-spacing": ["error", { before: true, after: true }], // Enforce consistent spacing before and after arrow functions
-    "no-duplicate-imports": "error", // Disallow duplicate imports
-    "no-useless-constructor": "error", // Disallow unnecessary constructors
+    // "arrow-spacing": ["error", { before: true, after: true }], // Enforce consistent spacing before and after arrow functions
+     "no-duplicate-imports": "error", // Disallow duplicate imports
+     "no-useless-constructor": "error", // Disallow unnecessary constructors
 
     // React and JSX
     "react/prop-types": "off", // Disable prop-types as we use TypeScript for type checking
-    "react/react-in-jsx-scope": "off", // Not necessary to import React when using Next.js
-    "react/jsx-uses-react": "off", // Not necessary to import React when using Next.js
+    // "react/react-in-jsx-scope": "off", // Not necessary to import React when using Next.js
+    // "react/jsx-uses-react": "off", // Not necessary to import React when using Next.js
     "react/jsx-uses-vars": "error", // Prevent variables used in JSX from being incorrectly marked as unused
 
     // JSX Accessibility
