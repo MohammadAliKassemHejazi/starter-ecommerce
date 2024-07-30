@@ -5,6 +5,7 @@ import { IUserAttributes } from "./user.model.types";
 import { ICategoryAttributes } from "./category.model.types";
 import { ISubcategoryAttributes } from "./subcategory.model.types";
 import { IStoreAttributes } from "./store.model.types";
+import { IProductImageAttributes } from "./productimage.model.types";
 
 /**
  * Interface for Product attributes.
@@ -25,5 +26,6 @@ export interface IProductAttributes {
   slug?: string;                       // Optional SEO friendly URL slug
   tags?: string;                       // Optional tags for the product
   discount?: number;
+  croppedPhotos?: IProductImageAttributes[];
 
 }

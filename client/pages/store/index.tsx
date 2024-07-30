@@ -17,13 +17,9 @@ const Stores = () => {
 
   useEffect(() => {
  
-
-
-
       dispatch(fetchAllStores())
-     
-  
-  },[]);
+
+  },[dispatch]);
 
   return (
     <Layout>

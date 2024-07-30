@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as shopService from "@/services/shopService";
 
 import { RootState } from "../store";
-import { IProductModel } from "@/models/product.model";
+import { IProductModel, productresponse } from "@/models/product.model";
 
 const initialState: ProductsState = {
 	product: undefined,
@@ -15,7 +15,7 @@ export const fetchProductById = createAsyncThunk(
 	"shop/by-id",
 	async (id: string) => {
 		const response = await shopService.requestProductById(id)
-		console.log(response)
+		console.log(response,"shop/by-id")
 		return response;
 	}
 
@@ -42,7 +42,7 @@ export const fetchAllProducts = createAsyncThunk(
 export const createProduct = createAsyncThunk(
 	"shop/create",
 	async (product : FormData) => {
-		const response: IProductModel = await shopService.requestCreateProducts(product);
+		const response: productresponse = await shopService.requestCreateProducts(product);
 		console.log(response);
 		return response
 	}
@@ -82,7 +82,7 @@ export const articleSlice = createSlice({
 
 		builder.addCase(createProduct.fulfilled, (state, action) => {
 			console.log(action)
-			state.product = action.payload
+			state.product = action.payload.product
 		})
 
 		builder.addCase(createProduct.rejected, (state, action) => {

@@ -34,7 +34,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Create an Express application
-const app: Express = express();
+const app: Express = express(); 
+
+app.use('/compressed', express.static(path.join(__dirname, 'compressed')));
 
 //static paths
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -114,12 +116,16 @@ app.use('/api/auth', authRouter);
 app.use('/api/utile', utileRouter);
 app.use('/api/users', userRouter);
 app.use('/api/articles', articleRouter);
-app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {
+app.use('/api/shop', upload.array('photos', 5), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const files = req.files as Express.Multer.File[];
-    if(!files){
+
+    if (!files || files.length === 0) {
+      // Handle the case where no files were uploaded
       next();
+      return;
     }
+
     // Process each uploaded file (resize and compress if it's an image)
     const processedFiles = await Promise.all(
       files.map(async (file) => {
@@ -146,7 +152,7 @@ app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Respons
           return {
             originalname: fileName,
             mimetype: 'image/jpeg', // Set the MIME type to JPEG after compression
-            buffer: compressedImageBuffer
+            buffer: compressedImageBuffer,
           };
         } else {
           // For non-image files, return the original file buffer without compression
@@ -158,16 +164,19 @@ app.use('/api/shop', upload.array('photos', 5),async (req: Request, res: Respons
           return {
             originalname: fileName,
             mimetype: file.mimetype,
-            buffer: fileBuffer
+            buffer: fileBuffer,
           };
         }
       })
     );
 
+    // Do something with the processed files if needed
+    console.log(processedFiles);
+
+    next();
   } catch (error) {
     next(error);
   }
-  next()
 }, shopRouter);
 
 app.use('/api/store', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {
@@ -267,7 +276,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   db.sequelize.sync().then(() => {
         logger.info('Database synced');
-        seedDatabase()
+        // seedDatabase()
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);
     });

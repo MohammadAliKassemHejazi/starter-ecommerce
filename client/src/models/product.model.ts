@@ -24,6 +24,10 @@ export interface IProductModel {
   sizes ?: [ISize];
 }
 
+export interface productresponse {
+product : IProductModel
+}
+
 
 
 export interface IProductModelErrors {

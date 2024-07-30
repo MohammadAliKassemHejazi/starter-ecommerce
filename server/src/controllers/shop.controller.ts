@@ -1,10 +1,12 @@
 import {  Response,NextFunction } from "express";
 
-import { userService } from "../services"
+import { articleService, userService } from "../services"
 import { shopService } from "../services"
 
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 import { IShopCreateProduct } from "interfaces/types/controllers/shop.controller.types";
+import { IArticleAttributes } from "interfaces/types/models/article.model.types";
+import { IProductAttributes } from "interfaces/types/models/product.model.types";
 
 
 export const handleCreateProduct = async (request: CustomRequest, response: Response, next: NextFunction) => {
@@ -15,7 +17,7 @@ export const handleCreateProduct = async (request: CustomRequest, response: Resp
         // Process product creation with data and files
         const results =  await shopService.createProductWithImages(productData, files);
      
-        response.status(200).json({ message: results.dataValues });
+        response.status(200).json({ product:results });
     } catch (error) {
         next(error); // Pass error to Express error handling middleware
     }
@@ -51,13 +53,30 @@ export const handelgetall = async (
 
 
 
-export const handelgetsingleitem = async (
+export const handleGetSingleItem = async (
   request: CustomRequest,
-  response: Response
+  response: Response,
+  next: NextFunction
 ): Promise<void> => {
-  const UserId = request.UserId; // Assuming UserId is accessible via middleware
-  const userSession = await userService.userSession(UserId!);
-  response.json(userSession);
+  const id = request.query.id as string; // Assuming id is always a string in your case
+
+  if (!id) {
+    response.status(400).json({ error: "Article ID is required" });
+    return;
+  }
+
+  try {
+    const product = await shopService.getProductById(id);
+
+    if (!product) {
+      response.status(404).json({ error: "Product not found" });
+      return;
+    }
+
+    response.status(200).json(product);
+  } catch (error) {
+    next(error); // Pass the error to the error handling middleware
+  }
 };
 
 
@@ -65,7 +84,7 @@ export default {
   handleCreateProduct,
   handleUpdate,
   handelgetall,
-  handelgetsingleitem,
+  handleGetSingleItem,
 };
 
 

@@ -101,18 +101,25 @@ function CreateProduct() {
     });
 
     try {
+
       const response = await dispatch(createProduct(formData)).unwrap();
-      console.log(response)
-      // router.push(`/shop/${response.id}`);
+
+      console.log(response,"respondr");
+
+       router.push(`/shop/${response.product.id}`);
+
       Toast.fire({
         icon: "success",
         title: "Product created successfully",
       });
+
     } catch (error: any) {
+
       Toast.fire({
         icon: "error",
         title: `Failed to create product: ${error.message}`,
       });
+
     }
   };
 

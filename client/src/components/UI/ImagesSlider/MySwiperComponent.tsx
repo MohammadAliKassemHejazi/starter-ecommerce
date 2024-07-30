@@ -29,13 +29,13 @@ export default function MySwiperComponent({ imageLinks }: Props) {
             prevEl: '.prev',
             nextEl: '.next',
           }}
-          onSwiper={(swiper) => console.log(swiper)}
+          onSwiper={(swiper : any) => console.log(swiper)}
           onSlideChange={() => console.log('slide change')}
         >
           {imageLinks.map((link, index) => (
             <SwiperSlide key={index}>
               <a href="#">
-                <Image className="card-img img-fluid" src={link} alt={`Product Image ${index + 1}`} width={128.79} height={128.79} />
+                <Image className="card-img img-fluid" src={link} alt={`Product Image ${index + 1}`} width={128.79} height={128.79} layout="responsive" quality={75} />
               </a>
             </SwiperSlide>
           ))}

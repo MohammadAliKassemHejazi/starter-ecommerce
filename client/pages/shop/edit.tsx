@@ -12,6 +12,8 @@ import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { setAuthHeaders } from "@/utils/httpClient";
+import { requestArticleById } from "@/services/articleService";
+import { requestProductById } from "@/services/shopService";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -206,23 +208,17 @@ export default protectedRoute(EditshopItem);
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const { id }: any = context.query;
+  const { pid }: any = context.query;
   const headers = context.req.headers;
-
   setAuthHeaders(headers);
-
-  if (id) {
-    try {
-      const product =  fetchProductById(id);
-      return {
-        props: {
-          product,
-        },
-      };
-    } catch (error) {
-      console.error("Failed to fetch product:", error);
-      return { props: {} };
-    }
+  
+  if (pid) {
+    const article = await requestProductById(pid);
+    return {
+      props: {
+        article,
+      },
+    };
   } else {
     return { props: {} };
   }

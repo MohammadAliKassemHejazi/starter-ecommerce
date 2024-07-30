@@ -6,7 +6,7 @@ import { protectedRoutes } from "../middlewares";
 const router = express.Router();
     // routes want to protect
   const Routes  = [
-    "/get",
+   
     "/get/author",
     "/create",
     "/update/:id",

@@ -18,14 +18,13 @@ import db from '../models/index';
     for (const file of files) {
       await db.ProductImage.create({
         productId: product.dataValues.id,
-        imageUrl: `/uploads/${file.filename}`
+        imageUrl: `/compressed/${file.filename}`
       });
     }
 
     // Return response with product and image URLs
-    return {
-      product
-    };
+    return product.dataValues;
+    
   } catch (error) {
     // Handle errors appropriately
     throw error;
@@ -34,13 +33,14 @@ import db from '../models/index';
 };
 
 
- const getProductById = async (
+const getProductById = async (
   productId: string
-): Promise<{ product: IProductAttributes; images: IProductImageAttributes[] } | null> => {
+): Promise<{ product: IProductAttributes & { croppedPhotos: IProductImageAttributes[] } } | null> => {
   const product: IProductAttributes | null = await db.Product.findOne({
     where: { id: productId },
     raw: true,
   });
+
   if (!product) {
     return null;
   }
@@ -50,8 +50,12 @@ import db from '../models/index';
     raw: true,
   });
 
-  return { product, images };
+  // Ensure croppedPhotos is set correctly
+  const productWithImages = { ...product, croppedPhotos: images };
+
+  return { product: productWithImages };
 };
+
 
 const getTopProductIds = async (
   limit: number = 200
