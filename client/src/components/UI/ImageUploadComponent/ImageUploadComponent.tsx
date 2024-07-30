@@ -51,6 +51,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
           updatedCroppedImages.push(newImage); // push the ImageType object
         } catch (error) {
+       
           console.error("Error cropping image:", error);
         }
       }
@@ -71,7 +72,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   };
 
   const handleCropChange = (newCrop: Crop, imageIndex: number) => {
-    console.log(newCrop);
+
     setCropData((prevData) => ({
       ...prevData,
       [imageIndex]: newCrop,
@@ -120,8 +121,8 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
           
           canvas.toBlob((blob) => {
             if (blob) {
-              const dataURL = URL.createObjectURL(blob);
-              console.log("Blob created, dataURL:", dataURL); // Check if the URL is valid
+            URL.createObjectURL(blob);
+          
               const croppedFile = new File([blob], imageFile.name, {
                 type: blob.type,
               });
@@ -136,7 +137,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
       };
 
       image.onerror = (error) => {
-        reject(new Error("Failed to load image"));
+        reject(new Error(error+"Failed to load image"));
       };
     });
   };

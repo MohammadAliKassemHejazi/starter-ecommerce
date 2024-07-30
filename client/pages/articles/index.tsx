@@ -12,9 +12,7 @@ import Moment from "react-moment";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import { GetServerSideProps, GetServerSidePropsContext, GetStaticProps, GetStaticPropsContext } from "next/types";
-import { requestArticleByAuthor } from "@/services/articleService";
-import { IArticleModel } from "@/models/article.model";
+
 
 type Props = {
  

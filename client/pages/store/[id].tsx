@@ -21,12 +21,12 @@ const SingleStore = () => {
 
       const storeId = Array.isArray(id) ? id[0] : id;
 
-      dispatch(fetchStoreById(storeId)).then((response) => {
+      dispatch(fetchStoreById(storeId)).then(() => {
     
        
       });
 
-      dispatch(fetchAllStores()).then((response) => {
+      dispatch(fetchAllStores()).then(() => {
     
       
       });

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
-import { fetchSession, signIn } from "@/store/slices/userSlice";
+import {  signIn } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";

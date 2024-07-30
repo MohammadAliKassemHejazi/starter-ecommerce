@@ -26,7 +26,7 @@ const protectedRoute = (WrappedComponent: React.FC) => (props: any) => {
       if (!isAuthenticated) {
         router.push(`/auth/signin`);
         return null;
-      } else if (route == "/") {
+      } else if (route === "/") {
         router.push(`/home`); // default page after login when call root path
         return null;
       }

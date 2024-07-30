@@ -29,8 +29,8 @@ export default function MySwiperComponent({ imageLinks }: Props) {
             prevEl: '.prev',
             nextEl: '.next',
           }}
-          onSwiper={(swiper : any) => console.log(swiper)}
-          onSlideChange={() => console.log('slide change')}
+          // onSwiper={(swiper : any) => console.log(swiper)}
+          // onSlideChange={() => console.log('slide change')}
         >
           {imageLinks.map((link, index) => (
             <SwiperSlide key={index}>

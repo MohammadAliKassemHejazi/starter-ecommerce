@@ -1,4 +1,4 @@
-import {  IProductModel } from "@/models/product.model"
+
 import httpClient from "@/utils/httpClient"
 import { ImageListType } from "react-images-uploading";
 
@@ -22,7 +22,7 @@ export const requestProductById = async (id: string) => {
 
 export const requestAllProductID = async () => {
 	const { data: response } = await httpClient.get("/shop/getall");
-	console.log(response)
+
 	return response.data
 }
 

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { IProductModel, IProductModelErrors } from "../../src/models/product.model";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch,store } from "@/store/store";
 import { createProduct } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
 import ImageViewer from "../../src/components/UI/imageViewer/imageViewer";
@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
-import { store } from "@/store/store";
+
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import { fetchAllSubCategoriesID, utileSubCategoriesSelector } from "@/store/slices/utilsSlice";
 import { useSelector } from "react-redux";
@@ -94,7 +94,7 @@ function CreateProduct() {
       }
     });
 
-    product.croppedPhotos?.forEach((file, index) => {
+    product.croppedPhotos?.forEach((file) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
@@ -104,7 +104,6 @@ function CreateProduct() {
 
       const response = await dispatch(createProduct(formData)).unwrap();
 
-      console.log(response,"respondr");
 
        router.push(`/shop/${response.product.id}`);
 

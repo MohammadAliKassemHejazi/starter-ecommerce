@@ -71,14 +71,14 @@ export const articleSlice = createSlice({
 			state.article = action.payload;
 		})
 
-		builder.addCase(fetchArticleById.rejected, (state, action) => {
+		builder.addCase(fetchArticleById.rejected, (state) => {
 			state.article = undefined;
 		})
 		builder.addCase(fetchArticleByAuthor.fulfilled, (state, action) => {
 			state.articleAuthor = action.payload.data;
 		})
 
-		builder.addCase(fetchArticleByAuthor.rejected, (state, action) => {
+		builder.addCase(fetchArticleByAuthor.rejected, (state) => {
 			state.articleAuthor = undefined;
 		})
 
@@ -86,7 +86,7 @@ export const articleSlice = createSlice({
 			state.articles = action.payload;
 		})
 
-		builder.addCase(fetchAllArticles.rejected, (state, action) => {
+		builder.addCase(fetchAllArticles.rejected, (state) => {
 			state.articles = [];
 		})
 

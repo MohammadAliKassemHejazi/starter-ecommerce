@@ -1,7 +1,7 @@
 import Layout from "@/components/Layouts/Layout";
 import Image from "next/image";
 import Link from "next/link";
-import Router from "next/router";
+
 import React, { useState } from "react";
 
 type Props = {};
@@ -11,8 +11,8 @@ export default function ForgotPassword({}: Props) {
   const [error, setError] = useState(false);
   const [email, setEmail] = useState("");
 
-  const handleSendMail = (e: any) => {
-    console.log(email);
+  const handleSendMail = () => {
+
     if (email === "") {
       setError(true);
       setResponseText("กรุณากรอกอีเมล");
@@ -73,8 +73,8 @@ export default function ForgotPassword({}: Props) {
                         </div>
                         <div className="col-12">
                           <button
-                            onClick={(e) => {
-                              handleSendMail(e);
+                            onClick={() => {
+                              handleSendMail();
                             }}
                             className="me-3 btn btn-primary px-4 float-end mt-4"
                           >

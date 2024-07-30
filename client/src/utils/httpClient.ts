@@ -6,7 +6,7 @@ const httpClient = axios.create({
 })
 
 export const setAuthHeaders = (headers: any) => {
-  console.log(headers);
+
   const cookies = headers.cookie;
   const parsedCookies = cookies ? cookie.parse(cookies) : {};
   const token = parsedCookies[ACCESS_TOKEN_KEY]; // Adjust the cookie name to your setup

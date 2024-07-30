@@ -1,7 +1,6 @@
 import { GetSession, SignIn, SignUp } from "@/models/auth.model"
 import httpClient from "@/utils/httpClient";
-import axios from "axios";
-import { METHODS } from "http";
+
 
 type signProps = {
 	email: string;

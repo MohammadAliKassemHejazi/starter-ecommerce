@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { IProductModel, IProductModelErrors } from "../../src/models/product.model";
 import { useAppDispatch } from "@/store/store";
-import { updateProduct, fetchProductById } from "@/store/slices/shopSlice";
+import { updateProduct } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
 import ImageViewer from "../../src/components/UI/imageViewer/imageViewer";
 
@@ -12,7 +12,7 @@ import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { setAuthHeaders } from "@/utils/httpClient";
-import { requestArticleById } from "@/services/articleService";
+
 import { requestProductById } from "@/services/shopService";
 
 const Toast = Swal.mixin({
@@ -75,14 +75,14 @@ const EditshopItem = ({ product }: EditProductProps) => {
 
     formData.append("id", (product!.id ?? 0).toString());
 
-    updatedProduct.croppedPhotos?.forEach((file, index) => {
+    updatedProduct.croppedPhotos?.forEach((file) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
     });
 
     try {
-      const response = await dispatch(updateProduct(formData)).unwrap();
+      await dispatch(updateProduct(formData)).unwrap();
 
       Toast.fire({
         icon: "success",

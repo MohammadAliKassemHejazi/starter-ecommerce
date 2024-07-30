@@ -99,7 +99,7 @@ export const userSlice = createSlice({
 			state.isAuthenticated = true;
 			state.isAuthenticating = false;
 		});
-		builder.addCase(signIn.rejected, (state, action) => {
+		builder.addCase(signIn.rejected, (state) => {
 			state.accessToken = "";
 			state.isAuthenticated = false;
 			state.isAuthenticating = false;
@@ -118,7 +118,7 @@ export const userSlice = createSlice({
 				state.isAuthenticated = true;
 			}
 		});
-		builder.addCase(signOut.fulfilled, (state, action) => {
+		builder.addCase(signOut.fulfilled, (state) => {
 			state.isAuthenticated = false;
 			state.isAuthenticating = false;
 			state.id = "";

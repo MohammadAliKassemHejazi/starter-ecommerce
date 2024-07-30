@@ -16,7 +16,7 @@ export const requestArticleById = async (id: string) => {
 
 export const requestAllArticles = async () => {
 	const { data: response } = await httpClient.get("/articles");
-	console.log(response)
+
 	return response.data
 }
 

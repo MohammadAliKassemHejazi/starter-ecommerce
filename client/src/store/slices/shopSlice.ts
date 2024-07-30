@@ -15,7 +15,7 @@ export const fetchProductById = createAsyncThunk(
 	"shop/by-id",
 	async (id: string) => {
 		const response = await shopService.requestProductById(id)
-		console.log(response,"shop/by-id")
+	
 		return response;
 	}
 
@@ -43,7 +43,7 @@ export const createProduct = createAsyncThunk(
 	"shop/create",
 	async (product : FormData) => {
 		const response: productresponse = await shopService.requestCreateProducts(product);
-		console.log(response);
+	
 		return response
 	}
 )
@@ -76,17 +76,17 @@ export const articleSlice = createSlice({
 			state.product = action.payload;
 		})
 
-		builder.addCase(fetchProductById.rejected, (state, action) => {
+		builder.addCase(fetchProductById.rejected, (state) => {
 			state.product = undefined;
 		})
 
 		builder.addCase(createProduct.fulfilled, (state, action) => {
-			console.log(action)
+	
 			state.product = action.payload.product
 		})
 
-		builder.addCase(createProduct.rejected, (state, action) => {
-				console.log(action)
+		builder.addCase(createProduct.rejected, (state) => {
+		
 			state.product = undefined;
 		})
 

@@ -44,7 +44,7 @@ const products =[
     "tag": "sale",
     "tagColor": "red",
     "rating": 5,
-    "price": 60.0
+    "price": 60.0,
   },
   {
     "id": 2,
@@ -53,7 +53,7 @@ const products =[
     "tag": "out of stock",
     "tagColor": "black",
     "rating": 4,
-    "price": 55.0
+    "price": 55.0,
   }
 ]
 const Home = ({ articles }: Props) => {

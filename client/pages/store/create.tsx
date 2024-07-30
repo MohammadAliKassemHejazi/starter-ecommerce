@@ -1,6 +1,6 @@
 
 import { useSelector } from "react-redux";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { IStoreModel, IStoreModelErrors } from "../../src/models/store.model";
 import { useAppDispatch } from "@/store/store";
@@ -30,7 +30,7 @@ const CreateStore = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const categoriesList = useSelector(utileCategoriesSelector);
-  const isMounted = useRef(false);
+
 
   useRunOnce(() => {
 
@@ -73,7 +73,7 @@ const CreateStore = () => {
       }
     });
 
-    store.croppedImages.forEach((file, index) => {
+    store.croppedImages.forEach((file) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
@@ -81,7 +81,7 @@ const CreateStore = () => {
 
     try {
       const response = await dispatch(createStore(formData)).unwrap();
-      console.log(response, "response");
+     
       router.push(`/store/${response.id}`);
       Toast.fire({
         icon: "success",

@@ -2,7 +2,7 @@ import {  signOut, userSelector } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
 import Link from "next/link";
 import Script from "next/script";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Router from "next/router";

@@ -30,7 +30,7 @@ export const fetchAllStores = createAsyncThunk(
 	"store/fetch",
 	async () => {
 		const response = await storeService.requestAllStores();
-		console.log(response,"store/fetch")
+	
 		return response
 	}
 )
@@ -46,8 +46,10 @@ export const createStore = createAsyncThunk(
 export const updateArticles = createAsyncThunk(
 	"store/update",
 	async (article: IStoreResponseModel) => {
+		article 
+			
 		// const response = await shopService.requestUpdateArticles(article);
-		return "response"
+		return article
 	}
 )
 
@@ -72,7 +74,7 @@ export const articleSlice = createSlice({
 			state.store = action.payload;
 		})
 
-		builder.addCase(fetchStoreById.rejected, (state, action) => {
+		builder.addCase(fetchStoreById.rejected, (state) => {
 			state.store = undefined;
 		})
 
@@ -80,16 +82,16 @@ export const articleSlice = createSlice({
 			state.store = action.payload
         })
         
-       builder.addCase(createStore.rejected, (state, action) => {
+       builder.addCase(createStore.rejected, (state, ) => {
 			state.store = undefined
 		})
 
 		builder.addCase(fetchAllStores.fulfilled, (state, action) => {
-			console.log(action)
+		
 			state.stores = action.payload.stores;
 		})
 
-		builder.addCase(fetchAllStores.rejected, (state, action) => {
+		builder.addCase(fetchAllStores.rejected, (state) => {
 			state.stores = undefined;
 		})
 

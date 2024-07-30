@@ -25,7 +25,7 @@ export const fetchAllSubCategoriesID = createAsyncThunk(
 	"/utile/subcategories",
 	async (id: string) => {
 		const response = await utileService.requestSubCategoriesId(id);
-		console.log(response)
+		
 		return response
 	}
 )
@@ -42,16 +42,16 @@ export const utilsSlice = createSlice({
 			state.Categories = action.payload.data.categories;
 		})
 
-		builder.addCase(fetchAllCategories.rejected, (state, action) => {
+		builder.addCase(fetchAllCategories.rejected, (state) => {
 			state.Categories = [];
 		})
 
 		builder.addCase(fetchAllSubCategoriesID.fulfilled, (state, action) => {
-			console.log(action)
+	
 			state.SubCategories = action.payload.subcategories;
 		})
 
-		builder.addCase(fetchAllSubCategoriesID.rejected, (state, action) => {
+		builder.addCase(fetchAllSubCategoriesID.rejected, (state) => {
 			state.SubCategories = [];
 		})
 

@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import { signIn, signUp, userSelector } from "@/store/slices/userSlice";
+import {  signUp } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,7 +35,7 @@ export default function SignUp({}: Props) {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   useEffect(() => {
-    if (password != passwordConfirmation) {
+    if (password !== passwordConfirmation) {
       setMessageError("password not match");
     } else {
       setMessageError("");
@@ -213,7 +213,7 @@ export default function SignUp({}: Props) {
                           <div className="form-check">
                             <div
                               className="btn"
-                              onClick={(e) => {
+                              onClick={() => {
                                 handleTogglePassword();
                               }}
                             >
