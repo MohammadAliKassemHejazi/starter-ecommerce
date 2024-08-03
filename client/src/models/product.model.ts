@@ -18,7 +18,7 @@ export interface IProductModel {
   photos?: ImageListType;
   croppedPhotos?: ImageListType;
   store? : IStoreModel;
-  rating ?:  number;
+  ratings ?:  number;
   commentsCount? :   number;
   comments ?: [IComment];
   sizes ?: [ISize];

@@ -47,10 +47,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(helmet()); // Apply helmet for security headers
 
 // Increase the request body size limit for JSON bodies
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
 
 // Increase the request body size limit for URL-encoded bodies
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -103,8 +103,8 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
 };
 
 const upload = multer({ storage: storage,fileFilter: fileFilter,limits: {
-    fileSize: 10 * 1024 * 1024, 
-    files: 5 
+    fileSize: 50 * 1024 * 1024, 
+    files: 6 
   } });
 
 // Routes
@@ -116,7 +116,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/utile', utileRouter);
 app.use('/api/users', userRouter);
 app.use('/api/articles', articleRouter);
-app.use('/api/shop', upload.array('photos', 5), async (req: Request, res: Response, next: NextFunction) => {
+app.use('/api/shop', upload.array('photos', 6), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const files = req.files as Express.Multer.File[];
 

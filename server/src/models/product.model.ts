@@ -35,6 +35,8 @@ module.exports = (sequelize: Sequelize) => {
       Product.hasMany(models.CartItem, { foreignKey: 'productId' });
       Product.hasMany(models.Favorite, { foreignKey: 'productId' });
       Product.hasMany(models.OrderItem, { foreignKey: 'productId' });
+       Product.hasMany(models.Comment, { foreignKey: 'productId' }); // Added association for comments
+      Product.hasMany(models.Size, { foreignKey: 'productId' }); // Added association for sizes
     }
   }
 

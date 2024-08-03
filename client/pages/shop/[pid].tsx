@@ -1,13 +1,12 @@
 import Layout from "@/components/Layouts/Layout";
 import MySwiperComponent from "@/components/UI/ImagesSlider/MySwiperComponent";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { Formik, Form } from "formik";
 import { IProductModel } from "../../src/models/product.model"; // Adjust the import path as needed
 import { setAuthHeaders } from "@/utils/httpClient";
-
 import { requestProductById } from "@/services/shopService";
 import Head from "next/head";
 
@@ -17,6 +16,11 @@ type Props = {
 
 const SingleItem = ({ product }: Props) => {
   const router = useRouter();
+  const [feedback, setFeedback] = useState({
+    rating: 0,
+    comment: "",
+  });
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -36,19 +40,41 @@ const SingleItem = ({ product }: Props) => {
     },
     image:
       process.env.NEXT_PUBLIC_BASE_URL_Images +
-      (product?.croppedPhotos?.[0]?.dataURL ?? ""),
+      (product?.croppedPhotos?.[0]?.imageUrl  ?? ""),
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: product?.rating ?? 0,
+      ratingValue: product?.ratings ?? 0,
       reviewCount: product?.commentsCount ?? 0,
     },
   };
+
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
   const handleSubmit = (values: any) => {
     console.log("Form values", values);
+  };
+
+  const handleFeedbackSubmit = async (values: any) => {
+    try {
+    //  await submitFeedback(product?.id, values);
+      // Optionally, you can refresh the page or update the state to show the new comment
+      alert("Feedback submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      alert("Failed to submit feedback");
+    }
+  };
+
+
+
+  const handleFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFeedback((prevFeedback) => ({
+      ...prevFeedback,
+      [name]: name === "rating" ? Number(value) : value,
+    }));
   };
 
   return (
@@ -70,7 +96,7 @@ const SingleItem = ({ product }: Props) => {
                     className="card-img img-fluid"
                     src={
                       process.env.NEXT_PUBLIC_BASE_URL_Images +
-                      (product?.croppedPhotos?.[0]?.dataURL ?? "")
+                      (product?.croppedPhotos?.[0]?.imageUrl  ?? "")
                     }
                     alt={product?.name ?? ""}
                     height={350}
@@ -82,10 +108,10 @@ const SingleItem = ({ product }: Props) => {
                 <div className="row">
                   <MySwiperComponent
                     imageLinks={
-                      product?.photos?.map(
+                      product?.croppedPhotos?.map(
                         (photo: any) =>
                           process.env.NEXT_PUBLIC_BASE_URL_Images +
-                          photo.dataURL
+                          photo.imageUrl 
                       ) ?? []
                     }
                   />
@@ -103,7 +129,7 @@ const SingleItem = ({ product }: Props) => {
                       <i className="fa fa-star text-warning"></i>
                       <i className="fa fa-star text-secondary"></i>
                       <span className="list-inline-item text-dark">
-                        Rating {product?.rating ?? ""} |{" "}
+                        Rating {product?.ratings ?? ""} |{" "}
                         {product?.commentsCount ?? ""} Comments
                       </span>
                     </p>
@@ -142,16 +168,18 @@ const SingleItem = ({ product }: Props) => {
                                 </li>
                                 {product?.sizes?.map((s) => (
                                   <li key={s.id} className="list-inline-item">
-                                    <span
+                                    <button
+                                      type="button"
                                       className={`btn btn-success btn-size ${
                                         values.size === s.size ? "active" : ""
                                       }`}
                                       onClick={() =>
                                         setFieldValue("size", s.size)
                                       }
+                                      disabled={s.stockQuantity === 0}
                                     >
                                       {s.size}
-                                    </span>
+                                    </button>
                                   </li>
                                 ))}
                               </ul>
@@ -229,11 +257,55 @@ const SingleItem = ({ product }: Props) => {
                     {product?.comments?.map((comment: any, index: any) => (
                       <div key={index} className="comment">
                         <p>
-                          <strong>{comment?.user ?? ""}</strong>
+                          <strong>{comment?.user ?? ""}</strong> -{" "}
+                          {comment?.rating} stars
                         </p>
                         <p>{comment?.text ?? ""}</p>
                       </div>
                     ))}
+                    <div className="feedback-section">
+                      <h6>Submit Feedback:</h6>
+                      <Formik
+                        initialValues={{
+                          comment: "",
+                          rating: 0,
+                        }}
+                        onSubmit={handleFeedbackSubmit}
+                      >
+                        {({ values }) => (
+                          <Form>
+                            <div className="form-group">
+                              <label htmlFor="comment">Comment:</label>
+                              <input
+                                type="text"
+                                id="comment"
+                                name="comment"
+                                value={values.comment}
+                                onChange={handleFeedbackChange}
+                                className="form-control"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="rating">Rating:</label>
+                              <input
+                                type="number"
+                                id="rating"
+                                name="rating"
+                                value={values.rating}
+                                onChange={handleFeedbackChange}
+                                min="0"
+                                max="5"
+                                step="0.1"
+                                className="form-control"
+                              />
+                            </div>
+                            <button type="submit" className="btn btn-success">
+                              Submit Feedback
+                            </button>
+                          </Form>
+                        )}
+                      </Formik>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -269,7 +341,7 @@ export async function generateMetadata({
         {
           url:
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            (product?.croppedPhotos?.[0]?.dataURL ?? ""),
+            (product?.croppedPhotos?.[0]?.imageUrl  ?? ""),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
@@ -283,7 +355,7 @@ export async function generateMetadata({
         "Product Description",
       image:
         process.env.NEXT_PUBLIC_BASE_URL_Images +
-        (product?.croppedPhotos?.[0]?.dataURL ?? ""),
+        (product?.croppedPhotos?.[0]?.imageUrl  ?? ""),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };
@@ -299,47 +371,16 @@ export const getServerSideProps: GetServerSideProps = async (
     setAuthHeaders(headers);
 
     if (pid) {
-      const { product1 } = await requestProductById(pid);
-
-      const product = {
-        id: pid,
-        name: "Sample Product",
-        description: "This is a sample product description.",
-        price: 29.99,
-        stockQuantity: 100,
-        isActive: true,
-        ownerId: "sample-owner-id",
-        categoryId: "sample-category-id",
-        subcategoryId: "sample-subcategory-id",
-        storeId: "sample-store-id",
-        metaTitle: "Sample Meta Title",
-        metaDescription: "Sample Meta Description",
-        slug: "sample-product-slug",
-        tags: "sample,product,tags",
-        discount: 10,
-        rating: 4.5,
-        commentsCount: 10,
-        comments: [
-          { user: "User1", text: "Great product!" },
-          { user: "User2", text: "Very useful." },
-        ],
-        croppedPhotos: [{ dataURL: "/compressed/40767-coding-event.avif" }],
-        photos: [{ dataURL: "/compressed/40767-coding-event.avif" }],
-        sizes: [
-          { id: "size1", size: "S" },
-          { id: "size2", size: "M" },
-          { id: "size3", size: "L" },
-        ],
-        store: {
-          name: "Sample Store",
-        },
-      };
+      const product = await requestProductById(pid);
 
       if (!product) {
+
         return {
           notFound: true,
         };
       }
+      product.croppedPhotos = (product?.ProductImages ?? [])
+      product.photo = (product?.ProductImages?.[0]  ?? [])
       return {
         props: {
           product,

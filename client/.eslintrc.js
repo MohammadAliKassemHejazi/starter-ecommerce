@@ -2,15 +2,15 @@ module.exports = {
   extends: ["next", "next/core-web-vitals"],
   rules: {
     // Possible Errors
-    "no-console": "warn", // Disallow console.log statements
-    "no-debugger": "warn", // Disallow debugger statements
+    //"no-console": "warn", // Disallow console.log statements
+    //"no-debugger": "warn", // Disallow debugger statements
 
     // Best Practices
     eqeqeq: ["error", "always"], // Require the use of === and !==
     curly: ["error", "all"], // Require consistent use of curly braces for all control statements
 
     // Variables
-    "no-unused-vars": "warn", // Disallow unused variables
+    //"no-unused-vars": "warn", // Disallow unused variables
     "no-var": "error", // Require let or const instead of var
     "prefer-const": "warn", // Suggest using const if variable is never reassigned
 

@@ -66,7 +66,7 @@ export const handleGetSingleItem = async (
   }
 
   try {
-    const product = await shopService.getProductById(id);
+    const  product = await shopService.getProductById(id);
 
     if (!product) {
       response.status(404).json({ error: "Product not found" });

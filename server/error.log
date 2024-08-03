@@ -40,3 +40,10 @@
 {"level":"error"}
 {"level":"error"}
 {"level":"error"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"code":"LIMIT_FILE_COUNT","level":"error","message":"Too many files","name":"MulterError","storageErrors":[]}
+{"code":"LIMIT_FILE_COUNT","level":"error","message":"Too many files","name":"MulterError","storageErrors":[]}
+{"code":"LIMIT_UNEXPECTED_FILE","field":"photos","level":"error","message":"Unexpected field","name":"MulterError","storageErrors":[]}
