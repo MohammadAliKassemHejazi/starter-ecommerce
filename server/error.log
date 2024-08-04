@@ -47,3 +47,7 @@
 {"code":"LIMIT_FILE_COUNT","level":"error","message":"Too many files","name":"MulterError","storageErrors":[]}
 {"code":"LIMIT_FILE_COUNT","level":"error","message":"Too many files","name":"MulterError","storageErrors":[]}
 {"code":"LIMIT_UNEXPECTED_FILE","field":"photos","level":"error","message":"Unexpected field","name":"MulterError","storageErrors":[]}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"errors":[{"instance":{"createdAt":"2024-08-03T11:32:22.015Z","id":"a5503814-3de0-4ace-bfef-b1ebc4674a36","imageUrl":"/compressed/2611-coding-event.avif","updatedAt":"2024-08-03T11:32:22.015Z"},"message":"ProductImage.productId cannot be null","origin":"CORE","path":"productId","type":"notNull Violation","validatorArgs":[],"validatorKey":"is_null","validatorName":null,"value":null}],"level":"error","name":"SequelizeValidationError"}
+{"errors":[{"instance":{"createdAt":"2024-08-03T11:33:22.104Z","id":"b40ca28b-05e9-4c3a-ac37-769713bfda26","imageUrl":"/compressed/45853-coding-event.avif","updatedAt":"2024-08-03T11:33:22.104Z"},"message":"ProductImage.productId cannot be null","origin":"CORE","path":"productId","type":"notNull Violation","validatorArgs":[],"validatorKey":"is_null","validatorName":null,"value":null}],"level":"error","name":"SequelizeValidationError"}

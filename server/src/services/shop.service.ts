@@ -1,17 +1,17 @@
 
 import { IShopCreateProduct } from 'interfaces/types/controllers/shop.controller.types';
 import { IProductAttributes, } from 'interfaces/types/models/product.model.types';
-import { ISizeAttributes, } from 'interfaces/types/models/size.model.types';
-import { ICommentAttributes } from 'interfaces/types/models/comment.model.types';
-import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
+// import { ISizeAttributes, } from 'interfaces/types/models/size.model.types';
+// import { ICommentAttributes } from 'interfaces/types/models/comment.model.types';
+// import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 import db from '../models/index';
 
 
 
- const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<any> => {
+ const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductAttributes> => {
   try {
-     const product = await db.Product.create(productData);
-
+    const product = await db.Product.create(productData);
+    const productJSON = product.toJSON() as IProductAttributes;
 
     // const imageUrls = files.map(file => `/uploads/${file.filename}`);
     
@@ -19,13 +19,13 @@ import db from '../models/index';
     // Replace this with your actual image data saving logic
     for (const file of files) {
       await db.ProductImage.create({
-        productId: product.dataValues.id,
+        productId: productJSON.id,
         imageUrl: `/compressed/${file.filename}`
       });
     }
 
     // Return response with product and image URLs
-    return product.toJSON();
+    return productJSON;
     
   } catch (error) {
     // Handle errors appropriately
@@ -37,7 +37,7 @@ import db from '../models/index';
 
 const getProductById = async (
   productId: string
-): Promise< any | null> => {
+): Promise< IProductAttributes | null> => {
   try {
     const product = await db.Product.findOne({
       where: { id: productId },
@@ -76,12 +76,12 @@ const getProductById = async (
     product.rating = ratingResult?.[0]?.averageRating || 0;
 
     // Flatten the product object to include the average rating directly
-    const productWithDetails = {
-      ...product.toJSON(), // Convert Sequelize instance to plain object
+    // const productWithDetails = {
+    //   ...product, // Convert Sequelize instance to plain object
 
-    };
-
-    return  productWithDetails ;
+    // };
+    const productJson = product.toJSON() as IProductAttributes
+    return  productJson ;
   } catch (error) {
     console.error('Error fetching product:', error);
     return null;

@@ -1,24 +1,31 @@
 import {  Response,NextFunction } from "express";
 
-import { articleService, userService } from "../services"
-import { shopService } from "../services"
+
+import { shopService,userService } from "../services"
 
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 import { IShopCreateProduct } from "interfaces/types/controllers/shop.controller.types";
-import { IArticleAttributes } from "interfaces/types/models/article.model.types";
-import { IProductAttributes } from "interfaces/types/models/product.model.types";
+import { unlink } from "fs/promises";
+// import { IArticleAttributes } from "interfaces/types/models/article.model.types";
+// import { IProductAttributes } from "interfaces/types/models/product.model.types";
 
 
 export const handleCreateProduct = async (request: CustomRequest, response: Response, next: NextFunction) => {
-    try {
+      const files = request.files as Express.Multer.File[];
+  try {
       const UserId = request.UserId
         const productData = {...request.body ,"ownerId":UserId} as IShopCreateProduct;
-        const files = request.files as  Express.Multer.File[];
+     
         // Process product creation with data and files
         const results =  await shopService.createProductWithImages(productData, files);
      
         response.status(200).json({ product:results });
     } catch (error) {
+      try {
+      await Promise.all(files.map(file => unlink(file.path)));
+    } catch (deleteError) {
+      console.error('Failed to delete files:', deleteError);
+    }
         next(error); // Pass error to Express error handling middleware
     }
 };

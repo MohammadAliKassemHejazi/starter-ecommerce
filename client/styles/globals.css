@@ -185,3 +185,9 @@ code {
   background: white;
   opacity: 0.8;
 }
+
+.ReactCrop__image {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+}

@@ -27,5 +27,6 @@ export interface IProductAttributes {
   tags?: string;                       // Optional tags for the product
   discount?: number;
   croppedPhotos?: IProductImageAttributes[];
+  rating?: number;
 
 }

@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
-import ImageUploading, {
-  ImageListType,
-  ImageType,
-} from "react-images-uploading";
-import ReactCrop, { Crop } from "react-image-crop";
-import "react-image-crop/dist/ReactCrop.css";
-import DynamicSizedImage from "../dynamicSizeImage/dynamicSizeImage";
+import React, { useState, useEffect } from 'react';
+import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading';
+import ReactCrop, { Crop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+import DynamicSizedImage from '../dynamicSizeImage/dynamicSizeImage'; // Replace with your actual import path
 
 interface ImageUploadProps {
   onImagesChange: (images: ImageListType) => void;
@@ -17,8 +14,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   defaultImages = [],
 }) => {
   const [cropData, setCropData] = useState<{ [key: number]: Crop }>({});
-  const [uploadedImages, setUploadedImages] =
-    useState<ImageListType>(defaultImages);
+  const [uploadedImages, setUploadedImages] = useState<ImageListType>(defaultImages);
   const [croppedImages, setCroppedImages] = useState<ImageListType>([]);
 
   useEffect(() => {
@@ -27,7 +23,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
   useEffect(() => {
     onImagesChange(croppedImages);
-  }, [croppedImages,onImagesChange]);
+  }, [croppedImages, onImagesChange]);
 
   const handlePhotoChange = async (imageList: ImageListType) => {
     const newCropData: { [key: number]: Crop } = {};
@@ -39,20 +35,19 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
       if (image.file && crop) {
         try {
-          const croppedFile = await getCroppedFile(image.file, crop);
+          const scaledImage = await scaleImage(image.file, 800, 534);
+          const croppedFile = await getCroppedFile(scaledImage, crop);
           newCropData[index] = crop;
 
-          // Create a new ImageType object
           const newImage: ImageType = {
             ...image, // spread other properties to keep them if needed
             file: croppedFile,
-            data_url: URL.createObjectURL(croppedFile), // Create a new data URL for the cropped image
+            data_url: URL.createObjectURL(croppedFile),
           };
 
-          updatedCroppedImages.push(newImage); // push the ImageType object
+          updatedCroppedImages.push(newImage);
         } catch (error) {
-       
-          console.error("Error cropping image:", error);
+          console.error('Error cropping image:', error);
         }
       }
     }
@@ -61,9 +56,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
     setCropData(newCropData);
 
     // Remove cropped images from uploadedImages and trigger callback with updated cropped images
-    setUploadedImages((prevImages) =>
-      prevImages.filter((img, idx) => !newCropData[idx])
-    );
+    setUploadedImages((prevImages) => prevImages.filter((img, idx) => !newCropData[idx]));
 
     setCroppedImages((prevCroppedImages) => {
       const newCroppedImages = [...prevCroppedImages, ...updatedCroppedImages];
@@ -72,20 +65,54 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   };
 
   const handleCropChange = (newCrop: Crop, imageIndex: number) => {
-
     setCropData((prevData) => ({
       ...prevData,
       [imageIndex]: newCrop,
     }));
   };
 
-  const getCroppedFile = (imageFile: File, crop: Crop): Promise<File> => {
+  const scaleImage = async (imageFile: File, maxWidth: number, maxHeight: number): Promise<File> => {
     return new Promise((resolve, reject) => {
-      const image = document.createElement("img");
+      const image = new Image();
       image.src = URL.createObjectURL(imageFile);
 
       image.onload = () => {
-        const canvas = document.createElement("canvas");
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        if (ctx) {
+          const scaleX = Math.min(maxWidth / image.naturalWidth, 1);
+          const scaleY = Math.min(maxHeight / image.naturalHeight, 1);
+          canvas.width = image.naturalWidth * scaleX;
+          canvas.height = image.naturalHeight * scaleY;
+
+          ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, canvas.width, canvas.height);
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(new File([blob], imageFile.name, { type: blob.type }));
+            } else {
+              reject(new Error('Failed to scale image'));
+            }
+          }, imageFile.type || 'image/jpeg');
+        } else {
+          reject(new Error('Failed to initialize canvas context'));
+        }
+      };
+
+      image.onerror = (error) => {
+        reject(new Error(error + 'Failed to load image'));
+      };
+    });
+  };
+
+  const getCroppedFile = (imageFile: File, crop: Crop): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const image = document.createElement('img');
+      image.src = URL.createObjectURL(imageFile);
+
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
 
         if (!crop || !canvas || !image) {
           return;
@@ -93,7 +120,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
         const scaleX = image.naturalWidth / image.width;
         const scaleY = image.naturalHeight / image.height;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext('2d');
 
         if (ctx) {
           // refer https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
@@ -104,7 +131,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
           // refer https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
           ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-          ctx.imageSmoothingQuality = "high";
+          ctx.imageSmoothingQuality = 'high';
 
           // refer https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
           ctx.drawImage(
@@ -118,26 +145,26 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
             crop.width * scaleX,
             crop.height * scaleY
           );
-          
+
           canvas.toBlob((blob) => {
             if (blob) {
-            URL.createObjectURL(blob);
-          
+              URL.createObjectURL(blob);
+
               const croppedFile = new File([blob], imageFile.name, {
                 type: blob.type,
               });
               resolve(croppedFile);
             } else {
-              reject(new Error("Failed to crop image"));
+              reject(new Error('Failed to crop image'));
             }
-          }, imageFile.type || "image/jpeg");
+          }, imageFile.type || 'image/jpeg');
         } else {
-          reject(new Error("Failed to initialize canvas context"));
+          reject(new Error('Failed to initialize canvas context'));
         }
       };
 
       image.onerror = (error) => {
-        reject(new Error(error+"Failed to load image"));
+        reject(new Error(error + 'Failed to load image'));
       };
     });
   };
@@ -159,18 +186,13 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
                   <ReactCrop
                     crop={cropData[index]}
                     onChange={(newCrop) => handleCropChange(newCrop, index)}
-                    minWidth={100}
-                    minHeight={100}
-                    aspect={500/720}
+                    minWidth={20}
+                    minHeight={20}
+                    aspect={500 / 720}
                   >
-                     <DynamicSizedImage
-                  file={image}
-                  index = {index}
-                />
+                    <DynamicSizedImage file={image} index={index} constrainWidth={true} />
                   </ReactCrop>
-                  <button onClick={() => handlePhotoChange([image])}>
-                    Confirm Crop
-                  </button>
+                  <button onClick={() => handlePhotoChange([image])}>Confirm Crop</button>
                 </div>
               )}
             </div>

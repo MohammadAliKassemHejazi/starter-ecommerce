@@ -35,8 +35,8 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ croppedPhotos }) => {
           <Image
             key={index}
             src={image.data_url ?? ""}
-            height={720}
-            width={500}
+            height={720/2}
+            width={500/2}
             alt={index + ""}
           />
         </div>
