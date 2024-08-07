@@ -12,7 +12,8 @@ import { CustomRequest } from '../interfaces/types/middlewares/request.middlewar
 
 export const handleCreate = async (
   request: ArticleCreateBodyRequest,
-  response: Response
+  response: Response,
+  next:NextFunction
 ): Promise<void> => {
   const userId = request.UserId
   const {title, text, type } = request.body;
@@ -25,7 +26,7 @@ export const handleCreate = async (
     });
     response.status(201).json(article);
   } catch (error) {
-    customError(articleErrors.ArticleCreateFailure);
+    next(customError(articleErrors.ArticleCreateFailure));
   }
 };
 
@@ -44,7 +45,8 @@ export const handleGetArticles = async (
 
 export const handleGetByAuthor = async (
   request: CustomRequest,
-  response: Response
+  response: Response,
+  next:NextFunction
 ): Promise<void> => {
   const userId = request.UserId; // Assuming UserId is accessible via middleware
   if (userId) {
@@ -55,7 +57,7 @@ export const handleGetByAuthor = async (
       const responseData = { data };
       response.json(responseData);
     } catch (error) {
-      response.status(500).json({ error: "Internal Server Error" });
+       next(error)
     }
   }
 };

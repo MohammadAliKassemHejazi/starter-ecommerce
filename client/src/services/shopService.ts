@@ -26,10 +26,13 @@ export const requestAllProductID = async () => {
 	return response.data
 }
 
-export const requestArticleByAuthor = async () => {
-	const { data: response } = await httpClient.get("/articles/get/author");
-	return response;
-}
+
+
+export const requestProductsByStore = async ( storeId: string, page: number, pageSize: number ) => {
+  const { data: response } = await httpClient.get(`/shop/get/storeProducts/${storeId}?page=${page}&pageSize=${pageSize}`);
+  return response;
+};
+
 
 export const requestCreateProducts = async (Product: FormData) => {
 	const { data: response } = await httpClient.post("/shop/create", Product)
@@ -41,8 +44,8 @@ export const requestUpdateArticles = async (Product: FormData): Promise<void> =>
 	return response
 }
 
-export const requestDeleteArticles = async (id: string): Promise<void> => {
-	const { data: response } = await httpClient.delete("/articles/delete/" + id)
+export const requestDeleteProduct = async (id: string): Promise<void> => {
+	const { data: response } = await httpClient.delete("/articles/delete?id=" + id)
 	return response
 }
 

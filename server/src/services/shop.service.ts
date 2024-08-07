@@ -1,10 +1,12 @@
 
-import { IShopCreateProduct } from 'interfaces/types/controllers/shop.controller.types';
+import { FetchProductsByStoreParams, IShopCreateProduct } from 'interfaces/types/controllers/shop.controller.types';
 import { IProductAttributes, } from 'interfaces/types/models/product.model.types';
 // import { ISizeAttributes, } from 'interfaces/types/models/size.model.types';
 // import { ICommentAttributes } from 'interfaces/types/models/comment.model.types';
 // import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 import db from '../models/index';
+import fs from 'fs';
+import path from 'path';
 
 
 
@@ -84,7 +86,7 @@ const getProductById = async (
     return  productJson ;
   } catch (error) {
     console.error('Error fetching product:', error);
-    return null;
+    throw error;
   }
 };
 
@@ -108,8 +110,54 @@ const getTopProductIds = async (
 };
 
 
+
+export const deleteProduct = async (id: string, userId: string): Promise<any | null> => {
+  try {
+    // Fetch product and related images
+    const product = await db.Product.findOne({
+      where: { id, userId },
+      include: [{ model: db.ProductImage, as: 'photos' }],
+    });
+
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    // Delete images from filesystem
+    product.photos.forEach((photo: any) => {
+      const imagePath = path.resolve(__dirname, '..', 'path_to_images', photo.url); // Adjust the path as necessary
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error(`Failed to delete image: ${imagePath}`, err);
+        }
+      });
+    });
+
+    // Delete product and related records
+    await db.Product.destroy({ where: { id, userId } });
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchProductsByStore = async ({ storeId,userId, page, pageSize }: FetchProductsByStoreParams) => {
+
+  
+  const [products, total] = await db.Product.findAndCount({
+    where: { storeId,userId },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+  });
+  
+  return { products, total, page, pageSize };
+};
+
+
 export default {
   createProductWithImages,
   getProductById,
   getTopProductIds,
+  deleteProduct,
+  fetchProductsByStore
 };

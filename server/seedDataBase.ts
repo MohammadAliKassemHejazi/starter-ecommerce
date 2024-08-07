@@ -33,6 +33,11 @@ async function seedDatabase() {
       { name: 'Educational', categoryId: categories[2].dataValues.id }
     ]);
 
+   await db.Size.bulkCreate([
+      { size: 's'},
+      { size: 'm' },
+      { size: 'l' }
+    ]);
     console.log('Database has been seeded.');
   } catch (error) {
     console.error('Failed to seed database:', error);

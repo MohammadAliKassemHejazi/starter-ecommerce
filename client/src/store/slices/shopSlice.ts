@@ -6,95 +6,101 @@ import { RootState } from "../store";
 import { IProductModel, productresponse } from "@/models/product.model";
 
 const initialState: ProductsState = {
-	product: undefined,
-	products: [],
-	error: "",
+  product: undefined,
+  products: [],
+  Storeproducts: [],
+  total: 0,
+  page: 1,
+  pageSize: 10,
+  error: "",
 };
 
 export const fetchProductById = createAsyncThunk(
-	"shop/by-id",
-	async (id: string) => {
-		const response = await shopService.requestProductById(id)
-	
-		return response;
-	}
+  "shop/by-id",
+  async (id: string) => {
+    const response = await shopService.requestProductById(id);
+    return response;
+  }
+);
 
-)
+export const fetchProductsByStore = createAsyncThunk(
+  "shop/by-store",
+  async ({ storeId, page, pageSize }: { storeId: string, page: number, pageSize: number }) => {
+    const response = await shopService.requestProductsByStore(storeId, page, pageSize);
+    return response;
+  }
+);
 
-export const fetchArticleByAuthor = createAsyncThunk(
-	"shop/by-author",
-	async () => {
-		const response = await shopService.requestArticleByAuthor();
-		return response
-	}
-)
-
-export const fetchAllProducts = createAsyncThunk(
-	"shop/getall",
-	async () => {
-
-		const response = await shopService.requestAllProductID();
-		
-		return response
-	}
-)
+export const fetchAllProducts = createAsyncThunk("shop/getall", async () => {
+  const response = await shopService.requestAllProductID();
+  return response;
+});
 
 export const createProduct = createAsyncThunk(
-	"shop/create",
-	async (product : FormData) => {
-		const response: productresponse = await shopService.requestCreateProducts(product);
-	
-		return response
-	}
-)
+  "shop/create",
+  async (product: FormData) => {
+    const response: productresponse = await shopService.requestCreateProducts(product);
+    return response;
+  }
+);
 
 export const updateProduct = createAsyncThunk(
-	"shop/update",
-	async (product: FormData) => {
-		const response = await shopService.requestUpdateArticles(product);
-		return response
-	}
-)
+  "shop/update",
+  async (product: FormData) => {
+    const response = await shopService.requestUpdateArticles(product);
+    return response;
+  }
+);
 
-export const deleteArticles = createAsyncThunk(
-	"shop/delete",
-	async (id: string) => {
-		const response = await shopService.requestDeleteArticles(id);
-		return response
-	}
-)
+export const deleteProduct = createAsyncThunk(
+  "shop/delete",
+  async (id: string) => {
+    const response = await shopService.requestDeleteProduct(id);
+    return response;
+  }
+);
 
 export const articleSlice = createSlice({
-	name: "products",
-	initialState: initialState,
-	reducers: {
+  name: "products",
+  initialState: initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchProductById.fulfilled, (state, action) => {
+      state.product = action.payload;
+    });
 
-	},
-	extraReducers: (builder) => {
+    builder.addCase(fetchProductById.rejected, (state) => {
+      state.product = undefined;
+    });
 
-		builder.addCase(fetchProductById.fulfilled, (state, action) => {
-			state.product = action.payload;
-		})
+    builder.addCase(createProduct.fulfilled, (state, action) => {
+      state.product = action.payload.product;
+    });
 
-		builder.addCase(fetchProductById.rejected, (state) => {
-			state.product = undefined;
-		})
+    builder.addCase(createProduct.rejected, (state) => {
+      state.product = undefined;
+    });
 
-		builder.addCase(createProduct.fulfilled, (state, action) => {
-	
-			state.product = action.payload.product
-		})
+    builder.addCase(fetchProductsByStore.fulfilled, (state, action) => {
+      state.Storeproducts = action.payload.products;
+      state.total = action.payload.total;
+      state.page = action.payload.page;
+      state.pageSize = action.payload.pageSize;
+    });
 
-		builder.addCase(createProduct.rejected, (state) => {
-		
-			state.product = undefined;
-		})
-
-
-	}
-})
+    builder.addCase(fetchProductsByStore.rejected, (state) => {
+      state.Storeproducts = [];
+      state.total = 0;
+      state.page = 1;
+      state.pageSize = 10;
+    });
+  },
+});
 
 export const productSelector = (store: RootState): IProductModel[] | undefined => store.products.products;
-
+export const productByStoreSelector = (store: RootState): IProductModel[] | undefined => store.products.Storeproducts;
+export const totalProductsSelector = (store: RootState): number => store.products.total;
+export const pageSelector = (store: RootState): number => store.products.page;
+export const pageSizeSelector = (store: RootState): number => store.products.pageSize;
 
 export default articleSlice.reducer;

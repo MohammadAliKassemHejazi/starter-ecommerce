@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { IProductModel, IProductModelErrors } from "../../src/models/product.model";
-import { useAppDispatch,store } from "@/store/store";
+import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
+import {
+  IProductModel,
+  IProductModelErrors,
+} from "../../../src/models/product.model";
+import { useAppDispatch, store } from "@/store/store";
 import { createProduct } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
-import ImageViewer from "../../src/components/UI/imageViewer/imageViewer";
+import ImageViewer from "../../../src/components/UI/imageViewer/imageViewer";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
@@ -12,8 +15,15 @@ import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
-import { fetchAllSubCategoriesID, utileSubCategoriesSelector } from "@/store/slices/utilsSlice";
+import {
+  fetchAllSizes,
+  fetchAllSubCategoriesID,
+  utileSizes,
+  utileSubCategoriesSelector,
+} from "@/store/slices/utilsSlice";
 import { useSelector } from "react-redux";
+import { ISize } from "@/models/size.model";
+
 
 const Toast = Swal.mixin({
   toast: true,
@@ -33,15 +43,20 @@ function CreateProduct() {
 
   // Correctly using the selector to get single store data
   const listOfStores = useSelector(storeSelector);
-  const listofsubCategories = useSelector(utileSubCategoriesSelector);
+  const listOfSubCategories = useSelector(utileSubCategoriesSelector);
+  const listOfSizes = useSelector(utileSizes);
   React.useEffect(() => {
     store.dispatch(fetchAllStores());
-  }, []);
+    store.dispatch(fetchAllSizes());
+  }, [dispatch]);
 
-  const handleStoreChange = (event: React.ChangeEvent<HTMLSelectElement>, setFieldValue: Function) => {
+  const handleStoreChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    setFieldValue: Function
+  ) => {
     const { value } = event.target;
     setFieldValue("storeId", value);
-    const selectedStore = listOfStores?.find(store => store.id === value);
+    const selectedStore = listOfStores?.find((store) => store.id === value);
     if (selectedStore) {
       setFieldValue("categoryId", selectedStore.categoryId);
     }
@@ -68,11 +83,12 @@ function CreateProduct() {
     isActive: false,
     subcategoryId: "",
     storeId: "",
-    categoryId: "",  // Added categoryId to initial values
+    categoryId: "", // Added categoryId to initial values
     metaTitle: "",
     metaDescription: "",
     photos: [],
     croppedPhotos: [],
+    sizes: [{ sizeId: "", quantity: 0 , size:"" }],
   };
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
@@ -100,25 +116,25 @@ function CreateProduct() {
       }
     });
 
-    try {
+      values?.sizes?.forEach((size, index) => {
+    formData.append(`sizes[${index}][sizeId]`, size.sizeId);
+    formData.append(`sizes[${index}][quantity]`, size.quantity.toString());
+  });
 
+    try {
       const response = await dispatch(createProduct(formData)).unwrap();
 
-
-       router.push(`/shop/${response.product.id}`);
+      router.push(`/shop/${response.product.id}`);
 
       Toast.fire({
         icon: "success",
         title: "Product created successfully",
       });
-
     } catch (error: any) {
-
       Toast.fire({
         icon: "error",
         title: `Failed to create product: ${error.message}`,
       });
-
     }
   };
 
@@ -170,7 +186,9 @@ function CreateProduct() {
                     as="select"
                     id="storeId"
                     name="storeId"
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleStoreChange(event, setFieldValue)}
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                      handleStoreChange(event, setFieldValue)
+                    }
                   >
                     <option value="">Select store</option>
                     {listOfStores?.map((store) => {
@@ -188,12 +206,12 @@ function CreateProduct() {
                 "Loading store data..."
               )}
 
-              {listofsubCategories ? (
+              {listOfSubCategories ? (
                 <div>
                   <label htmlFor="subcategoryId">Subcategory:</label>
                   <Field as="select" id="subcategoryId" name="subcategoryId">
                     <option value="">Select subcategory</option>
-                    {listofsubCategories?.map((subCategorie) => {
+                    {listOfSubCategories?.map((subCategorie) => {
                       return (
                         <option key={subCategorie.id} value={subCategorie.id}>
                           {subCategorie.name}
@@ -207,6 +225,41 @@ function CreateProduct() {
                 "Loading subCategories data..."
               )}
 
+ <FieldArray name="sizes">
+                {({ push, remove, form }) => (
+                  <div>
+                    <label>Sizes and Quantities:</label>
+                    {form.values.sizes.map((size:ISize, index:number) => (
+                      <div key={index}>
+                        <Field as="select" name={`sizes[${index}].sizeId`}>
+                          <option value="">Select size</option>
+                          {listOfSizes?.map((size: ISize) => (
+                            <option key={size.id} value={size.id}>
+                              {size.size}
+                            </option>
+                          ))}
+                        </Field>
+                        <Field
+                          type="number"
+                          name={`sizes[${index}].quantity`}
+                          placeholder="Quantity"
+                        />
+                        <button type="button" onClick={() => remove(index)}>
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => push({ sizeId: "", quantity: 0 })}
+                    >
+                      Add Size
+                    </button>
+                  </div>
+                )}
+              </FieldArray>
+
+
               <div>
                 <label htmlFor="Discount">Sale Discount:</label>
                 <Field type="number" id="Discount" name="Discount" />
@@ -218,6 +271,13 @@ function CreateProduct() {
                 <Field type="text" id="tags" name="tags" />
                 <ErrorMessage name="tags" component="div" />
               </div>
+
+                <div>
+                <label htmlFor="slug">slug:</label>
+                <Field type="text" id="slug" name="slug" />
+                <ErrorMessage name="slug" component="div" />
+              </div>
+              
               <div>
                 <label htmlFor="metaTitle">Meta Title:</label>
                 <Field type="text" id="metaTitle" name="metaTitle" />

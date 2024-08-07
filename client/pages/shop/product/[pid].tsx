@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { Formik, Form } from "formik";
-import { IProductModel } from "../../src/models/product.model"; // Adjust the import path as needed
+import { IProductModel } from "../../../src/models/product.model"; // Adjust the import path as needed
 import { setAuthHeaders } from "@/utils/httpClient";
 import { requestProductById } from "@/services/shopService";
 import Head from "next/head";
@@ -176,7 +176,7 @@ const SingleItem = ({ product }: Props) => {
                                       onClick={() =>
                                         setFieldValue("size", s.size)
                                       }
-                                      disabled={s.stockQuantity === 0}
+                                      disabled={s.quantity === 0}
                                     >
                                       {s.size}
                                     </button>

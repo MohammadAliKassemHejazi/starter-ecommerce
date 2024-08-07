@@ -6,8 +6,7 @@ import { shopService,userService } from "../services"
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 import { IShopCreateProduct } from "interfaces/types/controllers/shop.controller.types";
 import { unlink } from "fs/promises";
-// import { IArticleAttributes } from "interfaces/types/models/article.model.types";
-// import { IProductAttributes } from "interfaces/types/models/product.model.types";
+
 
 
 export const handleCreateProduct = async (request: CustomRequest, response: Response, next: NextFunction) => {
@@ -30,6 +29,22 @@ export const handleCreateProduct = async (request: CustomRequest, response: Resp
     }
 };
 
+
+export const handleDelete = async (
+  request: CustomRequest,
+  response: Response,
+  next:NextFunction,
+): Promise<void> => {
+  const id = request.params.id;
+  const userId = request.UserId;
+  try {
+    const result: number = await shopService.deleteProduct(id, userId!);
+    response.json(result);
+  } catch (error) {
+    next(error)
+    response.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 
 export const handleUpdate = async (
@@ -87,11 +102,33 @@ export const handleGetSingleItem = async (
 };
 
 
+export const getProductsByStore =
+  async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
+  const UserId = req.UserId;
+  const { storeId } = req.params;
+  const { page = 1, pageSize = 10 } = req.query;
+
+  try {
+    
+    const result = await shopService.fetchProductsByStore({
+      storeId,
+      userId:UserId!,
+      page: Number(page),
+      pageSize: Number(pageSize),
+    });
+    res.json(result);
+  } catch (error) {
+    next(error);
+
+  }
+};
+
 export default {
   handleCreateProduct,
   handleUpdate,
   handelgetall,
   handleGetSingleItem,
+  getProductsByStore
 };
 
 

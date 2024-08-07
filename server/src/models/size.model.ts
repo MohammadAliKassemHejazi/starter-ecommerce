@@ -6,12 +6,10 @@ import { ISizeAttributes } from "../interfaces/types/models/size.model.types";
 module.exports = (sequelize: Sequelize) => {
   class Size extends Model<ISizeAttributes> implements ISizeAttributes {
     id!: string;
-    productId!: string;
     size!: string;
-    quantity!: number;
 
     static associate(models: any) {
-      Size.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' });
+      Size.hasMany(models.SizeItem, { foreignKey: 'sizeId', sourceKey: 'id' });
     }
   }
 
@@ -22,18 +20,10 @@ module.exports = (sequelize: Sequelize) => {
       allowNull: false,
       primaryKey: true,
     },
-    productId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
     size: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }
   }, {
     sequelize,
     modelName: "Size",

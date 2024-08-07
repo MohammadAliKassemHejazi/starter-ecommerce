@@ -34,9 +34,25 @@ export const handelGetSubCategoriesByID = async (
 
 };
 
+export const handelGetSizes = async (
+  request: CustomRequest,
+  response: Response,
+  next :NextFunction
+): Promise<void> => {
+
+  try {
+    const Sizes = await utileService.getAllSizes();
+    response.json(Sizes);
+  } catch (error) {
+    next(error);
+  }
+
+};
+
 export default {
   handelGetAllCategories,
-  handelGetSubCategoriesByID
+  handelGetSubCategoriesByID,
+  handelGetSizes,
 };
 
 

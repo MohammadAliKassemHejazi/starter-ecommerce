@@ -15,3 +15,10 @@ export interface IShopCreateProduct extends CustomRequest {
         };
     };
 }
+// used in get product by storeid
+export interface FetchProductsByStoreParams {
+    storeId: string;
+    userId: string;
+  page: number;
+  pageSize: number;
+}

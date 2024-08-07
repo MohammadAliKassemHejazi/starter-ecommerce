@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { IProductModel, IProductModelErrors } from "../../src/models/product.model";
+import { IProductModel, IProductModelErrors } from "../../../src/models/product.model";
 import { useAppDispatch } from "@/store/store";
 import { updateProduct } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
-import ImageViewer from "../../src/components/UI/imageViewer/imageViewer";
+import ImageViewer from "../../../src/components/UI/imageViewer/imageViewer";
 
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";

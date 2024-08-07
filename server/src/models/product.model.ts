@@ -26,17 +26,17 @@ module.exports = (sequelize: Sequelize) => {
     discount?: number;
 
     static associate(models: any) {
-      Product.belongsTo(models.User, { foreignKey: 'ownerId', targetKey: 'id' });
-      Product.belongsTo(models.Category, { foreignKey: 'categoryId', targetKey: 'id' });
-      Product.belongsTo(models.SubCategory, { foreignKey: 'subcategoryId', targetKey: 'id' });
-      Product.belongsTo(models.Store, { foreignKey: 'storeId', targetKey: 'id' });
+        Product.belongsTo(models.User, { foreignKey: 'ownerId', targetKey: 'id', onDelete: 'CASCADE' });
+      Product.belongsTo(models.Category, { foreignKey: 'categoryId', targetKey: 'id', onDelete: 'CASCADE' });
+      Product.belongsTo(models.SubCategory, { foreignKey: 'subcategoryId', targetKey: 'id', onDelete: 'CASCADE' });
+      Product.belongsTo(models.Store, { foreignKey: 'storeId', targetKey: 'id', onDelete: 'CASCADE' });
 
-      Product.hasMany(models.ProductImage, { foreignKey: 'productId' });
-      Product.hasMany(models.CartItem, { foreignKey: 'productId' });
-      Product.hasMany(models.Favorite, { foreignKey: 'productId' });
-      Product.hasMany(models.OrderItem, { foreignKey: 'productId' });
-       Product.hasMany(models.Comment, { foreignKey: 'productId' }); // Added association for comments
-      Product.hasMany(models.Size, { foreignKey: 'productId' }); // Added association for sizes
+      Product.hasMany(models.ProductImage, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.CartItem, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.Favorite, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.OrderItem, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.Comment, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.SizeItem, { foreignKey: 'productId', onDelete: 'CASCADE' });
     }
   }
 
@@ -58,9 +58,6 @@ module.exports = (sequelize: Sequelize) => {
     price: {
       type: DataTypes.FLOAT,
       allowNull: false,
-    },
-    stockQuantity: {
-      type: DataTypes.INTEGER,
     },
     isActive: {
       type: DataTypes.BOOLEAN,

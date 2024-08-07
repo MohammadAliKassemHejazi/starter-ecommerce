@@ -16,6 +16,14 @@ export const requestSubCategoriesId = async (id: string) => {
 	return response
 }
 
+export const requestSizes = async () => {
+	const { data: response } = await httpClient.get(
+		`/utile/getSizes`
+	)
+	
+	return response
+}
+
 
 
 
