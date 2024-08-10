@@ -16,5 +16,6 @@ router.post("/create", shopController.handleCreateProduct);
 router.post("/update", shopController.handleUpdate);
 router.get("/get", shopController.handleGetSingleItem);
 router.get("/getall", shopController.handelgetall);
-router.get("/storeProducts/:storeId", shopController.getProductsByStore);
+router.get("/get/storeProducts/:storeId", shopController.getProductsByStore);
+
 export default router;

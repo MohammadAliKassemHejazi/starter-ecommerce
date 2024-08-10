@@ -113,7 +113,7 @@ const Shop = ({}: Props) => {
                 ))}
               </select>
 
-              <Link className="col-md-5 text-end" href="/products/create">
+              <Link className="col-md-5 text-end" href="shop/product/create">
                 <span className="btn btn-primary">New Product</span>
               </Link>
             </div>

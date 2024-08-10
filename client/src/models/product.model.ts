@@ -20,8 +20,8 @@ export interface IProductModel {
   store? : IStoreModel;
   ratings ?:  number;
   commentsCount? :   number;
-  comments ?: [IComment];
-  sizes?: [ISizeItem];
+  comments ?: IComment[];
+  SizeItems?: ISizeItem[];
   updatedAt?: string;
 }
 

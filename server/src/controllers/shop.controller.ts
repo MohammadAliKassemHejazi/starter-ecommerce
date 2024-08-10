@@ -6,19 +6,26 @@ import { shopService,userService } from "../services"
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 import { IShopCreateProduct } from "interfaces/types/controllers/shop.controller.types";
 import { unlink } from "fs/promises";
+import { error } from "console";
 
 
 
 export const handleCreateProduct = async (request: CustomRequest, response: Response, next: NextFunction) => {
       const files = request.files as Express.Multer.File[];
   try {
+    if(files.length > 0){
       const UserId = request.UserId
-        const productData = {...request.body ,"ownerId":UserId} as IShopCreateProduct;
+      const sizes = JSON.parse(request.body.sizes[1]);
+        const productData = {...request.body ,"ownerId":UserId,"sizes":sizes} as IShopCreateProduct;
      
         // Process product creation with data and files
         const results =  await shopService.createProductWithImages(productData, files);
      
-        response.status(200).json({ product:results });
+      response.status(200).json({ product: results });
+    }
+    else {
+      throw error("images are missing while creating a product")
+    }
     } catch (error) {
       try {
       await Promise.all(files.map(file => unlink(file.path)));

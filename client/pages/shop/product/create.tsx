@@ -54,13 +54,16 @@ function CreateProduct() {
     event: React.ChangeEvent<HTMLSelectElement>,
     setFieldValue: Function
   ) => {
-    const { value } = event.target;
-    setFieldValue("storeId", value);
-    const selectedStore = listOfStores?.find((store) => store.id === value);
-    if (selectedStore) {
-      setFieldValue("categoryId", selectedStore.categoryId);
-    }
-    dispatch(fetchAllSubCategoriesID(value));
+     const selectedStoreId = event.target.value;
+  const selectedStore = listOfStores?.find(store => store.id === selectedStoreId);
+  const categoryId = selectedStore ? selectedStore.categoryId : '';
+
+  // Set the storeId
+  setFieldValue("storeId", selectedStoreId);
+  // Set the corresponding categoryId
+  setFieldValue("categoryId", categoryId);
+
+  dispatch(fetchAllSubCategoriesID(categoryId));
   };
 
   const [product, setProduct] = useState<IProductModel>({
@@ -102,7 +105,7 @@ function CreateProduct() {
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
-      if (key !== "photos") {
+      if (key !== "photos" || key !== "sizes") {
         formData.append(
           key,
           typeof value === "boolean" ? value.toString() : value
@@ -116,15 +119,22 @@ function CreateProduct() {
       }
     });
 
-      values?.sizes?.forEach((size, index) => {
-    formData.append(`sizes[${index}][sizeId]`, size.sizeId);
-    formData.append(`sizes[${index}][quantity]`, size.quantity.toString());
-  });
+    console.log(values?.sizes , "sizes")
+
+// values?.sizes?.forEach((size, index) => {
+//   formData.append(`sizes[${index}][sizeId]`, size.sizeId);
+//   formData.append(`sizes[${index}][quantity]`, size.quantity.toString());
+// });
+    
+    formData.append('sizes', JSON.stringify(values?.sizes));
+
+
+    
 
     try {
       const response = await dispatch(createProduct(formData)).unwrap();
 
-      router.push(`/shop/${response.product.id}`);
+      router.push(`/shop/product/${response.product.id}`);
 
       Toast.fire({
         icon: "success",

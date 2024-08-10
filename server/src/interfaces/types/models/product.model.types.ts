@@ -6,6 +6,7 @@ import { ICategoryAttributes } from "./category.model.types";
 import { ISubcategoryAttributes } from "./subcategory.model.types";
 import { IStoreAttributes } from "./store.model.types";
 import { IProductImageAttributes } from "./productimage.model.types";
+import { ISizeItemAttributes } from "./sizeitem.model.types";
 
 /**
  * Interface for Product attributes.
@@ -28,5 +29,6 @@ export interface IProductAttributes {
   discount?: number;
   croppedPhotos?: IProductImageAttributes[];
   rating?: number;
+  sizes?: [ISizeItemAttributes];
 
 }

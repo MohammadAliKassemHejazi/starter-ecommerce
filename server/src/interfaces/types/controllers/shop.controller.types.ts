@@ -1,8 +1,9 @@
 import { CustomRequest } from "../middlewares/request.middleware.types";
+import { ISizeItemAttributes } from "../models/sizeitem.model.types";
 
 // Define the interface for handling create product requests
 export interface IShopCreateProduct extends CustomRequest {
-
+     sizes?: [ISizeItemAttributes];
     body: {
         productData: {
     name?: string;
@@ -11,7 +12,8 @@ export interface IShopCreateProduct extends CustomRequest {
     stockQuantity?: number; // Can be number or undefined
     isActive?: boolean; // Can be boolean or undefined
     ownerId?:string,
-    categoryId?:string,
+            categoryId?: string,
+         sizes?: [ISizeItemAttributes];
         };
     };
 }

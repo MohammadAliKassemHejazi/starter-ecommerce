@@ -22,9 +22,22 @@ import path from 'path';
     for (const file of files) {
       await db.ProductImage.create({
         productId: productJSON.id,
-        imageUrl: `/compressed/${file.filename}`
+        imageUrl: `${file.filename}`
       });
     }
+
+        // Step 3: Create the size items
+
+    for (const size of productData.sizes ?? []) {
+        if(size.sizeId ?? 0> 0){
+        await db.SizeItem.create({
+          productId: productJSON.id,
+          sizeId: size.sizeId,
+          quantity: size.quantity,
+        });
+          }
+      }
+    
 
     // Return response with product and image URLs
     return productJSON;
@@ -41,12 +54,11 @@ const getProductById = async (
   productId: string
 ): Promise< IProductAttributes | null> => {
   try {
-    const product = await db.Product.findOne({
+const product = await db.Product.findOne({
       where: { id: productId },
       include: [
         {
           model: db.ProductImage,
-        
         },
         {
           model: db.Comment,
@@ -54,8 +66,13 @@ const getProductById = async (
           order: [['rating', 'DESC']], // Order by rating in descending order
         },
         {
-          model: db.Size,
-
+          model: db.SizeItem,
+          include: [
+            {
+              model: db.Size, // Assuming SizeItem is associated with Size
+              attributes: ['size'], // Fetch only the 'size' attribute
+            },
+          ],
         },
       ],
       raw: false, // Allow inclusion of associated models

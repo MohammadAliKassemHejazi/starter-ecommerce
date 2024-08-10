@@ -90,7 +90,7 @@ export default function Navbar({}: Props) {
             </li>
       
             <li className="nav-item">
-            <Link href="/shop/create" className="nav-link">
+            <Link href="/shop/product/create" className="nav-link">
                   Create Product
                 </Link>
             </li>

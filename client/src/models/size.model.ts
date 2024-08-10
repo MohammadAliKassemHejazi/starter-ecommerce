@@ -8,11 +8,11 @@ export interface ISize {
 }
   
 export interface ISizeItem {
-    id?: string;
+  id?: string;
   sizeId: string;
-    size: string;
+  Size: { size: string }; 
   quantity: number;
-  }
+}
   
   
   

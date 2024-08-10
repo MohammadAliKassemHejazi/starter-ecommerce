@@ -276,7 +276,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   db.sequelize.sync().then(() => {
         logger.info('Database synced');
-         seedDatabase()
+        //  seedDatabase()
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);
     });

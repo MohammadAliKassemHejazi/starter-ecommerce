@@ -9,12 +9,14 @@ import { IProductModel } from "../../../src/models/product.model"; // Adjust the
 import { setAuthHeaders } from "@/utils/httpClient";
 import { requestProductById } from "@/services/shopService";
 import Head from "next/head";
+import protectedRoute from "@/components/protectedRoute";
 
 type Props = {
   product?: IProductModel;
 };
 
 const SingleItem = ({ product }: Props) => {
+  console.log(product)
   const router = useRouter();
   const [feedback, setFeedback] = useState({
     rating: 0,
@@ -40,7 +42,7 @@ const SingleItem = ({ product }: Props) => {
     },
     image:
       process.env.NEXT_PUBLIC_BASE_URL_Images +
-      (product?.croppedPhotos?.[0]?.imageUrl  ?? ""),
+      (product?.croppedPhotos?.[0]?.imageUrl ?? ""),
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: product?.ratings ?? 0,
@@ -58,7 +60,7 @@ const SingleItem = ({ product }: Props) => {
 
   const handleFeedbackSubmit = async (values: any) => {
     try {
-    //  await submitFeedback(product?.id, values);
+      //  await submitFeedback(product?.id, values);
       // Optionally, you can refresh the page or update the state to show the new comment
       alert("Feedback submitted successfully!");
     } catch (error) {
@@ -66,8 +68,6 @@ const SingleItem = ({ product }: Props) => {
       alert("Failed to submit feedback");
     }
   };
-
-
 
   const handleFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -96,7 +96,7 @@ const SingleItem = ({ product }: Props) => {
                     className="card-img img-fluid"
                     src={
                       process.env.NEXT_PUBLIC_BASE_URL_Images +
-                      (product?.croppedPhotos?.[0]?.imageUrl  ?? "")
+                      (product?.croppedPhotos?.[0]?.imageUrl ?? "")
                     }
                     alt={product?.name ?? ""}
                     height={350}
@@ -111,7 +111,7 @@ const SingleItem = ({ product }: Props) => {
                       product?.croppedPhotos?.map(
                         (photo: any) =>
                           process.env.NEXT_PUBLIC_BASE_URL_Images +
-                          photo.imageUrl 
+                          photo.imageUrl
                       ) ?? []
                     }
                   />
@@ -148,7 +148,9 @@ const SingleItem = ({ product }: Props) => {
 
                     <Formik
                       initialValues={{
-                        size: "S",
+                        size: {
+                          size: "S", // Set a default size string or use product.sizes[0]?.size if you want to default to the first available size
+                        },
                         quantity: 1,
                       }}
                       onSubmit={handleSubmit}
@@ -163,25 +165,30 @@ const SingleItem = ({ product }: Props) => {
                                   <input
                                     type="hidden"
                                     name="size"
-                                    value={values.size}
+                                    value={values.size.size}
                                   />
                                 </li>
-                                {product?.sizes?.map((s) => (
-                                  <li key={s.id} className="list-inline-item">
-                                    <button
-                                      type="button"
-                                      className={`btn btn-success btn-size ${
-                                        values.size === s.size ? "active" : ""
-                                      }`}
-                                      onClick={() =>
-                                        setFieldValue("size", s.size)
-                                      }
-                                      disabled={s.quantity === 0}
-                                    >
-                                      {s.size}
-                                    </button>
-                                  </li>
-                                ))}
+                                {product?.SizeItems?.map((s) => {
+                                  console.log(s); // Debugging
+                                  return (
+                                    <li key={s.id} className="list-inline-item">
+                                      <button
+                                        type="button"
+                                        className={`btn btn-success btn-size ${
+                                          values.size.size === s.Size.size
+                                            ? "active"
+                                            : ""
+                                        }`}
+                                        onClick={() =>
+                                          setFieldValue("size", s.Size.size)
+                                        }
+                                        disabled={s.quantity === 0}
+                                      >
+                                        {s.Size.size}
+                                      </button>
+                                    </li>
+                                  );
+                                })}
                               </ul>
                             </div>
                             <div className="col-auto">
@@ -317,7 +324,7 @@ const SingleItem = ({ product }: Props) => {
   );
 };
 
-export default SingleItem;
+export default protectedRoute(SingleItem);
 
 export async function generateMetadata({
   params,
@@ -341,7 +348,7 @@ export async function generateMetadata({
         {
           url:
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            (product?.croppedPhotos?.[0]?.imageUrl  ?? ""),
+            (product?.croppedPhotos?.[0]?.imageUrl ?? ""),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
@@ -355,7 +362,7 @@ export async function generateMetadata({
         "Product Description",
       image:
         process.env.NEXT_PUBLIC_BASE_URL_Images +
-        (product?.croppedPhotos?.[0]?.imageUrl  ?? ""),
+        (product?.croppedPhotos?.[0]?.imageUrl ?? ""),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };
@@ -374,13 +381,14 @@ export const getServerSideProps: GetServerSideProps = async (
       const product = await requestProductById(pid);
 
       if (!product) {
-
         return {
           notFound: true,
         };
       }
-      product.croppedPhotos = (product?.ProductImages ?? [])
-      product.photo = (product?.ProductImages?.[0]  ?? [])
+      product.croppedPhotos = product?.ProductImages ?? [];
+      product.photo = product?.ProductImages?.[0] ?? [];
+      
+      console.log(product, "product");
       return {
         props: {
           product,
