@@ -42,7 +42,7 @@ const SingleItem = ({ product }: Props) => {
     },
     image:
       process.env.NEXT_PUBLIC_BASE_URL_Images +
-      (product?.croppedPhotos?.[0]?.imageUrl ?? ""),
+      (product?.ProductImages?.[0]?.imageUrl ?? ""),
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: product?.ratings ?? 0,
@@ -96,7 +96,7 @@ const SingleItem = ({ product }: Props) => {
                     className="card-img img-fluid"
                     src={
                       process.env.NEXT_PUBLIC_BASE_URL_Images +
-                      (product?.croppedPhotos?.[0]?.imageUrl ?? "")
+                      (product?.ProductImages?.[0]?.imageUrl ?? "")
                     }
                     alt={product?.name ?? ""}
                     height={350}
@@ -108,7 +108,7 @@ const SingleItem = ({ product }: Props) => {
                 <div className="row">
                   <MySwiperComponent
                     imageLinks={
-                      product?.croppedPhotos?.map(
+                      product?.ProductImages?.map(
                         (photo: any) =>
                           process.env.NEXT_PUBLIC_BASE_URL_Images +
                           photo.imageUrl
@@ -348,7 +348,7 @@ export async function generateMetadata({
         {
           url:
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            (product?.croppedPhotos?.[0]?.imageUrl ?? ""),
+            (product?.ProductImages?.[0]?.imageUrl ?? ""),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
@@ -362,7 +362,7 @@ export async function generateMetadata({
         "Product Description",
       image:
         process.env.NEXT_PUBLIC_BASE_URL_Images +
-        (product?.croppedPhotos?.[0]?.imageUrl ?? ""),
+        (product?.ProductImages?.[0]?.imageUrl ?? ""),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };
@@ -385,7 +385,7 @@ export const getServerSideProps: GetServerSideProps = async (
           notFound: true,
         };
       }
-      product.croppedPhotos = product?.ProductImages ?? [];
+      product.ProductImages = product?.ProductImages ?? [];
       product.photo = product?.ProductImages?.[0] ?? [];
       
       console.log(product, "product");

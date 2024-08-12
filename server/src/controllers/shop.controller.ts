@@ -53,6 +53,22 @@ export const handleDelete = async (
   }
 };
 
+export const handleDeleteImage = async (
+  request: CustomRequest,
+  response: Response,
+  next:NextFunction,
+): Promise<void> => {
+  const id = request.params.id;
+  const userId = request.UserId;
+  try {
+    const result: number = await shopService.deleteProductImage(id, userId!);
+    response.json(result);
+  } catch (error) {
+    next(error)
+    response.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 export const handleUpdate = async (
  request: CustomRequest,
@@ -119,11 +135,19 @@ export const getProductsByStore =
     
     const result = await shopService.fetchProductsByStore({
       storeId,
-      userId:UserId!,
+      ownerId:UserId!,
       page: Number(page),
       pageSize: Number(pageSize),
     });
-    res.json(result);
+     const transformedProducts = result.products.map((product: any) => ({
+      ...product,
+      photos: [product.ProductImages], // Rename field here
+      ProductImages: undefined, // Optionally remove the old field
+    }));
+    res.json({
+      ...result,
+      products: transformedProducts,
+    });
   } catch (error) {
     next(error);
 
@@ -135,7 +159,9 @@ export default {
   handleUpdate,
   handelgetall,
   handleGetSingleItem,
-  getProductsByStore
+  getProductsByStore,
+  handleDelete,
+  handleDeleteImage,
 };
 
 

@@ -27,7 +27,7 @@ export interface IProductAttributes {
   slug?: string;                       // Optional SEO friendly URL slug
   tags?: string;                       // Optional tags for the product
   discount?: number;
-  croppedPhotos?: IProductImageAttributes[];
+  productImages?: IProductImageAttributes[];
   rating?: number;
   sizes?: [ISizeItemAttributes];
 

@@ -3,10 +3,10 @@ import protectedRoute from "@/components/protectedRoute";
 import {
   deleteProduct,
   fetchProductsByStore,
-  productSelector,
   totalProductsSelector,
   pageSelector,
   pageSizeSelector,
+  productByStoreSelector,
 } from "@/store/slices/shopSlice";
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import { store, useAppDispatch } from "@/store/store";
@@ -34,7 +34,7 @@ const Toast = Swal.mixin({
 
 const Shop = ({}: Props) => {
   const dispatch = useAppDispatch();
-  const productList = useSelector(productSelector);
+  const productList = useSelector(productByStoreSelector);
   const totalProducts = useSelector(totalProductsSelector);
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
@@ -48,8 +48,12 @@ const Shop = ({}: Props) => {
 
   useEffect(() => {
     if (selectedStore) {
-      dispatch(fetchProductsByStore({ storeId: selectedStore, page: currentPage, pageSize }));
+      dispatch(fetchProductsByStore({ storeId: selectedStore, page: currentPage, pageSize })).then(result => {
+        console.log(result,"productList")
+      });
+        
     }
+  
   }, [dispatch, selectedStore, currentPage, pageSize]);
 
   const handleDeleteProduct = async (id: string, name?: string) => {
@@ -138,48 +142,54 @@ const Shop = ({}: Props) => {
                 </thead>
 
                 <tbody>
-                  {productList?.map((product, idx) => (
-                    <tr key={idx} className="text-center">
-                      <td>{(currentPage - 1) * pageSize + idx + 1}</td>
-                      <td>
-                        {product.photos && product.photos.length > 0 && (
-                          <Image
-                            src={product.photos[0]?.url ?? ""}
-                            alt={product?.name ?? ""}
-                            width={50}
-                            height={50}
-                          />
-                        )}
-                      </td>
-                      <td>{product.name}</td>
-                      <td>{product.price}</td>
-                      <td>
-                        <Moment format="DD/MM/YYYY HH:mm">
-                          {product?.updatedAt ?? ""}
-                        </Moment>
-                      </td>
-                      <td>
-                        <div className="btn-group">
-                          <button
-                            className="btn btn-danger me-2"
-                            onClick={() =>
-                              handleDeleteProduct(product?.id ?? "", product.name)
-                            }
-                          >
-                            Delete
-                          </button>
-                          <button
-                            className="btn btn-primary"
-                            onClick={() =>
-                              router.push(`/products/edit?id=${product.id}`)
-                            }
-                          >
-                            Edit
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                {productList?.map((product, idx) => {
+  // Log the product object to the console
+  console.log(product);
+
+  return (
+    <tr key={idx} className="text-center">
+      <td>{(currentPage - 1) * pageSize + idx + 1}</td>
+      <td>
+        {product.photos  && (
+          <Image
+            src={process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0]?.imageUrl ?? ""}
+            alt={product?.name ?? ""}
+            width={50}
+            height={50}
+          />
+        )}
+      </td>
+      <td>{product.name}</td>
+      <td>{product.price}</td>
+      <td>
+        <Moment format="DD/MM/YYYY HH:mm">
+          {product?.updatedAt ?? ""}
+        </Moment>
+      </td>
+      <td>
+        <div className="btn-group">
+          <button
+            className="btn btn-danger me-2"
+            onClick={() =>
+              handleDeleteProduct(product?.id ?? "", product.name)
+            }
+          >
+            Delete
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={() =>
+              router.push(`/shop/product/edit?id=${product.id}`)
+            }
+          >
+            Edit
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+})}
+
                 </tbody>
               </table>
             </div>

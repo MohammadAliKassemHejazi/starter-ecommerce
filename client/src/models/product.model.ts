@@ -16,7 +16,7 @@ export interface IProductModel {
   metaTitle?: string;
   metaDescription?: string; 
   photos?: ImageListType;
-  croppedPhotos?: ImageListType;
+  ProductImages?: ImageListType;
   store? : IStoreModel;
   ratings ?:  number;
   commentsCount? :   number;
@@ -43,5 +43,5 @@ export interface IProductModelErrors {
     metaTitle?: string; 
     metaDescription?: string;
     photos: string;
-    croppedPhotos: string;
+    ProductImages: string;
   }

@@ -34,18 +34,23 @@ export const requestProductsByStore = async ( storeId: string, page: number, pag
 };
 
 
-export const requestCreateProducts = async (Product: FormData) => {
+export const requestCreateProducts = async (Product: FormData): Promise<any> => {
 	const { data: response } = await httpClient.post("/shop/create", Product)
 	return response
 }
 
-export const requestUpdateArticles = async (Product: FormData): Promise<void> => {
+export const requestUpdateArticles = async (Product: FormData): Promise<any> => {
 	const { data: response } = await httpClient.patch("/articles/update" , Product)
 	return response
 }
 
 export const requestDeleteProduct = async (id: string): Promise<void> => {
-	const { data: response } = await httpClient.delete("/articles/delete?id=" + id)
+	const { data: response } = await httpClient.delete("/shop/delete/" + id)
+	return response
+}
+
+export const requestDeleteProductImage = async (id: string): Promise<void> => {
+	const { data: response } = await httpClient.delete("/shop/delete/image" + id)
 	return response
 }
 

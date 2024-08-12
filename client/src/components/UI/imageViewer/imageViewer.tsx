@@ -10,10 +10,12 @@ import Image from "next/image";
 import DynamicSizedImage from "../dynamicSizeImage/dynamicSizeImage";
 import { ImageListType, ImageType } from "react-images-uploading";
 interface ImageViewerProps {
-  croppedPhotos: ImageListType;
+  productImages: ImageListType;
+  isonline?: Boolean;
+  onDeleteImage?: (index: number) => void; // Add onDeleteImage prop
 }
 
-const ImageViewer: React.FC<ImageViewerProps> = ({ croppedPhotos }) => {
+const ImageViewer: React.FC<ImageViewerProps> = ({ productImages , isonline = false,onDeleteImage}) => {
   const [fullscreen, setFullscreen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -27,19 +29,34 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ croppedPhotos }) => {
   const handleCloseFullscreen = () => {
     setFullscreen(false);
   };
+  const handleDeleteImage = (index: number) => {
+    if (onDeleteImage) {
+      onDeleteImage(index);
+    }
+  };
 
   return (
     <div className={styles["image-container"]}>
-      {croppedPhotos.map((image: ImageType, index) => (
+   
+      {productImages.map((image: ImageType | any, index) => (
+        <div   key={index} className={styles["image-wrapper"]}>
+    
         <div key={index} onClick={() => handleImageClick(index)}>
           <Image
-            key={index}
-            src={image.data_url ?? ""}
+              src={(isonline === true) ? (process.env.NEXT_PUBLIC_BASE_URL_Images + image.imageUrl) : (image.data_url ?? "")}
             height={720/2}
             width={500/2}
             alt={index + ""}
           />
         </div>
+          <div>
+            <button
+              
+            className={styles["delete-button"]}
+            onClick={() => handleDeleteImage(index)}
+          ></button>
+          </div>
+          </div>
       ))}
 
       {fullscreen && (
@@ -52,10 +69,11 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ croppedPhotos }) => {
             initialSlide={activeIndex}
             navigation
             pagination={{ clickable: true }}
+            
           >
-            {croppedPhotos.map((image: ImageType, index) => (
+            {productImages.map((image: ImageType | any, index) => (
               <SwiperSlide key={index} className={styles["swiper-slide"]}>
-                <DynamicSizedImage file={image} index={index} />
+                <DynamicSizedImage url={(isonline === true) ? (process.env.NEXT_PUBLIC_BASE_URL_Images + image.imageUrl) :(image.data_url ?? "")} index={index} />
               </SwiperSlide>
             ))}
           </Swiper>

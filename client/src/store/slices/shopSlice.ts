@@ -60,6 +60,14 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
+export const deleteProductImage = createAsyncThunk(
+  "shop/delete",
+  async (id: string) => {
+    const response = await shopService.requestDeleteProductImage(id);
+    return response;
+  }
+);
+
 export const articleSlice = createSlice({
   name: "products",
   initialState: initialState,
@@ -82,6 +90,7 @@ export const articleSlice = createSlice({
     });
 
     builder.addCase(fetchProductsByStore.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.Storeproducts = action.payload.products;
       state.total = action.payload.total;
       state.page = action.payload.page;

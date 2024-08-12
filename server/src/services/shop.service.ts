@@ -132,17 +132,22 @@ export const deleteProduct = async (id: string, userId: string): Promise<any | n
   try {
     // Fetch product and related images
     const product = await db.Product.findOne({
-      where: { id, userId },
-      include: [{ model: db.ProductImage, as: 'photos' }],
+      where: { id, ownerId:userId },
+      include: [{ model: db.ProductImage }],
+      raw: true,
+      nest:true,
     });
 
     if (!product) {
       throw new Error('Product not found');
     }
 
+    const images = [product.ProductImages] ?? [];
+
+
     // Delete images from filesystem
-    product.photos.forEach((photo: any) => {
-      const imagePath = path.resolve(__dirname, '..', 'path_to_images', photo.url); // Adjust the path as necessary
+    images.forEach((photo: any) => {
+      const imagePath = path.resolve(__dirname, '..', '/compressed', photo.imageUrl); // Adjust the path as necessary
       fs.unlink(imagePath, (err) => {
         if (err) {
           console.error(`Failed to delete image: ${imagePath}`, err);
@@ -150,23 +155,62 @@ export const deleteProduct = async (id: string, userId: string): Promise<any | n
       });
     });
 
+
     // Delete product and related records
-    await db.Product.destroy({ where: { id, userId } });
+    await db.Product.destroy({ where: { id, ownerId:userId } });
 
   } catch (error) {
     throw error;
   }
 };
 
-export const fetchProductsByStore = async ({ storeId,userId, page, pageSize }: FetchProductsByStoreParams) => {
+export const deleteProductImage = async (id: string, userId: string): Promise<any | null> => {
+  try {
+    // Fetch product and related images
+    const ProductImage = await db.ProductImage.findOne({
+      where: { id, ownerId:userId },
+   
+    });
 
-  
-  const [products, total] = await db.Product.findAndCount({
-    where: { storeId,userId },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
+    if (!ProductImage) {
+      throw new Error('Product not found');
+    }
+
+
+
+    // Delete images from filesystem
+    ProductImage.forEach((photo: any) => {
+      const imagePath = path.resolve(__dirname, '..', '/compressed', photo.imageUrl); // Adjust the path as necessary
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error(`Failed to delete image: ${imagePath}`, err);
+        }
+      });
+    });
+
+
+    // Delete product and related records
+    await db.ProductImage.destroy({ where: { id, ownerId:userId } });
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchProductsByStore = async ({ storeId,ownerId, page, pageSize }: FetchProductsByStoreParams) => {
+  const { rows:products, count:total } = await db.Product.findAndCountAll({
+    where: { storeId, ownerId },
+    offset: (page - 1) * pageSize,
+    limit: pageSize,
+       include: [
+        {
+          model: db.ProductImage,
+        },
+      ],
+      raw: true, // Allow inclusion of associated models
+      nest: true, // Nest the results to properly align the data structure
   });
-  
+
   return { products, total, page, pageSize };
 };
 
@@ -176,5 +220,6 @@ export default {
   getProductById,
   getTopProductIds,
   deleteProduct,
-  fetchProductsByStore
+  fetchProductsByStore,
+  deleteProductImage
 };

@@ -190,7 +190,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
                     minHeight={20}
                     aspect={500 / 720}
                   >
-                    <DynamicSizedImage file={image} index={index} constrainWidth={true} />
+                    <DynamicSizedImage url={image.data_url ?? ""} index={index} constrainWidth={true} />
                   </ReactCrop>
                   <button onClick={() => handlePhotoChange([image])}>Confirm Crop</button>
                 </div>

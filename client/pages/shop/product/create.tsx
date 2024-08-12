@@ -76,7 +76,7 @@ function CreateProduct() {
     metaTitle: "",
     metaDescription: "",
     photos: [],
-    croppedPhotos: [],
+    ProductImages: [],
   });
 
   const initialValues: IProductModel = {
@@ -90,14 +90,14 @@ function CreateProduct() {
     metaTitle: "",
     metaDescription: "",
     photos: [],
-    croppedPhotos: [],
-    sizes: [{ sizeId: "", quantity: 0 , size:"" }],
+    ProductImages: [],
+    SizeItems: [{ sizeId: "", quantity: 0 , Size:{size:""} }],
   };
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
     setProduct((prevProduct) => ({
       ...prevProduct,
-      croppedPhotos: croppedImages,
+      ProductImages: croppedImages,
     }));
   }, []);
 
@@ -105,7 +105,7 @@ function CreateProduct() {
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
-      if (key !== "photos" || key !== "sizes") {
+      if (key !== "photos" ) {
         formData.append(
           key,
           typeof value === "boolean" ? value.toString() : value
@@ -113,20 +113,19 @@ function CreateProduct() {
       }
     });
 
-    product.croppedPhotos?.forEach((file) => {
+    product.ProductImages?.forEach((file) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
     });
 
-    console.log(values?.sizes , "sizes")
 
 // values?.sizes?.forEach((size, index) => {
 //   formData.append(`sizes[${index}][sizeId]`, size.sizeId);
 //   formData.append(`sizes[${index}][quantity]`, size.quantity.toString());
 // });
     
-    formData.append('sizes', JSON.stringify(values?.sizes));
+    formData.append('sizes', JSON.stringify(values?.SizeItems));
 
 
     
@@ -239,7 +238,7 @@ function CreateProduct() {
                 {({ push, remove, form }) => (
                   <div>
                     <label>Sizes and Quantities:</label>
-                    {form.values.sizes.map((size:ISize, index:number) => (
+                    {form.values.SizeItems.map((size:ISize, index:number) => (
                       <div key={index}>
                         <Field as="select" name={`sizes[${index}].sizeId`}>
                           <option value="">Select size</option>
@@ -318,7 +317,7 @@ function CreateProduct() {
 
         <div>
           <h3>Cropped Images</h3>
-          <ImageViewer croppedPhotos={product.croppedPhotos ?? []} />
+          <ImageViewer productImages={product.ProductImages ?? []} isonline={false} />
         </div>
       </section>
     </Layout>

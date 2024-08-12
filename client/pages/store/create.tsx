@@ -95,6 +95,8 @@ const CreateStore = () => {
     }
   };
 
+  
+
   return (
     <Layout>
       <section className="mt-5">
@@ -152,7 +154,7 @@ const CreateStore = () => {
 
         <div>
           <h3>Cropped Images</h3>
-          <ImageViewer croppedPhotos={store.croppedImages} />
+          <ImageViewer productImages={store.croppedImages} />
         </div>
       </section>
     </Layout>

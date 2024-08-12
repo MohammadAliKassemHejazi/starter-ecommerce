@@ -35,3 +35,28 @@
   height: 100%;
   object-fit: contain;
 }
+
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 14px;
+  text-align: center;
+}
+
+.delete-button:hover {
+  background-color: darkred;
+}

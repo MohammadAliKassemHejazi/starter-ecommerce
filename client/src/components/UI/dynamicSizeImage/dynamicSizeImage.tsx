@@ -1,14 +1,15 @@
 import Image from 'next/image';
 import React, { useState, SyntheticEvent } from 'react';
-import { ImageType } from 'react-images-uploading';
+
 
 interface DynamicSizedImageProps {
-  file: ImageType;
+  url: string;
   index: any; // Adjust the type of index according to your needs
   constrainWidth?: boolean;
+  isonline ?: boolean;
 }
 
-const DynamicSizedImage: React.FC<DynamicSizedImageProps> = ({ file , index,constrainWidth = false }) => {
+const DynamicSizedImage: React.FC<DynamicSizedImageProps> = ({ url ,index,constrainWidth = false,isonline = false }) => {
   const [calculatedWidth, setCalculatedWidth] = useState<number>(0);
   const [calculatedHeight, setCalculatedHeight] = useState<number>(0);
 
@@ -31,12 +32,12 @@ const DynamicSizedImage: React.FC<DynamicSizedImageProps> = ({ file , index,cons
 
            <Image
         key={index}
-        src={file.data_url ?? ""}
+        src={url}
         alt={`Cropped Image ${index}`}
         onLoad={handleImageLoad}
         width={calculatedWidth}
        height={calculatedHeight}
-       quality={90}
+       
      
       />
       
