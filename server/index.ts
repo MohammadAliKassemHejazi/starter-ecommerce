@@ -1,12 +1,11 @@
 // Import necessary modules
 import express, { Express, Request, Response, NextFunction } from 'express';
-import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import winston from 'winston';
-import { swaggerOption } from './src/config/swagger';
+
 import { authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter } from './src/routes';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
@@ -18,6 +17,7 @@ import fs from 'fs';
 import * as  spdy from 'spdy';
 import seedDatabase from './seedDataBase';
 // Set up Winston for logging
+
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.json(),
@@ -26,6 +26,7 @@ const logger = winston.createLogger({
         new winston.transports.File({ filename: 'combined.log' })
     ],
 });
+
 
 if (process.env.NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({
@@ -74,11 +75,8 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Swagger API documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOption.options));
 
 //Storage
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/'); // Destination folder for uploaded files

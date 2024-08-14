@@ -24,6 +24,7 @@ import {
 import { useSelector } from "react-redux";
 import { ISize } from "@/models/size.model";
 
+const isonline = false
 
 const Toast = Swal.mixin({
   toast: true,
@@ -146,6 +147,25 @@ function CreateProduct() {
       });
     }
   };
+
+    const handleDeleteImage = async (index: number) => {
+  
+   if (!product?.ProductImages) {
+    // Handle the case where ProductImages is undefined or null
+    console.error('ProductImages is undefined or null.');
+    return;
+  }
+
+  const imageToDelete: ImageListType | any = product.ProductImages[index];
+    console.log(imageToDelete?.imageUrl, "imageToDelete");
+
+ 
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      ProductImages: prevProduct?.ProductImages?.filter((_, i) => i !== index) || [],
+    }));
+  
+};
 
   return (
     <Layout>
@@ -314,10 +334,11 @@ function CreateProduct() {
           onImagesChange={handlePhotoChange}
           defaultImages={product.photos}
         />
+  
 
         <div>
           <h3>Cropped Images</h3>
-          <ImageViewer productImages={product.ProductImages ?? []} isonline={false} />
+          <ImageViewer productImages={product.ProductImages ?? []} isonline={isonline} onDeleteImage={handleDeleteImage}/>
         </div>
       </section>
     </Layout>

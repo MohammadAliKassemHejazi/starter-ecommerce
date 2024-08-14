@@ -1,53 +1,64 @@
 import config from "../config";
+import fs from 'fs';
+import path from 'path';
 
-exports.options = {
-  openapi: '3.0.0', // Specify the OpenAPI version
-  routePrefix: "/api/documentation",
-  swagger: {
+const loadSchemas = async (schemaPath: string): Promise<Schemas> => {
+  const schemas: Schemas = {};
+  const files = fs.readdirSync(schemaPath);
+
+  await Promise.all(
+    files.map(async (file) => {
+      if (file.endsWith('.ts')) {
+        const schema = (await import(path.join(schemaPath, file))).default;
+        Object.assign(schemas, schema);
+      }
+    })
+  );
+
+  return schemas;
+};
+
+export const createSwaggerFile = async () => {
+  const schemasPath = path.resolve(__dirname, '../../routes/swaggerSchema/');
+  const schemas: Schemas = await loadSchemas(schemasPath);
+
+  const paths: Record<string, any> = {}; // Explicitly type the paths as a record with string keys and any values
+
+  Object.keys(schemas).forEach(key => {
+    paths[`/api/${key.replace('RouteSchema', '').toLowerCase()}`] = schemas[key];
+  });
+
+  const swaggerOptions = {
+    openapi: '3.0.0',
     info: {
-      title: "node express app init - swagger",
+      title: "Node Express App - Swagger",
       description: "Testing the express swagger API",
       version: "1.0.0",
     },
-    externalDocs: {
-      url: "https://swagger.io",
-      description: "Find more info here",
-    },
-    host: `localhost:${config.port}`,
-    schemes: ["http"],
-    consumes: ["application/json"],
-    produces: ["application/json"],
-    tags: [
-      { name: "user", description: "User related end-points" },
-      { name: "article", description: "article related end-points" },
-      { name: "auth", description: "auth related end-points" },
+    servers: [
+      { url: `http://localhost:${config.port}` },
     ],
-    securityDefinitions: {
-      apiKey: {
-        type: "apiKey",
-        name: "Authorization",
-        in: "header",
-        scheme: "bearer",
-        bearerFormat: "JWT",
-        description: "JWT access token",
-      },
+    components: {
+      schemas,
     },
-  },
-  uiConfig: {
-    // docExpansion: "full",
-    deepLinking: true,
-  },
-  uiHooks: {
-    // @ts-ignore
-    onRequest: function (request, reply, next) {
-      next();
-    },
-    preHandler: function (request: any, reply: any, next: () => void) {
-      next();
-    },
-  },
-  staticCSP: true,
-  // @ts-ignore
-  transformStaticCSP: (header) => header,
-  exposeRoute: true,
+    paths,
+  };
+
+  const outputPath = path.resolve(__dirname, '../../routes/swaggerSchema/swagger.json');
+  fs.writeFileSync(outputPath, JSON.stringify(swaggerOptions, null, 2));
+
+  console.log(`Swagger options have been written to ${outputPath}`);
+};
+
+type Schema = {
+  tags: string[];
+  security?: object[];
+  body?: object;
+  querystring?: object;
+  params?: object;
+  response?: object;
+};
+
+type Schemas = {
+  [key: string]: Schema;
 };

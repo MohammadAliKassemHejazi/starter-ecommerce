@@ -134,9 +134,6 @@ export const isAuthenticatedRouteSchema = {
 	},
 }
 
-
-
-
 export default {
 	loginRouteSchema,
 	isAuthenticatedRouteSchema,

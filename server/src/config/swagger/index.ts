@@ -1,1 +1,2 @@
-export const swaggerOption = require("./swagger.option");
+import { createSwaggerFile } from "./swagger.option";
+export { createSwaggerFile };
