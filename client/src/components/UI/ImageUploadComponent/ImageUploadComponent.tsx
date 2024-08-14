@@ -35,7 +35,10 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
       if (image.file && crop) {
         try {
-          const scaledImage = await scaleImage(image.file, 800, 534);
+        const imgElement = document.getElementById(`${index}_image`) as HTMLImageElement;
+
+        // Pass the image's actual width and height to scaleImage
+        const scaledImage = await scaleImage(image.file, imgElement.width, imgElement.height);
           const croppedFile = await getCroppedFile(scaledImage, crop);
           newCropData[index] = crop;
 

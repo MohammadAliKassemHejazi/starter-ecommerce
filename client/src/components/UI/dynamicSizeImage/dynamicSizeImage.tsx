@@ -16,7 +16,7 @@ const DynamicSizedImage: React.FC<DynamicSizedImageProps> = ({ url ,index,constr
   const handleImageLoad = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     const imgElement = e.target as HTMLImageElement;
     const { naturalWidth, naturalHeight } = imgElement;
-    const maxWidth =   (constrainWidth = true) ? 800 : 800 ; // Define your maximum width here
+    const maxWidth =  720 ; // Define your maximum width here
     const aspectRatio = naturalWidth / naturalHeight;
 
     const widthToFit = Math.min(naturalWidth, maxWidth);
@@ -31,7 +31,8 @@ const DynamicSizedImage: React.FC<DynamicSizedImageProps> = ({ url ,index,constr
   
 
            <Image
-        key={index}
+       key={index}
+       id={index+"_image"}
         src={url}
         alt={`Cropped Image ${index}`}
         onLoad={handleImageLoad}
