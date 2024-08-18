@@ -204,7 +204,9 @@ export const fetchProductsByStore = async ({ storeId,ownerId, page, pageSize }: 
     limit: pageSize,
        include: [
         {
-          model: db.ProductImage,
+           model: db.ProductImage,
+           limit: 1,
+         order: [['createdAt', 'DESC']],
         },
       ],
       raw: true, // Allow inclusion of associated models

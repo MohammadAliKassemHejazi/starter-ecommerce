@@ -22,8 +22,8 @@ module.exports = {
 
     // ECMAScript 6
     // "arrow-spacing": ["error", { before: true, after: true }], // Enforce consistent spacing before and after arrow functions
-     "no-duplicate-imports": "error", // Disallow duplicate imports
-     "no-useless-constructor": "error", // Disallow unnecessary constructors
+    "no-duplicate-imports": "error", // Disallow duplicate imports
+    "no-useless-constructor": "error", // Disallow unnecessary constructors
 
     // React and JSX
     "react/prop-types": "off", // Disable prop-types as we use TypeScript for type checking

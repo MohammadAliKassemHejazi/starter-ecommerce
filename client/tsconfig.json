@@ -23,6 +23,7 @@
       "@/models/*": ["models/*"],
       "@/interfaces/*": ["interfaces/*"],
       "@/utils/*": ["utils/*"],
+      "@/styles/*": ["styles/*"],
       "@/*": ["/*"],
     }
   },
