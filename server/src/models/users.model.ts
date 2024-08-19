@@ -14,9 +14,9 @@ module.exports = (sequelize: any) => {
 
     static associate(models: any) {
       // one to one realtion
+      User.hasOne(models.RoleUser, { foreignKey: 'userId' });
       User.hasOne(models.Package, { foreignKey: 'userId'}); // User can have one package subscription
-      User.hasOne(models.Role, { foreignKey: 'userId' }); // user can have 1 role 
-
+    
       //  one to many
       User.hasMany(models.Store, { foreignKey: 'userId'}); // User can have many stores
       User.hasMany(models.Article, { foreignKey: 'userId' }); // User can have many articles

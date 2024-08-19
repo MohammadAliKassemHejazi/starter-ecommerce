@@ -5,20 +5,21 @@ import { protectedRoutes } from '../middlewares';
 import { usersController } from "../controllers";
 
 
+  // routes want to protect
+  const Routes = [
+    "/profile",
+  ];
 
 
-  const router = express.Router()
+const router = express.Router()
+  protectedRoutes(router, Routes);
   router.get(
     "/profile",
     usersController.handleUserProfile
   );
 
-  // routes want to protect
-  const Routes = [
-    "/api/users/profile",
-  ];
-
   // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
-protectedRoutes(router, Routes);
+
+
 export  default router;
 

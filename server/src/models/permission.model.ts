@@ -1,20 +1,19 @@
 "use strict";
 
 import { Model, DataTypes } from "sequelize";
-import { IRoleAttributes } from "../interfaces/types/models/role.model.types";
+import { IPermissionAttributes } from "../interfaces/types/models/permission.model.types";
 
 module.exports = (sequelize: any) => {
-  class Role extends Model<IRoleAttributes> implements IRoleAttributes {
+  class Permission extends Model<IPermissionAttributes> implements IPermissionAttributes {
     id!: string;
     name!: string;
 
     static associate(models: any) {
-      Role.hasMany(models.RoleUser, { foreignKey: 'roleId' }); // Role has many RoleUsers
-      Role.hasMany(models.RolePermission, { foreignKey: 'roleId' }); // Role has many RolePermissions
+      Permission.hasMany(models.RolePermission, { foreignKey: 'permissionId' }); // Permission has many RolePermissions
     }
   }
 
-  Role.init(
+  Permission.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -28,9 +27,9 @@ module.exports = (sequelize: any) => {
     },
     {
       sequelize,
-      modelName: "Role",
+      modelName: "Permission",
     }
   );
 
-  return Role;
+  return Permission;
 };

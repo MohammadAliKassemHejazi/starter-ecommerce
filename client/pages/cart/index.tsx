@@ -53,8 +53,8 @@ const Cart = () => {
         <div className={styles.cartEmpty}>
           <p>Your cart is currently empty</p>
           <div className={styles.startShopping}>
-            <Link href="/">
-              <a>
+            <Link  href="/">
+              
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -69,7 +69,7 @@ const Cart = () => {
                   />
                 </svg>
                 <span>Start Shopping</span>
-              </a>
+              
             </Link>
           </div>
         </div>
@@ -139,7 +139,7 @@ const Cart = () => {
               <button className={styles.checkoutBtn}>Check out</button>
               <div className={styles.continueShopping}>
                 <Link href="/">
-                  <a>
+               
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -154,7 +154,7 @@ const Cart = () => {
                       />
                     </svg>
                     <span>Continue Shopping</span>
-                  </a>
+              
                 </Link>
               </div>
             </div>

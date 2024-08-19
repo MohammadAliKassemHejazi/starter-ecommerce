@@ -9,9 +9,13 @@ import Link from "next/link";
 import ParticleComponent from "@/components/UI/starsbackground/starsbackground";
 import { setAuthHeaders } from "@/utils/httpClient";
 import Image from "next/image";
+import { IProductModel } from "@/models/product.model";
+import { addToCart } from "@/store/slices/cartSlice";
+import { RootState, useAppDispatch } from "@/store/store"; // Importing your store types
 type Props = {
   articles?: IArticleModelWithUser[];
 };
+ 
 const stores = [
   { id: 1, name: 'Store 1' ,logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Gucci_logo.svg/512px-Gucci_logo.svg.png?20180702130155"},
   { id: 2, name: 'Store 2',logo:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg" },
@@ -53,7 +57,13 @@ const products =[
     "price": 55.0
   }
 ]
+
+
 const Home = ({ articles }: Props) => {
+  const dispatch = useAppDispatch();
+    const handleAddToCart = (product: IProductModel) => {
+    dispatch(addToCart(product));
+  };
   return (
     <Layout>
       <header className="py-5 bg-black border-bottom mb-4 overflow-hidden">
@@ -104,6 +114,7 @@ const Home = ({ articles }: Props) => {
                   </Link>
                 </li>
                 <li className="icon">
+                  
                 <Link href="/addtocart" legacyBehavior>
                   <span className="fas fa-shopping-bag"></span>
                   </Link>
@@ -168,3 +179,5 @@ export const getServerSideProps: GetServerSideProps = async (context:any) => {
     },
   };
 };
+
+
