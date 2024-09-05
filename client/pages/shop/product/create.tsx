@@ -7,7 +7,7 @@ import {
 import { useAppDispatch, store } from "@/store/store";
 import { createProduct } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
-import ImageViewer from "../../../src/components/UI/imageViewer/imageViewer";
+import ImageViewer from "../../../src/components/UI/General/imageViewer/imageViewer";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";

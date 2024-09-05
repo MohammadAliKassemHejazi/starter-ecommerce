@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import MySwiperComponent from "@/components/UI/ImagesSlider/MySwiperComponent";
+import MySwiperComponent from "@/components/UI/General/ImagesSlider/MySwiperComponent";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Image from "next/image";

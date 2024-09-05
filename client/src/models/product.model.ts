@@ -6,8 +6,10 @@ import { ISize, ISizeItem } from "./size.model";
 export interface IProductModel {
   id?: string;
   name?: string;
+  tagColor?: string;
   description?: string;
   price?: number;
+  discount?: number;
   stockQuantity?: number;
   isActive?: boolean;
   subcategoryId?: string;
@@ -23,6 +25,7 @@ export interface IProductModel {
   comments ?: IComment[];
   SizeItems?: ISizeItem[];
   updatedAt?: string;
+  createdAt?: string;
 }
 
 export interface productresponse {

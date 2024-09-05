@@ -12,6 +12,7 @@ import styles from "./cart.module.css"; // Import CSS module
 import { AppDispatch, RootState } from "@/store/store"; // Importing your store types
 import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";
+import Layout from "@/components/Layouts/Layout";
 
 const Cart = () => {
   // Type the useSelector hook to use RootState
@@ -47,6 +48,7 @@ const Cart = () => {
   };
 
   return (
+    <Layout>
     <div className={styles.cartContainer}>
       <h2 className={styles.cartTitle}>Shopping Cart</h2>
       {cart.cartItems.length === 0 ? (
@@ -161,7 +163,8 @@ const Cart = () => {
           </div>
         </div>
       )}
-    </div>
+      </div>
+      </Layout>
   );
 };
 

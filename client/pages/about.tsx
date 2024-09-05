@@ -9,7 +9,7 @@ import { GetServerSideProps } from "next";
 import React from "react";
 import styles from "./Home.module.css";
 import Link from "next/link";
-import ParticleComponent from "@/components/UI/starsbackground/starsbackground";
+import ParticleComponent from "@/components/UI/home/starsbackground/starsbackground";
 import { setAuthHeaders } from "@/utils/httpClient";
 import Image from "next/image";
 type Props = {

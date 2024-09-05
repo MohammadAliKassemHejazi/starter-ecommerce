@@ -12,11 +12,7 @@ const ListShop = ({}: Props) => {
 
   return (
     <Layout>
-      
-  
-
-<div className="container bg-white">
-   
+     <div className="container bg-white">
     <div className="row">
         <div className="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3">
             <div className="product">
@@ -93,9 +89,7 @@ const ListShop = ({}: Props) => {
             <div className="price">$ 60.0</div>
         </div>
     </div>
-  
-</div>
-
+     </div>
     </Layout>
   );
 };
