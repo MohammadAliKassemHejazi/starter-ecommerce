@@ -114,19 +114,20 @@ export const articleSlice = createSlice({
 
     
 
-		builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
-      state.products = action.payload.products;
-      state.total = action.payload.total;
-      state.page = action.payload.page;
-      state.pageSize = action.payload.pageSize;
-    });
+builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
+  state.products = [...state.products, ...action.payload.products]; // Append new products
+  state.total = action.payload.total;
+  state.page = action.payload.page;
+  state.pageSize = action.payload.pageSize;
+});
 
-    builder.addCase(fetchProductsListing.rejected, (state) => {
-      state.products = [];
-      state.total = 0;
-      state.page = 1;
-      state.pageSize = 10;
-    });
+builder.addCase(fetchProductsListing.rejected, (state) => {
+  state.products = [...state.products]; // Keep existing products
+  state.total = 0;
+  state.page = 1;
+  state.pageSize = 10;
+});
+
 
   },
 });

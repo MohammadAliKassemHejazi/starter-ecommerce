@@ -30,7 +30,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
             </div>
           ))
         ) : (
-          <div>No articles available</div>
+          <div className="text-center text-bold m-3 ">No articles available</div>
         )}
       </div>
     </div>

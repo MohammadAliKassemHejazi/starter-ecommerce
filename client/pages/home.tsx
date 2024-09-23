@@ -33,13 +33,7 @@ const storesModel : IStoreResponseModel[] =  [
   {  name: 'Store 10',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
   { name: 'Store 11',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
   { name: 'Store 12',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
-  { name: 'Store 13' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
-  {  name: 'Store 14',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
-  { name: 'Store 15',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
-  {  name: 'Store 16',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
-  { name: 'Store 17',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
-  {  name: 'Store 18',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
- 
+
 ];
 const products : IProductModel[] = [
   {

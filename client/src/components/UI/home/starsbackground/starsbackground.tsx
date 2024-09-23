@@ -9,7 +9,7 @@ const ParticleComponent = () => {
 
             particleContainer.textContent='';
             starBackground.textContent='';
-            for (let i = 0; i < 1000; i++) {
+            for (let i = 0; i < 100; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 particle.style.top = `${Math.random() * 100}vh`;
@@ -20,7 +20,7 @@ const ParticleComponent = () => {
                 particleContainer!.appendChild(particle);
             }
 
-            for (let i = 0; i < 300; i++) {
+            for (let i = 0; i < 100; i++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
                 star.style.top = `${Math.random() * 100}vh`;
