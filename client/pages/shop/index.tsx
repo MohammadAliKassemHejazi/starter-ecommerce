@@ -17,6 +17,8 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import Image from "next/image";
 import Moment from "react-moment";
+import { IProductModel } from "@/models/product.model";
+import { IStoreModel, IStoreResponseModel } from "@/models/store.model";
 
 type Props = {};
 
@@ -34,12 +36,12 @@ const Toast = Swal.mixin({
 
 const Shop = ({}: Props) => {
   const dispatch = useAppDispatch();
-  const productList = useSelector(productByStoreSelector);
+  const productList = useSelector(productByStoreSelector) as IProductModel[];
   const totalProducts = useSelector(totalProductsSelector);
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
-  const stores = useSelector(storeSelector);
-  const [selectedStore, setSelectedStore] = useState<string | null>(null);
+  const stores = useSelector(storeSelector)  as IStoreResponseModel[];
+   const [selectedStore, setSelectedStore] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {

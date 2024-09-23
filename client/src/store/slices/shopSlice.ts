@@ -15,6 +15,14 @@ const initialState: ProductsState = {
   error: "",
 };
 
+export const fetchProductsListing = createAsyncThunk(
+  "shop/productListing",
+  async ({ page, pageSize }: {page?: number, pageSize: number }) => {
+    const response = await shopService.requestProductsListing( page!, pageSize);
+    return response;
+  }
+);
+
 export const fetchProductById = createAsyncThunk(
   "shop/by-id",
   async (id: string) => {
@@ -103,6 +111,23 @@ export const articleSlice = createSlice({
       state.page = 1;
       state.pageSize = 10;
     });
+
+    
+
+		builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
+      state.products = action.payload.products;
+      state.total = action.payload.total;
+      state.page = action.payload.page;
+      state.pageSize = action.payload.pageSize;
+    });
+
+    builder.addCase(fetchProductsListing.rejected, (state) => {
+      state.products = [];
+      state.total = 0;
+      state.page = 1;
+      state.pageSize = 10;
+    });
+
   },
 });
 

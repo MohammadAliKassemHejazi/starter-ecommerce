@@ -152,6 +152,38 @@ export const getProductsByStore =
     next(error);
 
   }
+  };
+
+  export const getProductsListing =
+  async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
+
+
+  const { page = 1, pageSize = 10 } = req.query;
+
+  try {
+    
+    const result = await shopService.fetchProductsListing({
+      storeId:"",
+      ownerId:"",
+      page: Number(page),
+      pageSize: Number(pageSize),
+    });
+
+     const transformedProducts = result.products.map((product: any) => ({
+      ...product,
+      photos: [product.ProductImages], // Rename field here
+      ProductImages: undefined, // Optionally remove the old field
+     }));
+    
+    res.json({
+      ...result,
+      products: transformedProducts,
+    });
+
+  } catch (error) {
+    next(error);
+
+  }
 };
 
 export default {
@@ -162,6 +194,7 @@ export default {
   getProductsByStore,
   handleDelete,
   handleDeleteImage,
+  getProductsListing
 };
 
 

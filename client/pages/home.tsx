@@ -10,7 +10,7 @@ import ParticleComponent from "@/components/UI/home/starsbackground/starsbackgro
 import { setAuthHeaders } from "@/utils/httpClient";
 
 import { IProductModel } from "@/models/product.model";
-import { addToCart } from "@/store/slices/cartSlice";
+
 import {  useAppDispatch } from "@/store/store"; // Importing your store types
 import BubbleAnimation from "@/components/UI/home/bubbleanimation/BubbleAnimation";
 import { IStoreResponseModel } from "@/models/store.model";
@@ -62,11 +62,6 @@ const products : IProductModel[] = [
 
 
 const Home = ({ articles }: Props) => {
-  
-  const dispatch = useAppDispatch();
-    const handleAddToCart = (product: IProductModel) => {
-    dispatch(addToCart(product));
-  };
 
   return (
     <Layout>
@@ -76,7 +71,7 @@ const Home = ({ articles }: Props) => {
         <BubbleAnimation stores={storesModel} ></BubbleAnimation>
      
       </header>
-     <ProductList products={products}></ProductList>
+     <ProductList ></ProductList>
 
     <ArticleList articles={articles!}></ArticleList>
     </Layout>

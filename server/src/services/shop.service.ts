@@ -216,6 +216,25 @@ export const fetchProductsByStore = async ({ storeId,ownerId, page, pageSize }: 
   return { products, total, page, pageSize };
 };
 
+export const fetchProductsListing = async ({ page, pageSize }: FetchProductsByStoreParams) => {
+  const { rows:products, count:total } = await db.Product.findAndCountAll({
+    offset: (page - 1) * pageSize,
+    limit: pageSize,
+       include: [
+        {
+           model: db.ProductImage,
+           limit: 1,
+         order: [['createdAt', 'DESC']],
+        },
+      ],
+      raw: true, // Allow inclusion of associated models
+      nest: true, // Nest the results to properly align the data structure
+  });
+
+  return { products, total, page, pageSize };
+};
+
+
 
 export default {
   createProductWithImages,
@@ -223,5 +242,6 @@ export default {
   getTopProductIds,
   deleteProduct,
   fetchProductsByStore,
-  deleteProductImage
+  deleteProductImage,
+  fetchProductsListing
 };

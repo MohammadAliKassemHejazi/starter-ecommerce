@@ -266,3 +266,28 @@
 {"level":"info","message":"::1 - - [04/Sep/2024:15:42:05 +0000] \"GET /api/shop/get/storeProducts/04a0a93d-fe07-40de-8462-7f4961b034c9?page=2&pageSize=10 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36\""}
 {"level":"info","message":"::1 - - [04/Sep/2024:15:42:06 +0000] \"GET /api/shop/get/storeProducts/04a0a93d-fe07-40de-8462-7f4961b034c9?page=1&pageSize=10 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36\""}
 {"level":"info","message":"::1 - - [04/Sep/2024:15:42:06 +0000] \"GET /api/shop/get/storeProducts/04a0a93d-fe07-40de-8462-7f4961b034c9?page=1&pageSize=10 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:21:19 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 53 \"-\" \"axios/1.7.4\""}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:21:21 +0000] \"POST /api/auth/login HTTP/1.1\" 200 346 \"-\" \"axios/1.7.4\""}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:21:22 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.7.4\""}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:21:22 +0000] \"GET /api/shop/get/productListing/?page=1&pageSize=10 HTTP/1.1\" 404 167 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:22:21 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.7.4\""}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:22:21 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.7.4\""}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:22:21 +0000] \"GET /api/shop/get/productListing/?page=1&pageSize=10 HTTP/1.1\" 200 5222 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36\""}
+{"level":"error","name":"SequelizeDatabaseError","original":{"code":"42703","file":"parse_relation.c","length":104,"line":"3718","name":"error","position":"402","routine":"errorMissingColumn","severity":"ERROR","sql":"SELECT \"Product\".\"id\", \"Product\".\"name\", \"Product\".\"description\", \"Product\".\"price\", \"Product\".\"isActive\", \"Product\".\"ownerId\", \"Product\".\"categoryId\", \"Product\".\"subcategoryId\", \"Product\".\"storeId\", \"Product\".\"metaTitle\", \"Product\".\"metaDescription\", \"Product\".\"slug\", \"Product\".\"tags\", \"Product\".\"discount\", \"Product\".\"createdAt\", \"Product\".\"updatedAt\" FROM \"Products\" AS \"Product\" LIMIT NaN OFFSET NaN;"},"parameters":{},"parent":{"code":"42703","file":"parse_relation.c","length":104,"line":"3718","name":"error","position":"402","routine":"errorMissingColumn","severity":"ERROR","sql":"SELECT \"Product\".\"id\", \"Product\".\"name\", \"Product\".\"description\", \"Product\".\"price\", \"Product\".\"isActive\", \"Product\".\"ownerId\", \"Product\".\"categoryId\", \"Product\".\"subcategoryId\", \"Product\".\"storeId\", \"Product\".\"metaTitle\", \"Product\".\"metaDescription\", \"Product\".\"slug\", \"Product\".\"tags\", \"Product\".\"discount\", \"Product\".\"createdAt\", \"Product\".\"updatedAt\" FROM \"Products\" AS \"Product\" LIMIT NaN OFFSET NaN;"},"sql":"SELECT \"Product\".\"id\", \"Product\".\"name\", \"Product\".\"description\", \"Product\".\"price\", \"Product\".\"isActive\", \"Product\".\"ownerId\", \"Product\".\"categoryId\", \"Product\".\"subcategoryId\", \"Product\".\"storeId\", \"Product\".\"metaTitle\", \"Product\".\"metaDescription\", \"Product\".\"slug\", \"Product\".\"tags\", \"Product\".\"discount\", \"Product\".\"createdAt\", \"Product\".\"updatedAt\" FROM \"Products\" AS \"Product\" LIMIT NaN OFFSET NaN;"}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:22:33 +0000] \"GET /api/shop/get/productListing/?page=undefined&pageSize=undefined HTTP/1.1\" 500 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:22:40 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.7.4\""}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:22:41 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 346 \"-\" \"axios/1.7.4\""}
+{"level":"info","message":"::1 - - [07/Sep/2024:14:22:41 +0000] \"GET /api/shop/get/productListing/?page=1&pageSize=10 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}

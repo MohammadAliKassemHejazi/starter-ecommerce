@@ -26,10 +26,13 @@ export const requestAllProductID = async () => {
 	return response.data
 }
 
-
-
 export const requestProductsByStore = async ( storeId: string, page: number, pageSize: number ) => {
   const { data: response } = await httpClient.get(`/shop/get/storeProducts/${storeId}?page=${page}&pageSize=${pageSize}`);
+  return response;
+};
+
+export const requestProductsListing = async ( page: number, pageSize: number ) => {
+  const { data: response } = await httpClient.get(`/shop/get/productListing/?page=${page}&pageSize=${pageSize}`);
   return response;
 };
 

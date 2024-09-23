@@ -21,15 +21,9 @@ const SingleStore = () => {
 
       const storeId = Array.isArray(id) ? id[0] : id;
 
-      dispatch(fetchStoreById(storeId)).then(() => {
-    
-       
-      });
+      dispatch(fetchStoreById(storeId));
 
-      dispatch(fetchAllStores()).then(() => {
-    
-      
-      });
+      dispatch(fetchAllStores());
      
     }
   }, [id, dispatch]);

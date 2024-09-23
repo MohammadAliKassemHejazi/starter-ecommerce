@@ -21,7 +21,6 @@ export const requestStoreById = async (id: string) => {
 
 export const requestAllStores = async () => {
 	const { data: response } = await httpClient.get("/store/getall");
-
 	return response
 }
 

@@ -5,7 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { IStoreModel, IStoreModelErrors } from "../../src/models/store.model";
 import { useAppDispatch } from "@/store/store";
 import { createStore } from "@/store/slices/storeSlice";
-import ImageUploadComponent from "@/components/UI/ImageUploadComponent/ImageUploadComponent";
+import ImageUploadComponent from "@/components/UI/General/ImageUploadComponent/ImageUploadComponent";
 import ImageViewer from "../../src/components/UI/General/imageViewer/imageViewer";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
