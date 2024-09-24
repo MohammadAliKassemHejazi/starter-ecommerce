@@ -147,12 +147,14 @@ export const deleteProduct = async (id: string, userId: string): Promise<any | n
 
     // Delete images from filesystem
     images.forEach((photo: any) => {
+      if(photo.id ?? 0 > 0){
       const imagePath = path.resolve(__dirname, '..', '/compressed', photo.imageUrl); // Adjust the path as necessary
       fs.unlink(imagePath, (err) => {
         if (err) {
           console.error(`Failed to delete image: ${imagePath}`, err);
         }
       });
+        }
     });
 
 

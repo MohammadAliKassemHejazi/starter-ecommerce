@@ -12,8 +12,8 @@ export interface IShopCreateProduct extends CustomRequest {
     stockQuantity?: number; // Can be number or undefined
     isActive?: boolean; // Can be boolean or undefined
     ownerId?:string,
-            categoryId?: string,
-         sizes?: [ISizeItemAttributes];
+    categoryId?: string,
+    sizes?: [ISizeItemAttributes];
         };
     };
 }

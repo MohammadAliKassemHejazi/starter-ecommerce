@@ -103,7 +103,13 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
 const upload = multer({ storage: storage,fileFilter: fileFilter,limits: {
     fileSize: 50 * 1024 * 1024, 
     files: 6 
-  } });
+}
+});
+  
+app.use('/compressed', express.static(path.join(__dirname, 'compressed'), {
+  maxAge: '1d', // Cache for 1 day
+  etag: false,  // Disable ETag headers
+}));
 
 // Routes
 app.get('/', (req: Request, res: Response, next: NextFunction) => {

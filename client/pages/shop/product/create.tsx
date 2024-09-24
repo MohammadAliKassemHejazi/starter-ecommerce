@@ -254,39 +254,40 @@ function CreateProduct() {
                 "Loading subCategories data..."
               )}
 
- <FieldArray name="sizes">
-                {({ push, remove, form }) => (
-                  <div>
-                    <label>Sizes and Quantities:</label>
-                    {form.values.SizeItems.map((size:ISize, index:number) => (
-                      <div key={index}>
-                        <Field as="select" name={`sizes[${index}].sizeId`}>
-                          <option value="">Select size</option>
-                          {listOfSizes?.map((size: ISize) => (
-                            <option key={size.id} value={size.id}>
-                              {size.size}
-                            </option>
-                          ))}
-                        </Field>
-                        <Field
-                          type="number"
-                          name={`sizes[${index}].quantity`}
-                          placeholder="Quantity"
-                        />
-                        <button type="button" onClick={() => remove(index)}>
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => push({ sizeId: "", quantity: 0 })}
-                    >
-                      Add Size
-                    </button>
-                  </div>
-                )}
-              </FieldArray>
+<FieldArray name="SizeItems">
+  {({ push, remove, form }) => (
+    <div>
+      <label>Sizes and Quantities:</label>
+      {form.values.SizeItems.map((size: ISize, index: number) => (
+        <div key={index}>
+          <Field as="select" name={`SizeItems[${index}].sizeId`}>
+            <option value="">Select size</option>
+            {listOfSizes?.map((size: ISize) => (
+              <option key={size.id} value={size.id}>
+                {size.size}
+              </option>
+            ))}
+          </Field>
+          <Field
+            type="number"
+            name={`SizeItems[${index}].quantity`}
+            placeholder="Quantity"
+          />
+          <button type="button" onClick={() => remove(index)}>
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => push({ sizeId: "", quantity: 0 })}
+      >
+        Add Size
+      </button>
+    </div>
+  )}
+</FieldArray>
+
 
 
               <div>

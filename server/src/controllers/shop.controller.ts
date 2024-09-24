@@ -7,7 +7,8 @@ import { CustomRequest } from '../interfaces/types/middlewares/request.middlewar
 import { IShopCreateProduct } from "interfaces/types/controllers/shop.controller.types";
 import { unlink } from "fs/promises";
 import { error } from "console";
-
+import path from 'node:path';
+import fs from 'fs';
 
 
 export const handleCreateProduct = async (request: CustomRequest, response: Response, next: NextFunction) => {
@@ -15,8 +16,8 @@ export const handleCreateProduct = async (request: CustomRequest, response: Resp
   try {
     if(files.length > 0){
       const UserId = request.UserId
-      const sizes = JSON.parse(request.body.sizes[1]);
-        const productData = {...request.body ,"ownerId":UserId,"sizes":sizes} as IShopCreateProduct;
+      const sizes = JSON.parse(request.body.sizes);
+      const productData = {...request.body ,"ownerId":UserId,"sizes":sizes} as any;
      
         // Process product creation with data and files
         const results =  await shopService.createProductWithImages(productData, files);
@@ -27,8 +28,20 @@ export const handleCreateProduct = async (request: CustomRequest, response: Resp
       throw error("images are missing while creating a product")
     }
     } catch (error) {
-      try {
-      await Promise.all(files.map(file => unlink(file.path)));
+   try {
+      // Ensure all files are deleted asynchronously
+      await Promise.all(
+        files.map(async (file) => {
+          const fileName = file.filename;
+      
+          const outputPath = path.join('compressed', fileName);
+           fs.unlink(outputPath, (err) => {
+    if (err) {
+      throw err;
+    }
+  }); // Use fs.promises.unlink
+        })
+      );
     } catch (deleteError) {
       console.error('Failed to delete files:', deleteError);
     }
