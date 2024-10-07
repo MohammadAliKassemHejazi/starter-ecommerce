@@ -7,6 +7,7 @@ import { IProductAttributes, } from 'interfaces/types/models/product.model.types
 import db from '../models/index';
 import fs from 'fs';
 import path from 'path';
+import { raw } from 'express';
 
 
 
@@ -207,11 +208,10 @@ export const fetchProductsByStore = async ({ storeId,ownerId, page, pageSize }: 
        include: [
         {
            model: db.ProductImage,
-           limit: 1,
-         order: [['createdAt', 'DESC']],
+           order: [['createdAt', 'DESC']],
         },
       ],
-      raw: true, // Allow inclusion of associated models
+      raw : true,
       nest: true, // Nest the results to properly align the data structure
   });
 
@@ -225,11 +225,10 @@ export const fetchProductsListing = async ({ page, pageSize }: FetchProductsBySt
        include: [
         {
            model: db.ProductImage,
-           limit: 1,
-         order: [['createdAt', 'DESC']],
+           order: [['createdAt', 'DESC']],
         },
       ],
-      raw: true, // Allow inclusion of associated models
+      raw : true,
       nest: true, // Nest the results to properly align the data structure
   });
 

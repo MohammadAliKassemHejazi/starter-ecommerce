@@ -35,6 +35,7 @@ export const fetchProductsByStore = createAsyncThunk(
   "shop/by-store",
   async ({ storeId, page, pageSize }: { storeId: string, page: number, pageSize: number }) => {
     const response = await shopService.requestProductsByStore(storeId, page, pageSize);
+    console.log(response)
     return response;
   }
 );

@@ -175,16 +175,16 @@ const SingleItem = ({ product }: Props) => {
                                       <button
                                         type="button"
                                         className={`btn btn-success btn-size ${
-                                          values.size.size === s.Size.size
+                                          values.size.size === s.Size?.size
                                             ? "active"
                                             : ""
                                         }`}
                                         onClick={() =>
-                                          setFieldValue("size", s.Size.size)
+                                          setFieldValue("size", s.Size?.size)
                                         }
                                         disabled={s.quantity === 0}
                                       >
-                                        {s.Size.size}
+                                        {s.Size?.size}
                                       </button>
                                     </li>
                                   );
