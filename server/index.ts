@@ -26,7 +26,7 @@ const logger = winston.createLogger({
         new winston.transports.File({ filename: 'combined.log' })
     ],
 });
-
+const stripe = require("stripe")(process.env.Stripe_Key)
 
 if (process.env.NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({
@@ -116,6 +116,9 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.send('SERVER');
     next();
 });
+app.use('/api/webhook', express.raw({ type: 'application/json' }), webhookRoute);
+
+app.use('/api/payment', paymentRoute);
 app.use('/api/auth', authRouter);
 app.use('/api/utile', utileRouter);
 app.use('/api/users', userRouter);
@@ -280,7 +283,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   db.sequelize.sync().then(() => {
         logger.info('Database synced');
-        //  seedDatabase()
+         //seedDatabase()
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);
     });

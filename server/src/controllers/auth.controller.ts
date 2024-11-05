@@ -35,7 +35,7 @@ export const handleRegister = async (
     });
     response.status(201).json(user);
   } catch (error) {
-    next(customError(authErrors.AuthRegisterFailure));
+    next(authErrors.AuthRegisterFailure);
   }
 };
 

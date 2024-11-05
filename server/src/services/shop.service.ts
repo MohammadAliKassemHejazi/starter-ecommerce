@@ -143,7 +143,7 @@ export const deleteProduct = async (id: string, userId: string): Promise<any | n
       throw new Error('Product not found');
     }
 
-    const images = [product.ProductImages] ?? [];
+    const images = [product.ProductImages] ;
 
 
     // Delete images from filesystem

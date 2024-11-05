@@ -3,5 +3,8 @@ import authRouter from "./auth.route";
 import articleRouter from "./article.route";
 import shopRouter from "./shop.route";
 import storeRouter from "./store.route";
-import utileRouter from "./utile.route"
-export { userRouter, authRouter, articleRouter,shopRouter,storeRouter,utileRouter};
+import utileRouter from "./utile.route";
+import paymentRoute from "./payment.route";
+import webhookRoute from "./webhook.route";
+
+export { userRouter, authRouter, articleRouter,shopRouter,storeRouter,utileRouter,paymentRoute,webhookRoute};

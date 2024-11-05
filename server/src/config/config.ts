@@ -5,6 +5,8 @@ const config = {
   env: process.env.NODE_ENV || "development",
   port: process.env.PORT || 5300,
   webtoken: process.env.JWT_SECRET,
+  Stripekey: process.env.Stripe_Key,
+  stripeWebhookSecret: process.env.WebhookSecret,
   client: process.env.CLIENT_URL,
   database: {
     username: process.env.DB_USERNAME,
