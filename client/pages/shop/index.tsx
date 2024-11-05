@@ -154,7 +154,7 @@ const Shop = ({}: Props) => {
       <td>
         {product.photos  && (
           <Image
-            src={process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0]?.imageUrl ?? ""}
+            src={process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0]?.imageUrl }
             alt={product?.name ?? ""}
             width={50}
             height={50}
