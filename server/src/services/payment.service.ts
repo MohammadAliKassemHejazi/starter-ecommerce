@@ -33,6 +33,19 @@ export const processPayment = async (amount: number, currency: string, paymentMe
   }
 };
 
+export const verifyWebhook = (body: any, signature: any) => {
+  try {
+    return stripeClient.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch (error) {
+    console.error("Webhook verification failed:", error);
+    throw new Error("Webhook verification failed.");
+  }
+};
+
 // Function to verify and process Stripe webhook events
 export const handleWebhookEvent = (event: any): void => {
   try {
@@ -52,6 +65,7 @@ export const handleWebhookEvent = (event: any): void => {
 
 export default {
 
-    processPayment,
+  processPayment,
+  verifyWebhook,
   handleWebhookEvent
 };

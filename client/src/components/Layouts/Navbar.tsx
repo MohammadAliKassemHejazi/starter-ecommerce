@@ -75,6 +75,9 @@ export default function Navbar({}: Props) {
               <Link href="/shop" className="nav-link">
                 shop
               </Link>
+              <Link href="/cart" className="nav-link">
+                cart
+              </Link>
             
             </li>
             <li className="nav-item">

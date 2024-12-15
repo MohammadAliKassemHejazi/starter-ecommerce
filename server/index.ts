@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import winston from 'winston';
 
-import { authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter } from './src/routes';
+import { authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter,paymentRoute } from './src/routes';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
@@ -116,7 +116,6 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.send('SERVER');
     next();
 });
-app.use('/api/webhook', express.raw({ type: 'application/json' }), webhookRoute);
 
 app.use('/api/payment', paymentRoute);
 app.use('/api/auth', authRouter);

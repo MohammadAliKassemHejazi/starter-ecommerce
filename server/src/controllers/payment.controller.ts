@@ -22,12 +22,15 @@ export const initiatePayment = async (req: Request, res: Response) => {
   }
 };
 
+
 export const handleWebhook = async (req: Request, res: Response) => {
   try {
-    const event = req.body;
+    const signature = req.headers["stripe-signature"];
+    const event = PaymentService.verifyWebhook(req.body, signature);
     const webhookResponse = await PaymentService.handleWebhookEvent(event);
     res.status(200).json(webhookResponse);
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Webhook error:", error.message);
     res.status(400).json(customError(paymentErrors.WebhookVerificationFailed));
   }
 };

@@ -13,14 +13,16 @@ import { AppDispatch, RootState } from "@/store/store"; // Importing your store 
 import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";
 import Layout from "@/components/Layouts/Layout";
+import Image from "next/image";
 
 const Cart = () => {
   // Type the useSelector hook to use RootState
   const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch<AppDispatch>();
 
-    useEffect(() => {
-         if (typeof window !== "undefined") {
+  useEffect(() => {
+ 
+    if (typeof window !== "undefined") {
       const storedCartItems = localStorage.getItem("cartItems");
       if (storedCartItems) {
         const cartItems = JSON.parse(storedCartItems);
@@ -28,7 +30,7 @@ const Cart = () => {
       }
       dispatch(getTotals());
     }
-  }, [cart, dispatch]);
+  }, [dispatch]);
 
   // Type event handlers
   const handleAddToCart = (product: IProductModel) => {
@@ -49,14 +51,13 @@ const Cart = () => {
 
   return (
     <Layout>
-    <div className={styles.cartContainer}>
-      <h2 className={styles.cartTitle}>Shopping Cart</h2>
-      {cart.cartItems.length === 0 ? (
-        <div className={styles.cartEmpty}>
-          <p>Your cart is currently empty</p>
-          <div className={styles.startShopping}>
-            <Link  href="/">
-              
+      <div className={styles.cartContainer}>
+        <h2 className={styles.cartTitle}>Shopping Cart</h2>
+        {cart.cartTotalQuantity === 0 ? (
+          <div className={styles.cartEmpty}>
+            <p>Your cart is currently empty</p>
+            <div className={styles.startShopping}>
+              <Link href="/">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -71,77 +72,88 @@ const Cart = () => {
                   />
                 </svg>
                 <span>Start Shopping</span>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.cartDetails}>
+            <table className={styles.cartTable}>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart.cartTotalQuantity > 0 && cart.cartItems.map((cartItem: CartItem) => (
+                  <tr key={cartItem.id}>
+                    <td className={styles.cartProduct}>
+                      {cartItem?.photos && cartItem.photos.length > 0 && (
+                        <Image
+                          src={process.env.NEXT_PUBLIC_BASE_URL_Images + cartItem.photos[0]?.imageUrl}
+                          alt={cartItem.name ?? ""}
+                          className={styles.cartProductImage}
+                          width={100}
+                          height={100}
+                        />
+                      )}
+                      <div>
+                        <h3 className={styles.cartProductName}>{cartItem.name}</h3>
+                        <p className={styles.cartProductDesc}>{cartItem.description}</p>
+                      </div>
+                    </td>
+                    <td className={styles.cartProductPrice}>${cartItem.price}</td>
+                    <td className={styles.cartProductQuantity}>
+                      <button
+                        className={styles.quantityBtn}
+                        onClick={() => handleDecreaseCart(cartItem)}
+                      >
+                        -
+                      </button>
+                      <div className={styles.count}>{cartItem.cartQuantity}</div>
+                      <button
+                        className={styles.quantityBtn}
+                        onClick={() => handleAddToCart(cartItem)}
+                      >
+                        +
+                      </button>
+                    </td>
+                    <td className={styles.cartProductTotalPrice}>
+                      ${(cartItem?.price ?? 0) * cartItem.cartQuantity}
+                    </td>
+                    <td>
+                      <button
+                        className={styles.removeBtn}
+                        onClick={() => handleRemoveFromCart(cartItem)}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+           {cart.cartTotalQuantity > 0 && <div className={styles.cartSummary}>
+              <button className={styles.clearBtn} onClick={handleClearCart}>
+                Clear Cart
+              </button>
+              <div className={styles.cartCheckout}>
+                <div className={styles.subtotal}>
+                  <span>Subtotal</span>
+                  <span className={styles.amount}>${cart.cartTotalAmount}</span>
+                </div>
+                <p>Taxes and shipping calculated at checkout</p>
+                <button className={styles.checkoutBtn}>Check out</button>
               
-            </Link>
-          </div>
-        </div>
-      ) : (
-        <div className={styles.cartDetails}>
-          <div className={styles.titles}>
-            <h3 className={styles.productTitle}>Product</h3>
-            <h3 className={styles.price}>Price</h3>
-            <h3 className={styles.quantity}>Quantity</h3>
-            <h3 className={styles.total}>Total</h3>
-          </div>
-          <div className={styles.cartItems}>
-            {cart.cartItems.map((cartItem: CartItem) => (
-              <div className={styles.cartItem} key={cartItem.id}>
-                <div className={styles.cartProduct}>
-                  {cartItem?.photos && cartItem.photos.length > 0 && (
-                    <img
-                      src={cartItem.photos[0]?.imageUrl ?? ""}
-                      alt={cartItem.name}
-                      className={styles.cartProductImage}
-                    />
-                  )}
-
-                  <div>
-                    <h3 className={styles.cartProductName}>{cartItem.name}</h3>
-                    <p className={styles.cartProductDesc}>{cartItem.description}</p>
-                    <button
-                      className={styles.removeBtn}
-                      onClick={() => handleRemoveFromCart(cartItem)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-                <div className={styles.cartProductPrice}>${cartItem.price}</div>
-                <div className={styles.cartProductQuantity}>
-                  <button
-                    className={styles.quantityBtn}
-                    onClick={() => handleDecreaseCart(cartItem)}
-                  >
-                    -
-                  </button>
-                  <div className={styles.count}>{cartItem.cartQuantity}</div>
-                  <button
-                    className={styles.quantityBtn}
-                    onClick={() => handleAddToCart(cartItem)}
-                  >
-                    +
-                  </button>
-                </div>
-                <div className={styles.cartProductTotalPrice}>
-                  ${(cartItem?.price ?? 0) * cartItem.cartQuantity}
-                </div>
               </div>
-            ))}
-          </div>
-          <div className={styles.cartSummary}>
-            <button className={styles.clearBtn} onClick={handleClearCart}>
-              Clear Cart
-            </button>
-            <div className={styles.cartCheckout}>
-              <div className={styles.subtotal}>
-                <span>Subtotal</span>
-                <span className={styles.amount}>${cart.cartTotalAmount}</span>
               </div>
-              <p>Taxes and shipping calculated at checkout</p>
-              <button className={styles.checkoutBtn}>Check out</button>
-              <div className={styles.continueShopping}>
-                <Link href="/">
-               
+                
+              }
+                <div className={styles.continueShopping}>
+                  <Link href="/shop">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -156,15 +168,13 @@ const Cart = () => {
                       />
                     </svg>
                     <span>Continue Shopping</span>
-              
-                </Link>
-              </div>
-            </div>
+                  </Link>
+                </div>
           </div>
-        </div>
-      )}
+            
+        )}
       </div>
-      </Layout>
+    </Layout>
   );
 };
 

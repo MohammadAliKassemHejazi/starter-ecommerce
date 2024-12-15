@@ -41,6 +41,7 @@ const ProductList: React.FC<ProductListProps> = () => {
   };
 
   const handleAddToCart = (product: IProductModel) => {
+    console.log("handleAddToCart clicked")
     dispatch(addToCart(product));
   };
 
@@ -77,7 +78,7 @@ return (
               <div className="product">
                 {product.photos && (
                   <Image
-                    src={process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0]?.imageUrl ?? ""}
+                    src={process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0]?.imageUrl}
                     alt=""
                     width={300}
                     height={350}
@@ -96,9 +97,9 @@ return (
                     </Link>
                   </li>
                   <li className="icon">
-                    <Link href="/addtocart" legacyBehavior>
+                    <a  onClick={() => handleAddToCart(product)}>
                       <span className="fas fa-shopping-bag"></span>
-                    </Link>
+                    </a>
                   </li>
                 </ul>
               </div>

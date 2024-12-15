@@ -120,3 +120,29 @@
 .bi-arrow-left {
   margin-right: 5px;
 }
+.cartTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.cartTable th,
+.cartTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.cartTable th {
+  background-color: #f4f4f4;
+}
+
+.cartProduct {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cartProductImage {
+  border-radius: 5px;
+}
