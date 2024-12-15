@@ -8,14 +8,15 @@ import shopReducer from "./slices/shopSlice";
 import storeReducer from "./slices/storeSlice";
 import utilsReducer from "./slices/utilsSlice";
 import cartReducer from "./slices/cartSlice";
-
+import paymentreducer from "./slices/paymentSlice"
 const reducer = {
 	user: userReducer,
 	article: articleReducer,
 	products: shopReducer,
 	store : storeReducer,
 	utils: utilsReducer,
-	cart:cartReducer,
+	cart: cartReducer,
+	payment:paymentreducer
 };
 
 export const store = configureStore({

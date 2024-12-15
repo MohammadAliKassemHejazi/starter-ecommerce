@@ -5,6 +5,7 @@ import {
   clearCart,
   decreaseCart,
   getTotals,
+  loadCart,
   removeFromCart,
 } from "@/store/slices/cartSlice";
 import Link from "next/link";
@@ -14,46 +15,57 @@ import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";
 import Layout from "@/components/Layouts/Layout";
 import Image from "next/image";
-
+import CheckoutForm from "../payment/checkoutwithstripe";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(`${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!}`);
 const Cart = () => {
   // Type the useSelector hook to use RootState
   const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
- 
-    if (typeof window !== "undefined") {
-      const storedCartItems = localStorage.getItem("cartItems");
-      if (storedCartItems) {
-        const cartItems = JSON.parse(storedCartItems);
-        dispatch(addToCart(cartItems)); // Set items to Redux store
-      }
-      dispatch(getTotals());
-    }
-  }, [dispatch]);
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    dispatch(loadCart()).then(() => {
+    dispatch(getTotals());
+    });
+  }
+}, [dispatch]);
 
   // Type event handlers
   const handleAddToCart = (product: IProductModel) => {
-    dispatch(addToCart(product));
+    dispatch(addToCart(product)).then(() => {
+    dispatch(getTotals());
+    });;
+   
   };
 
   const handleDecreaseCart = (product: IProductModel) => {
-    dispatch(decreaseCart(product));
+    dispatch(decreaseCart(product)).then(() => {
+    dispatch(getTotals());
+    });;
+  
   };
 
   const handleRemoveFromCart = (product: IProductModel) => {
-    dispatch(removeFromCart(product));
+    dispatch(removeFromCart(product)).then(() => {
+    dispatch(getTotals());
+    });;
+ 
   };
 
   const handleClearCart = () => {
-    dispatch(clearCart());
+    dispatch(clearCart()).then(() => {
+    dispatch(getTotals());
+    });;
+
   };
 
   return (
     <Layout>
       <div className={styles.cartContainer}>
         <h2 className={styles.cartTitle}>Shopping Cart</h2>
-        {cart.cartTotalQuantity === 0 ? (
+        {cart.cartItems.length === 0 ? (
           <div className={styles.cartEmpty}>
             <p>Your cart is currently empty</p>
             <div className={styles.startShopping}>
@@ -88,8 +100,10 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                {cart.cartTotalQuantity > 0 && cart.cartItems.map((cartItem: CartItem) => (
-                  <tr key={cartItem.id}>
+                  {cart.cartItems.length > 0 && cart.cartItems.map((cartItem: CartItem) => (
+                  
+                 cartItem.id && <tr key={cartItem.id}>
+                 
                     <td className={styles.cartProduct}>
                       {cartItem?.photos && cartItem.photos.length > 0 && (
                         <Image
@@ -121,7 +135,7 @@ const Cart = () => {
                         +
                       </button>
                     </td>
-                    <td className={styles.cartProductTotalPrice}>
+                      <td className={styles.cartProductTotalPrice} >
                       ${(cartItem?.price ?? 0) * cartItem.cartQuantity}
                     </td>
                     <td>
@@ -136,7 +150,7 @@ const Cart = () => {
                 ))}
               </tbody>
             </table>
-           {cart.cartTotalQuantity > 0 && <div className={styles.cartSummary}>
+           {cart.cartItems.length > 0 && <div className={styles.cartSummary}>
               <button className={styles.clearBtn} onClick={handleClearCart}>
                 Clear Cart
               </button>
@@ -146,8 +160,10 @@ const Cart = () => {
                   <span className={styles.amount}>${cart.cartTotalAmount}</span>
                 </div>
                 <p>Taxes and shipping calculated at checkout</p>
-                <button className={styles.checkoutBtn}>Check out</button>
-              
+                {/* <button className={styles.checkoutBtn}>Check out</button> */}
+               <Elements stripe={stripePromise}>
+                    <CheckoutForm></CheckoutForm>
+                    </Elements>
               </div>
               </div>
                 

@@ -13,6 +13,14 @@ export interface IProductProps {
 }
 
 
+export const paymentService = {
+  createPayment: async (paymentMethodId: string) => {
+    const { data } = await httpClient.post('/payment/charge', {
+      paymentMethodId,
+    });
+    return data; // Return the data from the backend
+  },
+};
 export const requestProductById = async (id: string) => {
 	const { data: response } = await httpClient.get(
 		`/shop/get?id=${id}`

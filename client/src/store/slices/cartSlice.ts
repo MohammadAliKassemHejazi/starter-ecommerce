@@ -22,28 +22,24 @@ export const addToCart = createAsyncThunk<
   { state: RootState }
 >("cart/addToCart", async (product, { getState }) => {
   const state = getState().cart;
-  const existingIndex = state.cartItems.findIndex(
-    (item) => item.id === product.id
-  );
 
-  let updatedCartItems: CartItem[];
+  // Find the existing item in the cart
+  const existingItem = state.cartItems.find((item) => item.id === product.id);
 
-  if (existingIndex >= 0) {
-    updatedCartItems = [...state.cartItems];
-    updatedCartItems[existingIndex] = {
-      ...updatedCartItems[existingIndex],
-      cartQuantity: updatedCartItems[existingIndex].cartQuantity + 1,
-    };
-  } else {
-    const tempProductItem = { ...product, cartQuantity: 1 };
-    updatedCartItems = [...state.cartItems, tempProductItem];
-  }
+  // Update the cart items
+  const updatedCartItems: CartItem[] = existingItem
+    ? state.cartItems.map((item) =>
+        item.id === product.id ? { ...item, cartQuantity: item.cartQuantity + 1 } : item
+      )
+    : [...state.cartItems, { ...product, cartQuantity: 1 }];
 
+  // Update local storage with the new cart items (optional)
   localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+
+  // Return the updated cart items array
   return updatedCartItems;
 });
 
-// Decrease Cart Item Quantity Thunk
 export const decreaseCart = createAsyncThunk<
   CartItem[],
   IProductModel,
@@ -51,18 +47,34 @@ export const decreaseCart = createAsyncThunk<
 >("cart/decreaseCart", async (product, { getState }) => {
   const state = getState().cart;
   const itemIndex = state.cartItems.findIndex((item) => item.id === product.id);
-  let updatedCartItems = [...state.cartItems];
 
-  if (updatedCartItems[itemIndex].cartQuantity > 1) {
-    updatedCartItems[itemIndex].cartQuantity -= 1;
+  if (itemIndex >= 0) { // Check if item exists before accessing index
+    let updatedCartItems = [...state.cartItems];
+
+    console.log(updatedCartItems[itemIndex].cartQuantity)
+    
+if (updatedCartItems[itemIndex].cartQuantity > 1) {
+  updatedCartItems = updatedCartItems.map((item, index) =>
+    index === itemIndex
+      ? { ...item, cartQuantity: item.cartQuantity - 1 }
+      : item
+  );
+} else {
+  updatedCartItems = updatedCartItems.filter(
+    (item) => item.id !== product.id
+  );
+}
+
+
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+  
+    return updatedCartItems;
   } else {
-    updatedCartItems = updatedCartItems.filter(
-      (item) => item.id !== product.id
-    );
+    // Handle case where item doesn't exist (optional)
+    console.warn('Item not found in cart:', product.id);
+    console.log('Item not found in cart:', product.id)
+    return state.cartItems; // Return current state to avoid unexpected changes
   }
-
-  localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-  return updatedCartItems;
 });
 
 // Remove from Cart Thunk
@@ -108,39 +120,62 @@ export const clearCart = createAsyncThunk<CartItem[]>(
   }
 );
 
+// Load Cart from Local Storage Thunk
+export const loadCart = createAsyncThunk<CartItem[]>(
+  "cart/loadCart",
+  async () => {
+    // Retrieve cart items from localStorage
+    const storedCartItems = localStorage.getItem("cartItems");
+    // Parse and return the stored cart items or an empty array
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  }
+);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    
     builder.addCase(
       addToCart.fulfilled,
       (state, action: PayloadAction<CartItem[]>) => {
         state.cartItems = action.payload;
       }
     );
+
     builder.addCase(
       decreaseCart.fulfilled,
       (state, action: PayloadAction<CartItem[]>) => {
         state.cartItems = action.payload;
       }
     );
+
     builder.addCase(
       removeFromCart.fulfilled,
       (state, action: PayloadAction<CartItem[]>) => {
         state.cartItems = action.payload;
       }
     );
+
     builder.addCase(
       clearCart.fulfilled,
       (state, action: PayloadAction<CartItem[]>) => {
         state.cartItems = action.payload;
       }
     );
+
     builder.addCase(getTotals.fulfilled, (state, action) => {
       state.cartTotalAmount = action.payload.totalAmount;
       state.cartTotalQuantity = action.payload.totalQuantity;
     });
+
+    builder.addCase(
+      loadCart.fulfilled,
+      (state, action: PayloadAction<CartItem[]>) => {
+        state.cartItems = action.payload;
+      }
+    );
   },
 });
 

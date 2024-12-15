@@ -6,7 +6,20 @@ import { fetchProductsListing } from "@/store/slices/shopSlice";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
-interface ProductListProps {}
+import Swal from "sweetalert2";
+
+interface ProductListProps { }
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 
 const ProductList: React.FC<ProductListProps> = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +56,11 @@ const ProductList: React.FC<ProductListProps> = () => {
   const handleAddToCart = (product: IProductModel) => {
     console.log("handleAddToCart clicked")
     dispatch(addToCart(product));
+    console.log(product);
+       Toast.fire({
+      icon: "success",
+      title: "Added to cart",
+    });
   };
 
   const lastProductRef = useCallback(
