@@ -38,13 +38,12 @@ export const processPayment = async (
   }
 };
 
-// Verify Stripe webhook events
-export const verifyWebhook = (body: any, signature: any) => {
+export const verifyWebhook = (rawBody: Buffer | string, signature: string) => {
   try {
     return stripeClient.webhooks.constructEvent(
-      body,
+      rawBody,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET! // Use your webhook secret
     );
   } catch (error) {
     console.error('Webhook verification failed:', error);

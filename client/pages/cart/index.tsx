@@ -37,7 +37,6 @@ useEffect(() => {
     dispatch(addToCart(product)).then(() => {
     dispatch(getTotals());
     });;
-   
   };
 
   const handleDecreaseCart = (product: IProductModel) => {

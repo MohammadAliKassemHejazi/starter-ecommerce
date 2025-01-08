@@ -1,19 +1,17 @@
-"use strict";
-
 import { Model } from "sequelize";
 import { IOrderItemAttributes } from "../interfaces/types/models/orderitem.model.types";
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class OrderItem extends Model<IOrderItemAttributes> implements IOrderItemAttributes {
     id!: string;
-    // orderId!: string;
-    // productId!: string;
+    orderId!: string;
+    productId!: string;
     quantity!: number;
-    price!: number;
+    price!: number; // Price at the time of purchase
 
     static associate(models: any) {
       OrderItem.belongsTo(models.Order, { foreignKey: 'orderId', targetKey: 'id' });
-      OrderItem.belongsTo(models.Product, { foreignKey: 'productId' , targetKey: 'id'});
+      OrderItem.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' });
     }
   }
 

@@ -20,9 +20,15 @@ export const initiatePayment = async (req: Request, res: Response, next: NextFun
 // Handle Stripe webhook events
 export const handleWebhook = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const signature = req.headers['stripe-signature'];
-    const event = PaymentService.verifyWebhook(req.body, signature);
+    const signature = req.headers['stripe-signature'] as string;
+    const rawBody = req.body; // This is the raw request body
+
+    // Verify the webhook
+    const event = PaymentService.verifyWebhook(rawBody, signature);
+
+    // Handle the webhook event
     await PaymentService.handleWebhookEvent(event);
+
     res.status(200).json({ received: true });
   } catch (error) {
     next(error);

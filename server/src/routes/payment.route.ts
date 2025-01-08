@@ -15,11 +15,13 @@ protectedRoutes(router, Routes);
 
 router.post("/charge", paymentController.initiatePayment);
 
-router.post(
-  "/webhook",
-  express.raw({ type: "application/json" }), // Required for Stripe webhook signature verification
-  paymentController.handleWebhook
-);
+
+
+
+
+router.post('/webhook', express.raw({ type: 'application/json' }), paymentController.handleWebhook);
+
+
 
 
 

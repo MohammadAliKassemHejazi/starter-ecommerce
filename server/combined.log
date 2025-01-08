@@ -767,3 +767,19 @@
 {"level":"info","message":"Database synced"}
 {"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
 {"level":"info","message":"::1 - - [08/Jan/2025:16:12:28 +0000] \"POST /api/payment/charge HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
