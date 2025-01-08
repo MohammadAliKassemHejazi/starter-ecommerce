@@ -162,8 +162,8 @@ useEffect(() => {
                 <p>Taxes and shipping calculated at checkout</p>
                 {/* <button className={styles.checkoutBtn}>Check out</button> */}
                <Elements stripe={stripePromise}>
-                    <CheckoutForm></CheckoutForm>
-                    </Elements>
+                    <CheckoutForm amount={cart.cartTotalAmount} currency="USD" />
+               </Elements>
               </div>
               </div>
                 

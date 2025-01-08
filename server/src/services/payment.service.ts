@@ -13,13 +13,16 @@ const stripeClient = new stripe(config.Stripekey as string, {
 // Function to process customer payments
 
 export const processPayment = async (amount: number, currency: string, paymentMethodId: string): Promise<IPaymentResponse> => {
+ 
   try {
+    var amount = Math.round(amount * 100) as number; 
     const paymentIntent = await stripeClient.paymentIntents.create({
-      amount, // e.g., $50.00 (5000 cents)
+      amount, 
       currency,
-      payment_method: paymentMethodId,
-      confirmation_method: 'manual',
-      confirm: true,
+      payment_method: paymentMethodId, 
+      automatic_payment_methods: {
+        enabled: true,
+      },
     });
 
     if (paymentIntent.status === 'succeeded') {

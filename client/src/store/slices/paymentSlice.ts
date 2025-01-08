@@ -15,22 +15,20 @@ const initialState: PaymentState = {
   error: null, // No error initially
 };
 
-// Create the createPayment async thunk with the correct payload type
 export const createPayment = createAsyncThunk<
-  string, // The return type of the async function (response from the backend)
-  string, // The type of the argument (paymentMethodId)
-  { rejectValue: string } // Specify that the rejected value is a string (error message)
+  string, // Return type (response from the backend)
+  { amount: number; currency: string; paymentMethodId: string }, // Argument type
+  { rejectValue: string } // Rejected value type
 >(
   'payment/create',
-  async (paymentMethodId: string, { rejectWithValue }) => {
+  async ({ amount, currency, paymentMethodId }, { rejectWithValue }) => {
     try {
-      const response = await paymentService.createPayment(paymentMethodId);
+      const response = await paymentService.createPayment({ amount, currency, paymentMethodId });
       return response; // Return the response from the backend
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message || 'Failed to process payment');
       }
-      // Handle non-Error types (e.g., network errors, etc.)
       return rejectWithValue('Failed to process payment');
     }
   }
