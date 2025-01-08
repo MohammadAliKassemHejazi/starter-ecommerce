@@ -715,3 +715,55 @@
 {"level":"info","message":"Database synced"}
 {"level":"info","message":"Server is running on port 5300 in development mode"}
 {"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:51:40 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 349 \"-\" \"axios/1.7.7\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:51:40 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:51:55 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:51:57 +0000] \"GET /api/articles HTTP/1.1\" 200 11 \"-\" \"axios/1.7.7\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:51:57 +0000] \"GET /api/shop/get/productListing/?page=1&pageSize=10 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"error","name":"SequelizeDatabaseError","original":{"code":"42703","file":"parse_relation.c","length":104,"line":"3718","name":"error","position":"775","routine":"errorMissingColumn","severity":"ERROR","sql":"SELECT \"Product\".\"id\", \"Product\".\"name\", \"Product\".\"description\", \"Product\".\"price\", \"Product\".\"isActive\", \"Product\".\"ownerId\", \"Product\".\"categoryId\", \"Product\".\"subcategoryId\", \"Product\".\"storeId\", \"Product\".\"metaTitle\", \"Product\".\"metaDescription\", \"Product\".\"slug\", \"Product\".\"tags\", \"Product\".\"discount\", \"Product\".\"createdAt\", \"Product\".\"updatedAt\", \"ProductImages\".\"id\" AS \"ProductImages.id\", \"ProductImages\".\"productId\" AS \"ProductImages.productId\", \"ProductImages\".\"imageUrl\" AS \"ProductImages.imageUrl\", \"ProductImages\".\"createdAt\" AS \"ProductImages.createdAt\", \"ProductImages\".\"updatedAt\" AS \"ProductImages.updatedAt\" FROM \"Products\" AS \"Product\" LEFT OUTER JOIN \"ProductImages\" AS \"ProductImages\" ON \"Product\".\"id\" = \"ProductImages\".\"productId\" LIMIT NaN OFFSET NaN;"},"parameters":{},"parent":{"code":"42703","file":"parse_relation.c","length":104,"line":"3718","name":"error","position":"775","routine":"errorMissingColumn","severity":"ERROR","sql":"SELECT \"Product\".\"id\", \"Product\".\"name\", \"Product\".\"description\", \"Product\".\"price\", \"Product\".\"isActive\", \"Product\".\"ownerId\", \"Product\".\"categoryId\", \"Product\".\"subcategoryId\", \"Product\".\"storeId\", \"Product\".\"metaTitle\", \"Product\".\"metaDescription\", \"Product\".\"slug\", \"Product\".\"tags\", \"Product\".\"discount\", \"Product\".\"createdAt\", \"Product\".\"updatedAt\", \"ProductImages\".\"id\" AS \"ProductImages.id\", \"ProductImages\".\"productId\" AS \"ProductImages.productId\", \"ProductImages\".\"imageUrl\" AS \"ProductImages.imageUrl\", \"ProductImages\".\"createdAt\" AS \"ProductImages.createdAt\", \"ProductImages\".\"updatedAt\" AS \"ProductImages.updatedAt\" FROM \"Products\" AS \"Product\" LEFT OUTER JOIN \"ProductImages\" AS \"ProductImages\" ON \"Product\".\"id\" = \"ProductImages\".\"productId\" LIMIT NaN OFFSET NaN;"},"sql":"SELECT \"Product\".\"id\", \"Product\".\"name\", \"Product\".\"description\", \"Product\".\"price\", \"Product\".\"isActive\", \"Product\".\"ownerId\", \"Product\".\"categoryId\", \"Product\".\"subcategoryId\", \"Product\".\"storeId\", \"Product\".\"metaTitle\", \"Product\".\"metaDescription\", \"Product\".\"slug\", \"Product\".\"tags\", \"Product\".\"discount\", \"Product\".\"createdAt\", \"Product\".\"updatedAt\", \"ProductImages\".\"id\" AS \"ProductImages.id\", \"ProductImages\".\"productId\" AS \"ProductImages.productId\", \"ProductImages\".\"imageUrl\" AS \"ProductImages.imageUrl\", \"ProductImages\".\"createdAt\" AS \"ProductImages.createdAt\", \"ProductImages\".\"updatedAt\" AS \"ProductImages.updatedAt\" FROM \"Products\" AS \"Product\" LEFT OUTER JOIN \"ProductImages\" AS \"ProductImages\" ON \"Product\".\"id\" = \"ProductImages\".\"productId\" LIMIT NaN OFFSET NaN;"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:51:57 +0000] \"GET /api/shop/get/productListing/?page=undefined&pageSize=undefined HTTP/1.1\" 500 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:52:35 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 349 \"-\" \"axios/1.7.7\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:52:56 +0000] \"POST /api/payment/charge HTTP/1.1\" 200 153 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:52:58 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 349 \"-\" \"axios/1.7.7\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:24 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:24 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:24 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:51 +0000] \"POST /api/payment/charge HTTP/1.1\" 200 153 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:52 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:53 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:53 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:53 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 349 \"-\" \"axios/1.7.7\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:15:57:55 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:07:27 +0000] \"POST /api/payment/charge HTTP/1.1\" 200 153 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:07:27 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:07:28 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:07:29 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:07:29 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 200 349 \"-\" \"axios/1.7.7\""}
+{"level":"error"}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:07:31 +0000] \"POST /api/payment/webhook HTTP/1.1\" 500 52 \"-\" \"Stripe/1.0 (+https://stripe.com/docs/webhooks)\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:11:22 +0000] \"POST /api/payment/charge HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:11:47 +0000] \"POST /api/payment/charge HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [08/Jan/2025:16:12:28 +0000] \"POST /api/payment/charge HTTP/1.1\" 401 53 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36\""}

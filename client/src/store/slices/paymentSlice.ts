@@ -1,22 +1,22 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "../store"; // Import RootState if it's already defined
-import { paymentService } from "@/services/shopService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { paymentService } from '@/services/shopService';
 
-
-// Define the PaymentState interface
 interface PaymentState {
-  paymentStatus: 'idle' | 'loading' | 'succeeded' | 'failed'; // Can be one of these states
-  error: string | null; // Error can be a string or null
+  paymentStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string | null;
+  clientSecret: string | null; // Store clientSecret for Stripe confirmation
 }
 
-// Define the initial state with the PaymentState type
 const initialState: PaymentState = {
-  paymentStatus: 'idle', // Default status is idle
-  error: null, // No error initially
+  paymentStatus: 'idle',
+  error: null,
+  clientSecret: null,
 };
 
+// Thunk to create a payment
 export const createPayment = createAsyncThunk<
-  string, // Return type (response from the backend)
+  { clientSecret: string }, // Return type
   { amount: number; currency: string; paymentMethodId: string }, // Argument type
   { rejectValue: string } // Rejected value type
 >(
@@ -24,7 +24,7 @@ export const createPayment = createAsyncThunk<
   async ({ amount, currency, paymentMethodId }, { rejectWithValue }) => {
     try {
       const response = await paymentService.createPayment({ amount, currency, paymentMethodId });
-      return response; // Return the response from the backend
+      return { clientSecret: response.body.clientSecret }; // Return clientSecret
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message || 'Failed to process payment');
@@ -34,7 +34,6 @@ export const createPayment = createAsyncThunk<
   }
 );
 
-// Create the paymentSlice
 const paymentSlice = createSlice({
   name: 'payment',
   initialState,
@@ -42,17 +41,19 @@ const paymentSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createPayment.pending, (state) => {
-        state.paymentStatus = 'loading'; // Set status to loading
+        state.paymentStatus = 'loading';
       })
-      .addCase(createPayment.fulfilled, (state) => {
-        state.paymentStatus = 'succeeded'; // Set status to succeeded
-        state.error = null; // Clear any previous errors
+      .addCase(createPayment.fulfilled, (state, action) => {
+        state.paymentStatus = 'succeeded';
+        state.clientSecret = action.payload.clientSecret; // Store clientSecret
+        state.error = null;
       })
       .addCase(createPayment.rejected, (state, action) => {
-        state.paymentStatus = 'failed'; // Set status to failed
-        state.error = action.payload as string; // Set the error message
+        state.paymentStatus = 'failed';
+        state.error = action.payload as string;
       });
   },
 });
-export const PaymentSelector = (store: RootState): string | undefined => store.payment.paymentStatus;
+
+export const PaymentSelector = (store: RootState): PaymentState => store.payment;
 export default paymentSlice.reducer;
