@@ -16,13 +16,14 @@ module.exports = (sequelize: any) => {
       // one to one realtion
       User.hasOne(models.RoleUser, { foreignKey: 'userId' });
       User.hasOne(models.Package, { foreignKey: 'userId'}); // User can have one package subscription
-    
+      User.hasOne(models.Cart, { foreignKey: 'userId' }); // User can have one cart 
+      User.hasOne(models.Favorite, { foreignKey: 'userId' }); // User can have many favorites that containes many favorte items
+     
       //  one to many
-      User.hasMany(models.Store, { foreignKey: 'userId'}); // User can have many stores
-      User.hasMany(models.Article, { foreignKey: 'userId' }); // User can have many articles
-      User.hasMany(models.Order, { foreignKey: 'userId' }); // User can have many orders
-      User.hasMany(models.CartItem, { foreignKey: 'userId' }); // User can have many cart items
-      User.hasMany(models.FavoriteItem, { foreignKey: 'userId' }); // User can have many favorite items
+      User.hasMany(models.Store, { foreignKey: 'userId', onDelete: 'CASCADE' }); // User can have many stores
+      User.hasMany(models.Article, { foreignKey: 'userId' , onDelete: 'CASCADE' }); // User can have many articles
+      User.hasMany(models.Order, { foreignKey: 'userId', onDelete: 'CASCADE' });
+      
     }
   }
 

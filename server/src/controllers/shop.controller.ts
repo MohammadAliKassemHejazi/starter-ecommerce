@@ -87,7 +87,7 @@ export const handleUpdate = async (
  request: CustomRequest,
   response: Response
 ): Promise<void> => {
-  const UserId = request.UserId; // Assuming UserId is accessible via middleware
+  const UserId = request.UserId; 
   const userSession = await userService.userSession(UserId!);
   response.json(userSession);
 };
@@ -167,8 +167,7 @@ export const getProductsByStore =
   }
   };
 
-  export const getProductsListing =
-  async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
+  export const getProductsListing = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
 
 
   const { page = 1, pageSize = 10 } = req.query;

@@ -9,7 +9,7 @@ module.exports = (sequelize: Sequelize) => {
     size!: string;
 
     static associate(models: any) {
-      Size.hasMany(models.SizeItem, { foreignKey: 'sizeId', sourceKey: 'id' });
+      Size.hasMany(models.SizeItem, { foreignKey: 'sizeId', sourceKey: 'id', onDelete: 'CASCADE'  });
     }
   }
 

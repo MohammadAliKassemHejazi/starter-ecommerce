@@ -1,98 +1,140 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store"; // Import RootState if it's already defined
 import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";
+import {
+  addToCart as addToCartService,
+  decreaseCart as decreaseCartService,
+  removeFromCart as removeFromCartService,
+  clearCart as clearCartService,
+  loadCart as loadCartService,
+} from "@/services/paymentService";
+
 interface CartState {
   cartItems: CartItem[];
   cartTotalQuantity: number;
   cartTotalAmount: number;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
 }
 
-// Initial state
 const initialState: CartState = {
-  cartItems:  [],
+  cartItems: [],
   cartTotalQuantity: 0,
   cartTotalAmount: 0,
+  status: "idle",
+  error: null,
 };
 
-// Add to Cart Thunk
-export const addToCart = createAsyncThunk<
-  CartItem[],
-  IProductModel,
-  { state: RootState }
->("cart/addToCart", async (product, { getState }) => {
-  const state = getState().cart;
-
-  // Find the existing item in the cart
-  const existingItem = state.cartItems.find((item) => item.id === product.id);
-
-  // Update the cart items
-  const updatedCartItems: CartItem[] = existingItem
-    ? state.cartItems.map((item) =>
-        item.id === product.id ? { ...item, cartQuantity: item.cartQuantity + 1 } : item
-      )
-    : [...state.cartItems, { ...product, cartQuantity: 1 }];
-
-  // Update local storage with the new cart items (optional)
-  localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-
-  // Return the updated cart items array
-  return updatedCartItems;
-});
-
-export const decreaseCart = createAsyncThunk<
-  CartItem[],
-  IProductModel,
-  { state: RootState }
->("cart/decreaseCart", async (product, { getState }) => {
-  const state = getState().cart;
-  const itemIndex = state.cartItems.findIndex((item) => item.id === product.id);
-
-  if (itemIndex >= 0) { // Check if item exists before accessing index
-    let updatedCartItems = [...state.cartItems];
-
-    console.log(updatedCartItems[itemIndex].cartQuantity)
-    
-if (updatedCartItems[itemIndex].cartQuantity > 1) {
-  updatedCartItems = updatedCartItems.map((item, index) =>
-    index === itemIndex
-      ? { ...item, cartQuantity: item.cartQuantity - 1 }
-      : item
-  );
-} else {
-  updatedCartItems = updatedCartItems.filter(
-    (item) => item.id !== product.id
-  );
-}
-
-
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-  
-    return updatedCartItems;
-  } else {
-    // Handle case where item doesn't exist (optional)
-    console.warn('Item not found in cart:', product.id);
-    console.log('Item not found in cart:', product.id)
-    return state.cartItems; // Return current state to avoid unexpected changes
+// Fetch cart from the backend
+export const fetchCart = createAsyncThunk(
+  "cart/fetchCart",
+  async (_, { rejectWithValue }) => {
+    try {
+      const cartItems = await loadCartService();
+      return cartItems;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "Failed to fetch cart");
+    }
   }
-});
+);
 
-// Remove from Cart Thunk
-export const removeFromCart = createAsyncThunk<
-  CartItem[],
-  IProductModel,
-  { state: RootState }
->("cart/removeFromCart", async (product, { getState }) => {
-  const state = getState().cart;
-  const updatedCartItems = state.cartItems.filter(
-    (item) => item.id !== product.id
-  );
-  localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+// Add/update item in the cart
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async (product: IProductModel, { rejectWithValue, dispatch, getState }) => {
+    const state = getState() as { cart: CartState };
+    const existingItem = state.cart.cartItems.find((item) => item.id === product.id);
 
-  return updatedCartItems;
-});
+    const quantity = existingItem ? existingItem.cartQuantity + 1 : 1;
 
-// Define the getTotals reducer
+    // Optimistically update the Redux state
+    dispatch(cartSlice.actions.addToCartOptimistic({ product, quantity }));
+
+    try {
+      // Perform the backend call
+      await addToCartService(product.id ?? "", quantity, product.price ?? 0);
+    } catch (error: any) {
+      // Revert the Redux state if the backend call fails
+      dispatch(cartSlice.actions.revertAddToCart({ product, quantity }));
+      return rejectWithValue(error.response?.data || "Failed to add to cart");
+    }
+  }
+);
+
+// Decrease item quantity in the cart
+export const decreaseCart = createAsyncThunk(
+  "cart/decreaseCart",
+  async (product: IProductModel, { rejectWithValue, dispatch, getState }) => {
+    const state = getState() as { cart: CartState };
+    const existingItem = state.cart.cartItems.find((item) => item.id === product.id);
+
+    if (existingItem && existingItem.cartQuantity > 1) {
+      const quantity = existingItem.cartQuantity - 1;
+
+      // Optimistically update the Redux state
+      dispatch(cartSlice.actions.decreaseCartOptimistic({ product, quantity }));
+
+      try {
+        // Perform the backend call
+        await decreaseCartService(product.id ?? "", quantity);
+      } catch (error: any) {
+        // Revert the Redux state if the backend call fails
+        dispatch(cartSlice.actions.revertDecreaseCart({ product, quantity }));
+        return rejectWithValue(error.response?.data || "Failed to decrease cart");
+      }
+    } else {
+      // Optimistically remove the item from the cart
+      dispatch(cartSlice.actions.removeFromCartOptimistic(product.id ?? ""));
+
+      try {
+        // Perform the backend call
+        await removeFromCartService(product.id ?? "");
+      } catch (error: any) {
+        // Revert the Redux state if the backend call fails
+        dispatch(cartSlice.actions.revertRemoveFromCart(product.id ?? ""));
+        return rejectWithValue(error.response?.data || "Failed to remove from cart");
+      }
+    }
+  }
+);
+
+// Remove item from the cart
+export const removeFromCart = createAsyncThunk(
+  "cart/removeFromCart",
+  async (product: IProductModel, { rejectWithValue, dispatch }) => {
+    // Optimistically remove the item from the cart
+    dispatch(cartSlice.actions.removeFromCartOptimistic(product.id ?? ""));
+
+    try {
+      // Perform the backend call
+      await removeFromCartService(product.id ?? "");
+    } catch (error: any) {
+      // Revert the Redux state if the backend call fails
+      dispatch(cartSlice.actions.revertRemoveFromCart(product.id ?? ""));
+      return rejectWithValue(error.response?.data || "Failed to remove from cart");
+    }
+  }
+);
+
+// Clear the cart
+export const clearCart = createAsyncThunk(
+  "cart/clearCart",
+  async (_, { rejectWithValue, dispatch }) => {
+    // Optimistically clear the cart
+    dispatch(cartSlice.actions.clearCartOptimistic());
+
+    try {
+      // Perform the backend call
+      await clearCartService();
+    } catch (error: any) {
+      // Revert the Redux state if the backend call fails
+      dispatch(cartSlice.actions.revertClearCart());
+      return rejectWithValue(error.response?.data || "Failed to clear cart");
+    }
+  }
+);
+
+// Calculate totals
 export const getTotals = createAsyncThunk(
   "cart/getTotals",
   async (_, { getState }) => {
@@ -111,72 +153,91 @@ export const getTotals = createAsyncThunk(
   }
 );
 
-// Clear Cart Thunk
-export const clearCart = createAsyncThunk<CartItem[]>(
-  "cart/clearCart",
-  async () => {
-    localStorage.setItem("cartItems", JSON.stringify([]));
-    return [];
-  }
-);
-
-// Load Cart from Local Storage Thunk
-export const loadCart = createAsyncThunk<CartItem[]>(
-  "cart/loadCart",
-  async () => {
-    // Retrieve cart items from localStorage
-    const storedCartItems = localStorage.getItem("cartItems");
-    // Parse and return the stored cart items or an empty array
-    return storedCartItems ? JSON.parse(storedCartItems) : [];
-  }
-);
-
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    // Optimistic updates
+    addToCartOptimistic: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
+      const { product, quantity } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === product.id);
+
+      if (existingItem) {
+        existingItem.cartQuantity += 1;
+      } else {
+        state.cartItems.push({ ...product, cartQuantity: quantity });
+      }
+    },
+    decreaseCartOptimistic: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
+      const { product, quantity } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === product.id);
+
+      if (existingItem) {
+        existingItem.cartQuantity = quantity;
+      }
+    },
+    removeFromCartOptimistic: (state, action: PayloadAction<string>) => {
+      state.cartItems = state.cartItems.filter((item) => item.id !== action.payload);
+    },
+    clearCartOptimistic: (state) => {
+      state.cartItems = [];
+    },
+
+    // Revert optimistic updates
+    revertAddToCart: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
+      const { product, quantity } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === product.id);
+
+      if (existingItem) {
+        existingItem.cartQuantity -= 1;
+      } else {
+        state.cartItems = state.cartItems.filter((item) => item.id !== product.id);
+      }
+    },
+    revertDecreaseCart: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
+      const { product, quantity } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === product.id);
+
+      if (existingItem) {
+        existingItem.cartQuantity += 1;
+      }
+    },
+    revertRemoveFromCart: (state, action: PayloadAction<string>) => {
+      // Re-add the removed item (you may need to store the removed item in a separate state for this)
+    },
+    revertClearCart: (state) => {
+      // Restore the previous cart items (you may need to store the previous state for this)
+    },
+  },
   extraReducers: (builder) => {
-    
-    builder.addCase(
-      addToCart.fulfilled,
-      (state, action: PayloadAction<CartItem[]>) => {
+    builder
+      .addCase(fetchCart.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchCart.fulfilled, (state, action: PayloadAction<CartItem[]>) => {
+        state.status = "succeeded";
         state.cartItems = action.payload;
-      }
-    );
-
-    builder.addCase(
-      decreaseCart.fulfilled,
-      (state, action: PayloadAction<CartItem[]>) => {
-        state.cartItems = action.payload;
-      }
-    );
-
-    builder.addCase(
-      removeFromCart.fulfilled,
-      (state, action: PayloadAction<CartItem[]>) => {
-        state.cartItems = action.payload;
-      }
-    );
-
-    builder.addCase(
-      clearCart.fulfilled,
-      (state, action: PayloadAction<CartItem[]>) => {
-        state.cartItems = action.payload;
-      }
-    );
-
-    builder.addCase(getTotals.fulfilled, (state, action) => {
-      state.cartTotalAmount = action.payload.totalAmount;
-      state.cartTotalQuantity = action.payload.totalQuantity;
-    });
-
-    builder.addCase(
-      loadCart.fulfilled,
-      (state, action: PayloadAction<CartItem[]>) => {
-        state.cartItems = action.payload;
-      }
-    );
+      })
+      .addCase(fetchCart.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(getTotals.fulfilled, (state, action) => {
+        state.cartTotalAmount = action.payload.totalAmount;
+        state.cartTotalQuantity = action.payload.totalQuantity;
+      });
   },
 });
+
+export const {
+  addToCartOptimistic,
+  decreaseCartOptimistic,
+  removeFromCartOptimistic,
+  clearCartOptimistic,
+  revertAddToCart,
+  revertDecreaseCart,
+  revertRemoveFromCart,
+  revertClearCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

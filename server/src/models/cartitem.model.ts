@@ -6,38 +6,44 @@ import { ICartItemAttributes } from "../interfaces/types/models/cartitem.model.t
 module.exports = (sequelize: any, DataTypes: any) => {
   class CartItem extends Model<ICartItemAttributes> implements ICartItemAttributes {
     id!: string;
-    // cartId!: string;
-    // productId!: string;
     quantity!: number;
 
     static associate(models: any) {
-      CartItem.belongsTo(models.Cart, { foreignKey: 'cartId' , targetKey: 'id'});
-      CartItem.belongsTo(models.Product, { foreignKey: 'productId' , targetKey: 'id'});
+      // Define the relationship with Cart
+      CartItem.belongsTo(models.Cart, {
+        foreignKey: "cartId", // Foreign key in CartItem pointing to Cart
+      });
+
+      // Define the relationship with Product
+CartItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
     }
   }
 
-  CartItem.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+  CartItem.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      cartId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      productId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
     },
-    cartId: {
-      type: DataTypes.UUID,
-      allowNull: false
-    },
-    productId: {
-      type: DataTypes.UUID,
-      allowNull: false
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    {
+      sequelize,
+      modelName: "CartItem",
     }
-  }, {
-    sequelize,
-    modelName: 'CartItem'
-  });
+  );
 
   return CartItem;
 };

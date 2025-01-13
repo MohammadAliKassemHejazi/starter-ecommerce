@@ -57,7 +57,7 @@ export const requestCreateProducts = async (Product: FormData): Promise<any> => 
 }
 
 export const requestUpdateArticles = async (Product: FormData): Promise<any> => {
-	const { data: response } = await httpClient.patch("/articles/update" , Product)
+	const { data: response } = await httpClient.patch("/shop/update" , Product)
 	return response
 }
 

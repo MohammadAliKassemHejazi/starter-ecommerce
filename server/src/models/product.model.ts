@@ -2,10 +2,6 @@
 
 import { Model, UUIDV4, DataTypes, ForeignKey, Sequelize } from "sequelize";
 import { IProductAttributes } from "../interfaces/types/models/product.model.types";
-import { IUserAttributes } from "../interfaces/types/models/user.model.types";
-import { ICategoryAttributes } from "../interfaces/types/models/category.model.types";
-import { ISubcategoryAttributes } from "../interfaces/types/models/subcategory.model.types";
-import { IStoreAttributes } from "../interfaces/types/models/store.model.types";
 
 module.exports = (sequelize: Sequelize) => {
   class Product extends Model<IProductAttributes> implements IProductAttributes {
@@ -15,10 +11,6 @@ module.exports = (sequelize: Sequelize) => {
     price!: number;
     stockQuantity?: number;
     isActive?: boolean;
-    // ownerId!: ForeignKey<IUserAttributes['id']>;
-    // categoryId!: ForeignKey<ICategoryAttributes['id']>;
-    // subcategoryId!: ForeignKey<ISubcategoryAttributes['id']>;
-    // storeId!: ForeignKey<IStoreAttributes['id']>;
     metaTitle?: string;
     metaDescription?: string;
     slug?: string;
@@ -26,7 +18,7 @@ module.exports = (sequelize: Sequelize) => {
     discount?: number;
 
     static associate(models: any) {
-        Product.belongsTo(models.User, { foreignKey: 'ownerId', targetKey: 'id', onDelete: 'CASCADE' });
+      Product.belongsTo(models.User, { foreignKey: 'ownerId', targetKey: 'id', onDelete: 'CASCADE' });
       Product.belongsTo(models.Category, { foreignKey: 'categoryId', targetKey: 'id', onDelete: 'CASCADE' });
       Product.belongsTo(models.SubCategory, { foreignKey: 'subcategoryId', targetKey: 'id', onDelete: 'CASCADE' });
       Product.belongsTo(models.Store, { foreignKey: 'storeId', targetKey: 'id', onDelete: 'CASCADE' });
@@ -34,7 +26,7 @@ module.exports = (sequelize: Sequelize) => {
       Product.hasMany(models.ProductImage, { foreignKey: 'productId', onDelete: 'CASCADE' });
       Product.hasMany(models.CartItem, { foreignKey: 'productId', onDelete: 'CASCADE' });
       Product.hasMany(models.Favorite, { foreignKey: 'productId', onDelete: 'CASCADE' });
-      Product.hasMany(models.OrderItem, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.OrderItem, { foreignKey: 'productId'});
       Product.hasMany(models.Comment, { foreignKey: 'productId', onDelete: 'CASCADE' });
       Product.hasMany(models.SizeItem, { foreignKey: 'productId', onDelete: 'CASCADE' });
     }

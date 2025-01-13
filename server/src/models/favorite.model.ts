@@ -10,7 +10,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
  Favorite.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
-      Favorite.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' });
+    Favorite.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
     }
   }
 

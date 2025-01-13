@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import winston from 'winston';
 
-import { authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter,paymentRoute } from './src/routes';
+import { cartRouter,authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter,paymentRouter } from './src/routes';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
@@ -16,6 +16,7 @@ import path from 'node:path';
 import fs from 'fs';
 import * as  spdy from 'spdy';
 import seedDatabase from './seedDataBase';
+import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.types';
 // Set up Winston for logging
 
 const logger = winston.createLogger({
@@ -48,7 +49,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(helmet()); // Apply helmet for security headers
 
 // Increase the request body size limit for JSON bodies
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ verify: function(req : CustomRequest, res, buf) {
+        if (req.path === '/api/payment/webhook') {
+            req.rawBody = buf;
+        }
+    },limit: '50mb' }));
 
 // Increase the request body size limit for URL-encoded bodies
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -117,7 +122,8 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
-app.use('/api/payment', paymentRoute);
+app.use('/api/cart', cartRouter);
+app.use('/api/payment', paymentRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/utile', utileRouter);
 app.use('/api/users', userRouter);
@@ -282,7 +288,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   db.sequelize.sync().then(() => {
         logger.info('Database synced');
-         //seedDatabase()
+        // seedDatabase()
     }).catch((err: Error) => {
         logger.error('Error syncing database:', err);
     });

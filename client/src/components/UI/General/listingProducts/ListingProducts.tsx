@@ -105,7 +105,7 @@ return (
 
                 <ul className="d-flex align-items-center justify-content-center list-unstyled icons">
                   <li className="icon">
-                    <Link href={`/shop/${product.id}`} legacyBehavior>
+                    <Link href={`/shop/product/${product.id}`} legacyBehavior>
                       <span className="fas fa-expand-arrows-alt"></span>
                     </Link>
                   </li>

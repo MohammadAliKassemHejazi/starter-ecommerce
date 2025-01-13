@@ -8,7 +8,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: string;
 
     static associate(models: any) {
-      Cart.hasMany(models.CartItem);
+      // Define the relationship with User
+      Cart.belongsTo(models.User, {
+        foreignKey: "userId",
+        onDelete: "CASCADE",
+      });
+
+      // Define the relationship with CartItem
+      Cart.hasMany(models.CartItem, {
+        foreignKey: "cartId", // Foreign key in CartItem pointing to Cart
+        onDelete: "CASCADE",
+      });
     }
   }
 
@@ -19,6 +29,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         defaultValue: UUIDV4,
         allowNull: false,
         primaryKey: true,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
       },
     },
     {

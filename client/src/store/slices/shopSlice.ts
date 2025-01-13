@@ -80,7 +80,16 @@ export const deleteProductImage = createAsyncThunk(
 export const articleSlice = createSlice({
   name: "products",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetProducts: (state) => {
+      state.products = []; 
+      state.Storeproducts = [];
+      state.total = 0;
+      state.page = 1; 
+      state.pageSize = 10; 
+      state.error = ""; 
+      state.product = undefined; 
+    }},
   extraReducers: (builder) => {
     builder.addCase(fetchProductById.fulfilled, (state, action) => {
       state.product = action.payload;
@@ -132,7 +141,7 @@ builder.addCase(fetchProductsListing.rejected, (state) => {
 
   },
 });
-
+export const { resetProducts } = articleSlice.actions;
 export const productSelector = (store: RootState): IProductModel[] | undefined => store.products.products;
 export const productByStoreSelector = (store: RootState): IProductModel[] | undefined => store.products.Storeproducts;
 export const totalProductsSelector = (store: RootState): number => store.products.total;

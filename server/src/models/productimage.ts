@@ -10,7 +10,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     imageUrl!: string;
 
     static associate(models: any) {
-      ProductImage.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' }); // Specify the foreign key
+      ProductImage.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
     }
   }
   

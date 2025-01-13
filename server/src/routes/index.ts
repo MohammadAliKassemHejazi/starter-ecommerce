@@ -4,7 +4,7 @@ import articleRouter from "./article.route";
 import shopRouter from "./shop.route";
 import storeRouter from "./store.route";
 import utileRouter from "./utile.route";
-import paymentRoute from "./payment.route";
+import paymentRouter from "./payment.route";
+import cartRouter from "./cart.route"
 
-
-export { userRouter, authRouter, articleRouter,shopRouter,storeRouter,utileRouter,paymentRoute};
+export { cartRouter,userRouter, authRouter, articleRouter,shopRouter,storeRouter,utileRouter,paymentRouter};

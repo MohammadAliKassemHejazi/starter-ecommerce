@@ -9,8 +9,8 @@ module.exports = (sequelize: any) => {
     name!: string;
 
     static associate(models: any) {
-      Role.hasMany(models.RoleUser, { foreignKey: 'roleId' }); // Role has many RoleUsers
-      Role.hasMany(models.RolePermission, { foreignKey: 'roleId' }); // Role has many RolePermissions
+      Role.hasMany(models.RoleUser, { foreignKey: 'roleId' , onDelete: 'CASCADE' }); // Role has many RoleUsers
+      Role.hasMany(models.RolePermission, { foreignKey: 'roleId', onDelete: 'CASCADE'  }); // Role has many RolePermissions
     }
   }
 

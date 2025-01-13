@@ -1,7 +1,7 @@
 "use strict";
-import { ForeignKey, Model, UUIDV4 } from "sequelize";
+import {  Model, UUIDV4 } from "sequelize";
 import { IArticleAttributes } from "../interfaces/types/models/article.model.types";
-import { IUserAttributes } from "interfaces/types/models/user.model.types";
+
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Article extends Model<IArticleAttributes> implements IArticleAttributes {

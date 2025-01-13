@@ -12,7 +12,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
       SubCategory.belongsTo(models.Category, {  targetKey: 'id' ,foreignKey: 'categoryId' });
-      SubCategory.hasMany(models.Product, {  foreignKey: 'subcategoryId' });
+      SubCategory.hasMany(models.Product, {  foreignKey: 'subcategoryId' , onDelete: 'CASCADE'  });
     }
   }
 
