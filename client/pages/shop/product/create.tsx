@@ -24,7 +24,7 @@ import {
 import { useSelector } from "react-redux";
 import { ISize } from "@/models/size.model";
 
-const isonline = false
+const isonline = false;
 
 const Toast = Swal.mixin({
   toast: true,
@@ -55,16 +55,18 @@ function CreateProduct() {
     event: React.ChangeEvent<HTMLSelectElement>,
     setFieldValue: Function
   ) => {
-     const selectedStoreId = event.target.value;
-  const selectedStore = listOfStores?.find(store => store.id === selectedStoreId);
-  const categoryId = selectedStore ? selectedStore.categoryId : '';
+    const selectedStoreId = event.target.value;
+    const selectedStore = listOfStores?.find(
+      (store) => store.id === selectedStoreId
+    );
+    const categoryId = selectedStore ? selectedStore.categoryId : "";
 
-  // Set the storeId
-  setFieldValue("storeId", selectedStoreId);
-  // Set the corresponding categoryId
-  setFieldValue("categoryId", categoryId);
+    // Set the storeId
+    setFieldValue("storeId", selectedStoreId);
+    // Set the corresponding categoryId
+    setFieldValue("categoryId", categoryId);
 
-  dispatch(fetchAllSubCategoriesID(categoryId));
+    dispatch(fetchAllSubCategoriesID(categoryId));
   };
 
   const [product, setProduct] = useState<IProductModel>({
@@ -92,7 +94,7 @@ function CreateProduct() {
     metaDescription: "",
     photos: [],
     ProductImages: [],
-    SizeItems: [{ sizeId: "", quantity: 0 , Size:{size:""} }],
+    SizeItems: [{ sizeId: "", quantity: 0, Size: { size: "" } }],
   };
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
@@ -106,7 +108,7 @@ function CreateProduct() {
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
-      if (key !== "photos" ) {
+      if (key !== "photos") {
         formData.append(
           key,
           typeof value === "boolean" ? value.toString() : value
@@ -120,16 +122,12 @@ function CreateProduct() {
       }
     });
 
+    // values?.sizes?.forEach((size, index) => {
+    //   formData.append(`sizes[${index}][sizeId]`, size.sizeId);
+    //   formData.append(`sizes[${index}][quantity]`, size.quantity.toString());
+    // });
 
-// values?.sizes?.forEach((size, index) => {
-//   formData.append(`sizes[${index}][sizeId]`, size.sizeId);
-//   formData.append(`sizes[${index}][quantity]`, size.quantity.toString());
-// });
-    
-    formData.append('sizes', JSON.stringify(values?.SizeItems));
-
-
-    
+    formData.append("sizes", JSON.stringify(values?.SizeItems));
 
     try {
       const response = await dispatch(createProduct(formData)).unwrap();
@@ -148,24 +146,22 @@ function CreateProduct() {
     }
   };
 
-    const handleDeleteImage = async (index: number) => {
-  
-   if (!product?.ProductImages) {
-    // Handle the case where ProductImages is undefined or null
-    console.error('ProductImages is undefined or null.');
-    return;
-  }
+  const handleDeleteImage = async (index: number) => {
+    if (!product?.ProductImages) {
+      // Handle the case where ProductImages is undefined or null
+      console.error("ProductImages is undefined or null.");
+      return;
+    }
 
-  const imageToDelete: ImageListType | any = product.ProductImages[index];
+    const imageToDelete: ImageListType | any = product.ProductImages[index];
     console.log(imageToDelete?.imageUrl, "imageToDelete");
 
- 
     setProduct((prevProduct) => ({
       ...prevProduct,
-      ProductImages: prevProduct?.ProductImages?.filter((_, i) => i !== index) || [],
+      ProductImages:
+        prevProduct?.ProductImages?.filter((_, i) => i !== index) || [],
     }));
-  
-};
+  };
 
   return (
     <Layout>
@@ -254,41 +250,44 @@ function CreateProduct() {
                 "Loading subCategories data..."
               )}
 
-<FieldArray name="SizeItems">
-  {({ push, remove, form }) => (
-    <div>
-      <label>Sizes and Quantities:</label>
-      {form.values.SizeItems.map((size: ISize, index: number) => (
-        <div key={index}>
-          <Field as="select" name={`SizeItems[${index}].sizeId`}>
-            <option value="">Select size</option>
-            {listOfSizes?.map((size: ISize) => (
-              <option key={size.id} value={size.id}>
-                {size.size}
-              </option>
-            ))}
-          </Field>
-          <Field
-            type="number"
-            name={`SizeItems[${index}].quantity`}
-            placeholder="Quantity"
-          />
-          <button type="button" onClick={() => remove(index)}>
-            Remove
-          </button>
-        </div>
-      ))}
-      <button
-        type="button"
-        onClick={() => push({ sizeId: "", quantity: 0 })}
-      >
-        Add Size
-      </button>
-    </div>
-  )}
-</FieldArray>
-
-
+              <FieldArray name="SizeItems">
+                {({ push, remove, form }) => (
+                  <div>
+                    <label>Sizes and Quantities:</label>
+                    {form.values.SizeItems.map(
+                      (_size: ISize, index: number) => (
+                        <div key={index}>
+                          <Field
+                            as="select"
+                            name={`SizeItems[${index}].sizeId`}
+                          >
+                            <option value="">Select size</option>
+                            {listOfSizes?.map((size: ISize) => (
+                              <option key={_size.id} value={_size.id}>
+                                {_size.size}
+                              </option>
+                            ))}
+                          </Field>
+                          <Field
+                            type="number"
+                            name={`SizeItems[${index}].quantity`}
+                            placeholder="Quantity"
+                          />
+                          <button type="button" onClick={() => remove(index)}>
+                            Remove
+                          </button>
+                        </div>
+                      )
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => push({ sizeId: "", quantity: 0 })}
+                    >
+                      Add Size
+                    </button>
+                  </div>
+                )}
+              </FieldArray>
 
               <div>
                 <label htmlFor="Discount">Sale Discount:</label>
@@ -302,12 +301,12 @@ function CreateProduct() {
                 <ErrorMessage name="tags" component="div" />
               </div>
 
-                <div>
+              <div>
                 <label htmlFor="slug">slug:</label>
                 <Field type="text" id="slug" name="slug" />
                 <ErrorMessage name="slug" component="div" />
               </div>
-              
+
               <div>
                 <label htmlFor="metaTitle">Meta Title:</label>
                 <Field type="text" id="metaTitle" name="metaTitle" />
@@ -335,11 +334,14 @@ function CreateProduct() {
           onImagesChange={handlePhotoChange}
           defaultImages={product.photos}
         />
-  
 
         <div>
           <h3>Cropped Images</h3>
-          <ImageViewer productImages={product.ProductImages ?? []} isonline={isonline} onDeleteImage={handleDeleteImage}/>
+          <ImageViewer
+            productImages={product.ProductImages ?? []}
+            isonline={isonline}
+            onDeleteImage={handleDeleteImage}
+          />
         </div>
       </section>
     </Layout>

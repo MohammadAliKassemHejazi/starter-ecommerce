@@ -16,7 +16,6 @@ export interface IProductAttributes {
   name: string;                        // Product name
   description: string;                 // Product description
   price: number;                       // Price of the product
-  stockQuantity?: number;              // Optional stock quantity
   isActive?: boolean;                  // Optional active status
   ownerId?: ForeignKey<IUserAttributes['id']>; // Foreign key to owner (user)
   categoryId?: ForeignKey<ICategoryAttributes['id']>; // Foreign key to category

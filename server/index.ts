@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import winston from 'winston';
 
-import { cartRouter,authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter,paymentRouter } from './src/routes';
+import { orderRouter,cartRouter,authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter,paymentRouter } from './src/routes';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
@@ -123,11 +123,9 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use('/api/cart', cartRouter);
+app.use('/api/orders', orderRouter);
 app.use('/api/payment', paymentRouter);
-app.use('/api/auth', authRouter);
-app.use('/api/utile', utileRouter);
-app.use('/api/users', userRouter);
-app.use('/api/articles', articleRouter);
+
 app.use('/api/shop', upload.array('photos', 6), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const files = req.files as Express.Multer.File[];
@@ -246,6 +244,11 @@ app.use('/api/store', upload.array('photos', 5),async (req: Request, res: Respon
   }
   next()
 },storeRouter);
+
+app.use('/api/auth', authRouter);
+app.use('/api/utile', utileRouter);
+app.use('/api/users', userRouter);
+app.use('/api/articles', articleRouter);
 
 
 // Error handling middleware

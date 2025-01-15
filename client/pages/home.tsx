@@ -5,13 +5,11 @@ import { requestAllArticles } from "@/services/articleService";
 import { GetServerSideProps } from "next";
 import React from "react";
 import styles from "./Home.module.css";
-import Link from "next/link";
+
 import ParticleComponent from "@/components/UI/home/starsbackground/starsbackground";
 import { setAuthHeaders } from "@/utils/httpClient";
 
 import { IProductModel } from "@/models/product.model";
-
-import {  useAppDispatch } from "@/store/store"; // Importing your store types
 import BubbleAnimation from "@/components/UI/home/bubbleanimation/BubbleAnimation";
 import { IStoreResponseModel } from "@/models/store.model";
 import ArticleList from "@/components/UI/General/listingArticles/ArticleList";
@@ -35,24 +33,7 @@ const storesModel : IStoreResponseModel[] =  [
   { name: 'Store 12',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
 
 ];
-const products : IProductModel[] = [
-  {
-    id: "1",
-    ProductImages: [],
-    name: "Winter Sweater",
-    tagColor: "red",
-    ratings: 5,
-    price: 60.0
-  },
-  {
-    id: "2",
-    ProductImages: [],
-    name: "Denim Dresses",
-    tagColor: "black",
-    ratings: 4,
-    price: 55.0
-  }
-]
+
 
 
 const Home = ({ articles }: Props) => {

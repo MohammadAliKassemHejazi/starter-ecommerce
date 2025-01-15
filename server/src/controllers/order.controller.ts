@@ -2,25 +2,22 @@ import { Response } from "express";
 import { orderService } from "../services";
 import { CustomRequest } from "../interfaces/types/middlewares/request.middleware.types";
 
-import orderErrors from "../utils/errors/order.errors";
 
-export const createOrder = async (
+export const getLastOrder = async (
   request: CustomRequest,
   response: Response,
   next: any
 ): Promise<void> => {
   try {
-    const { items, paymentId } = request.body;
     const userId = request.UserId; // Assuming UserId is accessible via middleware
-
-    const order = await orderService.createOrder(userId!, items, paymentId);
-    response.status(201).json(order);
+    const lastOrder = await orderService.getLastOrder(userId!);
+    response.json(lastOrder);
   } catch (error) {
     next(error);
   }
 };
 
-export const getOrderById = async (
+export const getOrderItems = async (
   request: CustomRequest,
   response: Response,
   next: any
@@ -29,23 +26,8 @@ export const getOrderById = async (
     const { orderId } = request.params;
     const userId = request.UserId; // Assuming UserId is accessible via middleware
 
-    const order = await orderService.getOrderById(orderId, userId!);
-    response.json(order);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getOrdersByUser = async (
-  request: CustomRequest,
-  response: Response,
-  next: any
-): Promise<void> => {
-  try {
-    const userId = request.UserId; // Assuming UserId is accessible via middleware
-
-    const orders = await orderService.getOrdersByUser(userId!);
-    response.json(orders);
+    const orderItems = await orderService.getOrderItems(orderId, userId!);
+    response.json({ orderId, items: orderItems });
   } catch (error) {
     next(error);
   }
@@ -57,14 +39,15 @@ export const getOrdersByDateRange = async (
   next: any
 ): Promise<void> => {
   try {
-    const { from, to } = request.query;
-    const userId = request.UserId; // Assuming UserId is accessible via middleware
+    const { from, to } = request.body; // Get from request body instead of query
+    const userId = request.UserId;
 
     const orders = await orderService.getOrdersByDateRange(
       userId!,
       from as string,
       to as string
-    );
+      );
+  
     response.json(orders);
   } catch (error) {
     next(error);
@@ -72,8 +55,7 @@ export const getOrdersByDateRange = async (
 };
 
 export default {
-  createOrder,
-  getOrderById,
-  getOrdersByUser,
+  getLastOrder,
+  getOrderItems,
   getOrdersByDateRange,
 };

@@ -40,7 +40,9 @@ const Cart = () => {
     
       dispatch(addToCart(product)).then(() => {
         dispatch(getTotals());
-      });
+      }).catch((e: any) => {
+        console.log(e)
+      });;
    
   };
 
@@ -48,7 +50,9 @@ const Cart = () => {
    
       dispatch(decreaseCart(product)).then(() => {
         dispatch(getTotals());
-      });
+      }).catch((e: any) => {
+        console.log(e)
+      });;
    
   };
 
@@ -56,7 +60,9 @@ const Cart = () => {
   
       dispatch(removeFromCart(product)).then(() => {
         dispatch(getTotals());
-      });
+      }).catch((e: any) => {
+        console.log(e)
+      });;
   
   };
 
@@ -64,11 +70,13 @@ const Cart = () => {
  
       dispatch(clearCart()).then(() => {
         dispatch(getTotals());
-      });
+      }).catch((e: any) => {
+        console.log(e)
+      });;
    
   };
 
-  return (
+return (
     <Layout>
       <div className={styles.cartContainer}>
         <h2 className={styles.cartTitle}>Shopping Cart</h2>
@@ -110,6 +118,7 @@ const Cart = () => {
                   <th>Product</th>
                   <th>Price</th>
                   <th>Quantity</th>
+                  <th>Size</th> {/* Add Size column */}
                   <th>Total</th>
                   <th>Actions</th>
                 </tr>
@@ -148,6 +157,7 @@ const Cart = () => {
                         +
                       </button>
                     </td>
+                    <td className={styles.cartProductSize}>{cartItem.selectedSize?.size}</td> {/* Display size */}
                     <td className={styles.cartProductTotalPrice}>
                       ${(cartItem?.price ?? 0) * cartItem.cartQuantity}
                     </td>

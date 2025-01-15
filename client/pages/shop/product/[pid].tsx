@@ -10,13 +10,25 @@ import { setAuthHeaders } from "@/utils/httpClient";
 import { requestProductById } from "@/services/shopService";
 import Head from "next/head";
 import protectedRoute from "@/components/protectedRoute";
-
+import { useAppDispatch } from "@/store/store";
+import { addToCart } from "@/store/slices/cartSlice";
+import Swal from "sweetalert2";
 type Props = {
   product?: IProductModel;
 };
-
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 const SingleItem = ({ product }: Props) => {
-  console.log(product)
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [feedback, setFeedback] = useState({
     rating: 0,
@@ -76,6 +88,16 @@ const SingleItem = ({ product }: Props) => {
       [name]: name === "rating" ? Number(value) : value,
     }));
   };
+
+    const handleAddToCart = (product: IProductModel) => {
+      console.log("handleAddToCart clicked")
+      dispatch(addToCart(product));
+      console.log(product);
+         Toast.fire({
+        icon: "success",
+        title: "Added to cart",
+      });
+    };
 
   return (
     <>
@@ -241,17 +263,8 @@ const SingleItem = ({ product }: Props) => {
                                 type="submit"
                                 className="btn btn-success btn-lg"
                                 name="submit"
-                                value="buy"
-                              >
-                                Buy
-                              </button>
-                            </div>
-                            <div className="col d-grid">
-                              <button
-                                type="submit"
-                                className="btn btn-success btn-lg"
-                                name="submit"
                                 value="addtocart"
+                                onClick={() =>handleAddToCart(product!)}
                               >
                                 Add To Cart
                               </button>
@@ -406,3 +419,5 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 };
+
+

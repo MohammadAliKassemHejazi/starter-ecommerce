@@ -1,33 +1,25 @@
 import express from "express";
-
-
-
 import orderController from "../controllers/order.controller";
-
 import { protectedRoutes } from "../middlewares";
 
 const router = express.Router();
 
 const Routes = [
-  "/create",
-  "/:orderId",
-  "/user",
+  "/last",
+  "/:orderId/items",
   "/date-range",
 ];
 
 // Protect all order routes
 protectedRoutes(router, Routes);
 
-// Create a new order
-router.post("/create", orderController.createOrder);
+// Get the last order for the logged-in user
+router.get("/last", orderController.getLastOrder);
 
-// Get order by ID
-router.get("/:orderId", orderController.getOrderById);
-
-// Get all orders for the logged-in user
-router.get("/user", orderController.getOrdersByUser);
+// Get order items by order ID
+router.get("/:orderId/items", orderController.getOrderItems);
 
 // Get orders within a date range
-router.get("/date-range", orderController.getOrdersByDateRange);
+router.post("/date-range", orderController.getOrdersByDateRange);
 
 export default router;

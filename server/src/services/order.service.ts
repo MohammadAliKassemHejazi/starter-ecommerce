@@ -1,38 +1,30 @@
 import { IOrderItemAttributes } from "interfaces/types/models/orderitem.model.types";
 import { IOrderAttributes } from "../interfaces/types/models/order.model.types";
-   
 import db from "../models";
 import customError from "../utils/customError";
 import orderErrors from "../utils/errors/order.errors";
+import { Op } from "sequelize";
 
-export const createOrder = async (
-  userId: string,
-  items: IOrderItemAttributes[],
-  paymentId: string
-): Promise<IOrderAttributes> => {
-  try {
-    const order = await db.Order.create({
-      userId,
-      paymentId,
-    });
-
-    const orderItems = items.map((item) => ({
-      ...item,
-      orderId: order.id,
-    }));
-
-    await db.OrderItem.bulkCreate(orderItems);
-
-    return order;
-  } catch (error) {
-    throw customError(orderErrors.OrderCreationFailed);
-  }
-};
-
-export const getOrderById = async (
-  orderId: string,
+export const getLastOrder = async (
   userId: string
 ): Promise<IOrderAttributes> => {
+  const lastOrder = await db.Order.findOne({
+    where: { userId },
+    order: [["createdAt", "DESC"]], // Get the most recent order
+    include: [{ model: db.OrderItem, as: "items" }],
+  });
+
+  if (!lastOrder) {
+    throw customError(orderErrors.OrderNotFound);
+  }
+
+  return lastOrder;
+};
+
+export const getOrderItems = async (
+  orderId: string,
+  userId: string
+): Promise<IOrderItemAttributes[]> => {
   const order = await db.Order.findOne({
     where: { id: orderId, userId },
     include: [{ model: db.OrderItem, as: "items" }],
@@ -42,18 +34,7 @@ export const getOrderById = async (
     throw customError(orderErrors.OrderNotFound);
   }
 
-  return order;
-};
-
-export const getOrdersByUser = async (
-  userId: string
-): Promise<IOrderAttributes[]> => {
-  const orders = await db.Order.findAll({
-    where: { userId },
-    include: [{ model: db.OrderItem, as: "items" }],
-  });
-
-  return orders;
+  return order.items.toJSON();
 };
 
 export const getOrdersByDateRange = async (
@@ -65,7 +46,7 @@ export const getOrdersByDateRange = async (
     where: {
       userId,
       createdAt: {
-        [db.Sequelize.Op.between]: [new Date(from), new Date(to)],
+        [Op.between]: [new Date(from), new Date(to)],
       },
     },
     include: [{ model: db.OrderItem, as: "items" }],
@@ -75,8 +56,7 @@ export const getOrdersByDateRange = async (
 };
 
 export default {
-  createOrder,
-  getOrderById,
-  getOrdersByUser,
+  getLastOrder,
+  getOrderItems,
   getOrdersByDateRange,
 };

@@ -1,5 +1,5 @@
 import httpClient from "@/utils/httpClient";
-import { IOrder ,IOrderItem} from "@/models/order.model";
+import { IOrder, IOrderItem } from "@/models/order.model";
 
 export const requestLastOrder = async (): Promise<IOrder> => {
   const { data: response } = await httpClient.get("/orders/last");
@@ -7,8 +7,9 @@ export const requestLastOrder = async (): Promise<IOrder> => {
 };
 
 export const requestOrdersByDate = async (from: string, to: string): Promise<IOrder[]> => {
-  const { data: response } = await httpClient.get(`/orders?from=${from}&to=${to}`);
-  return response.data;
+    const { data: response } = await httpClient.post("/orders/date-range", { from, to });
+
+  return response;
 };
 
 export const requestOrderItems = async (orderId: string): Promise<{ orderId: string; items: IOrderItem[] }> => {

@@ -61,9 +61,11 @@ export const orderSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchOrdersByDate.fulfilled, (state, action) => {
+        console.log(action)
         state.orders = action.payload;
       })
       .addCase(fetchOrdersByDate.rejected, (state) => {
+          
         state.error = "Failed to fetch orders by date";
       })
       .addCase(fetchOrderItems.fulfilled, (state, action) => {

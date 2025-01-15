@@ -28,7 +28,9 @@ const Orders = () => {
     if (startDate && endDate) {
       const from = startDate.toISOString().split("T")[0];
       const to = endDate.toISOString().split("T")[0];
-      dispatch(fetchOrdersByDate({ from, to }));
+      dispatch(fetchOrdersByDate({ from, to })).then((response) => {
+        console.log(response)
+      });
     }
   }, [startDate, endDate, dispatch]);
 
@@ -81,7 +83,7 @@ const Orders = () => {
             )}
 
             {/* Filtered Orders */}
-            {orders.length > 0 && (
+            {(orders?.length ?? 0) > 0 && (
               <div>
                 <h3>Filtered Orders</h3>
                 <table className="table table-bordered">

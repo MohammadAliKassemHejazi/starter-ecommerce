@@ -7,16 +7,17 @@ module.exports = (sequelize: any, DataTypes: any) => {
   class CartItem extends Model<ICartItemAttributes> implements ICartItemAttributes {
     id!: string;
     quantity!: number;
-
+      sizeId!: string; // Add sizeId to track the selected size
     static associate(models: any) {
       // Define the relationship with Cart
-      CartItem.belongsTo(models.Cart, {
-        foreignKey: "cartId", // Foreign key in CartItem pointing to Cart
-      });
+      CartItem.belongsTo(models.Cart, {foreignKey: "cartId"});
 
       // Define the relationship with Product
-CartItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      CartItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      
+       CartItem.belongsTo(models.Size, { foreignKey: 'sizeId', onDelete: 'CASCADE' });
     }
+    
   }
 
   CartItem.init(
@@ -36,6 +37,10 @@ CartItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE
       },
       productId: {
         type: DataTypes.UUID,
+        allowNull: false,
+      },
+      sizeId: {
+        type: DataTypes.UUID, // Add sizeId field
         allowNull: false,
       },
     },

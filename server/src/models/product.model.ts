@@ -9,7 +9,6 @@ module.exports = (sequelize: Sequelize) => {
     name!: string;
     description!: string;
     price!: number;
-    stockQuantity?: number;
     isActive?: boolean;
     metaTitle?: string;
     metaDescription?: string;
