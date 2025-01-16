@@ -1,7 +1,7 @@
 import { ImageListType } from "react-images-uploading";
 import { IStoreModel } from "./store.model";
 import { IComment } from "./comment.model";
-import { ISize, ISizeItem } from "./size.model";
+import { ISizeItem } from "./size.model";
 
 export interface IProductModel {
   id?: string;
@@ -24,6 +24,8 @@ export interface IProductModel {
   commentsCount? :   number;
   comments ?: IComment[];
   SizeItems?: ISizeItem[];
+  quantity?: number;
+  sizeId?: string;
   updatedAt?: string;
   createdAt?: string;
 }

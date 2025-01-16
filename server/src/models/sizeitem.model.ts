@@ -9,8 +9,10 @@ module.exports = (sequelize: Sequelize) => {
     quantity!: number;
 
     static associate(models: any) {
-     SizeItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
-      SizeItem.belongsTo(models.Size, { foreignKey: 'sizeId', targetKey: 'id' });
+    SizeItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+    SizeItem.belongsTo(models.Size, { foreignKey: 'sizeId', targetKey: 'id' });
+    SizeItem.belongsTo(models.CartItem, { foreignKey: 'sizeId', targetKey: 'id' ,onDelete: 'CASCADE'});
+      
     }
   }
 

@@ -12,7 +12,7 @@ import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.t
 // Get the user's cart
 export const getCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-     const userId = req.UserId ?? "";
+    const userId = req.UserId ?? "";
     const cart = await getCartService(userId);
     res.status(200).json(cart);
   } catch (error) {
@@ -25,9 +25,9 @@ export const getCart = async (req: CustomRequest, res: Response, next: NextFunct
 export const addToCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
         const userId = req.UserId ?? "";
-        const { productId, quantity } = req.body;
+        const { productId, quantity ,sizeId} = req.body;
 // Add item to cart
-        const cartItem = await addToCartService(userId, productId, quantity);
+        const cartItem = await addToCartService(userId, productId, quantity,sizeId);
         res.status(200).json(cartItem);
     } catch (error) {
         next(error);
@@ -39,8 +39,8 @@ export const addToCart = async (req: CustomRequest, res: Response, next: NextFun
 export const decreaseCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
     const userId = req.UserId ?? "";
-    const {  productId, quantity } = req.body;
-    const cartItem = await decreaseCartService(userId, productId, quantity);
+    const {  productId, quantity,sizeId } = req.body;
+    const cartItem = await decreaseCartService(userId, productId, quantity,sizeId);
     res.status(200).json(cartItem);
   } catch (error) {
     next(error);
@@ -51,8 +51,8 @@ export const decreaseCart = async (req: CustomRequest, res: Response, next: Next
 export const removeFromCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req.UserId ?? "";
-    const {  productId } = req.params;
-    await removeFromCartService(userId, productId);
+    const {  productId ,sizeId } = req.params;
+    await removeFromCartService(userId, productId,sizeId);
     res.status(204).send();
   } catch (error) {
     next(error);

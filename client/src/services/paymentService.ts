@@ -12,20 +12,20 @@ export const loadCart = async (): Promise<CartItem[]> => {
 };
 
 // Add/update item in the cart
-export const addToCart = async (productId: string, quantity: number, price: number) => {
-  const { data: response } = await httpClient.post('/cart/update', {  productId, quantity, price });
+export const addToCart = async (productId: string, quantity: number, price: number, sizeId: string) => {
+  const { data: response } = await httpClient.post('/cart/update', {  productId, quantity, price ,sizeId});
   return response;
 };
 
 // Decrease item quantity in the cart
-export const decreaseCart = async (productId: string, quantity: number) => {
-  const { data: response } = await httpClient.put('/cart/decrease', {  productId, quantity });
+export const decreaseCart = async (productId: string, quantity: number, sizeId: string) => {
+  const { data: response } = await httpClient.put('/cart/decrease', {  productId, quantity,sizeId });
   return response;
 };
 
 // Remove item from the cart
-export const removeFromCart = async ( productId: string) => {
-  const { data: response } = await httpClient.delete(`/cart/delete/${productId}`);
+export const removeFromCart = async ( productId: string, sizeId: string) => {
+  const { data: response } = await httpClient.delete(`/cart/delete/${productId}/${sizeId}`);
   return response;
 };
 

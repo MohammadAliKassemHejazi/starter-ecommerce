@@ -4,5 +4,5 @@ import { ISizeItem } from "./size.model";
 export interface CartItem extends IProductModel {
 
   cartQuantity: number;
-  selectedSize?: ISizeItem;
+  size?: String;
 }

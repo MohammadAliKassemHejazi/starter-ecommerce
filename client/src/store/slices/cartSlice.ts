@@ -38,24 +38,46 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
-// Add/update item in the cart
+
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (product: IProductModel, { rejectWithValue, dispatch, getState }) => {
+    // Debugging: Remove this in production
+    
+
+    // Ensure product has required fields
+    if (!product.id || !product.price || !product.sizeId) {
+      return rejectWithValue("Product is missing required fields (id, price, or sizeId)");
+    }
+
+    // Determine the quantity
     const state = getState() as { cart: CartState };
     const existingItem = state.cart.cartItems.find((item) => item.id === product.id);
 
-    const quantity = existingItem ? existingItem.cartQuantity + 1 : 1;
+    // If product.quantity is provided and greater than 1, use it; otherwise, increment existing quantity or default to 1
+    const quantity = product.quantity && product.quantity > 1 ? product.quantity : (existingItem ? existingItem.cartQuantity + 1 : 1);
 
     // Optimistically update the Redux state
-    dispatch(cartSlice.actions.addToCartOptimistic({ product, quantity }));
+    dispatch(
+      cartSlice.actions.addToCartOptimistic({
+        product,
+        quantity,
+      })
+    );
 
     try {
       // Perform the backend call
-      await addToCartService(product.id ?? "", quantity, product.price ?? 0);
+      await addToCartService(product.id, quantity, product.price, product.sizeId);
     } catch (error: any) {
       // Revert the Redux state if the backend call fails
-      dispatch(cartSlice.actions.revertAddToCart({ product, quantity }));
+      dispatch(
+        cartSlice.actions.revertAddToCart({
+          product,
+          quantity,
+        })
+      );
+
+      // Return the error message from the backend or a generic error
       return rejectWithValue(error.response?.data || "Failed to add to cart");
     }
   }
@@ -76,7 +98,7 @@ export const decreaseCart = createAsyncThunk(
 
       try {
         // Perform the backend call
-        await decreaseCartService(product.id ?? "", quantity);
+        await decreaseCartService(product.id ?? "", quantity,product.sizeId!);
       } catch (error: any) {
         // Revert the Redux state if the backend call fails
         dispatch(cartSlice.actions.revertDecreaseCart({ product, quantity }));
@@ -88,7 +110,7 @@ export const decreaseCart = createAsyncThunk(
 
       try {
         // Perform the backend call
-        await removeFromCartService(product.id ?? "");
+        await removeFromCartService(product.id ?? "",product.sizeId!);
       } catch (error: any) {
         // Revert the Redux state if the backend call fails
         dispatch(cartSlice.actions.revertRemoveFromCart(product.id ?? ""));
@@ -107,7 +129,7 @@ export const removeFromCart = createAsyncThunk(
 
     try {
       // Perform the backend call
-      await removeFromCartService(product.id ?? "");
+      await removeFromCartService(product.id ?? "",product.sizeId!);
     } catch (error: any) {
       // Revert the Redux state if the backend call fails
       dispatch(cartSlice.actions.revertRemoveFromCart(product.id ?? ""));

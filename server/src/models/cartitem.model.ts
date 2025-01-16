@@ -15,7 +15,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       // Define the relationship with Product
       CartItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
       
-       CartItem.belongsTo(models.Size, { foreignKey: 'sizeId', onDelete: 'CASCADE' });
+      CartItem.belongsTo(models.SizeItem, { foreignKey: 'sizeItemId', onDelete: 'CASCADE' });
     }
     
   }
@@ -39,8 +39,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      sizeId: {
-        type: DataTypes.UUID, // Add sizeId field
+      sizeItemId: {
+        type: DataTypes.UUID, 
         allowNull: false,
       },
     },

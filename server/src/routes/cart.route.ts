@@ -7,7 +7,7 @@ const router = express.Router();
       "/get",
       "/update",
       "/decrease",
-      "/delete/:productId",
+      "/delete/:productId/:sizeId",
       "/delete"
   ];
 
@@ -33,7 +33,7 @@ router.post('/update', addToCart);
 router.put('/decrease', decreaseCart);
 
 // Remove item from the cart
-router.delete('/delete/:productId', removeFromCart);
+router.delete('/delete/:productId/:sizeId', removeFromCart);
 
 // Clear the cart
 router.delete('/delete', clearCart);

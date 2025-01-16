@@ -118,7 +118,7 @@ return (
                   <th>Product</th>
                   <th>Price</th>
                   <th>Quantity</th>
-                  <th>Size</th> {/* Add Size column */}
+                  <th>Size</th> 
                   <th>Total</th>
                   <th>Actions</th>
                 </tr>
@@ -157,7 +157,7 @@ return (
                         +
                       </button>
                     </td>
-                    <td className={styles.cartProductSize}>{cartItem.selectedSize?.size}</td> {/* Display size */}
+                    <td className={styles.cartProductSize}>{cartItem.size}</td> 
                     <td className={styles.cartProductTotalPrice}>
                       ${(cartItem?.price ?? 0) * cartItem.cartQuantity}
                     </td>

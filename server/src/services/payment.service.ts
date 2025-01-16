@@ -4,8 +4,8 @@ import customError from "../utils/customError";
 import paymentErrors from "../utils/errors/payment.errors";
 import { IPaymentResponse } from "../interfaces/types/controllers/payment.controller.types";
 import db from "../models"; // Import your database models
-import { Transaction } from "sequelize";
 import { raw } from "body-parser";
+
 
 const stripeClient = new stripe(config.Stripekey as string, {
   apiVersion: "2024-06-20",
@@ -19,7 +19,67 @@ export const processPayment = async (
   userId: string
 ): Promise<IPaymentResponse> => {
   try {
-    const amountInCents = Math.round(amount * 100); // Convert amount to cents
+    // Fetch the user's cart
+    const cart = await db.Cart.findOne({
+      where: { userId },
+      include: [
+        {
+          model: db.CartItem,
+          include: [
+            {
+              model: db.Product,
+              include: [db.ProductImage], // Include product images
+            },
+            {
+              model: db.SizeItem, // Include size information
+              include: [db.Size], // Include size details
+            },
+          ],
+        },
+      ],
+    });
+
+    // If the cart is not found, throw an error
+    if (!cart) {
+      throw customError({
+        message: `Cart not found`,
+        code: "CART_NOT_FOUND",
+        statusCode: 400,
+      });
+    }
+
+    // Validate cart items to ensure quantities do not exceed available stock
+    for (const cartItem of cart.CartItems) {
+      const sizeItem = await db.SizeItem.findOne({
+        where: {
+          productId: cartItem.productId,
+          id: cartItem.sizeItemId,
+        },
+      });
+
+      // If the SizeItem does not exist, throw an error
+      if (!sizeItem) {
+        throw customError({
+          message: `SizeItem not found for product ${cartItem.Product.name} (Size: ${cartItem.SizeItem.Size.size})`,
+          code: "SIZE_ITEM_NOT_FOUND",
+          statusCode: 400,
+        });
+      }
+
+      // If the requested quantity exceeds the available stock, throw an error
+      if (sizeItem.quantity < cartItem.quantity) {
+        throw customError({
+          message: `Insufficient stock for product ${cartItem.Product.name} (Size: ${cartItem.SizeItem.Size.size}). Available: ${sizeItem.quantity}, Requested: ${cartItem.quantity}`,
+          code: "INSUFFICIENT_STOCK",
+          statusCode: 400,
+        });
+      }
+    }
+
+    // Convert amount to cents
+    const amountInCents = Math.round(amount * 100);
+
+    // Create a PaymentIntent with Stripe
     const paymentIntent = await stripeClient.paymentIntents.create({
       amount: amountInCents,
       currency,
@@ -41,6 +101,7 @@ export const processPayment = async (
       userId,
     });
 
+    // Return the payment response
     return {
       body: {
         status: "success",
@@ -79,6 +140,7 @@ export const handleWebhookEvent = async (event: any): Promise<void> => {
         const transaction = await db.sequelize.transaction();
 
         try {
+          // Fetch the user's cart
           const cart = await db.Cart.findOne({
             where: { userId },
             include: [
@@ -89,9 +151,14 @@ export const handleWebhookEvent = async (event: any): Promise<void> => {
                     model: db.Product,
                     include: [db.ProductImage], // Include product images
                   },
+                  {
+                    model: db.SizeItem, // Include size information
+                    include: [db.Size], // Include size details
+                  },
                 ],
               },
             ],
+            transaction, // Pass the transaction
           });
 
           // If the cart is not found, throw a custom error
@@ -102,6 +169,7 @@ export const handleWebhookEvent = async (event: any): Promise<void> => {
           // Convert the Sequelize instance to a plain object
           const plainCart = cart.toJSON();
 
+          // Fetch the payment record
           const payment = await db.Payment.findOne({
             where: { paymentIntentId: paymentIntent.id },
             raw: true,
@@ -109,36 +177,61 @@ export const handleWebhookEvent = async (event: any): Promise<void> => {
           });
 
           if (!payment) {
-            throw new Error("payment not found");
+            throw new Error("Payment not found");
           }
+
           // Create an order
           const order = await db.Order.create(
             {
               userId,
               paymentId: payment.id,
             },
-
-            { transaction,raw:true } // Pass the transaction
+            
+            { transaction } // Pass the transaction
           );
-          const JSONorder = order.toJSON()
-          // Add order items
+
+          // Add order items and update SizeItem quantities
           for (const item of plainCart.CartItems) {
+            // Create the order item
             await db.OrderItem.create(
               {
-                orderId: JSONorder.id,
+                orderId: order.dataValues.id,
                 productId: item.productId,
                 quantity: item.quantity,
                 price: item.Product.price, // Assuming price is stored in the cart item
               },
               { transaction } // Pass the transaction
             );
+
+            // Update the SizeItem quantity
+            const sizeItem = await db.SizeItem.findOne({
+              where: {
+                id: item.sizeItemId,
+              },
+              transaction, // Pass the transaction
+            });
+
+            if (!sizeItem) {
+              throw new Error(`SizeItem not found for product ${item.productId}`);
+            }
+
+            // Subtract the purchased quantity
+            sizeItem.quantity -= item.quantity;
+
+            // If the quantity reaches 0, delete the SizeItem
+            if (sizeItem.quantity <= 0) {
+              await sizeItem.destroy({ transaction });
+            } else {
+              // Otherwise, save the updated quantity
+              await sizeItem.save({ transaction });
+            }
           }
 
           // Clear the cart
           await db.CartItem.destroy({
             where: { cartId: plainCart.id },
-            transaction,
-          }); // Pass the transaction
+            transaction, // Pass the transaction
+          });
 
           // Update the payment status
           await db.Payment.update(

@@ -18,6 +18,10 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
               model: db.Product,
               include: [db.ProductImage], // Include product images
             },
+            {
+              model: db.SizeItem ,// Include size information
+              include: [db.Size], // Include size details
+            },
           ],
         },
       ],
@@ -25,14 +29,24 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
 
     // If the cart is not found, throw a custom error
     if (!cart) {
-      throw customError(cartErrors.CartNotFound);
+      throw customError(cartErrors.CartItemNotFound);
     }
 
     // Convert the Sequelize instance to a plain object
     const plainCart = cart.toJSON();
 
-    // Transform the cart items to match the required structure
-    const transformedCartItems = plainCart.CartItems.map((cartItem: any) => ({
+    // Filter out cart items where SizeItem quantity is 0 or SizeItem does not exist
+    const validCartItems = plainCart.CartItems.filter((cartItem: any) => {
+      if (!cartItem.SizeItem || cartItem.SizeItem.quantity === 0) {
+        // Delete the cart item if SizeItem is invalid
+        db.CartItem.destroy({ where: { id: cartItem.id } });
+        return false; // Exclude this item from the response
+      }
+      return true; // Include this item in the response
+    });
+
+    // Transform the valid cart items to match the required structure
+    const transformedCartItems = validCartItems.map((cartItem: any) => ({
       id: cartItem.Product.id,
       name: cartItem.Product.name,
       description: cartItem.Product.description,
@@ -42,6 +56,8 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
         imageUrl: image.imageUrl,
       })), // Map product images
       cartQuantity: cartItem.quantity, // Assuming quantity is stored in CartItem
+      sizeId: cartItem.sizeItemId, // Include sizeId
+      size: cartItem.SizeItem.Size.size, // Include size
       totalPrice: cartItem.Product.price * cartItem.quantity, // Calculate total price
     }));
 
@@ -63,11 +79,12 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
     });
   }
 };
-// Add/update item in the cart
+
 export const addToCart = async (
   userId: string,
   productId: string,
-  quantity: number
+  quantity: number,
+  sizeId: string,
 ): Promise<ICartItemAttributes> => {
   try {
     // Check if the product exists
@@ -80,6 +97,27 @@ export const addToCart = async (
       });
     }
 
+    // Check if the size exists and has sufficient quantity
+    const sizeItem = await db.SizeItem.findOne({
+      where: { productId, id: sizeId },
+      raw:true
+    });
+    if (!sizeItem) {
+      throw customError({
+        message: "Size not found for this product",
+        code: "SIZE_NOT_FOUND",
+        statusCode: 404,
+      });
+    }
+
+    if (sizeItem.quantity < quantity) {
+      throw customError({
+        message: "Insufficient stock for the selected size",
+        code: "INSUFFICIENT_STOCK",
+        statusCode: 400,
+      });
+    }
+
     // Find or create the user's cart
     let cart = await getCartByUserId(userId);
     if (!cart) {
@@ -88,15 +126,23 @@ export const addToCart = async (
 
     // Find or create the cart item
     const [cartItem, created] = await db.CartItem.findOrCreate({
-      where: { cartId: cart.id, productId },
-      defaults: { cartId: cart.id, productId, quantity },
+      where: { cartId: cart.id, productId, sizeItemId:sizeId },
+      defaults: { cartId: cart.id, productId, sizeItemId: sizeId, quantity },
+  
     });
-
+      const cartitemJson = cartItem.toJSON()
     // If the cart item already exists, update its quantity
-if (!created) {
-  await cartItem.update({ quantity:  quantity });
-
-    await cartItem.reload(); // Ensure the updated value is returned
+    if (!created) {
+      const newQuantity = cartitemJson.quantity + quantity;
+      if (newQuantity > sizeItem.quantity) {
+        throw customError({
+          message: "Cannot add more than available stock",
+          code: "EXCEEDS_STOCK",
+          statusCode: 400,
+        });
+      }
+      await cartItem.update({ quantity: newQuantity });
+      await cartItem.reload(); 
     }
 
     return cartItem;
@@ -110,7 +156,6 @@ if (!created) {
   }
 };
 
-
 export const getCartByUserId = async (userId: string): Promise<ICartAttributes | null> => {
   return await db.Cart.findOne({ where: { userId }, raw: true  });
 };
@@ -119,30 +164,31 @@ export const createCartForUser = async (userId: string): Promise<ICartAttributes
   return await db.Cart.create({ userId } );
 };
 
-// Decrease item quantity in the cart
 export const decreaseCart = async (
   userId: string,
   productId: string,
-  quantity: number
+  quantity: number,
+    sizeId: string,
 ): Promise<ICartItemAttributes | null> => {
   try {
     // Find the user's cart
-    const cart = await db.Cart.findOne({ where: { userId } ,raw:true});
+    const cart = await db.Cart.findOne({ where: { userId }, raw: true });
     if (!cart) {
       throw customError(cartErrors.CartNotFound);
     }
 
     // Find the cart item
-    const cartItem = await db.CartItem.findOne({ where: { cartId: cart.id, productId } });
+    const cartItem = await db.CartItem.findOne({
+      where: { cartId: cart.id, productId, sizeItemId:sizeId },
+    });
     if (!cartItem) {
       throw customError(cartErrors.CartItemNotFound);
     }
-
-    // If quantity is greater than 1, decrement; otherwise, remove item
-    if (cartItem.dataValues.quantity > quantity) {
- await cartItem.update({ quantity:  quantity });
-
-    await cartItem.reload(); // Ensure the updated value is returned
+const cartItemJson = cartItem.toJSON()
+    // If quantity is greater than the requested decrease, decrement; otherwise, remove item
+    if (cartItemJson.quantity > quantity) {
+      await cartItem.update({ quantity: cartItemJson.quantity - quantity });
+      await cartItem.reload(); // Ensure the updated value is returned
       return cartItem;
     } else {
       await cartItem.destroy();
@@ -158,22 +204,21 @@ export const decreaseCart = async (
   }
 };
 
-
-// Remove item from the cart
 export const removeFromCart = async (
   userId: string,
-  productId: string
+  productId: string,
+  sizeId: string // Add sizeId parameter
 ): Promise<void> => {
   try {
     // Find the user's cart
-    const cart = await db.Cart.findOne({ where: { userId },raw:true });
+    const cart = await db.Cart.findOne({ where: { userId }, raw: true });
     if (!cart) {
       throw customError(cartErrors.CartNotFound);
     }
 
     // Remove the item from the cart
     const deletedRows = await db.CartItem.destroy({
-      where: { cartId: cart.id, productId },
+      where: { cartId: cart.id, productId, sizeItemId :sizeId },
     });
 
     // If no rows were deleted, the product was not in the cart
@@ -194,7 +239,6 @@ export const removeFromCart = async (
   }
 };
 
-// Clear the cart
 export const clearCart = async (userId: string): Promise<void> => {
   try {
     // Find the user's cart
@@ -214,6 +258,7 @@ export const clearCart = async (userId: string): Promise<void> => {
     });
   }
 };
+
 export default {
   getCart,
   addToCart,

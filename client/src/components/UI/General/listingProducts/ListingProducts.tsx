@@ -114,11 +114,11 @@ return (
                       <span className="far fa-heart"></span>
                     </Link>
                   </li>
-                  <li className="icon">
+                  {/* <li className="icon">
                     <a  onClick={() => handleAddToCart(product)}>
                       <span className="fas fa-shopping-bag"></span>
                     </a>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
 
