@@ -216,10 +216,10 @@ export const handleWebhookEvent = async (event: any): Promise<void> => {
             }
 
             // Subtract the purchased quantity
-            sizeItem.quantity -= item.quantity;
+            sizeItem.dataValues.quantity -= item.quantity;
 
             // If the quantity reaches 0, delete the SizeItem
-            if (sizeItem.quantity <= 0) {
+            if (sizeItem.dataValues.quantity <= 0) {
               await sizeItem.destroy({ transaction });
             } else {
               // Otherwise, save the updated quantity
