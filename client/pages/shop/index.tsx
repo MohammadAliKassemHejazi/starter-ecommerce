@@ -18,7 +18,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Moment from "react-moment";
 import { IProductModel } from "@/models/product.model";
-import { IStoreModel, IStoreResponseModel } from "@/models/store.model";
+import { IStoreResponseModel } from "@/models/store.model";
 
 type Props = {};
 
@@ -40,8 +40,8 @@ const Shop = ({}: Props) => {
   const totalProducts = useSelector(totalProductsSelector);
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
-  const stores = useSelector(storeSelector)  as IStoreResponseModel[];
-   const [selectedStore, setSelectedStore] = useState<string>("");
+  const stores = useSelector(storeSelector) as IStoreResponseModel[];
+  const [selectedStore, setSelectedStore] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
@@ -50,12 +50,16 @@ const Shop = ({}: Props) => {
 
   useEffect(() => {
     if (selectedStore) {
-      dispatch(fetchProductsByStore({ storeId: selectedStore, page: currentPage, pageSize })).then(result => {
-        console.log(result,"productList")
+      dispatch(
+        fetchProductsByStore({
+          storeId: selectedStore,
+          page: currentPage,
+          pageSize,
+        })
+      ).then((result) => {
+        console.log(result, "productList");
       });
-        
     }
-  
   }, [dispatch, selectedStore, currentPage, pageSize]);
 
   const handleDeleteProduct = async (id: string, name?: string) => {
@@ -78,7 +82,13 @@ const Shop = ({}: Props) => {
               title: "Product deleted successfully",
             });
 
-            dispatch(fetchProductsByStore({ storeId: selectedStore!, page: currentPage, pageSize }));
+            dispatch(
+              fetchProductsByStore({
+                storeId: selectedStore!,
+                page: currentPage,
+                pageSize,
+              })
+            );
           } else {
             Toast.fire({
               icon: "error",
@@ -91,7 +101,9 @@ const Shop = ({}: Props) => {
   };
 
   const handlePageChange = (newPage: number) => {
-    dispatch(fetchProductsByStore({ storeId: selectedStore!, page: newPage, pageSize }));
+    dispatch(
+      fetchProductsByStore({ storeId: selectedStore!, page: newPage, pageSize })
+    );
   };
 
   const totalPages = Math.ceil(totalProducts / pageSize);
@@ -144,54 +156,61 @@ const Shop = ({}: Props) => {
                 </thead>
 
                 <tbody>
-                {productList?.map((product, idx) => {
-  // Log the product object to the console
-  console.log(product);
+                  {productList?.map((product, idx) => {
+                    // Log the product object to the console
+                    console.log(product);
 
-  return (
-    <tr key={idx} className="text-center">
-      <td>{(currentPage - 1) * pageSize + idx + 1}</td>
-      <td>
-        {product.photos  && (
-          <Image
-            src={process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0]?.imageUrl }
-            alt={product?.name ?? ""}
-            width={50}
-            height={50}
-          />
-        )}
-      </td>
-      <td>{product.name}</td>
-      <td>{product.price}</td>
-      <td>
-        <Moment format="DD/MM/YYYY HH:mm">
-          {product?.updatedAt ?? ""}
-        </Moment>
-      </td>
-      <td>
-        <div className="btn-group">
-          <button
-            className="btn btn-danger me-2"
-            onClick={() =>
-              handleDeleteProduct(product?.id ?? "", product.name)
-            }
-          >
-            Delete
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() =>
-              router.push(`/shop/product/edit?id=${product.id}`)
-            }
-          >
-            Edit
-          </button>
-        </div>
-      </td>
-    </tr>
-  );
-})}
-
+                    return (
+                      <tr key={idx} className="text-center">
+                        <td>{(currentPage - 1) * pageSize + idx + 1}</td>
+                        <td>
+                          {product.photos && (
+                            <Image
+                              src={
+                                process.env.NEXT_PUBLIC_BASE_URL_Images +
+                                product.photos[0]?.imageUrl
+                              }
+                              alt={product?.name ?? ""}
+                              width={50}
+                              height={50}
+                            />
+                          )}
+                        </td>
+                        <td>{product.name}</td>
+                        <td>{product.price}</td>
+                        <td>
+                          <Moment format="DD/MM/YYYY HH:mm">
+                            {product?.updatedAt ?? ""}
+                          </Moment>
+                        </td>
+                        <td>
+                          <div className="btn-group">
+                            <button
+                              className="btn btn-danger me-2"
+                              onClick={() =>
+                                handleDeleteProduct(
+                                  product?.id ?? "",
+                                  product.name
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() =>
+                                router.push(
+                                  `/shop/product/edit?id=${product.id}`
+                                )
+                              }
+                            >
+                              Edit
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

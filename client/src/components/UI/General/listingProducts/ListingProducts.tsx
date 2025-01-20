@@ -3,12 +3,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { IProductModel } from "@/models/product.model";
 import { fetchProductsListing } from "@/store/slices/shopSlice"; 
-import { addToCart } from "@/store/slices/cartSlice";
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
 interface ProductListProps { }
+
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -31,7 +31,7 @@ const ProductList: React.FC<ProductListProps> = () => {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Fetch the initial products
+
     dispatch(fetchProductsListing({page:1,pageSize:10}));
   }, [dispatch]);
 
@@ -53,15 +53,7 @@ const ProductList: React.FC<ProductListProps> = () => {
     return { tag, tagColor };
   };
 
-  const handleAddToCart = (product: IProductModel) => {
-    console.log("handleAddToCart clicked")
-    dispatch(addToCart(product));
-    console.log(product);
-       Toast.fire({
-      icon: "success",
-      title: "Added to cart",
-    });
-  };
+
 
   const lastProductRef = useCallback(
     (node: HTMLDivElement | null) => {

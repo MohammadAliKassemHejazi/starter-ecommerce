@@ -11,7 +11,7 @@ import { raw } from 'express';
 
 
 
- const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductAttributes> => {
+ export const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductAttributes> => {
   try {
     const product = await db.Product.create(productData);
     const productJSON = product.toJSON() as IProductAttributes;
@@ -51,7 +51,7 @@ import { raw } from 'express';
 };
 
 
-const getProductById = async (
+export const getProductById = async (
   productId: string
 ): Promise< IProductAttributes | null> => {
   try {
@@ -111,7 +111,7 @@ const product = await db.Product.findOne({
 
 
 
-const getTopProductIds = async (
+export const getTopProductIds = async (
   limit: number = 200
 ): Promise<any> => {
 

@@ -89,43 +89,42 @@ const SingleItem = ({ product }: Props) => {
     }));
   };
 
-const handleAddToCart = (
-  product: IProductModel,
-  size: string,
-  sizeId: string,
-  quantity: number
-) => {
-  if (!size || !sizeId) {
-    Toast.fire({
-      icon: "error",
-      title: "Please select a size",
-    });
-    return;
-  }
+  const handleAddToCart = (
+    product: IProductModel,
+    size: string,
+    sizeId: string,
+    quantity: number
+  ) => {
+    if (!size || !sizeId) {
+      Toast.fire({
+        icon: "error",
+        title: "Please select a size",
+      });
+      return;
+    }
 
-  if (quantity <= 0) {
+    if (quantity <= 0) {
+      Toast.fire({
+        icon: "error",
+        title: "Please select a valid quantity",
+      });
+      return;
+    }
+    debugger;
+    product.quantity = quantity;
+    // Add product to cart with selected size, size ID, and quantity
+    const productWithSizeAndQuantity = {
+      ...product,
+      size,
+      sizeId,
+    };
+
+    dispatch(addToCart(productWithSizeAndQuantity));
     Toast.fire({
-      icon: "error",
-      title: "Please select a valid quantity",
+      icon: "success",
+      title: "Added to cart",
     });
-    return;
-  }
-      debugger
-    product.quantity = quantity
-  // Add product to cart with selected size, size ID, and quantity
-  const productWithSizeAndQuantity = {
-    ...product,
-    size,
-    sizeId,
-    
   };
-
-  dispatch(addToCart(productWithSizeAndQuantity));
-  Toast.fire({
-    icon: "success",
-    title: "Added to cart",
-  });
-};
 
   return (
     <>
@@ -196,115 +195,122 @@ const handleAddToCart = (
                     <h6>Description:</h6>
                     <p>{product?.description ?? ""}</p>
 
-<Formik
-  initialValues={{
-    size: "S", // Default size
-    sizeId: "", // Default size ID
-    quantity: 1,
-  }}
-  onSubmit={handleSubmit}
->
-  {({ values, setFieldValue }) => (
-    <Form>
-      <div className="row">
-        <div className="col-auto">
-          <ul className="list-inline pb-3">
-            <li className="list-inline-item">
-              Size:
-              <input
-                type="hidden"
-                name="size"
-                value={values.size}
-              />
-              <input
-                type="hidden"
-                name="sizeId"
-                value={values.sizeId}
-              />
-            </li>
-            {product?.SizeItems?.map((s) => {
-              return (
-                <li key={s.id} className="list-inline-item">
-                  <button
-                    type="button"
-                    className={`btn btn-success btn-size ${
-                      values.size === s.Size?.size ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      setFieldValue("size", s.Size?.size); // Set the size
-                      setFieldValue("sizeId", s.id); // Set the size ID
-                    }}
-                    disabled={s.quantity === 0}
-                  >
-                    {s.Size?.size}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <div className="col-auto">
-          <ul className="list-inline pb-3">
-            <li className="list-inline-item text-right">
-              Quantity
-              <input
-                type="hidden"
-                name="quantity"
-                value={values.quantity}
-              />
-            </li>
-            <li className="list-inline-item">
-              <span
-                className="btn btn-success"
-                onClick={() =>
-                  setFieldValue(
-                    "quantity",
-                    Math.max(values.quantity - 1, 1)
-                  )
-                }
-              >
-                -
-              </span>
-            </li>
-            <li className="list-inline-item">
-              <span className="badge bg-secondary">
-                {values.quantity}
-              </span>
-            </li>
-            <li className="list-inline-item">
-              <span
-                className="btn btn-success"
-                onClick={() =>
-                  setFieldValue(
-                    "quantity",
-                    values.quantity + 1
-                  )
-                }
-              >
-                +
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="row pb-3">
-        <div className="col d-grid">
-          <button
-            type="submit"
-            className="btn btn-success btn-lg"
-            name="submit"
-            value="addtocart"
-            onClick={() =>
-              handleAddToCart(product!, values.size, values.sizeId, values.quantity)
-            }
-          >
-            Add To Cart
-          </button>
-        </div>
-      </div>
-    </Form>
-  )}
-</Formik>
+                    <Formik
+                      initialValues={{
+                        size: "S", // Default size
+                        sizeId: "", // Default size ID
+                        quantity: 1,
+                      }}
+                      onSubmit={handleSubmit}
+                    >
+                      {({ values, setFieldValue }) => (
+                        <Form>
+                          <div className="row">
+                            <div className="col-auto">
+                              <ul className="list-inline pb-3">
+                                <li className="list-inline-item">
+                                  Size:
+                                  <input
+                                    type="hidden"
+                                    name="size"
+                                    value={values.size}
+                                  />
+                                  <input
+                                    type="hidden"
+                                    name="sizeId"
+                                    value={values.sizeId}
+                                  />
+                                </li>
+                                {product?.SizeItems?.map((s) => {
+                                  return (
+                                    <li key={s.id} className="list-inline-item">
+                                      <button
+                                        type="button"
+                                        className={`btn btn-success btn-size ${
+                                          values.size === s.Size?.size
+                                            ? "active"
+                                            : ""
+                                        }`}
+                                        onClick={() => {
+                                          setFieldValue("size", s.Size?.size); // Set the size
+                                          setFieldValue("sizeId", s.id); // Set the size ID
+                                        }}
+                                        disabled={s.quantity === 0}
+                                      >
+                                        {s.Size?.size}
+                                      </button>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                            <div className="col-auto">
+                              <ul className="list-inline pb-3">
+                                <li className="list-inline-item text-right">
+                                  Quantity
+                                  <input
+                                    type="hidden"
+                                    name="quantity"
+                                    value={values.quantity}
+                                  />
+                                </li>
+                                <li className="list-inline-item">
+                                  <span
+                                    className="btn btn-success"
+                                    onClick={() =>
+                                      setFieldValue(
+                                        "quantity",
+                                        Math.max(values.quantity - 1, 1)
+                                      )
+                                    }
+                                  >
+                                    -
+                                  </span>
+                                </li>
+                                <li className="list-inline-item">
+                                  <span className="badge bg-secondary">
+                                    {values.quantity}
+                                  </span>
+                                </li>
+                                <li className="list-inline-item">
+                                  <span
+                                    className="btn btn-success"
+                                    onClick={() =>
+                                      setFieldValue(
+                                        "quantity",
+                                        values.quantity + 1
+                                      )
+                                    }
+                                  >
+                                    +
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="row pb-3">
+                            <div className="col d-grid">
+                              <button
+                                type="submit"
+                                className="btn btn-success btn-lg"
+                                name="submit"
+                                value="addtocart"
+                                onClick={() =>
+                                  handleAddToCart(
+                                    product!,
+                                    values.size,
+                                    values.sizeId,
+                                    values.quantity
+                                  )
+                                }
+                              >
+                                Add To Cart
+                              </button>
+                            </div>
+                          </div>
+                        </Form>
+                      )}
+                    </Formik>
                     <h6>Comments:</h6>
                     {product?.comments?.map((comment: any, index: any) => (
                       <div key={index} className="comment">
@@ -432,7 +438,7 @@ export const getServerSideProps: GetServerSideProps = async (
       }
       product.ProductImages = product?.ProductImages ?? [];
       product.photo = product?.ProductImages?.[0] ?? [];
-      
+
       console.log(product, "product");
       return {
         props: {
@@ -451,5 +457,3 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 };
-
-

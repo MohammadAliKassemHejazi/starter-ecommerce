@@ -27,6 +27,10 @@ function Document({}: Props) {
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
           rel="stylesheet"
         />
+        <link 
+  rel="stylesheet" 
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+/>
         <Script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></Script>
 
       </Head>

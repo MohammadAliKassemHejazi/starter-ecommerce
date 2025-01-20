@@ -34,7 +34,7 @@ const CreateStore = () => {
 
   useRunOnce(() => {
 
-      dispatch(fetchAllCategories());
+    dispatch(fetchAllCategories());
    
   });
 
@@ -100,65 +100,74 @@ const CreateStore = () => {
   return (
     <Layout>
       <section className="mt-5">
-        <p>{categoriesList?.length}</p>
+        <div className="container">
+          <h2 className="text-center mb-4">Create Store</h2>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validate={(values) => {
+              const errors: Partial<IStoreModelErrors> = {};
+              if (!values.name) {
+                errors.name = "Required";
+              }
+              return errors;
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                {/* Store Information Card */}
+                <div className="card mb-4">
+                  <div className="card-header">Store Information</div>
+                  <div className="card-body">
+                    <div className="form-group">
+                      <label htmlFor="name">Name:</label>
+                      <Field type="text" className="form-control" id="name" name="name" />
+                      <ErrorMessage name="name" component="div" className="text-danger" />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="description">Description:</label>
+                      <Field as="textarea" className="form-control" id="description" name="description" rows="4" />
+                      <ErrorMessage name="description" component="div" className="text-danger" />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="categoryId">Category:</label>
+                      <Field as="select" className="form-control" id="categoryId" name="categoryId">
+                        <option value="">Select Category</option>
+                        {categoriesList?.map((category: any) => (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage name="categoryId" component="div" className="text-danger" />
+                    </div>
+                  </div>
+                </div>
 
-        <h2>Create Store</h2>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validate={(values) => {
-            const errors: Partial<IStoreModelErrors> = {};
-            if (!values.name) {
-              errors.name = "Required";
-            }
-            return errors;
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <div>
-                <label htmlFor="name">Name:</label>
-                <Field type="text" id="name" name="name" />
-                <ErrorMessage name="name" component="div" />
-              </div>
-              <div>
-                <label htmlFor="description">Description:</label>
-                <Field as="textarea" id="description" name="description" />
-                <ErrorMessage name="description" component="div" />
-              </div>
+                {/* Image Upload and Viewer Section */}
+                <div className="card mb-4">
+                  <div className="card-header">Store Images</div>
+                  <div className="card-body">
+                    <ImageUploadComponent
+                      onImagesChange={handlePhotoChange}
+                      defaultImages={store.photos}
+                    />
+                    <h3 className="mt-4">Cropped Images</h3>
+                    <ImageViewer productImages={store.croppedImages} />
+                  </div>
+                </div>
 
-              <div>
-                <label htmlFor="categoryId">Category:</label>
-                <Field as="select" id="categoryId" name="categoryId">
-                  <option value="">Select Category</option>
-                  {categoriesList?.map((category: any) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage name="categoryId" component="div" />
-              </div>
-
-              <button type="submit" disabled={isSubmitting}>
-                Create Store
-              </button>
-            </Form>
-          )}
-        </Formik>
-
-        <ImageUploadComponent
-          onImagesChange={handlePhotoChange}
-          defaultImages={store.photos}
-        />
-
-        <div>
-          <h3>Cropped Images</h3>
-          <ImageViewer productImages={store.croppedImages} />
+                {/* Submit Button */}
+                <button type="submit" className="btn btn-primary btn-lg" disabled={isSubmitting}>
+                  Create Store
+                </button>
+              </Form>
+            )}
+          </Formik>
         </div>
       </section>
     </Layout>
   );
-};
+}
 
 export default protectedRoute(CreateStore);

@@ -17,7 +17,10 @@ const initialState: ProductsState = {
 
 export const fetchProductsListing = createAsyncThunk(
   "shop/productListing",
-  async ({ page, pageSize }: {page?: number, pageSize: number }) => {
+  async ({ page, pageSize }: { page?: number, pageSize: number }) => {
+    if (((page ?? 0) <= 0) || pageSize <= 0) {
+      throw new Error("Invalid page or pageSize");
+    }
     const response = await shopService.requestProductsListing( page!, pageSize);
     return response;
   }
@@ -125,7 +128,12 @@ export const articleSlice = createSlice({
     
 
 builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
-  state.products = [...state.products, ...action.payload.products]; // Append new products
+  // Reset products array if it's the first page
+  if (action.payload.page === 1) {
+    state.products = action.payload.products; // Replace the array
+  } else {
+    state.products = [...state.products, ...action.payload.products]; // Append new products
+  }
   state.total = action.payload.total;
   state.page = action.payload.page;
   state.pageSize = action.payload.pageSize;

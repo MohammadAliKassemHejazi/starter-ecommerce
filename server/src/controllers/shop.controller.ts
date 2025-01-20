@@ -4,8 +4,7 @@ import {  Response,NextFunction } from "express";
 import { shopService,userService } from "../services"
 
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
-import { IShopCreateProduct } from "interfaces/types/controllers/shop.controller.types";
-import { unlink } from "fs/promises";
+
 import { error } from "console";
 import path from 'node:path';
 import fs from 'fs';
@@ -168,8 +167,8 @@ export const getProductsByStore =
   };
 
   export const getProductsListing = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
-
-
+  
+  
   const { page = 1, pageSize = 10 } = req.query;
 
   try {

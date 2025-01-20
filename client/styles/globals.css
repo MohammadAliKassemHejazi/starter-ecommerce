@@ -205,6 +205,15 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-top:10px;
+  
+}
+.container-hidden {
+  max-width: 800px;
+  background-color:transparent;
+  padding: 20px;
+  border-radius: 0;
+  box-shadow: 0 0 0 0;
 }
 
 .card {
@@ -240,4 +249,10 @@ h2 {
 
 .text-danger {
   color: #dc3545;
+}
+
+
+.hover-text-dark:hover {
+  color: black !important; /* Change text color to black on hover */
+  background-color: rgba(255, 255, 255, 0.1); /* Optional: Add a subtle background on hover */
 }
