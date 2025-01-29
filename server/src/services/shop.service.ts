@@ -7,10 +7,9 @@ import { IProductAttributes, } from 'interfaces/types/models/product.model.types
 import db from '../models/index';
 import fs from 'fs';
 import path from 'path';
-import { raw } from 'express';
+import { Op } from "sequelize"; // Import Op
 
-
-
+import { validate as uuidValidate } from "uuid";
  export const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductAttributes> => {
   try {
     const product = await db.Product.create(productData);
@@ -200,23 +199,54 @@ export const deleteProductImage = async (id: string, userId: string): Promise<an
   }
 };
 
-export const fetchProductsByStore = async ({ storeId,ownerId, page, pageSize }: FetchProductsByStoreParams) => {
-  const { rows:products, count:total } = await db.Product.findAndCountAll({
-    where: { storeId, ownerId },
+
+
+interface SearchCondition {
+  name?: { [Op.like]: string };
+  id?: { [Op.eq]: string };
+}
+
+export const fetchProductsByStore = async ({
+  storeId,
+  ownerId,
+  page,
+  pageSize,
+  searchQuery,
+}: FetchProductsByStoreParams) => {
+  // Build the "where" clause dynamically
+  const whereClause: any = { storeId, ownerId };
+
+  if (searchQuery) {
+    const searchConditions: SearchCondition[] = [
+      { name: { [Op.like]: `%${searchQuery}%` } }, // Partial match for name
+    ];
+
+    // Only add the ID condition if the searchQuery is a valid UUID
+    if (uuidValidate(searchQuery)) {
+      searchConditions.push({ id: { [Op.eq]: searchQuery } }); // Exact match for UUID
+    }
+
+    whereClause[Op.or] = searchConditions;
+  }
+
+  const { rows: products, count: total } = await db.Product.findAndCountAll({
+    where: whereClause,
     offset: (page - 1) * pageSize,
     limit: pageSize,
-       include: [
-        {
-           model: db.ProductImage,
-           order: [['createdAt', 'DESC']],
-        },
-      ],
-      raw : true,
-      nest: true, // Nest the results to properly align the data structure
+    include: [
+      {
+        model: db.ProductImage,
+        order: [["createdAt", "DESC"]],
+      },
+    ],
+    raw: true,
+    nest: true,
   });
 
   return { products, total, page, pageSize };
 };
+
+
 
 export const fetchProductsListing = async ({ page, pageSize }: FetchProductsByStoreParams) => {
   const { rows:products, count:total } = await db.Product.findAndCountAll({

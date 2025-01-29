@@ -37,6 +37,7 @@
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
     "@types/cookie": "^0.5.1",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^18.9.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.14",

@@ -22,5 +22,6 @@ export interface FetchProductsByStoreParams {
     storeId: string;
     ownerId: string;
   page: number;
-  pageSize: number;
+    pageSize: number;
+    searchQuery?: string;
 }

@@ -10,7 +10,7 @@ import {
 } from "@/store/slices/shopSlice";
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import { store, useAppDispatch } from "@/store/store";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
@@ -19,7 +19,7 @@ import Image from "next/image";
 import Moment from "react-moment";
 import { IProductModel } from "@/models/product.model";
 import { IStoreResponseModel } from "@/models/store.model";
-
+import debounce from "lodash.debounce"
 type Props = {};
 
 const Toast = Swal.mixin({
@@ -34,33 +34,77 @@ const Toast = Swal.mixin({
   },
 });
 
+
+
 const Shop = ({}: Props) => {
-  const dispatch = useAppDispatch();
+   const dispatch = useAppDispatch();
   const productList = useSelector(productByStoreSelector) as IProductModel[];
   const totalProducts = useSelector(totalProductsSelector);
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
   const stores = useSelector(storeSelector) as IStoreResponseModel[];
   const [selectedStore, setSelectedStore] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const router = useRouter();
 
-  useEffect(() => {
-    store.dispatch(fetchAllStores());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (selectedStore) {
+  // Memoized debounced fetch function
+  const fetchProducts = useCallback(
+    (query: string) => {
       dispatch(
         fetchProductsByStore({
           storeId: selectedStore,
           page: currentPage,
           pageSize,
+          searchQuery: query,
         })
-      ).then((result) => {
-        console.log(result, "productList");
-      });
+      );
+    },
+    [selectedStore, currentPage, pageSize, dispatch]
+  );
+
+  // Debounce the fetch function
+  const debouncedFetchProducts = useMemo(
+    () => debounce(fetchProducts, 2000),
+    [fetchProducts]
+  );
+
+  // Fetch stores on mount
+  useEffect(() => {
+    store.dispatch(fetchAllStores());
+  }, [dispatch]);
+
+  // Fetch products when store, page, pageSize, or searchQuery changes
+  useEffect(() => {
+    if (selectedStore) {
+      debouncedFetchProducts(searchQuery);
     }
-  }, [dispatch, selectedStore, currentPage, pageSize]);
+  }, [selectedStore, currentPage, pageSize, searchQuery, debouncedFetchProducts]);
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      debouncedFetchProducts.cancel();
+    };
+  }, [debouncedFetchProducts]);
+
+  // Fetch stores on mount
+  useEffect(() => {
+    store.dispatch(fetchAllStores());
+  }, [dispatch]);
+
+  // Fetch products when store, page, pageSize, or searchQuery changes
+  useEffect(() => {
+    if (selectedStore) {
+      debouncedFetchProducts(searchQuery);
+    }
+  }, [selectedStore, currentPage, pageSize, searchQuery, debouncedFetchProducts]);
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      debouncedFetchProducts.cancel();
+    };
+  }, [debouncedFetchProducts]);
 
   const handleDeleteProduct = async (id: string, name?: string) => {
     Swal.fire({
@@ -87,6 +131,7 @@ const Shop = ({}: Props) => {
                 storeId: selectedStore!,
                 page: currentPage,
                 pageSize,
+                searchQuery,
               })
             );
           } else {
@@ -102,7 +147,12 @@ const Shop = ({}: Props) => {
 
   const handlePageChange = (newPage: number) => {
     dispatch(
-      fetchProductsByStore({ storeId: selectedStore!, page: newPage, pageSize })
+      fetchProductsByStore({
+        storeId: selectedStore!,
+        page: newPage,
+        pageSize,
+        searchQuery,
+      })
     );
   };
 
@@ -136,11 +186,23 @@ const Shop = ({}: Props) => {
               </Link>
             </div>
 
+            {/* Search Bar */}
+            <div className="mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search products by name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
             <span className="float-start">
               You have: {totalProducts} products
             </span>
           </div>
 
+          {/* Render product list */}
           <div className="col-md-12">
             <div className="table-responsive">
               <table className="table table-bordered">
@@ -156,65 +218,56 @@ const Shop = ({}: Props) => {
                 </thead>
 
                 <tbody>
-                  {productList?.map((product, idx) => {
-                    // Log the product object to the console
-                    console.log(product);
-
-                    return (
-                      <tr key={idx} className="text-center">
-                        <td>{(currentPage - 1) * pageSize + idx + 1}</td>
-                        <td>
-                          {product.photos && (
-                            <Image
-                              src={
-                                process.env.NEXT_PUBLIC_BASE_URL_Images +
-                                product.photos[0]?.imageUrl
-                              }
-                              alt={product?.name ?? ""}
-                              width={50}
-                              height={50}
-                            />
-                          )}
-                        </td>
-                        <td>{product.name}</td>
-                        <td>{product.price}</td>
-                        <td>
-                          <Moment format="DD/MM/YYYY HH:mm">
-                            {product?.updatedAt ?? ""}
-                          </Moment>
-                        </td>
-                        <td>
-                          <div className="btn-group">
-                            <button
-                              className="btn btn-danger me-2"
-                              onClick={() =>
-                                handleDeleteProduct(
-                                  product?.id ?? "",
-                                  product.name
-                                )
-                              }
-                            >
-                              Delete
-                            </button>
-                            <button
-                              className="btn btn-primary"
-                              onClick={() =>
-                                router.push(
-                                  `/shop/product/edit?id=${product.id}`
-                                )
-                              }
-                            >
-                              Edit
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {productList?.map((product, idx) => (
+                    <tr key={idx} className="text-center">
+                      <td>{product.id}</td>
+                      <td>
+                        {product.photos && (
+                          <Image
+                            src={
+                              process.env.NEXT_PUBLIC_BASE_URL_Images +
+                              product.photos[0]?.imageUrl
+                            }
+                            alt={product?.name ?? ""}
+                            width={50}
+                            height={50}
+                          />
+                        )}
+                      </td>
+                      <td>{product.name}</td>
+                      <td>{product.price}</td>
+                      <td>
+                        <Moment format="DD/MM/YYYY HH:mm">
+                          {product?.updatedAt ?? ""}
+                        </Moment>
+                      </td>
+                      <td>
+                        <div className="btn-group">
+                          <button
+                            className="btn btn-danger me-2"
+                            onClick={() =>
+                              handleDeleteProduct(product?.id ?? "", product.name)
+                            }
+                          >
+                            Delete
+                          </button>
+                          <button
+                            className="btn btn-primary"
+                            onClick={() =>
+                              router.push(`/shop/product/edit?id=${product.id}`)
+                            }
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
 
+            {/* Pagination */}
             <div className="d-flex justify-content-between mt-3">
               <button
                 className="btn btn-secondary"

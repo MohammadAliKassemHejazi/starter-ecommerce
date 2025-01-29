@@ -36,9 +36,24 @@ export const fetchProductById = createAsyncThunk(
 
 export const fetchProductsByStore = createAsyncThunk(
   "shop/by-store",
-  async ({ storeId, page, pageSize }: { storeId: string, page: number, pageSize: number }) => {
-    const response = await shopService.requestProductsByStore(storeId, page, pageSize);
-    console.log(response)
+  async ({
+    storeId,
+    page,
+    pageSize,
+    searchQuery = "", // Add searchQuery as an optional parameter
+  }: {
+    storeId: string;
+    page: number;
+    pageSize: number;
+    searchQuery?: string;
+  }) => {
+    const response = await shopService.requestProductsByStore(
+      storeId,
+      page,
+      pageSize,
+      searchQuery // Pass searchQuery to the API
+    );
+    console.log(response);
     return response;
   }
 );
