@@ -8,8 +8,6 @@ type Props = {};
 
 import Image from "next/image";
 const ListShop = ({}: Props) => {
-
-
   return (
     <Layout>
      <div className="container bg-white">

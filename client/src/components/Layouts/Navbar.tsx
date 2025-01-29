@@ -80,6 +80,7 @@ export default function Navbar() {
                     <li><Link className="dropdown-item text-white hover-text-dark" href="/store">Stores</Link></li>
                     <li><hr className="dropdown-divider border-white" /></li>
                     <li><Link className="dropdown-item text-white hover-text-dark" href="/cart">Cart</Link></li>
+                 <li><Link className="dropdown-item text-white hover-text-dark" href="/orders">Orders</Link></li>
                   </ul>
                 </li>
 

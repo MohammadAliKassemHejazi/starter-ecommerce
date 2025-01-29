@@ -6,101 +6,84 @@ import { RootState } from "../store";
 import { IStoreResponseModel } from "@/models/store.model";
 
 const initialState: StoresState = {
-	stores: [],
-	error: "",
+  stores: [],
+  store: undefined,
+  error: "",
 };
 
 export const fetchStoreById = createAsyncThunk(
-	"store/by-id",
-	async (id: string) => {
-		const response = await storeService.requestStoreById(id)
-		return response;
-	}
-)
-
-export const fetchArticleByAuthor = createAsyncThunk(
-	"store/by-author",
-	async () => {
-		const response = await storeService.requestArticleByAuthor();
-		return response
-	}
-)
+  "store/by-id",
+  async (id: string) => {
+    const response = await storeService.requestStoreById(id);
+    return response;
+  }
+);
 
 export const fetchAllStores = createAsyncThunk(
-	"store/fetch",
-	async () => {
-		const response = await storeService.requestAllStores();
-	
-		return response
-	}
-)
+  "store/fetch",
+  async () => {
+    const response = await storeService.requestAllStores();
+    return response;
+  }
+);
+
+export const fetchAllStoresWithFilter = createAsyncThunk(
+  "store/fetch",
+  async ({ searchQuery, page, pageSize }: { searchQuery: string, page: number, pageSize: number })=> {
+    const response = await storeService.requestAllStores();
+    return response;
+  }
+);
 
 export const createStore = createAsyncThunk(
-	"store/create",
-	async (store: FormData) => {
-		const response: IStoreResponseModel = await storeService.requestCreateStore(store);
-		return response
-	}
-)
+  "store/create",
+  async (store: FormData) => {
+    const response: IStoreResponseModel = await storeService.requestCreateStore(store);
+    return response;
+  }
+);
 
-export const updateArticles = createAsyncThunk(
-	"store/update",
-	async (article: IStoreResponseModel) => {
-		article 
-			
-		// const response = await shopService.requestUpdateArticles(article);
-		return article
-	}
-)
+export const deleteStore = createAsyncThunk(
+  "store/delete",
+  async (id: string) => {
+    const response = await storeService.requestDeleteStore(id);
+    return response;
+  }
+);
 
-export const deleteArticles = createAsyncThunk(
-	"store/delete",
-	async (id: string) => {
-		const response = await storeService.requestDeleteArticles(id);
-		return response
-	}
-)
-
-export const articleSlice = createSlice({
-	name: "store",
-	initialState: initialState,
-	reducers: {
-
-	},
-	extraReducers: (builder) => {
-
-		builder.addCase(fetchStoreById.fulfilled, (state, action) => {
-
-			state.store = action.payload;
-		})
-
-		builder.addCase(fetchStoreById.rejected, (state) => {
-			state.store = undefined;
-		})
-
-		builder.addCase(createStore.fulfilled, (state, action) => {
-			state.store = action.payload
-        })
-        
-       builder.addCase(createStore.rejected, (state, ) => {
-			state.store = undefined
-		})
-
-		builder.addCase(fetchAllStores.fulfilled, (state, action) => {
-		
-			state.stores = action.payload.stores;
-		})
-
-		builder.addCase(fetchAllStores.rejected, (state) => {
-			state.stores = undefined;
-		})
-
-
-	}
-})
+const storeSlice = createSlice({
+  name: "store",
+  initialState: initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchStoreById.fulfilled, (state, action) => {
+        state.store = action.payload;
+      })
+      .addCase(fetchStoreById.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to fetch store.";
+        state.store = undefined;
+      })
+      .addCase(fetchAllStores.fulfilled, (state, action) => {
+        state.stores = action.payload.stores;
+      })
+      .addCase(fetchAllStores.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to fetch stores.";
+        state.stores = [];
+      })
+      .addCase(createStore.fulfilled, (state, action) => {
+        state.stores?.push(action.payload);  // Add the new store to the list
+      })
+      .addCase(createStore.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to create store.";
+      })
+      .addCase(deleteStore.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to delete store.";
+      });
+  },
+});
 
 export const storeSelector = (store: RootState): IStoreResponseModel[] | undefined => store.store.stores;
 export const singleStoreSelector = (store: RootState): IStoreResponseModel | undefined => store.store.store;
 
-
-export default articleSlice.reducer;
+export default storeSlice.reducer;

@@ -39,8 +39,8 @@ export const requestUpdateArticles = async (article: IProductModel): Promise<voi
 	return response
 }
 
-export const requestDeleteArticles = async (id: string): Promise<void> => {
-	const { data: response } = await httpClient.delete("/articles/delete/" + id)
+export const requestDeleteStore = async (id: string): Promise<void> => {
+	const { data: response } = await httpClient.delete("/store/delete/" + id)
 	return response
 }
 

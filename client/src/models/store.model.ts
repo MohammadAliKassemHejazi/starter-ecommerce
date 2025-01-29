@@ -15,7 +15,7 @@ export interface IStoreModelErrors {
     name: string;
     description: string;
     categoryId : string;
-        photos: ImageListType;
+    photos: ImageListType;
     croppedImages: string;
 }
 
@@ -32,6 +32,7 @@ export interface IStoreModel {
 
 
 export interface IStoreResponseModel {
+    createdAt: string | number | Date  | undefined;
     id?: string;
     name: string;
     description: string;

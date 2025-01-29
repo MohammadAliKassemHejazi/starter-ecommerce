@@ -1,164 +1,208 @@
-import React, { useState, useEffect } from "react";
-import { useAppDispatch } from "@/store/store";
-import { useSelector } from "react-redux";
-import { fetchLastOrder, fetchOrdersByDate, fetchOrderItems,lastOrderSelector, ordersSelector, loadingSelector  } from "@/store/slices/orderSlice";
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
+import {
+  fetchOrdersByStore,
+  totalOrdersSelector,
+  pageSelector,
+  pageSizeSelector,
+  orderByStoreSelector,
+} from "@/store/slices/orderSlice";
+import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
+import { store, useAppDispatch } from "@/store/store";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useSelector } from "react-redux";
+
+import Swal from "sweetalert2";
+import debounce from "lodash.debounce";
 import Moment from "react-moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { IOrderModel } from "@/models/order.model";
+import { IStoreResponseModel } from "@/models/store.model";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 
 const Orders = () => {
   const dispatch = useAppDispatch();
-  const lastOrder = useSelector(lastOrderSelector);
-  const orders = useSelector(ordersSelector);
-  const loading = useSelector(loadingSelector);
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const orderList = useSelector(orderByStoreSelector) as IOrderModel[];
+  const totalOrders = useSelector(totalOrdersSelector);
+  const currentPage = useSelector(pageSelector);
+  const pageSize = useSelector(pageSizeSelector);
+  const stores = useSelector(storeSelector) as IStoreResponseModel[];
+  const [selectedStore, setSelectedStore] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [fromDate, setFromDate] = useState<Date | null>(null);
+  const [toDate, setToDate] = useState<Date | null>(null);
+
+  const fetchOrders = useCallback(() => {
+    dispatch(
+      fetchOrdersByStore({
+        storeId: selectedStore,
+        page: currentPage,
+        pageSize,
+        from: fromDate ? fromDate.toISOString() : undefined,
+        to: toDate ? toDate.toISOString() : undefined,
+      })
+    );
+  }, [selectedStore, currentPage, pageSize, fromDate, toDate, dispatch]);
+
+  const debouncedFetchOrders = useMemo(
+    () => debounce(fetchOrders, 2000),
+    [fetchOrders]
+  );
 
   useEffect(() => {
-    // Simulate 2-second loading delay
-    setTimeout(() => {
-      dispatch(fetchLastOrder());
-    }, 2000);
+    store.dispatch(fetchAllStores());
   }, [dispatch]);
 
   useEffect(() => {
-    if (startDate && endDate) {
-      const from = startDate.toISOString().split("T")[0];
-      const to = endDate.toISOString().split("T")[0];
-      dispatch(fetchOrdersByDate({ from, to })).then((response) => {
-        console.log(response)
-      });
+    if (selectedStore) {
+      debouncedFetchOrders();
     }
-  }, [startDate, endDate, dispatch]);
+  }, [selectedStore, currentPage, pageSize, fromDate, toDate, debouncedFetchOrders]);
 
-  const handleOrderClick = (orderId: string) => {
-    setSelectedOrderId(orderId);
-    dispatch(fetchOrderItems(orderId));
+  useEffect(() => {
+    return () => {
+      debouncedFetchOrders.cancel();
+    };
+  }, [debouncedFetchOrders]);
+
+  const handlePageChange = (newPage: number) => {
+    dispatch(
+      fetchOrdersByStore({
+        storeId: selectedStore,
+        page: newPage,
+        pageSize,
+        from: fromDate ? fromDate.toISOString() : undefined,
+        to: toDate ? toDate.toISOString() : undefined,
+      })
+    );
   };
 
-return (
-  <Layout>
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-10">
-          <h1 className="mb-5 text-center mt-3">Your Orders</h1>
+  const totalPages = Math.ceil(totalOrders / pageSize);
 
-          {/* Date Filter */}
-          <div className="mb-4 card p-4 shadow-sm">
-            <h4 className="mb-3">Filter Orders by Date</h4>
-            <div className="row">
-              <div className="col-md-6">
-                <label className="form-label">From:</label>
-                <DatePicker
-                  selected={startDate}
-                  onChange={(date: Date | null) => setStartDate(date)}
-                  className="form-control"
-                  dateFormat="dd/MM/yyyy"
-                  placeholderText="Select start date"
-                />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">To:</label>
-                <DatePicker
-                  selected={endDate}
-                  onChange={(date: Date | null) => setEndDate(date)}
-                  className="form-control"
-                  dateFormat="dd/MM/yyyy"
-                  placeholderText="Select end date"
-                />
-              </div>
+  return (
+    <Layout>
+      <div className="container mt-5">
+        <div className="row justify-content-center">
+          <div className="col-md-12">
+            <h1 className="mb-5 text-center mt-3">My Orders</h1>
+
+            <div className="d-flex justify-content-between mb-3">
+              <select
+                className="form-select"
+                value={selectedStore ?? ""}
+                onChange={(e) => setSelectedStore(e.target.value)}
+              >
+                <option value="" disabled>
+                  Select Store
+                </option>
+                {stores?.map((store) => (
+                  <option key={store.id} value={store.id}>
+                    {store.name}
+                  </option>
+                ))}
+              </select>
             </div>
+
+            <div className="mb-3 d-flex gap-1">
+              <DatePicker
+                selected={fromDate}
+                onChange={(date) => setFromDate(date)}
+                className="form-control"
+                placeholderText="From Date"
+                dateFormat="yyyy-MM-dd"
+              />
+              <DatePicker
+                selected={toDate}
+                onChange={(date) => setToDate(date)}
+                className="form-control"
+                placeholderText="To Date"
+                dateFormat="yyyy-MM-dd"
+              />
+            </div>
+
+            <div className="mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search orders..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <span className="float-start">
+              You have: {totalOrders} orders
+            </span>
           </div>
 
-          {/* Last Order */}
-          {loading ? (
-            <div className="text-center">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <p className="mt-2">Loading your last order...</p>
-            </div>
-          ) : (
-            lastOrder && (
-              <div className="mb-5 card p-4 shadow-sm">
-                <h3 className="mb-4">Last Order</h3>
-                <div className="row">
-                  <div className="col-md-6">
-                    <p><strong>Order ID:</strong> {lastOrder.id}</p>
-                    <p><strong>Created At:</strong> <Moment format="DD/MM/YYYY HH:mm">{lastOrder.createdAt}</Moment></p>
-                  </div>
-                  <div className="col-md-6">
-                    <h5>Items:</h5>
-                    <ul className="list-group">
-                      {lastOrder.items.map((item) => (
-                        <li key={item.id} className="list-group-item">
-                          <strong>Product ID:</strong> {item.productId} | <strong>Quantity:</strong> {item.quantity} | <strong>Price:</strong> ${item.price}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )
-          )}
+          <div className="col-md-12">
+            <div className="table-responsive">
+              <table className="table table-bordered">
+                <thead>
+                  <tr className="text-center text-light bg-dark">
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Updated At</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
 
-          {/* Filtered Orders */}
-          {(orders?.length ?? 0) > 0 && (
-            <div className="card p-4 shadow-sm">
-              <h3 className="mb-4">Filtered Orders</h3>
-              <div className="table-responsive">
-                <table className="table table-hover">
-                  <thead className="table-light">
-                    <tr>
-                      <th>Order ID</th>
-                      <th>Created At</th>
-                      <th>Action</th>
+                <tbody>
+                  {orderList?.map((order, idx) => (
+                    <tr key={idx} className="text-center">
+                      <td>{order.id}</td>
+                      <td>{order.customerName}</td>
+                      <td>{order.totalPrice}</td>
+                      <td>{order.status}</td>
+                      <td>
+                        <Moment format="DD/MM/YYYY HH:mm">
+                          {order.updatedAt}
+                        </Moment>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {orders.map((order) => (
-                      <tr key={order.id}>
-                        <td>{order.id}</td>
-                        <td><Moment format="DD/MM/YYYY HH:mm">{order.createdAt}</Moment></td>
-                        <td>
-                          <button
-                            className="btn btn-outline-primary btn-sm"
-                            onClick={() => handleOrderClick(order.id)}
-                          >
-                            View Items
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* Order Items */}
-          {selectedOrderId && (
-            <div className="mt-5 card p-4 shadow-sm">
-              <h3 className="mb-4">Order Items</h3>
-              <ul className="list-group">
-                {orders
-                  .find((order) => order.id === selectedOrderId)
-                  ?.items.map((item) => (
-                    <li key={item.id} className="list-group-item">
-                      <strong>Product ID:</strong> {item.productId} | <strong>Quantity:</strong> {item.quantity} | <strong>Price:</strong> ${item.price}
-                    </li>
                   ))}
-              </ul>
+                </tbody>
+              </table>
             </div>
-          )}
+
+            <div className="d-flex justify-content-between mt-3">
+              <button
+                className="btn btn-secondary"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                Previous
+              </button>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                className="btn btn-secondary"
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </Layout>
-);
+    </Layout>
+  );
 };
 
 export default protectedRoute(Orders);
