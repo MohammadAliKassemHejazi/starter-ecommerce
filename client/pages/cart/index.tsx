@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import {
   addToCart,
   clearCart,
@@ -10,7 +10,7 @@ import {
 } from "@/store/slices/cartSlice";
 import Link from "next/link";
 import styles from "./cart.module.css"; // Import CSS module
-import { AppDispatch, RootState } from "@/store/store"; // Importing your store types
+import {  RootState, useAppDispatch } from "@/store/store"; // Importing your store types
 import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";
 import Layout from "@/components/Layouts/Layout";
@@ -24,7 +24,7 @@ const stripePromise = loadStripe(`${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_K
 
 const Cart = () => {
   const cart = useSelector((state: RootState) => state.cart);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (typeof window !== "undefined") {

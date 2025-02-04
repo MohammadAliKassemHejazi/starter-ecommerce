@@ -21,6 +21,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         primaryKey: true,
       },
+      currency: {
+  type: DataTypes.STRING(3),
+  allowNull: false,
+  defaultValue: 'USD'
+}
     },
     {
       sequelize,

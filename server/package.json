@@ -4,7 +4,10 @@
   "description": "backend node.js express starter structure template",
   "main": "index.ts",
   "scripts": {
-    "start": "pm2 start --interpreter ts-node index.ts --name server",
+    "build": "tsc",
+    "start": "pm2 start dist/index.js --name server",
+    "build-dev": "nodemon src/index.ts",
+    "dev-start": "pm2 start --interpreter ts-node index.ts --name server",
     "stop": "pm2 stop server",
     "restart": "pm2 restart server",
     "dev": "nodemon index.ts",
@@ -55,6 +58,10 @@
     "ts-node": "^10.8.2",
     "typescript": "^4.7.4"
   },
+  "engines": {
+  "node": ">=20.0.0"
+}
+,
   "keywords": [],
   "author": "",
   "license": "ISC"

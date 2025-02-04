@@ -1,29 +1,30 @@
 "use strict";
-
 import { Model, DataTypes } from "sequelize";
 import { IUserAttributes } from "../interfaces/types/models/user.model.types";
 
 module.exports = (sequelize: any) => {
-  class User extends Model<IUserAttributes> implements IUserAttributes {
+  class User extends Model implements IUserAttributes {
     id!: string;
     name!: string;
     email!: string;
     password!: string;
     phone!: string;
     address!: string;
-
+    createdById!: string | null; // Optional field to track who created the user
     static associate(models: any) {
-      // one to one realtion
-      User.hasOne(models.RoleUser, { foreignKey: 'userId' });
-      User.hasOne(models.Package, { foreignKey: 'userId'}); // User can have one package subscription
-      User.hasOne(models.Cart, { foreignKey: 'userId' }); // User can have one cart 
-      User.hasOne(models.Favorite, { foreignKey: 'userId' }); // User can have many favorites that containes many favorte items
-     
-      //  one to many
-      User.hasMany(models.Store, { foreignKey: 'userId', onDelete: 'CASCADE' }); // User can have many stores
-      User.hasMany(models.Article, { foreignKey: 'userId' , onDelete: 'CASCADE' }); // User can have many articles
-      User.hasMany(models.Order, { foreignKey: 'userId', onDelete: 'CASCADE' });
-      
+      // One-to-one relations
+      User.hasOne(models.RoleUser, { foreignKey: "userId" });
+      User.hasOne(models.Package, { foreignKey: "userId" });
+      User.hasOne(models.Cart, { foreignKey: "userId" });
+      User.hasOne(models.Favorite, { foreignKey: "userId" });
+
+      // One-to-many relations
+      User.hasMany(models.Store, { foreignKey: "userId", onDelete: "CASCADE" });
+      User.hasMany(models.Article, { foreignKey: "userId", onDelete: "CASCADE" });
+      User.hasMany(models.Order, { foreignKey: "userId", onDelete: "CASCADE" });
+
+      // Self-referential relationship for tracking who created the user
+      User.belongsTo(models.User, { foreignKey: "createdById", as: "CreatedBy" });
     }
   }
 
@@ -54,6 +55,10 @@ module.exports = (sequelize: any) => {
       address: {
         type: DataTypes.STRING(100),
         allowNull: true,
+      },
+      createdById: {
+        type: DataTypes.UUID,
+        allowNull: true, // Optional field
       },
     },
     {

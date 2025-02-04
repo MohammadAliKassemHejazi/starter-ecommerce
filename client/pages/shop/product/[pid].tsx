@@ -1,9 +1,8 @@
+import React, { useState } from "react";
 import Layout from "@/components/Layouts/Layout";
 import MySwiperComponent from "@/components/UI/General/ImagesSlider/MySwiperComponent";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
 import Image from "next/image";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { Formik, Form } from "formik";
 import { IProductModel } from "../../../src/models/product.model"; // Adjust the import path as needed
 import { setAuthHeaders } from "@/utils/httpClient";
@@ -13,9 +12,12 @@ import protectedRoute from "@/components/protectedRoute";
 import { useAppDispatch } from "@/store/store";
 import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
+import { GetStaticPaths, GetStaticProps } from "next";
+
 type Props = {
   product?: IProductModel;
 };
+
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -27,6 +29,7 @@ const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   },
 });
+
 const SingleItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -35,6 +38,11 @@ const SingleItem = ({ product }: Props) => {
     comment: "",
   });
 
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+
+  // JSON-LD Structured Data
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -62,33 +70,6 @@ const SingleItem = ({ product }: Props) => {
     },
   };
 
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
-
-  const handleSubmit = (values: any) => {
-    console.log("Form values", values);
-  };
-
-  const handleFeedbackSubmit = async (values: any) => {
-    try {
-      //  await submitFeedback(product?.id, values);
-      // Optionally, you can refresh the page or update the state to show the new comment
-      alert("Feedback submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting feedback:", error);
-      alert("Failed to submit feedback");
-    }
-  };
-
-  const handleFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFeedback((prevFeedback) => ({
-      ...prevFeedback,
-      [name]: name === "rating" ? Number(value) : value,
-    }));
-  };
-
   const handleAddToCart = (
     product: IProductModel,
     size: string,
@@ -110,9 +91,8 @@ const SingleItem = ({ product }: Props) => {
       });
       return;
     }
-    debugger;
+
     product.quantity = quantity;
-    // Add product to cart with selected size, size ID, and quantity
     const productWithSizeAndQuantity = {
       ...product,
       size,
@@ -201,7 +181,14 @@ const SingleItem = ({ product }: Props) => {
                         sizeId: "", // Default size ID
                         quantity: 1,
                       }}
-                      onSubmit={handleSubmit}
+                      onSubmit={(values) => {
+                        handleAddToCart(
+                          product!,
+                          values.size,
+                          values.sizeId,
+                          values.quantity
+                        );
+                      }}
                     >
                       {({ values, setFieldValue }) => (
                         <Form>
@@ -232,8 +219,8 @@ const SingleItem = ({ product }: Props) => {
                                             : ""
                                         }`}
                                         onClick={() => {
-                                          setFieldValue("size", s.Size?.size); // Set the size
-                                          setFieldValue("sizeId", s.id); // Set the size ID
+                                          setFieldValue("size", s.Size?.size);
+                                          setFieldValue("sizeId", s.id);
                                         }}
                                         disabled={s.quantity === 0}
                                       >
@@ -295,14 +282,6 @@ const SingleItem = ({ product }: Props) => {
                                 className="btn btn-success btn-lg"
                                 name="submit"
                                 value="addtocart"
-                                onClick={() =>
-                                  handleAddToCart(
-                                    product!,
-                                    values.size,
-                                    values.sizeId,
-                                    values.quantity
-                                  )
-                                }
                               >
                                 Add To Cart
                               </button>
@@ -311,59 +290,6 @@ const SingleItem = ({ product }: Props) => {
                         </Form>
                       )}
                     </Formik>
-                    <h6>Comments:</h6>
-                    {product?.comments?.map((comment: any, index: any) => (
-                      <div key={index} className="comment">
-                        <p>
-                          <strong>{comment?.user ?? ""}</strong> -{" "}
-                          {comment?.rating} stars
-                        </p>
-                        <p>{comment?.text ?? ""}</p>
-                      </div>
-                    ))}
-                    <div className="feedback-section">
-                      <h6>Submit Feedback:</h6>
-                      <Formik
-                        initialValues={{
-                          comment: "",
-                          rating: 0,
-                        }}
-                        onSubmit={handleFeedbackSubmit}
-                      >
-                        {({ values }) => (
-                          <Form>
-                            <div className="form-group">
-                              <label htmlFor="comment">Comment:</label>
-                              <input
-                                type="text"
-                                id="comment"
-                                name="comment"
-                                value={values.comment}
-                                onChange={handleFeedbackChange}
-                                className="form-control"
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="rating">Rating:</label>
-                              <input
-                                type="number"
-                                id="rating"
-                                name="rating"
-                                value={values.rating}
-                                onChange={handleFeedbackChange}
-                                min="0"
-                                max="5"
-                                step="0.1"
-                                className="form-control"
-                              />
-                            </div>
-                            <button type="submit" className="btn btn-success">
-                              Submit Feedback
-                            </button>
-                          </Form>
-                        )}
-                      </Formik>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -377,11 +303,50 @@ const SingleItem = ({ product }: Props) => {
 
 export default protectedRoute(SingleItem);
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { pid: string };
-}) {
+// Fetch all product IDs at build time
+export const getStaticPaths: GetStaticPaths = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+  const products: IProductModel[] = await res.json();
+
+  const paths = products.map((product) => ({
+    params: { pid: product.id!.toString() },
+  }));
+
+  return {
+    paths,
+    fallback: "blocking", // Generate pages on-demand if not pre-rendered
+  };
+};
+
+// Fetch product data at build time
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { pid } = params as { pid: string };
+
+  try {
+    const product = await requestProductById(pid);
+
+    if (!product) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        product,
+      },
+      revalidate: 60 * 60, // Revalidate every hour (ISR)
+    };
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return {
+      notFound: true,
+    };
+  }
+};
+
+// Generate metadata for each product page
+export async function generateMetadata({ params }: { params: { pid: string } }) {
   const { pid } = params;
   const product = await requestProductById(pid);
 
@@ -418,42 +383,3 @@ export async function generateMetadata({
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };
 }
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const { pid }: any = context.query;
-  const headers = context.req.headers;
-
-  try {
-    setAuthHeaders(headers);
-
-    if (pid) {
-      const product = await requestProductById(pid);
-
-      if (!product) {
-        return {
-          notFound: true,
-        };
-      }
-      product.ProductImages = product?.ProductImages ?? [];
-      product.photo = product?.ProductImages?.[0] ?? [];
-
-      console.log(product, "product");
-      return {
-        props: {
-          product,
-        },
-      };
-    } else {
-      return {
-        notFound: true,
-      };
-    }
-  } catch (error) {
-    console.error("Error fetching product:", error);
-    return {
-      notFound: true,
-    };
-  }
-};
