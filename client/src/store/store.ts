@@ -11,6 +11,8 @@ import cartReducer from "./slices/cartSlice";
 import paymentReducer from "./slices/paymentSlice";
 import orderReducer from "./slices/orderSlice";
 import permissionReducer from "./slices/permissionSlice";
+import categories from "./slices/categorySlice";
+
 const reducer = {
 	user: userReducer,
 	article: articleReducer,
