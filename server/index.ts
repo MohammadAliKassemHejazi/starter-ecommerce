@@ -5,18 +5,18 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import winston from 'winston';
-
 import { orderRouter,cartRouter,authRouter, userRouter, articleRouter ,shopRouter , storeRouter,utileRouter,paymentRouter } from './src/routes';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
 import multer, { FileFilterCallback } from 'multer';
-import sharp from 'sharp';
 import path from 'node:path';
-import fs from 'fs';
-import * as  spdy from 'spdy';
-import seedDatabase from './seedDataBase';
+
+// import * as  spdy from 'spdy';
+// import seedDatabase from './seedDataBase';
 import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.types';
+import { storeMiddleWear } from 'middlewares/store.middleweare';
+import { shopMiddleWare } from 'middlewares/shop.middleware';
 // Set up Winston for logging
 
 const logger = winston.createLogger({
@@ -27,7 +27,7 @@ const logger = winston.createLogger({
         new winston.transports.File({ filename: 'combined.log' })
     ],
 });
-const stripe = require("stripe")(process.env.Stripe_Key)
+
 
 if (process.env.NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({
@@ -126,124 +126,9 @@ app.use('/api/cart', cartRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/payment', paymentRouter);
 
-app.use('/api/shop', upload.array('photos', 6), async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const files = req.files as Express.Multer.File[];
+app.use('/api/shop', upload.array('photos', 6),shopMiddleWare , shopRouter);
 
-    if (!files || files.length === 0) {
-      // Handle the case where no files were uploaded
-      next();
-      return;
-    }
-
-    // Process each uploaded file (resize and compress if it's an image)
-    const processedFiles = await Promise.all(
-      files.map(async (file) => {
-        const filePath = file.path; // Get the path of the uploaded file
-        const fileName = file.filename;
-        const outputPath = path.join(__dirname, 'compressed', fileName); // Specify output path for compressed file
-
-        if (file.mimetype.startsWith('image/')) {
-          // Read file buffer from file path
-          const fileBuffer = fs.readFileSync(filePath);
-
-          // Resize and compress image using sharp
-          const compressedImageBuffer = await sharp(fileBuffer)
-            .resize({ width: 800 }) // Resize image to a maximum width of 800px
-            .jpeg({ quality: 80 }) // Convert image to JPEG format with 80% quality (adjust as needed)
-            .toBuffer(); // Get the compressed image buffer
-
-          // Write the compressed image buffer to the output path (optional)
-          fs.writeFileSync(outputPath, compressedImageBuffer);
-
-          // Delete the original uploaded file
-          fs.unlinkSync(filePath);
-
-          return {
-            originalname: fileName,
-            mimetype: 'image/jpeg', // Set the MIME type to JPEG after compression
-            buffer: compressedImageBuffer,
-          };
-        } else {
-          // For non-image files, return the original file buffer without compression
-          const fileBuffer = fs.readFileSync(filePath);
-
-          // Delete the original uploaded file
-          fs.unlinkSync(filePath);
-
-          return {
-            originalname: fileName,
-            mimetype: file.mimetype,
-            buffer: fileBuffer,
-          };
-        }
-      })
-    );
-
-    // Do something with the processed files if needed
-    console.log(processedFiles);
-
-    next();
-  } catch (error) {
-    next(error);
-  }
-}, shopRouter);
-
-app.use('/api/store', upload.array('photos', 5),async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const files = req.files as Express.Multer.File[];
-    if(!files || files === undefined){
-    
-    }else{
-    // Process each uploaded file (resize and compress if it's an image)
-    const processedFiles = await Promise.all(
-      files.map(async (file) => {
-        const filePath = file.path; // Get the path of the uploaded file
-        const fileName = file.filename;
-        const outputPath = path.join(__dirname, 'compressed', fileName); // Specify output path for compressed file
-
-        if (file.mimetype.startsWith('image/')) {
-          // Read file buffer from file path
-          const fileBuffer = fs.readFileSync(filePath);
-
-          // Resize and compress image using sharp
-          const compressedImageBuffer = await sharp(fileBuffer)
-            .resize({ width: 800 }) // Resize image to a maximum width of 800px
-            .jpeg({ quality: 80 }) // Convert image to JPEG format with 80% quality (adjust as needed)
-            .toBuffer(); // Get the compressed image buffer
-
-          // Write the compressed image buffer to the output path (optional)
-          fs.writeFileSync(outputPath, compressedImageBuffer);
-
-          // Delete the original uploaded file
-          fs.unlinkSync(filePath);
-
-          return {
-            originalname: fileName,
-            mimetype: 'image/jpeg', // Set the MIME type to JPEG after compression
-            buffer: compressedImageBuffer
-          };
-        } else {
-          // For non-image files, return the original file buffer without compression
-          const fileBuffer = fs.readFileSync(filePath);
-
-          // Delete the original uploaded file
-          fs.unlinkSync(filePath);
-
-          return {
-            originalname: fileName,
-            mimetype: file.mimetype,
-            buffer: fileBuffer
-          };
-        }
-      })
-    );
-  }
-  } catch (error) {
-    next(error);
-  }
-  next()
-},storeRouter);
+app.use('/api/store', upload.array('photos', 5),storeMiddleWear,storeRouter);
 
 app.use('/api/auth', authRouter);
 app.use('/api/utile', utileRouter);
@@ -274,17 +159,7 @@ app.listen(Number(PORT), () => {
 });
 
 // to enable http2
-// const options = {
-//   key: fs.readFileSync('path/to/server.key'),
-//   cert:  fs.readFileSync('path/to/server.crt')
-// };
 
-// spdy
-//   .createServer(options, app)
-//   .listen(Number(PORT), () => {
-//     console.log('Listening on port: ' + PORT + '.');
-//   })
-//   ;
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
