@@ -4088,3 +4088,14 @@
 {"level":"info","message":"::1 - - [31/Jan/2025:14:22:11 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36\""}
 {"level":"info","message":"::1 - - [31/Jan/2025:14:22:16 +0000] \"GET /api/articles HTTP/1.1\" 200 317 \"-\" \"axios/1.7.9\""}
 {"level":"info","message":"::1 - - [31/Jan/2025:14:22:16 +0000] \"GET /api/shop/get/productListing/?page=1&pageSize=10 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36\""}
+{"level":"info","message":"Server is running on port 5300 in development mode"}
+{"level":"info","message":"Database synced"}
+{"code":"AUTH004","level":"error","name":"CustomError","statusCode":401}
+{"level":"info","message":"::1 - - [12/Feb/2025:14:57:29 +0000] \"GET /api/auth/isauthenticated HTTP/1.1\" 401 53 \"-\" \"axios/1.7.9\""}
+{"level":"info","message":"::1 - - [12/Feb/2025:14:57:32 +0000] \"POST /api/auth/login HTTP/1.1\" 200 361 \"-\" \"axios/1.7.9\""}
+{"level":"info","message":"::1 - - [12/Feb/2025:14:57:33 +0000] \"GET /api/articles HTTP/1.1\" 200 317 \"-\" \"axios/1.7.9\""}
+{"level":"info","message":"::1 - - [12/Feb/2025:14:57:33 +0000] \"GET /api/shop/get/productListing/?page=1&pageSize=10 HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [12/Feb/2025:14:57:48 +0000] \"GET /api/articles/get/author HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [12/Feb/2025:14:57:54 +0000] \"GET /api/store/getall HTTP/1.1\" 200 319 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [12/Feb/2025:14:57:54 +0000] \"GET /api/store/getall HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\""}
+{"level":"info","message":"::1 - - [12/Feb/2025:14:58:00 +0000] \"GET /api/shop/get/storeProducts/c77b3af2-72fa-4d15-8e0f-96b88560c07a?page=1&pageSize=10&searchQuery= HTTP/1.1\" 200 783 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36\""}

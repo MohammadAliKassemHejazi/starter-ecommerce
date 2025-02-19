@@ -11,8 +11,8 @@ import cartReducer from "./slices/cartSlice";
 import paymentReducer from "./slices/paymentSlice";
 import orderReducer from "./slices/orderSlice";
 import permissionReducer from "./slices/permissionSlice";
-import categories from "./slices/categorySlice";
-
+import categoriesReducer from "./slices/categorySlice";
+import DashboardReducer from "./slices/vendorDashboardSlice";
 const reducer = {
 	user: userReducer,
 	article: articleReducer,
@@ -22,7 +22,9 @@ const reducer = {
 	cart: cartReducer,
 	payment: paymentReducer,
 	order: orderReducer,
-	permission:permissionReducer,
+	permission: permissionReducer,
+	categories: categoriesReducer,
+	Dashboard : DashboardReducer,
 };
 
 export const store = configureStore({

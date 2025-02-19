@@ -7,6 +7,7 @@ import {
   singleStoreSelector,
 } from "@/store/slices/storeSlice";
 import {
+  fetchProductsByStore,
   fetchProductsListing,
   productSelector,
 } from "@/store/slices/shopSlice";
@@ -63,11 +64,11 @@ const SingleStore = ({ initialStore, initialProducts }: SingleStoreProps) => {
     sortBy: string;
   }) => {
     dispatch(
-      fetchProductsListing({
+      fetchProductsByStore({
         storeId,
         page,
         pageSize,
-        sortBy,
+        searchQuery : sortBy,
       })
     );
   };

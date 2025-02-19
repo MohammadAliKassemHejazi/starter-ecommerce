@@ -64,9 +64,7 @@ const permissionSlice = createSlice({
   reducers: {},
     extraReducers: (builder) => {
       
-         builder.addCase(fetchPermissions.fulfilled, (state, action) => {
-      state.permissions = action.payload;
-    });
+
 
     // Handle adding a permission to a role
     builder.addCase(addPermissionToRole.fulfilled, (state, action) => {

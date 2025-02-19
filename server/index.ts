@@ -15,8 +15,8 @@ import path from 'node:path';
 // import * as  spdy from 'spdy';
 // import seedDatabase from './seedDataBase';
 import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.types';
-import { storeMiddleWear } from 'middlewares/store.middleweare';
-import { shopMiddleWare } from 'middlewares/shop.middleware';
+import { storeMiddleWear } from './src/middlewares/store.middleweare';
+import { shopMiddleWare } from './src/middlewares/shop.middleware';
 // Set up Winston for logging
 
 const logger = winston.createLogger({
