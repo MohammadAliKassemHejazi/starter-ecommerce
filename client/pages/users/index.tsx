@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { fetchUsersByCreator, deleteUser, usersSelector } from "@/store/slices/myusersSlice";
+import { fetchUsersByCreator, deleteUser, usersSelector } from "@/store/slices/myUsersSlice";
 import Swal from "sweetalert2";
 import { useAppDispatch } from "@/store/store";
 
