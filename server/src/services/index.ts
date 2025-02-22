@@ -1,4 +1,4 @@
-import userService from "./user.service";
+import userService from "./users.service";
 import articleService from "./article.service";
 import shopService from "./shop.service";
 import storeService from "./store.service";

@@ -1,124 +1,63 @@
-import bcrypt from "bcrypt";
-import { sign } from "jsonwebtoken";
+import db from "../models";
 import { IUserAttributes } from "../interfaces/types/models/user.model.types";
 import customError from "../utils/customError";
-import authErrors from "../utils/errors/auth.errors";
-import config from "../config/config";
-import { IAuthLoginBodyResponse } from "../interfaces/types/controllers/auth.controller.types";
-import db from "../models";
+import userErrors from "../utils/errors/user.errors";
 
-const passwordHashing = (password: string): string => {
-  const salt = bcrypt.genSaltSync(10);
-  const hashPassword = bcrypt.hashSync(password, salt);
-  return hashPassword;
-};
-
-const comparePassword = (password: string, existsPassword: string): boolean => {
-  const isPasswordCorrect = bcrypt.compareSync(password, existsPassword);
-  if (!isPasswordCorrect) {
-    customError(authErrors.AuthInvalidPassword);
-  }
-  return true;
-};
-
-const createToken = (UserId: string): string => {
-  const token = sign({}, config.webtoken as string, {
-    expiresIn: 3600 * 30,
-    audience: String(UserId),
+export const fetchUsersByCreator = async (creatorId: string): Promise<IUserAttributes[]> => {
+  const users = await db.User.findAll({
+    where: { createdById: creatorId },
   });
-  return token;
+  return users;
 };
 
-const mapUserResponseObject = (
-  userId: string,
-  user: IUserAttributes,
-  accessToken?: string
-): IAuthLoginBodyResponse => {
-  const response: IAuthLoginBodyResponse = {
-    id: userId,
-    email: user.email,
-    name: user.name || "",
-    address: user.address || "",
-    phone: user.phone || "",
-    accessToken,
-  };
-  return response;
-};
-
-export const createUser = async (
-  data: IUserAttributes
-): Promise<IUserAttributes> => {
-  data.password = passwordHashing(data.password);
-  const user: IUserAttributes = await db.User.create(data);
+export const createUser = async (data: { name: string; email: string; password: string }): Promise<IUserAttributes> => {
+  const { name, email, password } = data;
+  const user = await db.User.create({ name, email, password });
   return user;
 };
 
-export const userLogin = async (
-  email: string,
-  password: string
-): Promise<IAuthLoginBodyResponse> => {
-  const user = await db.User.findOne({
-    where: { email }, raw: true
-  });
-  if (user == null) {
-    customError({
-      ...authErrors.AuthInvalidEmail,
-      data: {
-        success: false,
-      },
-    });
+export const updateUser = async (id: string, data: { name?: string; email?: string }): Promise<IUserAttributes> => {
+  const user = await db.User.findByPk(id);
+  if (!user) {
+    throw customError(userErrors.UserNotFound);
   }
-  // console.log("debugging", email, password, user)
-  comparePassword(password, user.password);
-  const UserId: string = user.id;
-  const accessToken = createToken(UserId);
-  const response: IAuthLoginBodyResponse = mapUserResponseObject(
-    UserId,
-    user,
-    accessToken
-  );
-  return response;
+
+  if (data.name) user.name = data.name;
+  if (data.email) user.email = data.email;
+
+  await user.save();
+  return user;
 };
 
-export const userSession = async (
-  id: string,
-): Promise<IAuthLoginBodyResponse> => {
-  const user = await db.User.findOne({
-    where: { id }, raw: true
-  });
-  if (user == null) {
-    customError({
-      ...authErrors.AuthJWTError,
-      data: {
-        success: false,
-      },
-    });
+export const deleteUser = async (id: string): Promise<void> => {
+  const user = await db.User.findByPk(id);
+  if (!user) {
+    throw customError(userErrors.UserNotFound);
   }
-  const UserId: string = id;
-  const accessToken = createToken(UserId);
-  const response: IAuthLoginBodyResponse = mapUserResponseObject(
-    UserId,
-    user,
-    accessToken
-  );
-  return response;
+
+  await user.destroy();
 };
 
-export const getUserById = async (
-  UserId: string
-): Promise<IAuthLoginBodyResponse> => {
-  const user = await db.User.findOne({ where: { id: UserId }, raw: true });
-  if (user == null) {
-    return customError(authErrors.AuthJWTError);
+export const assignRoleToUser = async (userId: string, roleId: string): Promise<any> => {
+  const user = await db.User.findByPk(userId);
+  if (!user) {
+    throw customError(userErrors.UserNotFound);
   }
-  const response: IAuthLoginBodyResponse = mapUserResponseObject(UserId, user);
-  return response;
+
+  const role = await db.Role.findByPk(roleId);
+  if (!role) {
+    throw customError(userErrors.RoleNotFound);
+  }
+
+  const roleUser = await db.RoleUser.create({ userId, roleId });
+  return roleUser;
 };
 
-export default {
-  createUser,
-  userLogin,
-  getUserById,
-  createToken,
-  userSession
+export const removeRoleFromUser = async (userId: string, roleId: string): Promise<void> => {
+  const roleUser = await db.RoleUser.findOne({ where: { userId, roleId } });
+  if (!roleUser) {
+    throw customError(userErrors.UserRoleNotFound);
+  }
+
+  await roleUser.destroy();
 };

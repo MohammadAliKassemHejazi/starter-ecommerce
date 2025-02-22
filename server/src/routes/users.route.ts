@@ -18,7 +18,6 @@ const router = express.Router()
     usersController.handleUserProfile
   );
 
-  // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
 
 
 export  default router;
