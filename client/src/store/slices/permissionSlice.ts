@@ -1,6 +1,7 @@
 // @/store/slices/permissionSlice.ts
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as permissionService from "@/services/permissionService";
+import { RootState } from "../store";
 
 interface PermissionState {
   permissions: any[];
@@ -107,6 +108,6 @@ const permissionSlice = createSlice({
   },
 });
 
-export const permissionsSelector = (state: any) => state.permissions.permissions;
+export const permissionsSelector = (state: RootState): any | undefined => state.permission.permissions;
 
 export default permissionSlice.reducer;

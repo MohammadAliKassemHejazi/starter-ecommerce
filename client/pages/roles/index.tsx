@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector,  } from "react-redux";
-import { fetchRoles, deleteRole } from "@/store/slices/roleSlice";
+import { fetchRoles, deleteRole, rolesSelector } from "@/store/slices/roleSlice";
 import { useAppDispatch } from "@/store/store";
 import Swal from "sweetalert2";
 
@@ -18,7 +18,7 @@ const Toast = Swal.mixin({
 
 const RolesGrid = () => {
   const dispatch = useAppDispatch();
-  const roles = useSelector((state: any) => state.role.roles);
+  const roles = useSelector(rolesSelector);
 
   React.useEffect(() => {
     dispatch(fetchRoles());

@@ -1,11 +1,11 @@
-import { ForeignKey, Model } from 'sequelize';
-import { ISubcategoryAttributes } from '../interfaces/types/models/subcategory.model.types';
-import { ICategoryAttributes } from 'interfaces/types/models/category.model.types';
+import {  Model } from 'sequelize';
+import  { ISubCategoryAttributes }  from 'interfaces/types/models/subcategory.model.types';
+
 
 module.exports = (sequelize: any, DataTypes: any) => {
 
 
-  class SubCategory extends Model<ISubcategoryAttributes> implements ISubcategoryAttributes {
+  class SubCategory extends Model<ISubCategoryAttributes> implements ISubCategoryAttributes {
     id!: string;
 
     name!: string;

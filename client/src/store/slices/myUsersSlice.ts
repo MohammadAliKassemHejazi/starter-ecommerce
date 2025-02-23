@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as userService from "@/services/myUsersService";
+import { RootState } from "../store";
 
 interface UserState {
   users: any[];
@@ -66,6 +67,6 @@ const userSlice = createSlice({
   },
 });
 
-export const usersSelector = (state: any) => state.users.users;
+export const usersSelector = (state: RootState): any | undefined => state.users.users;
 
 export default userSlice.reducer;

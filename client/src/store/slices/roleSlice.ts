@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as roleService from "@/services/roleService";
+import { RootState } from "../store";
 
 interface RoleState {
   roles: any[];
@@ -57,6 +58,6 @@ const roleSlice = createSlice({
   },
 });
 
-export const rolesSelector = (state: any) => state.roles.roles;
+export const rolesSelector = (state: RootState): any | undefined => state.roles.roles;
 
 export default roleSlice.reducer;

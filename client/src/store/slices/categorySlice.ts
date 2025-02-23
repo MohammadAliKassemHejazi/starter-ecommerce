@@ -1,6 +1,7 @@
 // @/store/slices/categorySlice.ts
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as categoryService from "@/services/categoryService";
+import { RootState } from "../store";
 
 interface CategoryState {
   categories: any[];
@@ -56,6 +57,6 @@ const categorySlice = createSlice({
   },
 });
 
-export const categoriesSelector = (state: any) => state.categories.categories;
+export const categoriesSelector = (state: RootState): any | undefined => state.categories.categories;
 
 export default categorySlice.reducer;

@@ -117,13 +117,13 @@ export const orderSlice = createSlice({
   },
 });
 
-export const ordersSelector = (state: RootState): IOrderModel[] => state.order.orders;
+export const ordersSelector = (state: RootState): IOrderModel[] | undefined => state.order.orders;
 export const lastOrderSelector = (state: RootState): IOrderModel | null => state.order.lastOrder;
 export const loadingSelector = (state: RootState): boolean => state.order.loading;
 export const totalOrdersSelector = (state: RootState): number => state.order.totalOrders;
 export const pageSelector = (state: RootState): number => state.order.currentPage;
 export const pageSizeSelector = (state: RootState): number => state.order.pageSize;
-export const orderByStoreSelector = (state: RootState): IOrderModel[] => state.order.orders;
+export const orderByStoreSelector = (state: RootState): IOrderModel[]| undefined => state.order.orders;
 
 export const { setPage, setPageSize, setFilter, clearError } = orderSlice.actions;
 

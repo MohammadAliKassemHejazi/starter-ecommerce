@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as vendorService from '../../services/vendorService';
+import { RootState } from '../store';
 
 interface VendorDashboardState {
   salesData: { date: string; totalSales: number }[];
@@ -105,10 +106,10 @@ const vendorDashboardSlice = createSlice({
 export default vendorDashboardSlice.reducer;
 
 // Selectors
-export const selectSalesData = (state: any) => state.vendorDashboard.salesData;
-export const selectInventoryAlerts = (state: any) =>
-  state.vendorDashboard.inventoryAlerts;
-export const selectOrderStatuses = (state: any) =>
-  state.vendorDashboard.orderStatuses;
-export const selectLoading = (state: any) => state.vendorDashboard.loading;
-export const selectError = (state: any) => state.vendorDashboard.error;
+export const selectSalesData = (state: RootState): any | undefined => state.Dashboard.salesData;
+export const selectInventoryAlerts = (state: RootState): any | undefined =>
+  state.Dashboard.inventoryAlerts;
+export const selectOrderStatuses = (state: RootState): any | undefined =>
+  state.Dashboard.orderStatuses;
+export const selectLoading = (state: RootState): any | undefined => state.Dashboard.loading;
+export const selectError = (state: RootState): any | undefined => state.Dashboard.error;

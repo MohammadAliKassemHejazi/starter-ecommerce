@@ -13,6 +13,10 @@ import orderReducer from "./slices/orderSlice";
 import permissionReducer from "./slices/permissionSlice";
 import categoriesReducer from "./slices/categorySlice";
 import DashboardReducer from "./slices/vendorDashboardSlice";
+import usersReducer from "./slices/myUsersSlice";
+import rolesReducer from "./slices/roleSlice";
+import subCategories from "./slices/subCategorySlice";
+
 const reducer = {
 	user: userReducer,
 	article: articleReducer,
@@ -24,7 +28,10 @@ const reducer = {
 	order: orderReducer,
 	permission: permissionReducer,
 	categories: categoriesReducer,
-	Dashboard : DashboardReducer,
+	Dashboard: DashboardReducer,
+	users: usersReducer,
+	roles: rolesReducer,
+	subCategories:subCategories,
 };
 
 export const store = configureStore({

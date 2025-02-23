@@ -1,7 +1,7 @@
 import {ICategoryAttributes} from 'interfaces/types/models/category.model.types';
 
 import db from '../models/index';
-import { ISubcategoryAttributes } from 'interfaces/types/models/subcategory.model.types';
+import { ISubCategoryAttributes } from 'interfaces/types/models/subcategory.model.types';
 import { ISizeAttributes } from 'interfaces/types/models/size.model.types';
 
 
@@ -15,8 +15,8 @@ const getAllCategories = async (): Promise<{ categories: ICategoryAttributes[] }
   return { categories };
 };
 
-const getSubCategories = async (categoryId:string): Promise<{ subcategories: ISubcategoryAttributes[] } | null> => {
-  const subcategories: ISubcategoryAttributes[] | null = await db.SubCategory.findAll(
+const getSubCategories = async (categoryId:string): Promise<{ subcategories: ISubCategoryAttributes[] } | null> => {
+  const subcategories: ISubCategoryAttributes[] | null = await db.SubCategory.findAll(
     {where : {categoryId:categoryId}}
   );
 
