@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { fetchPermissions, deletePermission, permissionsSelector } from "@/store/slices/permissionSlice";
 import { useAppDispatch } from "@/store/store";
 import Swal from "sweetalert2";
+import Layout from "@/components/Layouts/Layout";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -58,6 +59,7 @@ const PermissionsGrid = () => {
   };
 
   return (
+    <Layout>
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-10">
@@ -100,7 +102,8 @@ const PermissionsGrid = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      </Layout>
   );
 };
 

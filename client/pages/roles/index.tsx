@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { fetchRoles, deleteRole, rolesSelector } from "@/store/slices/roleSlice";
 import { useAppDispatch } from "@/store/store";
 import Swal from "sweetalert2";
+import Layout from "@/components/Layouts/Layout";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -58,6 +59,7 @@ const RolesGrid = () => {
   };
 
   return (
+    <Layout>
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-10">
@@ -107,7 +109,8 @@ const RolesGrid = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      </Layout>
   );
 };
 

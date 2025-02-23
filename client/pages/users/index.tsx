@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { fetchUsersByCreator, deleteUser, usersSelector } from "@/store/slices/myUsersSlice";
 import Swal from "sweetalert2";
 import { useAppDispatch } from "@/store/store";
+import Layout from "@/components/Layouts/Layout";
 
 const UsersGrid = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ const UsersGrid = () => {
   };
 
   return (
+    <Layout>
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-10">
@@ -77,7 +79,8 @@ const UsersGrid = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      </Layout>
   );
 };
 

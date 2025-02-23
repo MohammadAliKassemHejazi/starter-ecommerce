@@ -8,6 +8,7 @@ import {
 } from "@/store/slices/permissionSlice";
 import { useAppDispatch } from "@/store/store";
 import { rolesSelector } from "@/store/slices/roleSlice";
+import Layout from "@/components/Layouts/Layout";
 
 const RolePermissionGrid = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ const RolePermissionGrid = () => {
   };
 
   return (
+     <Layout>
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-10">
@@ -104,7 +106,8 @@ const RolePermissionGrid = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      </Layout>
   );
 };
 
