@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { createUser, usersSelector } from "@/store/slices/myusersSlice";
+import { createUser, usersSelector } from "@/store/slices/myUsersSlice";
 import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
 

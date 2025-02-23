@@ -30,34 +30,53 @@ const UsersGrid = () => {
   };
 
   return (
-    <div>
-      <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users?.map((user: any) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.role?.name || "None"}</td>
-              <td>
-                <button>Edit</button>
-                <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
-                <button>Assign Role</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-10">
+          <h1 className="mb-4 text-center fw-bold">Users</h1>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <span className="text-muted">
+              Total Users: {users?.length || 0}
+            </span>
+            <button className="btn btn-primary">New User</button>
+          </div>
+          <div className="table-responsive shadow-sm bg-white">
+            <table className="table table-hover table-bordered border-secondary">
+              <thead className="bg-dark text-light text-center">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users?.map((user: any, idx: number) => (
+                  <tr key={user.id} className="align-middle text-center">
+                    <td>{idx + 1}</td>
+                    <td className="fw-semibold">{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role?.name || "None"}</td>
+                    <td>
+                      <div className="btn-group">
+                        <button className="btn btn-primary btn-sm me-2">Edit</button>
+                        <button
+                          className="btn btn-danger btn-sm me-2"
+                          onClick={() => handleDeleteUser(user.id)}
+                        >
+                          Delete
+                        </button>
+                        <button className="btn btn-success btn-sm">Assign Role</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

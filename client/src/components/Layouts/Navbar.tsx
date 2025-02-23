@@ -228,6 +228,14 @@ export default function Navbar() {
                     <li>
                       <Link
                         className="dropdown-item text-white hover-text-dark"
+                        href="/roles/Assignment"
+                      >
+                        Roles Assignment
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="dropdown-item text-white hover-text-dark"
                         href="/permissions"
                       >
                         Permissions

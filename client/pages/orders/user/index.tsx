@@ -120,7 +120,7 @@ return (
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order) => (
+                    {orders!.map((order) => (
                       <tr key={order.id}>
                         <td>{order.id}</td>
                         <td><Moment format="DD/MM/YYYY HH:mm">{order.createdAt}</Moment></td>
@@ -145,8 +145,8 @@ return (
             <div className="mt-5 card p-4 shadow-sm">
               <h3 className="mb-4">Order Items</h3>
               <ul className="list-group">
-               {orders
-  .find((order) => order.id === selectedOrderId)
+               {orders!
+.find((order) => order.id === selectedOrderId)
   ?.items?.map((item) => (
     <li key={item.id} className="list-group-item">
       <strong>Product ID:</strong> {item.productId} | <strong>Quantity:</strong> {item.quantity} | <strong>Price:</strong> ${item.price}

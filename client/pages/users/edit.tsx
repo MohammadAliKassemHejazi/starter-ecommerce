@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { updateUser } from "@/store/slices/myusersSlice";
+import { updateUser } from "@/store/slices/myUsersSlice";
 import { useAppDispatch } from "@/store/store";
 
 const EditUserModal = ({ user }: { user: any }) => {

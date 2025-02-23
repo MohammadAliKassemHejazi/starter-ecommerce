@@ -11,7 +11,6 @@ import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import { store, useAppDispatch } from "@/store/store";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
-
 import Swal from "sweetalert2";
 import debounce from "lodash.debounce";
 import Moment from "react-moment";
@@ -39,6 +38,7 @@ const Orders = () => {
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
   const stores = useSelector(storeSelector) as IStoreResponseModel[];
+
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [fromDate, setFromDate] = useState<Date | null>(null);
@@ -96,11 +96,11 @@ const Orders = () => {
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-md-12">
-            <h1 className="mb-5 text-center mt-3">My Orders</h1>
-
-            <div className="d-flex justify-content-between mb-3">
+            <h1 className="mb-4 text-center fw-bold">My Orders</h1>
+            <div className="d-flex flex-column flex-md-row gap-3 mb-4">
+              {/* Store Selector */}
               <select
-                className="form-select"
+                className="form-select flex-grow-1"
                 value={selectedStore ?? ""}
                 onChange={(e) => setSelectedStore(e.target.value)}
               >
@@ -113,65 +113,65 @@ const Orders = () => {
                   </option>
                 ))}
               </select>
-            </div>
 
-            <div className="mb-3 d-flex gap-1">
+              {/* Date Pickers */}
               <DatePicker
                 selected={fromDate}
                 onChange={(date) => setFromDate(date)}
-                className="form-control"
+                className="form-control flex-grow-1"
                 placeholderText="From Date"
                 dateFormat="yyyy-MM-dd"
               />
               <DatePicker
                 selected={toDate}
                 onChange={(date) => setToDate(date)}
-                className="form-control"
+                className="form-control flex-grow-1"
                 placeholderText="To Date"
                 dateFormat="yyyy-MM-dd"
               />
-            </div>
 
-            <div className="mb-3">
+              {/* Search Input */}
               <input
                 type="text"
-                className="form-control"
+                className="form-control flex-grow-1"
                 placeholder="Search orders..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
 
-            <span className="float-start">
-              You have: {totalOrders} orders
+            {/* Total Orders Count */}
+            <span className="text-muted d-block mb-4">
+              You have: {totalOrders} order{totalOrders !== 1 && "s"}
             </span>
-          </div>
 
-          <div className="col-md-12">
-            <div className="table-responsive">
-              <table className="table table-bordered">
-                <thead>
-                  <tr className="text-center text-light bg-dark">
-                    <th>ID</th>
-                    <th>Customer</th>
-                    <th>Total Price</th>
-                    <th>Status</th>
-                    <th>Updated At</th>
-                    <th>Action</th>
+            {/* Orders Table */}
+            <div className="table-responsive shadow-sm bg-white">
+              <table className="table table-hover table-bordered border-secondary">
+                <thead className="bg-dark text-light text-center">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Updated At</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {orderList?.map((order, idx) => (
-                    <tr key={idx} className="text-center">
+                    <tr key={idx} className="align-middle text-center">
                       <td>{order.id}</td>
                       <td>{order.customerName}</td>
-                      <td>{order.totalPrice}</td>
+                      <td>${order.totalPrice.toFixed(2)}</td>
                       <td>{order.status}</td>
                       <td>
                         <Moment format="DD/MM/YYYY HH:mm">
                           {order.updatedAt}
                         </Moment>
+                      </td>
+                      <td>
+                        <button className="btn btn-primary btn-sm">View</button>
                       </td>
                     </tr>
                   ))}
@@ -179,25 +179,36 @@ const Orders = () => {
               </table>
             </div>
 
-            <div className="d-flex justify-content-between mt-3">
-              <button
-                className="btn btn-secondary"
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                Previous
-              </button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                className="btn btn-secondary"
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
+            {/* Pagination */}
+            <nav aria-label="Page navigation" className="mt-4">
+              <ul className="pagination justify-content-center">
+                <li className={`page-item ${currentPage === 1 && "disabled"}`}>
+                  <button
+                    className="page-link"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    Previous
+                  </button>
+                </li>
+                <li className="page-item">
+                  <span className="page-link">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                </li>
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages && "disabled"
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

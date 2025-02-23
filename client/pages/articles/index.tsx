@@ -13,10 +13,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
 
-
-type Props = {
- 
-};
+type Props = {};
 
 const Toast = Swal.mixin({
   toast: true,
@@ -49,110 +46,84 @@ const Articles = ({}: Props) => {
       <p>${title}</p>
       `,
       showCancelButton: true,
-      confirmButtonText: "delete",
+      confirmButtonText: "Delete",
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         dispatch(deleteArticles(id)).then((resp: any) => {
           if (resp.meta.requestStatus === "fulfilled") {
             Toast.fire({
               icon: "success",
-              title: "delete article successfully",
+              title: "Article deleted successfully",
             });
-
             dispatch(fetchArticleByAuthor());
           } else {
             Toast.fire({
               icon: "error",
-              title: "delete article failed",
+              title: "Failed to delete article",
             });
           }
         });
       }
     });
   };
+
   return (
     <Layout>
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-md-10">
-            <h1 className="mb-5 text-center mt-3">My Articles</h1>
-
-            <div className="text-end">
-              <Link href="/articles/create">
-                <span className="btn btn-primary">new article</span>
+            <h1 className="mb-4 text-center fw-bold">My Articles</h1>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <span className="text-muted">
+                You have: {articleList?.length || 0} article{articleList?.length !== 1 && "s"}
+              </span>
+              <Link href="/articles/create" className="btn btn-primary">
+                New Article
               </Link>
             </div>
-
-            <span className="float-start">
-              you have: {articleList?.length} article
-            </span>
-          </div>
-
-          <div className="col-md-12">
-            <div className="table-responsive">
-              <table className="table table-bordered">
-                <thead>
-                  <tr className="text-center text-light bg-dark">
-                    <th>id</th>
-                    <th>Title</th>
-                    <th>Text</th>
-                    <th>updatedAt</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <React.Fragment>
-                    {articleList?.map((article, idx) => {
-                      return (
-                        <React.Fragment key={idx}>
-                          <tr className="text-center">
-                            <td>{idx + 1}</td>
-                            <td>{article.title}</td>
-                            <td>{article.text}</td>
-                            <td>
-                              <Moment format="DD/MM/YYYY HH:mm">
-                                {article.updatedAt}
-                              </Moment>
-                            </td>
-                            <td>
-                              <div className="btn-group">
-                                <button
-                                  className="btn btn-danger me-2"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#my-modal"
-                                  onClick={() => {
-                                    handleDeleteArticle(
-                                      article.id,
-                                      article.title
-                                    );
-                                  }}
-                                >
-                                  delete
-                                </button>
-                                <button
-                                  className="btn btn-primary"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#my-modal"
-                                  onClick={() => {
-                                    router.push(
-                                      "/articles/edit?id=" + article.id
-                                    );
-                                  }}
-                                >
-                                  edit
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        </React.Fragment>
-                      );
-                    })}
-                  </React.Fragment>
-                </tbody>
-              </table>
+<div className="table-responsive shadow-sm  bg-white">
+  <table className="table table-hover table-bordered border-secondary">
+    <thead className="bg-dark text-light text-center border-bottom border-dark">
+      <tr>
+        <th scope="col" className="border-top-0">#</th>
+        <th scope="col" className="border-top-0">Title</th>
+        <th scope="col" className="border-top-0">Text</th>
+        <th scope="col" className="border-top-0">Updated At</th>
+        <th scope="col" className="border-top-0">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {articleList?.map((article, idx) => (
+        <tr key={idx} className="align-middle text-center border-bottom">
+          <td className="border-start border-end">{idx + 1}</td>
+          <td className="fw-semibold border-start border-end">{article.title}</td>
+          <td className="text-truncate border-start border-end" style={{ maxWidth: "200px" }}>
+            {article.text}
+          </td>
+          <td className="border-start border-end">
+            <Moment format="DD/MM/YYYY HH:mm">{article.updatedAt}</Moment>
+          </td>
+          <td className="border-start border-end">
+            <div className="btn-group">
+              <button
+                className="btn btn-danger btn-sm me-2"
+                onClick={() => handleDeleteArticle(article.id, article.title)}
+              >
+                Delete
+              </button>
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => router.push(`/articles/edit?id=${article.id}`)}
+              >
+                Edit
+              </button>
             </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
           </div>
         </div>
       </div>
@@ -161,4 +132,3 @@ const Articles = ({}: Props) => {
 };
 
 export default protectedRoute(Articles);
-
