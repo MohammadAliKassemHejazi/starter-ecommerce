@@ -5,7 +5,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import winston from "winston";
-import { orderRouter, cartRouter, authRouter, userRouter, articleRouter, shopRouter, storeRouter, utileRouter, paymentRouter, categoriesRouter, usersRouter } from "./src/routes";
+import { orderRouter, cartRouter, authRouter, userRouter, articleRouter, shopRouter, storeRouter, utileRouter, paymentRouter, categoriesRouter, usersRouter, ordersRouter, permissionsRouter, rolesRouter, subcategoriesRouter, dashboardRouter } from "./src/routes";
 import { CustomError } from "./src/utils/customError";
 import config from "./src/config/config";
 import db from "./src/models";
@@ -125,7 +125,6 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.use("/api/cart", cartRouter);
-app.use("/api/orders", orderRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
@@ -133,6 +132,11 @@ app.use("/api/articles", articleRouter);
 app.use("/api/utile", utileRouter);
 app.use("/api/categories", categoriesRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/orders", ordersRouter);
+app.use("/api/permissions", permissionsRouter);
+app.use("api/roles", rolesRouter);
+app.use("api/subcategories", subcategoriesRouter);
+app.use("api/inventory", dashboardRouter);
 
 // Middleware for file uploads and custom middlewares
 app.use(
