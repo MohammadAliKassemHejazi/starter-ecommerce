@@ -5,8 +5,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { Formik, Form } from "formik";
 import { IProductModel } from "../../../src/models/product.model"; // Adjust the import path as needed
-import { setAuthHeaders } from "@/utils/httpClient";
-import { requestProductById } from "@/services/shopService";
+import { requestAllProductID, requestProductById } from "@/services/shopService";
 import Head from "next/head";
 import protectedRoute from "@/components/protectedRoute";
 import { useAppDispatch } from "@/store/store";
@@ -305,45 +304,53 @@ export default protectedRoute(SingleItem);
 
 // Fetch all product IDs at build time
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
-  const products: IProductModel[] = await res.json();
+  try {
+    const res = await requestAllProductID(); // Fetch all product IDs
+console.log(res,"response to requestAllProductID")
+    if (!res || !Array.isArray(res.message)) {
+      console.error("Invalid response structure:", res);
+      return { paths: [], fallback: "blocking" };
+    }
 
-  const paths = products.map((product) => ({
-    params: { pid: product.id!.toString() },
-  }));
-
-  return {
-    paths,
-    fallback: "blocking", // Generate pages on-demand if not pre-rendered
-  };
+    // Pre-render only the first 50 products (adjust as needed)
+    const paths = res.message.map((product: any) => ({
+      params: { pid: product.id.toString() },
+    }));
+    console.log(paths,"paths res.message")
+    return {
+      paths, // Pre-rendered pages for first 50 products
+      fallback: "blocking", // Other pages will be generated on-demand
+    };
+  } catch (error) {
+    console.error("Error fetching product IDs:", error);
+    return { paths: [], fallback: "blocking" };
+  }
 };
+
 
 // Fetch product data at build time
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { pid } = params as { pid: string };
 
+  console.log("Fetching data for ID:", pid);
+
   try {
     const product = await requestProductById(pid);
 
     if (!product) {
-      return {
-        notFound: true,
-      };
+      return { notFound: true };
     }
 
     return {
-      props: {
-        product,
-      },
-      revalidate: 60 * 60, // Revalidate every hour (ISR)
+      props: { product },
+      revalidate: 3600, // Revalidate every hour (ISR)
     };
   } catch (error) {
     console.error("Error fetching product:", error);
-    return {
-      notFound: true,
-    };
+    return { notFound: true };
   }
 };
+
 
 // Generate metadata for each product page
 export async function generateMetadata({ params }: { params: { pid: string } }) {

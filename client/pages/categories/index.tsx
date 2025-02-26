@@ -2,6 +2,7 @@ import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 import { fetchCategories, deleteCategory, categoriesSelector } from "@/store/slices/categorySlice";
 import { useAppDispatch } from "@/store/store";
+import router from "next/router";
 import React from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -83,7 +84,12 @@ const CategoriesGrid = () => {
                       </td>
                       <td>
                         <div className="btn-group">
-                          <button className="btn btn-primary btn-sm me-2">Edit</button>
+                          <button className="btn btn-primary btn-sm me-2"    onClick={() =>
+        router.push({
+          pathname: "/categories/edit",
+          query: { category: JSON.stringify(category) }, // Serialize the category object
+        })
+      }>Edit</button>
                           <button
                             className="btn btn-danger btn-sm"
                             onClick={() => handleDeleteCategory(category.id)}

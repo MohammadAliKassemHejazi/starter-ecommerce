@@ -8,11 +8,12 @@ import {
 import { useAppDispatch } from "@/store/store";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
-import router from "next/router";
+
 import Swal from "sweetalert2";
 import Link from "next/link";
 import Moment from "react-moment";
 import debounce from "lodash.debounce";
+import { useRouter } from "next/router";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -27,6 +28,7 @@ const Toast = Swal.mixin({
 });
 
 const Stores = () => {
+    const router = useRouter();
   const dispatch = useAppDispatch();
   const stores = useSelector(storeSelector); // Fetch store data
   const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
@@ -154,7 +156,7 @@ const Stores = () => {
                           </button>
                           <button
                             className="btn btn-primary"
-                            onClick={() => router.push(`/shop/store/edit?id=${store.id}`)}
+                            onClick={() => router.push(`/store/edit?id=${store.id}`)}
                           >
                             Edit
                           </button>

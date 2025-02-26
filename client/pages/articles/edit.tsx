@@ -5,9 +5,8 @@ import { requestArticleById } from "@/services/articleService";
 import { updateArticles } from "@/store/slices/articleSlice";
 import { useAppDispatch } from "@/store/store";
 import { setAuthHeaders } from "@/utils/httpClient";
-import moment from "moment";
+
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import Swal from "sweetalert2";
@@ -54,82 +53,23 @@ const EditArticle = ({ article }: Props) => {
     }
   };
 
-  return (
+ return (
     <Layout>
       <div className="container">
         <div className="row justify-content-center py-5 vh-100">
           <div className="col-lg-9 col-md-12 mb-4">
-            <form className="mt-5">
-              <h1>Update Article</h1>
-              <div className="form-group">
-                <label htmlFor="InputArticleID">ID</label>
-                <input
-              
-                  readOnly
-                  value={article?.id}
-                  type="text"
-                  className="form-control"
-                  id="InputArticleID"
-                  aria-describedby="articleTitleHelp"
-                  placeholder="Enter title"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="InputArticleTitle">Title</label>
-                <input
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                  }}
-                  defaultValue={article?.title}
-                  type="text"
-                  maxLength={150}
-                  className="form-control"
-                  id="InputArticleTitle"
-                  aria-describedby="articleTitleHelp"
-                  placeholder="Enter title"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="InputArticleText">Text</label>
-                <textarea
-                  defaultValue={article?.text}
-                  maxLength={500}
-                  onChange={(e) => {
-                    setText(e.target.value);
-                  }}
-                  rows={4}
-                  className="form-control"
-                  id="InputArticleText"
-                  placeholder="Input your body of your article here."
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="InputArticleLastupdate">Last update</label>
-                <input
-                  readOnly
-                  value={moment(article?.updatedAt).format("DD/MM/YYYY HH:mm")}
-                  type="text"
-                  className="form-control"
-                  id="InputArticleLastupdate"
-                  aria-describedby="articleTitleHelp"
-                  placeholder="Enter title"
-                />
-              </div>
-
-              <Link href={"/articles"}>
-                <button className="btn btn-secondary mt-3 me-3">Cancel</button>
-              </Link>
-              <button
-                onClick={(e) => {
-                  handleUpdateArticle(e);
-                }}
-                className="btn btn-primary mt-3"
-              >
-                update
-              </button>
-            </form>
+            <EditForm
+              title="Update Article"
+              fields={[
+                { label: "ID", value: article?.id, readOnly: true },
+                { label: "Title", value: title, onChange: (e) => setTitle(e.target.value), maxLength: 150 },
+                { label: "Text", value: text, onChange: (e) => setText(e.target.value), type: "textarea", maxLength: 500 },
+              ]}
+              onSubmit={handleUpdateArticle}
+              cancelRoute="/articles"
+              entityName="Article"
+              lastUpdated={article?.updatedAt}
+            />
           </div>
         </div>
       </div>

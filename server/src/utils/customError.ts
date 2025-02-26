@@ -27,7 +27,7 @@ export class CustomError extends Error {
 	statusCode,
 	data,
   }: CustomErrorParams) => {
-	throw new CustomError(message, code, statusCode, data);
+	return new CustomError(message, code, statusCode, data);
   };
   
   export default customError;

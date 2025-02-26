@@ -11,8 +11,11 @@ import config from './src/config/config';
 import db from './src/models';
 import multer, { FileFilterCallback } from 'multer';
 import path from 'node:path';
+
 // import * as spdy from 'spdy';
+
 // import seedDatabase from './seedDataBase';
+
 import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.types';
 import { storeMiddleWear } from './src/middlewares/store.middleweare';
 import { shopMiddleWare } from './src/middlewares/shop.middleware';
@@ -78,6 +81,7 @@ const storage = multer.diskStorage({
     cb(null, random + "-" + file.originalname);
   }
 });
+
 const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
   if (
     file.mimetype === "image/png" ||
@@ -90,6 +94,7 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
     cb(null, false); // Reject the file
   }
 };
+
 const upload = multer({
   storage: storage, fileFilter: fileFilter, limits: {
     fileSize: 50 * 1024 * 1024,
@@ -101,11 +106,13 @@ app.use('/compressed', express.static(path.join(__dirname, 'compressed'), {
   maxAge: '1d', // Cache for 1 day
   etag: false, // Disable ETag headers
 }));
+
 // Routes
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('SERVER');
   next();
 });
+
 app.use('/api/cart', cartRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/payment', paymentRouter);
@@ -119,9 +126,10 @@ app.use("/api/categories", categoriesRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/orders", ordersRouter);
 app.use("/api/permissions", permissionsRouter);
-app.use("api/roles", rolesRouter);
-app.use("api/subcategories", subcategoriesRouter);
-app.use("api/inventory", dashboardRouter);
+app.use("/api/roles", rolesRouter);
+app.use("/api/subcategories", subcategoriesRouter);
+app.use("/api/inventory", dashboardRouter);
+
 
 // Error handling middleware
 app.use((error: CustomError, req: Request, res: Response, next: NextFunction) => {
@@ -134,6 +142,7 @@ app.use((error: CustomError, req: Request, res: Response, next: NextFunction) =>
     }
   });
 });
+
 // Set up the server
 const PORT = process.env.PORT || config.port;
 app.listen(Number(PORT), () => {
@@ -141,7 +150,7 @@ app.listen(Number(PORT), () => {
   logger.info(`Server is running on port ${PORT} in ${app.get('env')} mode`);
 
 });
-// to enable http2
+
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {

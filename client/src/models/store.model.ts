@@ -32,7 +32,7 @@ export interface IStoreModel {
 
 
 export interface IStoreResponseModel {
-    createdAt: string | number | Date  | undefined;
+    createdAt?: string | number | Date  | undefined;
     id?: string;
     name: string;
     description: string;

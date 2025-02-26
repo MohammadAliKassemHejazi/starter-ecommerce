@@ -3,7 +3,8 @@ import React from "react";
 
 type Props = {};
 
-const ArticleById = ({}: Props) => {
+const ArticleById = ({ }: Props) => {
+
   return <div>ArticleById</div>;
 };
 

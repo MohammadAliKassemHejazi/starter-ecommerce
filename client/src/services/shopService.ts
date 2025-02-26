@@ -37,7 +37,7 @@ export const requestProductById = async (id: string) => {
 export const requestAllProductID = async () => {
 	const { data: response } = await httpClient.get("/shop/getall");
 
-	return response.data
+	return response
 }
 
 export const requestProductsByStore = async ( storeId: string, page: number, pageSize: number, searchQuery?: string ) => {

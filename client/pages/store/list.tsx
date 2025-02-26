@@ -46,7 +46,7 @@ const StoreListing = () => {
               <div
                 key={store.id}
                 className="store-card bg-white rounded-lg shadow-lg p-4 cursor-pointer"
-                onClick={() => handleStoreClick(store.id)}
+                onClick={() => handleStoreClick(store.id ?? "")}
               >
                 <Image
                   src={store.imgUrl}

@@ -15,6 +15,7 @@ import SalesAnalytics from '@/components/Vendor/SalesAnalytics';
 import InventoryAlerts from '@/components/Vendor/InventoryAlerts';
 import OrderFulfillmentStatus from '@/components/Vendor/OrderFulfillmentStatus';
 import Layout from '@/components/Layouts/Layout';
+import protectedRoute from '@/components/protectedRoute';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -45,4 +46,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default protectedRoute(Dashboard) ;

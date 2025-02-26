@@ -109,7 +109,7 @@ export const getUserById = async (
 ): Promise<IAuthLoginBodyResponse> => {
   const user = await db.User.findOne({ where: { id: UserId }, raw: true });
   if (user == null) {
-    return customError(authErrors.AuthJWTError);
+     customError(authErrors.AuthJWTError);
   }
   const response: IAuthLoginBodyResponse = mapUserResponseObject(UserId, user);
   return response;

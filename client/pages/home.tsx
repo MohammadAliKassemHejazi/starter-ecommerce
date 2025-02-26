@@ -19,18 +19,18 @@ type Props = {
 };
  
 const storesModel : IStoreResponseModel[] =  [
-  { name: 'Store 1',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Gucci_logo.svg/512px-Gucci_logo.svg.png?20180702130155"},
-  {  name: 'Store 2',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg" },
-  {  name: 'Store 3',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg"},
-  { name: 'Store 4' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg"},
-  {  name: 'Store 5',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg"},
-  {  name: 'Store 6',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg"},
-  {  name: 'Store 7' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
-  { name: 'Store 8' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
-  {  name: 'Store 9' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg"},
-  {  name: 'Store 10',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg"},
-  { name: 'Store 11',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
-  { name: 'Store 12',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Zalando_logo.svg" },
+  { name: 'Store 1',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  {  name: 'Store 2',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png" },
+  {  name: 'Store 3',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  { name: 'Store 4' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  {  name: 'Store 5',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  {  name: 'Store 6',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  {  name: 'Store 7' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  { name: 'Store 8' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  {  name: 'Store 9' ,description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  {  name: 'Store 10',description : "" ,categoryId:"" ,imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
+  { name: 'Store 11',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png" },
+  { name: 'Store 12',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png" },
 
 ];
 
