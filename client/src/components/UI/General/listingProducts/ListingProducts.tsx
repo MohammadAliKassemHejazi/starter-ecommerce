@@ -5,21 +5,11 @@ import { IProductModel } from "@/models/product.model";
 import { fetchProductsListing } from "@/store/slices/shopSlice"; 
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
+
 
 interface ProductListProps { }
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
+
 
 const ProductList: React.FC<ProductListProps> = () => {
   const dispatch = useAppDispatch();
@@ -106,11 +96,7 @@ return (
                       <span className="far fa-heart"></span>
                     </Link>
                   </li>
-                  {/* <li className="icon">
-                    <a  onClick={() => handleAddToCart(product)}>
-                      <span className="fas fa-shopping-bag"></span>
-                    </a>
-                  </li> */}
+                  
                 </ul>
               </div>
 

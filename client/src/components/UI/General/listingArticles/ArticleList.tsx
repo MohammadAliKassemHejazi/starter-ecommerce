@@ -7,7 +7,7 @@ interface ArticleListProps {
 
 const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
   return (
-    <div className="container">
+    <div className="container mb-4">
       <div className="row">
         {articles?.length > 0 ? (
           articles.map((article) => (

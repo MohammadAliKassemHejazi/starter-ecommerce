@@ -2,8 +2,10 @@ import { ImageListType } from "react-images-uploading";
 import { IStoreModel } from "./store.model";
 import { IComment } from "./comment.model";
 import { ISizeItem } from "./size.model";
+import { ReactNode } from "react";
 
 export interface IProductModel {
+  originalPrice: ReactNode;
   id?: string;
   name?: string;
   tagColor?: string;

@@ -1,0 +1,55 @@
+/* ProductList.module.css */
+
+.product-item {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-10px); /* Lift the card slightly on hover */
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.icons {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .icons {
+  opacity: 1; /* Show icons on hover */
+}
+
+.tag {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+}
+
+.card-title {
+  font-size: 1rem;
+  line-height: 1.2;
+  color: #333;
+}
+
+.ratings {
+  font-size: 0.9rem;
+}
+
+.price {
+  color: #ff5722; /* Orange pricing color */
+}
+
+.discount {
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+}

@@ -40,7 +40,7 @@ const Home = ({ articles }: Props) => {
 
   return (
     <Layout>
-      <header className="py-5 bg-black border-bottom mb-4 overflow-hidden">
+      <header className="py-5  border-bottom mb-4 overflow-hidden">
             
         <ParticleComponent></ParticleComponent>
         <BubbleAnimation stores={storesModel} ></BubbleAnimation>

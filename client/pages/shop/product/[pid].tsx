@@ -3,16 +3,19 @@ import Layout from "@/components/Layouts/Layout";
 import MySwiperComponent from "@/components/UI/General/ImagesSlider/MySwiperComponent";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import { IProductModel } from "../../../src/models/product.model"; // Adjust the import path as needed
-import { requestAllProductID, requestProductById } from "@/services/shopService";
+import {
+  requestAllProductID,
+  requestProductById,
+} from "@/services/shopService";
 import Head from "next/head";
 import protectedRoute from "@/components/protectedRoute";
 import { useAppDispatch } from "@/store/store";
 import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
 import { GetStaticPaths, GetStaticProps } from "next";
-
+import styles from "./SingleItem.module.css";
 type Props = {
   product?: IProductModel;
 };
@@ -106,19 +109,19 @@ const SingleItem = ({ product }: Props) => {
   };
 
   return (
-    <>
+    <Layout>
       <Head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-          id={product?.id ?? ""}
         />
       </Head>
-      <Layout>
-        <section className="bg-light">
-          <div className="container pb-5">
-            <div className="row">
-              <div className="col-lg-5 mt-5">
+      <div className={styles.productContainer}>
+        {/* Image Slider */}
+        <div className={styles.productImages}>
+          {/* Large Image on Top */}
+          <div className="row">
+              
                 <div className="card mb-3">
                   <Image
                     className="card-img img-fluid"
@@ -145,158 +148,143 @@ const SingleItem = ({ product }: Props) => {
                   />
                 </div>
               </div>
-              <div className="col-lg-7 mt-5">
-                <div className="card">
-                  <div className="card-body">
-                    <h1 className="h2">{product?.name ?? ""}</h1>
-                    <p className="h3 py-2">${product?.price?.toFixed(2)}</p>
-                    <p className="py-2">
-                      <i className="fa fa-star text-warning"></i>
-                      <i className="fa fa-star text-warning"></i>
-                      <i className="fa fa-star text-warning"></i>
-                      <i className="fa fa-star text-warning"></i>
-                      <i className="fa fa-star text-secondary"></i>
-                      <span className="list-inline-item text-dark">
-                        Rating {product?.ratings ?? ""} |{" "}
-                        {product?.commentsCount ?? ""} Comments
-                      </span>
-                    </p>
-                    <ul className="list-inline">
-                      <li className="list-inline-item">
-                        <h6>Brand:</h6>
-                      </li>
-                      <li className="list-inline-item">
-                        <p className="text-muted">
-                          <strong>{product?.store?.name ?? ""}</strong>
-                        </p>
-                      </li>
-                    </ul>
-                    <h6>Description:</h6>
-                    <p>{product?.description ?? ""}</p>
+        </div>
 
-                    <Formik
-                      initialValues={{
-                        size: "S", // Default size
-                        sizeId: "", // Default size ID
-                        quantity: 1,
-                      }}
-                      onSubmit={(values) => {
-                        handleAddToCart(
-                          product!,
-                          values.size,
-                          values.sizeId,
-                          values.quantity
-                        );
-                      }}
-                    >
-                      {({ values, setFieldValue }) => (
-                        <Form>
-                          <div className="row">
-                            <div className="col-auto">
-                              <ul className="list-inline pb-3">
-                                <li className="list-inline-item">
-                                  Size:
-                                  <input
-                                    type="hidden"
-                                    name="size"
-                                    value={values.size}
-                                  />
-                                  <input
-                                    type="hidden"
-                                    name="sizeId"
-                                    value={values.sizeId}
-                                  />
-                                </li>
-                                {product?.SizeItems?.map((s) => {
-                                  return (
-                                    <li key={s.id} className="list-inline-item">
-                                      <button
-                                        type="button"
-                                        className={`btn btn-success btn-size ${
-                                          values.size === s.Size?.size
-                                            ? "active"
-                                            : ""
-                                        }`}
-                                        onClick={() => {
-                                          setFieldValue("size", s.Size?.size);
-                                          setFieldValue("sizeId", s.id);
-                                        }}
-                                        disabled={s.quantity === 0}
-                                      >
-                                        {s.Size?.size}
-                                      </button>
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                            </div>
-                            <div className="col-auto">
-                              <ul className="list-inline pb-3">
-                                <li className="list-inline-item text-right">
-                                  Quantity
-                                  <input
-                                    type="hidden"
-                                    name="quantity"
-                                    value={values.quantity}
-                                  />
-                                </li>
-                                <li className="list-inline-item">
-                                  <span
-                                    className="btn btn-success"
-                                    onClick={() =>
-                                      setFieldValue(
-                                        "quantity",
-                                        Math.max(values.quantity - 1, 1)
-                                      )
-                                    }
-                                  >
-                                    -
-                                  </span>
-                                </li>
-                                <li className="list-inline-item">
-                                  <span className="badge bg-secondary">
-                                    {values.quantity}
-                                  </span>
-                                </li>
-                                <li className="list-inline-item">
-                                  <span
-                                    className="btn btn-success"
-                                    onClick={() =>
-                                      setFieldValue(
-                                        "quantity",
-                                        values.quantity + 1
-                                      )
-                                    }
-                                  >
-                                    +
-                                  </span>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div className="row pb-3">
-                            <div className="col d-grid">
-                              <button
-                                type="submit"
-                                className="btn btn-success btn-lg"
-                                name="submit"
-                                value="addtocart"
-                              >
-                                Add To Cart
-                              </button>
-                            </div>
-                          </div>
-                        </Form>
-                      )}
-                    </Formik>
-                  </div>
-                </div>
-              </div>
-            </div>
+        {/* Product Details */}
+        <div className={styles.productDetails}>
+          <h1 className={styles.productName}>{product?.name}</h1>
+          <div className={styles.productPrice}>
+            ${product?.price?.toFixed(2)}
+            {product?.discount && (
+              <span className={styles.discountPrice}>
+                $
+                {(
+                  product.price! -
+                  (product.price! * product.discount) / 100
+                ).toFixed(2)}
+              </span>
+            )}
           </div>
-        </section>
-      </Layout>
-    </>
+          <p className={styles.productDescription}>{product?.description}</p>
+
+          {/* Add to Cart Form */}
+          <Formik
+  initialValues={{
+    size: "", // Default size
+    sizeId: "", // Default size ID
+    quantity: 1, // Set default quantity to 1
+  }}
+  onSubmit={(values) => {
+    console.log(values);
+    handleAddToCart(product!, values.size, values.sizeId, values.quantity);
+  }}
+  validate={(values) => {
+    const errors: any = {};
+    if (!values.sizeId) {
+      errors.sizeId = "Please select a size";
+    }
+    if (values.quantity < 1) {
+      errors.quantity = "Quantity must be at least 1";
+    }
+    return errors;
+  }}
+>
+  {({ errors, touched, values, setFieldValue }) => (
+    <Form className={styles.cartForm}>
+      {/* Quantity Field */}
+      <div className={styles.formField}>
+        <label className={styles.formLabel}>Quantity</label>
+        <Field
+          className={`${styles.formInput} ${
+            errors.quantity && touched.quantity ? styles.inputError : ""
+          }`}
+          type="number"
+          name="quantity"
+          min={1}
+        />
+        {errors.quantity && touched.quantity && (
+          <div className={styles.errorMsg}>{errors.quantity}</div>
+        )}
+      </div>
+
+      {/* Size Selection */}
+      <div className={styles.formField}>
+        <label className={styles.formLabel}>Size</label>
+        <div className={styles.sizeOptions}>
+          {product?.SizeItems?.map((size) => (
+            <div key={size.id} className="position-relative">
+              <Field
+                className={`${styles.sizeOption} ${
+                  touched.sizeId && errors.sizeId ? styles.error : ""
+                }`}
+                type="radio"
+                name="sizeId"
+                value={size.id}
+                onClick={() => setFieldValue("size", size.Size?.size)} // Update size field
+              />
+              <span className={`${styles.sizeMark}`}>{size.Size?.size}</span>
+            </div>
+          ))}
+        </div>
+        {errors.sizeId && touched.sizeId && (
+          <div className={styles.errorMsg}>{errors.sizeId}</div>
+        )}
+      </div>
+
+      {/* Hidden input to submit size text */}
+      <input type="hidden" name="size" value={values.size} />
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className={styles.addToCartBtn}
+        name="submit"
+        value="addtocart"
+      >
+        Add To Cart
+      </button>
+    </Form>
+  )}
+</Formik>
+
+
+          {/* Feedback Section */}
+          <div className={styles.feedbackSection}>
+            <h3 className={styles.feedbackTitle}>Leave Feedback</h3>
+            <div className={styles.ratingContainer}>
+              {[...Array(5)].map((_, i) => (
+                <span
+                  key={i}
+                  className={`
+                    ${styles.star}
+                    ${i < feedback.rating ? styles.filled : ""}
+                  `}
+                  onClick={() => setFeedback({ ...feedback, rating: i + 1 })}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <textarea
+              className={styles.feedbackInput}
+              value={feedback.comment}
+              onChange={(e) =>
+                setFeedback({ ...feedback, comment: e.target.value })
+              }
+              placeholder="Your comment..."
+            />
+            <button
+              className={styles.submitFeedback}
+              onClick={() => {
+                // Submit feedback logic
+              }}
+            >
+              Submit Feedback
+            </button>
+          </div>
+        </div>
+      </div>
+    </Layout>
   );
 };
 
@@ -306,7 +294,7 @@ export default protectedRoute(SingleItem);
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
     const res = await requestAllProductID(); // Fetch all product IDs
-console.log(res,"response to requestAllProductID")
+    console.log(res, "response to requestAllProductID");
     if (!res || !Array.isArray(res.message)) {
       console.error("Invalid response structure:", res);
       return { paths: [], fallback: "blocking" };
@@ -316,7 +304,7 @@ console.log(res,"response to requestAllProductID")
     const paths = res.message.map((product: any) => ({
       params: { pid: product.id.toString() },
     }));
-    console.log(paths,"paths res.message")
+    console.log(paths, "paths res.message");
     return {
       paths, // Pre-rendered pages for first 50 products
       fallback: "blocking", // Other pages will be generated on-demand
@@ -326,7 +314,6 @@ console.log(res,"response to requestAllProductID")
     return { paths: [], fallback: "blocking" };
   }
 };
-
 
 // Fetch product data at build time
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -351,9 +338,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 };
 
-
 // Generate metadata for each product page
-export async function generateMetadata({ params }: { params: { pid: string } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { pid: string };
+}) {
   const { pid } = params;
   const product = await requestProductById(pid);
 

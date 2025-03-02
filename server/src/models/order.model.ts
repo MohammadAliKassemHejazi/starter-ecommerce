@@ -9,7 +9,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     static associate(models: any) {
       Order.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
       Order.belongsTo(models.Payment, { foreignKey: 'paymentId', targetKey: 'id' }); // Link to Payment
-      Order.hasMany(models.OrderItem,{foreignKey: "orderId", as: "items",});
+      Order.hasMany(models.OrderItem, { foreignKey: "orderId", as: "items", });
+      Order.hasMany(models.OrderShipping);
     }
   }
 
