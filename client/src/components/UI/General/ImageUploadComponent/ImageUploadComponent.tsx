@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ButtonHTMLAttributes } from 'react';
 import ImageUploading, { ImageListType, ImageType } from 'react-images-uploading';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -181,7 +181,10 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
     >
       {({ imageList, onImageUpload }) => (
         <div>
-          <button onClick={onImageUpload}>Upload Photos</button>
+          <button   onClick={(e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default behavior if needed
+    onImageUpload(); // Ensure the function is invoked
+  }}>Upload Photos</button>
           {imageList.map((image: ImageType, index: number) => (
             <div key={index}>
               {!!image.file && (
@@ -195,7 +198,10 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
                   >
                     <DynamicSizedImage url={image.data_url ?? ""} index={index} constrainWidth={true} />
                   </ReactCrop>
-                  <button onClick={() => handlePhotoChange([image])}>Confirm Crop</button>
+                  <button onClick={(e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default behavior if needed
+    handlePhotoChange([image])// Ensure the function is invoked
+  }}>Confirm Crop</button>
                 </div>
               )}
             </div>

@@ -91,21 +91,57 @@ export const handleDeleteImage = async (
   }
 };
 
+
 export const handleUpdate = async (
   request: CustomRequest,
-  response: Response
+  response: Response,
+  next: NextFunction
 ): Promise<void> => {
+  // Step 1: Validate the request
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
     response.status(400).json({ errors: errors.array() });
-    return;
   }
 
-  const UserId = request.UserId;
-  const userSession = await userService.userSession(UserId!);
-  response.json(userSession);
-};
+  try {
+    // Extract user ID and product ID from the request
+    const userId = request.UserId;
+    const productId = request.body.productID; // Assuming the product ID is passed as a route parameter
 
+    // Extract files and body data
+    const files = request.files as Express.Multer.File[] || [];
+    const sizes = JSON.parse(request.body.sizes || "[]"); // Parse sizes array
+    const productData = { ...request.body, ownerId: userId, sizes } as any;
+
+  
+
+    // Step 2: Update the product
+    const updatedProduct = await shopService.updateProductWithImages(productId, productData, files);
+
+    // Step 3: Return the updated product
+    response.status(200).json({ product: updatedProduct });
+  } catch (error) {
+    // Step 4: Clean up uploaded files in case of an error
+    try {
+      if (request.files && Array.isArray(request.files)) {
+        await Promise.all(
+          request.files.map(async (file: Express.Multer.File) => {
+            const fileName = file.filename;
+            const outputPath = path.join("compressed", fileName);
+            fs.unlink(outputPath, (err) => {
+              if (err) console.error(`Failed to delete file: ${outputPath}`, err);
+            });
+          })
+        );
+      }
+    } catch (deleteError) {
+      console.error("Failed to clean up files:", deleteError);
+    }
+
+    // Pass the error to the error-handling middleware
+    next(error);
+  }
+};
 export const handelgetall = async (
   request: CustomRequest,
   response: Response,

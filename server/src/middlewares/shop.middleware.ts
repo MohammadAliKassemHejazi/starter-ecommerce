@@ -18,7 +18,7 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
       files.map(async (file) => {
         const filePath = file.path; // Get the path of the uploaded file
         const fileName = file.filename;
-        const outputPath = path.join(__dirname, 'compressed', fileName); // Specify output path for compressed file
+        const outputPath = path.join(__dirname,"..","..", 'compressed', fileName); // Specify output path for compressed file
 
         if (file.mimetype.startsWith('image/')) {
           // Read file buffer from file path

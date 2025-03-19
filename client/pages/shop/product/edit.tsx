@@ -43,17 +43,26 @@ function EditProduct() {
   const listOfStores = useSelector(storeSelector);
   const listOfSubCategories = useSelector(utileSubCategoriesSelector);
   const listOfSizes = useSelector(utileSizes);
-  const [product, setProduct] = useState<IProductModel | null>(null);
-
+  
+  const [product, setProduct] = useState<IProductModel>();
+ 
   useEffect(() => {
     if (id) {
       dispatch(fetchProductById(id as string))
         .unwrap()
-        .then((fetchedProduct: IProductModel | any) => {
-  
-          setProduct(fetchedProduct);
-          dispatch(fetchAllSubCategoriesID(fetchedProduct.categoryId ?? ""));
-        })
+         .then((fetchedProduct: IProductModel | any) => {
+    // Create a shallow copy of fetchedProduct
+    const updatedProduct = {
+      ...fetchedProduct,
+      discount: fetchedProduct.discount ?? 0, // Set default value for discount
+    };
+
+    // Update the state with the copied object
+    setProduct(updatedProduct);
+
+    // Fetch subcategories based on categoryId
+    dispatch(fetchAllSubCategoriesID(updatedProduct.categoryId ?? ""));
+  })
         .catch((error) => {
           Toast.fire({
             icon: "error",
@@ -85,35 +94,45 @@ function EditProduct() {
   };
 
 const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
-  setProduct((prevProduct) => {
-    // Merge new cropped images with existing ProductImages
+  setProduct((prevProduct: any) => {
+    if (!prevProduct) {return prevProduct;}  // ✅ Prevent errors if `product` is undefined
+
+    const existingImages = prevProduct?.ProductImages || [];
     const updatedImages = [
-      ...(prevProduct?.ProductImages || []),
-      ...croppedImages.map(image => ({
-        imageUrl: image.dataURL, // Assuming `dataURL` is the URL of the cropped image
-        file: image.file, // Keep reference to the original file if needed
+      ...existingImages,
+      ...croppedImages.map((image) => ({
+        imageUrl: "40627-coding-event.avif",
+        file: image.file,
       })),
-    ];
+    ]; 
+
+    console.log(croppedImages)
 
     return {
       ...prevProduct,
       ProductImages: updatedImages,
     };
   });
-}, []);
+}, [setProduct]);
+
 
   const handleSubmit = async (values: IProductModel) => {
+    debugger
+    console.log(product);
     const formData = new FormData();
-
+debugger
     Object.entries(values).forEach(([key, value]) => {
       if (key !== "photos") {
+        if(key !== "id"){
+         
         formData.append(
           key,
           typeof value === "boolean" ? value.toString() : value
-        );
+          );
+          }
       }
     });
-
+      formData.append("productID",id!.toString());
     product?.ProductImages?.forEach((file) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
@@ -123,6 +142,7 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
     formData.append("sizes", JSON.stringify(values?.SizeItems));
 
     try {
+      debugger
       const response = await dispatch(updateProduct(formData)).unwrap();
 
       router.push(`/shop/product/${response.product.id}`);
@@ -154,12 +174,12 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
   if (isonline && imageToDelete?.imageUrl) {
     try {
       // Send a request to the server to delete the image
-      await dispatch(deleteProductImage(imageToDelete.imageUrl)).unwrap();
+      await dispatch(deleteProductImage(imageToDelete.id)).unwrap();
 
       // Remove the image locally only if the server deletion is successful
-      setProduct((prevProduct) => ({
+      setProduct((prevProduct:any) => ({
         ...prevProduct,
-        ProductImages: prevProduct?.ProductImages?.filter((_, i) => i !== index) || [],
+        ProductImages: prevProduct?.ProductImages?.filter((_: any, i: number) => i !== index) || [],
       }));
 
       Toast.fire({
@@ -174,12 +194,16 @@ const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
     }
   } else {
     // For locally added images (not online), simply remove it from the array
-    setProduct((prevProduct) => ({
+    setProduct((prevProduct:any) => ({
       ...prevProduct,
-      ProductImages: prevProduct?.ProductImages?.filter((_, i) => i !== index) || [],
+      ProductImages: prevProduct?.ProductImages?.filter((_: any, i: number) => i !== index) || [],
     }));
   }
-};
+  };
+
+  useEffect(() => {
+  console.log("Current product state:", product);  
+}, [product]);
 
   if (!product) {
     return <div>Loading...</div>;
@@ -191,13 +215,15 @@ return (
       <div className="container">
         <h2 className="text-center mb-4">Edit Product</h2>
         <Formik
-          initialValues={product}
+            initialValues={product || { name: "", price: 0, description: "", isActive: false, storeId: "", categoryId: "", sizes: [], ProductImages: [] }}
+          enableReinitialize={true} 
           onSubmit={handleSubmit}
           validate={(values) => {
             const errors: Partial<IProductModelErrors> = {};
             if (!values.name) {
               errors.name = "Required";
             }
+            
             if (values.price && (values.price <= 0 || isNaN(values.price))) {
               errors.price = "Price must be a positive number";
             }
@@ -285,7 +311,7 @@ return (
                   <FieldArray name="sizes">
                     {({ push, remove, form }) => (
                       <div>
-                        {form.values.SizeItems.map((size: ISize, index: number) => (
+                        {form.values.SizeItems.map((_size: ISize, index: number) => (
                           <div key={index} className="d-flex align-items-center mb-3">
                             <Field
                               as="select"
@@ -318,9 +344,9 @@ return (
                 <div className="card-header">Additional Information</div>
                 <div className="card-body">
                   <div className="form-group">
-                    <label htmlFor="Discount">Sale Discount:</label>
-                    <Field type="number" className="form-control" id="Discount" name="Discount" />
-                    <ErrorMessage name="Discount" component="div" className="text-danger" />
+                    <label htmlFor="discount">Sale Discount:</label>
+                    <Field type="number" className="form-control" id="discount" name="discount"  />
+                    <ErrorMessage name="discount" component="div" className="text-danger" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="tags">Tags:</label>

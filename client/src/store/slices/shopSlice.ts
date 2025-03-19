@@ -88,7 +88,7 @@ export const deleteProduct = createAsyncThunk(
 );
 
 export const deleteProductImage = createAsyncThunk(
-  "shop/delete",
+  "shop/delete/image",
   async (id: string) => {
     const response = await shopService.requestDeleteProductImage(id);
     return response;

@@ -8,9 +8,10 @@ const router = express.Router();
 const Routes = [
   "/create",
   "/update",
-
   "/get/storeProducts/:storeId",
+  "/delete/image/:id",
   "/delete/:id",
+
 ];
 
 // Apply protectedRoutes middleware
@@ -23,13 +24,13 @@ router.post(
     body("name").trim().notEmpty().escape(), // Validate and sanitize name
     body("description").trim().escape(), // Sanitize description
     body("price").isFloat({ min: 0 }).toFloat(), // Validate price
-    body("sizes").isArray(), // Validate sizes
+
   ],
   shopController.handleCreateProduct
 );
 
 // Update Product (with validation and sanitization)
-router.post(
+router.patch(
   "/update",
   [
     body("id").isInt().toInt(), // Validate ID

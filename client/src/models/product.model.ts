@@ -5,13 +5,13 @@ import { ISizeItem } from "./size.model";
 import { ReactNode } from "react";
 
 export interface IProductModel {
-  originalPrice: ReactNode;
+  originalPrice: number;
   id?: string;
   name?: string;
   tagColor?: string;
   description?: string;
   price?: number;
-  discount?: number;
+  discount?: number | 0;
   stockQuantity?: number;
   isActive?: boolean;
   subcategoryId?: string;

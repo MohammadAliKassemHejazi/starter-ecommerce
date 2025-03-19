@@ -30,8 +30,11 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ productImages , isonline = fa
     setFullscreen(false);
   };
   const handleDeleteImage = (index: number) => {
-    if (onDeleteImage) {
+    debugger
+    if (index !== 0) {
+      if (onDeleteImage) {
       onDeleteImage(index);
+      }
     }
   };
 
@@ -53,7 +56,13 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ productImages , isonline = fa
             <button
               
             className={styles["delete-button"]}
-            onClick={() => handleDeleteImage(index)}
+              onClick={(e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default behavior if needed
+
+  
+
+                handleDeleteImage(index)
+              }}
           ></button>
           </div>
           </div>

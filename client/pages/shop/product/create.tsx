@@ -73,6 +73,7 @@ function CreateProduct() {
     name: "",
     description: "",
     price: 0,
+    discount:0,
     isActive: false,
     subcategoryId: "",
     storeId: "",
@@ -80,12 +81,14 @@ function CreateProduct() {
     metaDescription: "",
     photos: [],
     ProductImages: [],
+    originalPrice:0,
   });
 
   const initialValues: IProductModel = {
     name: "",
     description: "",
     price: 0,
+    originalPrice:0,
     isActive: false,
     subcategoryId: "",
     storeId: "",
@@ -263,7 +266,7 @@ return (
                   <FieldArray name="SizeItems">
                     {({ push, remove, form }) => (
                       <div>
-                        {form.values.SizeItems.map((size, index) => (
+                        {form.values.SizeItems.map((size :any, index : number) => (
                           <div key={index} className="d-flex align-items-center mb-3">
                             <Field
                               as="select"
@@ -296,9 +299,9 @@ return (
                 <div className="card-header">Additional Information</div>
                 <div className="card-body">
                   <div className="form-group">
-                    <label htmlFor="Discount">Sale Discount:</label>
-                    <Field type="number" className="form-control" id="Discount" name="Discount" />
-                    <ErrorMessage name="Discount" component="div" className="text-danger" />
+                    <label htmlFor="discount">Sale Discount:</label>
+                    <Field type="number" className="form-control" id="discount" name="discount" />
+                    <ErrorMessage name="discount" component="div" className="text-danger" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="tags">Tags:</label>

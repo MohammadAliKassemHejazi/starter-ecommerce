@@ -23,6 +23,7 @@ export const fetchSalesData = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await vendorService.getSalesData();
+      console.log(response);
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);

@@ -69,7 +69,7 @@ router.get("/sales", handleGetSalesData);
  *                   threshold:
  *                     type: integer
  */
-router.get("/inventory/alerts", handleGetInventoryAlerts);
+router.get("/alerts", handleGetInventoryAlerts);
 
 /**
  * @swagger

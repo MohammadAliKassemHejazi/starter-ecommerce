@@ -5,11 +5,13 @@ import { IProductAttributes, } from 'interfaces/types/models/product.model.types
 // import { ICommentAttributes } from 'interfaces/types/models/comment.model.types';
 // import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 import db from '../models/index';
-import fs from 'fs';
 import path from 'path';
 import { Op } from "sequelize"; // Import Op
+import { promises as fsPromises } from 'fs';
 
 import { validate as uuidValidate } from "uuid";
+
+
  export const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductAttributes> => {
   try {
     const product = await db.Product.create(productData);
@@ -49,6 +51,55 @@ import { validate as uuidValidate } from "uuid";
   }
 };
 
+
+export const updateProductWithImages = async (
+  productId: string,
+  productData: IShopCreateProduct,
+  files: Express.Multer.File[]
+): Promise<IProductAttributes> => {
+  try {
+    // Step 1: Find the product by ID
+    const product = await db.Product.findByPk(productId);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    // Step 2: Update the product data
+    await product.update(productData);
+
+    // Step 3: Handle new images
+    if (files.length > 0) {
+      for (const file of files) {
+        await db.ProductImage.create({
+          productId,
+          imageUrl: `${file.filename}`,
+        });
+      }
+    }
+
+    // Step 4: Update size items
+    if (productData.sizes && Array.isArray(productData.sizes)) {
+      // Delete existing size items
+      await db.SizeItem.destroy({ where: { productId } });
+
+      // Create new size items
+      for (const size of productData.sizes) {
+        if (size.sizeId) {
+          await db.SizeItem.create({
+            productId,
+            sizeId: size.sizeId,
+            quantity: size.quantity,
+          });
+        }
+      }
+    }
+
+    // Step 5: Return the updated product
+    return product.toJSON() as IProductAttributes;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getProductById = async (
   productId: string
@@ -128,73 +179,96 @@ export const getTopProductIds = async (
 
 
 
+
+
+
 export const deleteProduct = async (id: string, userId: string): Promise<any | null> => {
   try {
     // Fetch product and related images
     const product = await db.Product.findOne({
-      where: { id, ownerId:userId },
-      include: [{ model: db.ProductImage }],
-      raw: true,
-      nest:true,
+      where: { id, ownerId: userId }, // Ensure the product belongs to the user
+      include: [{ model: db.ProductImage }], // Include related ProductImages
     });
 
+    // Check if the product exists
     if (!product) {
-      throw new Error('Product not found');
+      throw new Error('Product not found or you do not have permission to delete it');
     }
 
-    const images = [product.ProductImages] ;
+    // Extract related images
+    const images = product.ProductImages || []; // Fallback to empty array if no images exist
 
-
-    // Delete images from filesystem
-    images.forEach((photo: any) => {
-      if(photo.id ?? 0 > 0){
-      const imagePath = path.resolve(__dirname, '..', '/compressed', photo.imageUrl); // Adjust the path as necessary
-      fs.unlink(imagePath, (err) => {
-        if (err) {
+    // Delete images from the filesystem using Promise.all
+    await Promise.all(
+      images.map(async (photo: any) => {
+        const imagePath = path.resolve(__dirname, '..', '/compressed', photo.imageUrl); // Adjust the path as necessary
+        try {
+          await fsPromises.unlink(imagePath); // Use fs.promises.unlink for async file deletion
+        } catch (err) {
           console.error(`Failed to delete image: ${imagePath}`, err);
         }
-      });
-        }
-    });
+      })
+    );
 
+    // Delete the product and its related records (cascading will handle ProductImages)
+    await db.Product.destroy({ where: { id, ownerId: userId } });
 
-    // Delete product and related records
-    await db.Product.destroy({ where: { id, ownerId:userId } });
-
+    return { message: 'Product and associated images deleted successfully' };
   } catch (error) {
+    console.error('Error deleting product:', error);
     throw error;
   }
 };
 
+
+
 export const deleteProductImage = async (id: string, userId: string): Promise<any | null> => {
   try {
-    // Fetch product and related images
-    const ProductImage = await db.ProductImage.findOne({
-      where: { id, ownerId:userId },
-   
+    // Step 1: Fetch the product image and associated product
+    const productImage = await db.ProductImage.findOne({
+      where: { id }, // Find the image by its ID
+      include: [{ model: db.Product }], // Include the associated Product to check ownership
     });
 
-    if (!ProductImage) {
-      throw new Error('Product not found');
+    // Step 2: Check if the product image exists
+    if (!productImage) {
+      throw new Error('Product image not found');
     }
 
+    // Step 3: Verify ownership (ensure the product belongs to the user)
+    if (productImage.Product.ownerId !== userId) {
+      throw new Error('You do not have permission to delete this product image');
+    }
 
+    // Step 4: Resolve the file path
+    const filePath = path.join(__dirname, '..', 'compressed', productImage.imageUrl);
 
-    // Delete images from filesystem
-    ProductImage.forEach((photo: any) => {
-      const imagePath = path.resolve(__dirname, '..', '/compressed', photo.imageUrl); // Adjust the path as necessary
-      fs.unlink(imagePath, (err) => {
-        if (err) {
-          console.error(`Failed to delete image: ${imagePath}`, err);
-        }
-      });
-    });
+    // Step 5: Check if the file exists on the filesystem
+    try {
+      await fsPromises.access(filePath); // Throws an error if the file does not exist
+    } catch (err) {
+      console.warn(`File not found on the filesystem: ${filePath}`);
+      // Optionally, log this as a warning but proceed with database deletion
+    }
 
+    // Step 6: Delete the file from the filesystem (if it exists)
+    try {
+      await fsPromises.unlink(filePath); // Delete the file asynchronously
+    } catch (err) {
+      console.error(`Failed to delete file: ${filePath}`, err);
+      // Log the error but continue with the database deletion
+    }
 
-    // Delete product and related records
-    await db.ProductImage.destroy({ where: { id, ownerId:userId } });
+    // Step 7: Delete the product image record from the database
+    await db.ProductImage.destroy({ where: { id } });
 
+    // Step 8: Return success response
+    return { data: 'Product image deleted successfully' };
   } catch (error) {
+    // Step 9: Handle errors gracefully
+    console.error('Error deleting product image:', error);
+
+    // Rethrow the error to propagate it up the call stack
     throw error;
   }
 };
@@ -268,6 +342,7 @@ export const fetchProductsListing = async ({ page, pageSize }: FetchProductsBySt
 
 
 export default {
+  updateProductWithImages,
   createProductWithImages,
   getProductById,
   getTopProductIds,
