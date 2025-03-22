@@ -30,8 +30,8 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ productImages , isonline = fa
     setFullscreen(false);
   };
   const handleDeleteImage = (index: number) => {
-    debugger
-    if (index !== 0) {
+   
+    if (productImages.length > 1) {
       if (onDeleteImage) {
       onDeleteImage(index);
       }

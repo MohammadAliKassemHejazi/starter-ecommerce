@@ -5,15 +5,36 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation } from 'swiper/modules';
 import Image from "next/image";
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   imageLinks: string[];
 }
 
 export default function MySwiperComponent({ imageLinks }: Props) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleSlideChange = (swiper: any) => {
+    setCurrentImageIndex(swiper.activeIndex);
+  };
+
+  const handleImageClick = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
   return (
     <div className="row">
+      <div className="col-12 mb-3 d-flex justify-content-center">
+        <Image
+          className="img-fluid"
+          src={imageLinks[currentImageIndex]}
+          alt={`Cover Image`}
+          width={256}
+          height={256}
+          quality={100} // Increase quality to 100
+          priority={true} // Prioritize loading the cover image
+        />
+      </div>
       <div className="col-1 align-self-center">
         <div className="prev" role="button" data-bs-slide="prev">
           <i className="text-dark fas fa-chevron-left"></i>
@@ -29,14 +50,19 @@ export default function MySwiperComponent({ imageLinks }: Props) {
             prevEl: '.prev',
             nextEl: '.next',
           }}
-          // onSwiper={(swiper : any) => console.log(swiper)}
-          // onSlideChange={() => console.log('slide change')}
+          onSlideChange={handleSlideChange}
         >
           {imageLinks.map((link, index) => (
-            <SwiperSlide key={index}>
-              <a href="#">
-                <Image className="card-img img-fluid" src={link} alt={`Product Image ${index + 1}`} width={128.79} height={128.79} layout="responsive" quality={75} />
-              </a>
+            <SwiperSlide key={index} onClick={() => handleImageClick(index)}>
+              <Image
+                className="card-img img-fluid"
+                src={link}
+                alt={`Product Image ${index + 1}`}
+                width={128.79}
+                height={128.79}
+                layout="responsive"
+                quality={75}
+              />
             </SwiperSlide>
           ))}
         </Swiper>

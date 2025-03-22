@@ -101,6 +101,7 @@ function CreateProduct() {
   };
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
+    
     setProduct((prevProduct) => ({
       ...prevProduct,
       ProductImages: croppedImages,
@@ -149,22 +150,22 @@ function CreateProduct() {
     }
   };
 
-  const handleDeleteImage = async (index: number) => {
-    if (!product?.ProductImages) {
-      // Handle the case where ProductImages is undefined or null
-      console.error("ProductImages is undefined or null.");
-      return;
-    }
-
-    const imageToDelete: ImageListType | any = product.ProductImages[index];
-    console.log(imageToDelete?.imageUrl, "imageToDelete");
-
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      ProductImages:
-        prevProduct?.ProductImages?.filter((_, i) => i !== index) || [],
-    }));
-  };
+const handleDeleteImage = async (index: number) => {
+  if (!product?.ProductImages || !product?.photos) {
+    console.error("ProductImages or photos is undefined or null.");
+    return;
+  }
+  debugger
+ const newProductImages = product.ProductImages!.filter((_, i) => i !== index)
+    const newphotos= product.photos!.filter((_, i) => i !== index)
+  // Remove the image from both ProductImages and photos
+  setProduct((prevProduct) => ({
+    ...prevProduct,
+    ProductImages: newProductImages,
+    photos: newphotos,
+  }));
+  handlePhotoChange(newProductImages);
+};
 
 return (
   <Layout>
@@ -332,7 +333,8 @@ return (
                 <div className="card-body">
                   <ImageUploadComponent
                     onImagesChange={handlePhotoChange}
-                    defaultImages={product.photos}
+                    updatedPhotos={product?.ProductImages || []}
+                    defaultImages={product.photos ?? []}
                   />
                   <h3 className="mt-4">Cropped Images</h3>
                   <ImageViewer

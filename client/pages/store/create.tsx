@@ -150,6 +150,7 @@ const CreateStore = () => {
                   <div className="card-body">
                     <ImageUploadComponent
                       onImagesChange={handlePhotoChange}
+                      updatedPhotos={store.croppedImages}
                       defaultImages={store.photos}
                     />
                     <h3 className="mt-4">Cropped Images</h3>

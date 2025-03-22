@@ -74,10 +74,18 @@ export const createProduct = createAsyncThunk(
 export const updateProduct = createAsyncThunk(
   "shop/update",
   async (product: FormData) => {
-    const response = await shopService.requestUpdateArticles(product);
+    const response = await shopService.requestUpdateProduct(product);
     return response;
   }
 );
+export const updateProductImages = createAsyncThunk(
+  "shop/update",
+  async (Images: FormData) => {
+    const response = await shopService.requestUpdateProductImages(Images);
+    return response;
+  }
+);
+
 
 export const deleteProduct = createAsyncThunk(
   "shop/delete",
@@ -139,6 +147,8 @@ export const articleSlice = createSlice({
       state.page = 1;
       state.pageSize = 10;
     });
+
+    
 
     
 

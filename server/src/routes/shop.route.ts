@@ -33,13 +33,14 @@ router.post(
 router.patch(
   "/update",
   [
-    body("id").isInt().toInt(), // Validate ID
     body("name").trim().notEmpty().escape(), // Validate and sanitize name
     body("description").trim().escape(), // Sanitize description
     body("price").isFloat({ min: 0 }).toFloat(), // Validate price
   ],
   shopController.handleUpdate
 );
+
+router.patch("/update/images",shopController.handleUpdateImages);
 
 // Get Single Item (with validation)
 router.get(
@@ -76,7 +77,6 @@ router.get(
 // Delete Product (with validation)
 router.delete(
   "/delete/:id",
-  [param("id").isString().trim().notEmpty().escape()], // Validate ID
   shopController.handleDelete
 );
 

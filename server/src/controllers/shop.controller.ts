@@ -54,11 +54,7 @@ export const handleDelete = async (
   response: Response,
   next: NextFunction
 ): Promise<void> => {
-  const errors = validationResult(request);
-  if (!errors.isEmpty()) {
-    response.status(400).json({ errors: errors.array() });
-    return;
-  }
+
 
   const id = request.params.id;
   const userId = request.UserId;
@@ -142,6 +138,50 @@ export const handleUpdate = async (
     next(error);
   }
 };
+
+export const handleUpdateImages = async (
+  request: CustomRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+
+
+  try {
+
+    const productId = request.body.productID; // Assuming the product ID is passed as a route parameter
+
+    // Extract files and body data
+    const files = request.files as Express.Multer.File[] || [];
+
+    // Step 2: Update the product
+    const updatedProduct = await shopService.updateImages(productId, files);
+
+    // Step 3: Return the updated product
+    response.status(200).json({ product: updatedProduct });
+  } catch (error) {
+    // Step 4: Clean up uploaded files in case of an error
+    try {
+      if (request.files && Array.isArray(request.files)) {
+        await Promise.all(
+          request.files.map(async (file: Express.Multer.File) => {
+            const fileName = file.filename;
+            const outputPath = path.join("compressed", fileName);
+            fs.unlink(outputPath, (err) => {
+              if (err) console.error(`Failed to delete file: ${outputPath}`, err);
+            });
+          })
+        );
+      }
+    } catch (deleteError) {
+      console.error("Failed to clean up files:", deleteError);
+    }
+
+    // Pass the error to the error-handling middleware
+    next(error);
+  }
+};
+
+
 export const handelgetall = async (
   request: CustomRequest,
   response: Response,
@@ -202,14 +242,10 @@ export const getProductsByStore = async (
       pageSize: Number(pageSize),
       searchQuery: String(searchQuery),
     });
-    const transformedProducts = result.products.map((product: any) => ({
-      ...product,
-      photos: [product.ProductImages],
-      ProductImages: undefined,
-    }));
+ 
     response.json({
       ...result,
-      products: transformedProducts,
+    
     });
   } catch (error) {
     next(error);
@@ -235,14 +271,9 @@ export const getProductsListing = async (
       page: Number(page),
       pageSize: Number(pageSize),
     });
-    const transformedProducts = result.products.map((product: any) => ({
-      ...product,
-      photos: [product.ProductImages],
-      ProductImages: undefined,
-    }));
+
     response.json({
-      ...result,
-      products: transformedProducts,
+      ...result
     });
   } catch (error) {
     next(error);
@@ -258,4 +289,5 @@ export default {
   handleDelete,
   handleDeleteImage,
   getProductsListing,
+  handleUpdateImages
 };

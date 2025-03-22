@@ -10,7 +10,7 @@ type Props = {
   articles?: IArticleModelWithUser[];
 };
 
-const Home = ({articles}: Props) => {
+const articlesList = ({articles}: Props) => {
   return (
     <Layout>
       <div className="container">
@@ -45,7 +45,7 @@ const Home = ({articles}: Props) => {
   );
 };
 
-export default protectedRoute(Home);
+export default protectedRoute(articlesList);
 
 export const getServerSideProps: GetServerSideProps = async (context:any) => {
       const headers = context.req.headers;

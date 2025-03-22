@@ -10,7 +10,7 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
     if (!files || files.length === 0) {
       // Handle the case where no files were uploaded
       next();
-      return;
+     return
     }
 
     // Process each uploaded file (resize and compress if it's an image)

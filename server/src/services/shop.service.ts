@@ -10,6 +10,7 @@ import { Op } from "sequelize"; // Import Op
 import { promises as fsPromises } from 'fs';
 
 import { validate as uuidValidate } from "uuid";
+import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 
 
  export const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductAttributes> => {
@@ -96,6 +97,41 @@ export const updateProductWithImages = async (
 
     // Step 5: Return the updated product
     return product.toJSON() as IProductAttributes;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateImages = async (
+  productId: string,
+  files: Express.Multer.File[]
+): Promise<any> => {
+  try {
+    // Step 1: Find the product by ID
+    const product = await db.Product.findByPk(productId);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+  
+
+
+    let images;
+    // Step 3: Handle new images
+    if (files.length > 0) {
+      for (const file of files) {
+       images = await db.ProductImage.create({
+          productId,
+          imageUrl: `${file.filename}`,
+        });
+      }
+    }  else {
+       throw new Error("files not found");
+    }
+
+
+
+    // Step 5: Return the updated product
+    return images.toJSON() ;
   } catch (error) {
     throw error;
   }
@@ -227,7 +263,8 @@ export const deleteProductImage = async (id: string, userId: string): Promise<an
     // Step 1: Fetch the product image and associated product
     const productImage = await db.ProductImage.findOne({
       where: { id }, // Find the image by its ID
-      include: [{ model: db.Product }], // Include the associated Product to check ownership
+      include: [{ model: db.Product }],
+      raw:true// Include the associated Product to check ownership
     });
 
     // Step 2: Check if the product image exists
@@ -236,27 +273,23 @@ export const deleteProductImage = async (id: string, userId: string): Promise<an
     }
 
     // Step 3: Verify ownership (ensure the product belongs to the user)
-    if (productImage.Product.ownerId !== userId) {
+    if (productImage['Product.ownerId'] !== userId) {
       throw new Error('You do not have permission to delete this product image');
     }
 
-    // Step 4: Resolve the file path
-    const filePath = path.join(__dirname, '..', 'compressed', productImage.imageUrl);
+// Step 3: Resolve the file path
+    const filePath = path.join(__dirname, '..', '..', 'compressed', productImage.imageUrl);
 
-    // Step 5: Check if the file exists on the filesystem
+    // Step 4: Delete the file from the filesystem (if it exists)
     try {
-      await fsPromises.access(filePath); // Throws an error if the file does not exist
-    } catch (err) {
-      console.warn(`File not found on the filesystem: ${filePath}`);
-      // Optionally, log this as a warning but proceed with database deletion
-    }
-
-    // Step 6: Delete the file from the filesystem (if it exists)
-    try {
-      await fsPromises.unlink(filePath); // Delete the file asynchronously
-    } catch (err) {
-      console.error(`Failed to delete file: ${filePath}`, err);
-      // Log the error but continue with the database deletion
+      await fsPromises.unlink(filePath);
+      console.log(`Deleted file: ${filePath}`);
+    } catch (err :any) {
+      if (err.code !== 'ENOENT') {
+        console.error(`Failed to delete file: ${filePath}`, err);
+        throw new Error('Failed to delete product image file');
+      }
+      console.warn(`File not found, skipping deletion: ${filePath}`);
     }
 
     // Step 7: Delete the product image record from the database
@@ -303,40 +336,64 @@ export const fetchProductsByStore = async ({
     whereClause[Op.or] = searchConditions;
   }
 
-  const { rows: products, count: total } = await db.Product.findAndCountAll({
-    where: whereClause,
-    offset: (page - 1) * pageSize,
-    limit: pageSize,
-    include: [
-      {
-        model: db.ProductImage,
-        order: [["createdAt", "DESC"]],
-      },
-    ],
-    raw: true,
-    nest: true,
-  });
+const { rows: products, count: total } = await db.Product.findAndCountAll({
+  where: whereClause,
+  offset: (page - 1) * pageSize,
+  limit: pageSize,
+  raw: true,
+  nest: true,
+});
 
-  return { products, total, page, pageSize };
+// Fetch associated images
+const productIds = products.map((product:IProductAttributes) => product.id);
+const images = await db.ProductImage.findAll({
+  where: { productId: productIds },
+  order: [["createdAt", "DESC"]],
+  raw: true,
+});
+
+// Combine products and images
+const productsWithImages = products.map((product:IProductAttributes) => {
+  const productImages = images.filter((image:IProductImageAttributes) => image.productId === product.id);
+  return {
+    ...product,
+    photos: productImages,
+  };
+});
+
+return { products: productsWithImages, total, page, pageSize };
+
+
 };
 
 
 
 export const fetchProductsListing = async ({ page, pageSize }: FetchProductsByStoreParams) => {
-  const { rows:products, count:total } = await db.Product.findAndCountAll({
-    offset: (page - 1) * pageSize,
-    limit: pageSize,
-       include: [
-        {
-           model: db.ProductImage,
-           order: [['createdAt', 'DESC']],
-        },
-      ],
-      raw : true,
-      nest: true, // Nest the results to properly align the data structure
-  });
+const { rows: products, count: total } = await db.Product.findAndCountAll({
+  offset: (page - 1) * pageSize,
+  limit: pageSize,
+  raw: true,
+  nest: true,
+});
 
-  return { products, total, page, pageSize };
+// Fetch associated images
+const productIds = products.map((product:IProductAttributes) => product.id);
+const images = await db.ProductImage.findAll({
+  where: { productId: productIds },
+  order: [["createdAt", "DESC"]],
+  raw: true,
+});
+
+// Combine products and images
+const productsWithImages = products.map((product:IProductAttributes) => {
+  const productImages = images.filter((image:IProductImageAttributes) => image.productId === product.id);
+  return {
+    ...product,
+    photos: productImages,
+  };
+});
+
+return { products: productsWithImages, total, page, pageSize };
 };
 
 
@@ -349,5 +406,6 @@ export default {
   deleteProduct,
   fetchProductsByStore,
   deleteProductImage,
-  fetchProductsListing
+  fetchProductsListing,
+  updateImages
 };

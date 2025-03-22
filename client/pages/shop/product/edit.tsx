@@ -5,7 +5,7 @@ import {
   IProductModelErrors,
 } from "../../../src/models/product.model";
 import { useAppDispatch } from "@/store/store";
-import { updateProduct, fetchProductById, deleteProductImage } from "@/store/slices/shopSlice";
+import { updateProduct, fetchProductById, deleteProductImage, updateProductImages } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/General/ImageUploadComponent/ImageUploadComponent";
 import ImageViewer from "../../../src/components/UI/General/imageViewer/imageViewer";
 import { useRouter } from "next/router";
@@ -93,27 +93,76 @@ function EditProduct() {
     dispatch(fetchAllSubCategoriesID(categoryId));
   };
 
-const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
-  setProduct((prevProduct: any) => {
-    if (!prevProduct) {return prevProduct;}  // ✅ Prevent errors if `product` is undefined
+const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
+  console.log("handlePhotoChange triggered with:", croppedImages);
 
-    const existingImages = prevProduct?.ProductImages || [];
-    const updatedImages = [
-      ...existingImages,
-      ...croppedImages.map((image) => ({
-        imageUrl: "40627-coding-event.avif",
-        file: image.file,
-      })),
-    ]; 
+  // Check if there are any valid cropped images to process
+  const hasValidImages = croppedImages.some((image) => image.file instanceof File);
+  if (!hasValidImages) {
+    console.log("No valid images to upload. Skipping API call.");
+    return; // Exit early if no valid images are found
+  }
 
-    console.log(croppedImages)
+  try {
+    // Prepare FormData for the API call
+    const formData = new FormData();
+    formData.append("productID", id!.toString()); // Include the product ID
 
-    return {
-      ...prevProduct,
-      ProductImages: updatedImages,
-    };
-  });
-}, [setProduct]);
+    // Append the new images to the FormData object
+    croppedImages.forEach((image) => {
+      if (image.file instanceof File) {
+        formData.append("photos", image.file, image.file.name);
+      }
+    });
+
+    // Call the backend API to update the images
+    const response = await dispatch(updateProductImages(formData)).unwrap();
+
+    // Extract the updated images from the response
+    const updatedImagesFromResponse = Array.isArray(response.product)
+      ? response.product.map((uploadedImage: any) => ({
+          id: uploadedImage.id, // ID of the uploaded image
+          imageUrl: uploadedImage.imageUrl, // URL of the uploaded image
+          file: null, // Clear the file reference since it's already uploaded
+        }))
+      : [
+          {
+            id: response.product.id, // ID of the uploaded image
+            imageUrl: response.product.imageUrl, // URL of the uploaded image
+            file: null, // Clear the file reference since it's already uploaded
+          },
+        ];
+
+    // Update the local state with the response data
+    setProduct((prevProduct: any) => {
+      if (!prevProduct) {
+        return prevProduct; // Prevent errors if `product` is undefined
+      }
+
+      const existingImages = prevProduct?.ProductImages || [];
+      const updatedImages = [...existingImages, ...updatedImagesFromResponse];
+
+      console.log("Updated images from response:", updatedImages);
+
+      return {
+        ...prevProduct,
+        ProductImages: updatedImages,
+      };
+    });
+
+    // Show success toast
+    Toast.fire({
+      icon: "success",
+      title: "Images updated successfully",
+    });
+  } catch (error: any) {
+    // Show error toast
+    Toast.fire({
+      icon: "error",
+      title: `Failed to update images: ${error.message}`,
+    });
+  }
+}, [id, dispatch]);
 
 
   const handleSubmit = async (values: IProductModel) => {
@@ -308,34 +357,48 @@ return (
               <div className="card mb-4">
                 <div className="card-header">Sizes and Quantities</div>
                 <div className="card-body">
-                  <FieldArray name="sizes">
-                    {({ push, remove, form }) => (
-                      <div>
-                        {form.values.SizeItems.map((_size: ISize, index: number) => (
-                          <div key={index} className="d-flex align-items-center mb-3">
-                            <Field
-                              as="select"
-                              name={`sizes[${index}].sizeId`}
-                              className="form-control mr-2"
-                            >
-                              <option value="">Select size</option>
-                              {listOfSizes?.map((sizeOption: ISize) => (
-                                <option key={sizeOption.id} value={sizeOption.id}>{sizeOption.size}</option>
-                              ))}
-                            </Field>
-                            <Field
-                              type="number"
-                              name={`sizes[${index}].quantity`}
-                              className="form-control mr-2"
-                              placeholder="Quantity"
-                            />
-                            <button type="button" className="btn btn-danger" onClick={() => remove(index)}>Remove</button>
-                          </div>
-                        ))}
-                        <button type="button" className="btn btn-success" onClick={() => push({ sizeId: "", quantity: 0 })}>Add Size</button>
-                      </div>
-                    )}
-                  </FieldArray>
+               <FieldArray name="SizeItems">
+  {({ push, remove, form }) => (
+    <div>
+      {form.values.SizeItems.map((size: any, index: number) => (
+        <div key={index} className="d-flex align-items-center mb-3">
+          <Field
+            as="select"
+            name={`SizeItems[${index}].sizeId`}
+            className="form-control mr-2"
+          >
+            <option value="">Select size</option>
+            {listOfSizes?.map((sizeOption: ISize) => (
+              <option key={sizeOption.id} value={sizeOption.id}>
+                {sizeOption.size}
+              </option>
+            ))}
+          </Field>
+          <Field
+            type="number"
+            name={`SizeItems[${index}].quantity`}
+            className="form-control mr-2"
+            placeholder="Quantity"
+          />
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => remove(index)}
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        className="btn btn-success"
+        onClick={() => push({ sizeId: "", quantity: 0 })}
+      >
+        Add Size
+      </button>
+    </div>
+  )}
+</FieldArray>
                 </div>
               </div>
 
@@ -377,6 +440,7 @@ return (
                 <div className="card-body">
                   <ImageUploadComponent
                     onImagesChange={handlePhotoChange}
+                    updatedPhotos={product?.ProductImages || []}
                     defaultImages={product?.photos || []}
                   />
                   <h3 className="mt-4">Cropped Images</h3>

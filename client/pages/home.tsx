@@ -1,22 +1,17 @@
 import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
-import { IArticleModelWithUser } from "@/models/article.model";
-import { requestAllArticles } from "@/services/articleService";
-import { GetServerSideProps } from "next";
+
 import React from "react";
-import styles from "./Home.module.css";
+
 
 import ParticleComponent from "@/components/UI/home/starsbackground/starsbackground";
-import { setAuthHeaders } from "@/utils/httpClient";
 
-import { IProductModel } from "@/models/product.model";
+
 import BubbleAnimation from "@/components/UI/home/bubbleanimation/BubbleAnimation";
 import { IStoreResponseModel } from "@/models/store.model";
-import ArticleList from "@/components/UI/General/listingArticles/ArticleList";
+
 import ProductList from "@/components/UI/General/listingProducts/ListingProducts";
-type Props = {
-  articles?: IArticleModelWithUser[];
-};
+
  
 const storesModel : IStoreResponseModel[] =  [
   { name: 'Store 1',description : "" ,categoryId:"",imgUrl:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pepsi_2023.svg/800px-Pepsi_2023.svg.png"},
@@ -36,7 +31,7 @@ const storesModel : IStoreResponseModel[] =  [
 
 
 
-const Home = ({ articles }: Props) => {
+const Home = () => {
 
   return (
     <Layout>
@@ -48,22 +43,12 @@ const Home = ({ articles }: Props) => {
       </header>
      <ProductList ></ProductList>
 
-    <ArticleList articles={articles!}></ArticleList>
     </Layout>
   );
 };
 
 export default protectedRoute(Home);
 
-export const getServerSideProps: GetServerSideProps = async (context:any) => {
-    const headers = context.req.headers;
- setAuthHeaders(headers);
-  const articles = await requestAllArticles();
-  return {
-    props: {
-      articles,
-    },
-  };
-};
+
 
 

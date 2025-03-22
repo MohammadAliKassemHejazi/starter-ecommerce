@@ -56,8 +56,13 @@ export const requestCreateProducts = async (Product: FormData): Promise<any> => 
 	return response
 }
 
-export const requestUpdateArticles = async (Product: FormData): Promise<any> => {
+export const requestUpdateProduct = async (Product: FormData): Promise<any> => {
 	const { data: response } = await httpClient.patch("/shop/update" , Product)
+	return response
+}
+
+export const requestUpdateProductImages = async (Product: FormData): Promise<any> => {
+	const { data: response } = await httpClient.patch("/shop/update/images" , Product)
 	return response
 }
 

@@ -120,22 +120,7 @@ const SingleItem = ({ product }: Props) => {
         {/* Image Slider */}
         <div className={styles.productImages}>
           {/* Large Image on Top */}
-          <div className="row">
-              
-                <div className="card mb-3">
-                  <Image
-                    className="card-img img-fluid"
-                    src={
-                      process.env.NEXT_PUBLIC_BASE_URL_Images +
-                      (product?.ProductImages?.[0]?.imageUrl ?? "")
-                    }
-                    alt={product?.name ?? ""}
-                    height={350}
-                    width={300}
-                    layout="responsive"
-                    quality={75}
-                  />
-                </div>
+
                 <div className="row">
                   <MySwiperComponent
                     imageLinks={
@@ -148,27 +133,35 @@ const SingleItem = ({ product }: Props) => {
                   />
                 </div>
               </div>
-        </div>
+      
 
         {/* Product Details */}
         <div className={styles.productDetails}>
           <h1 className={styles.productName}>{product?.name}</h1>
-          <div className={styles.productPrice}>
-            ${product?.price?.toFixed(2)}
-            {product?.discount && (
-              <span className={styles.discountPrice}>
-                $
-                {(
-                  product.price! -
-                  (product.price! * product.discount) / 100
-                ).toFixed(2)}
-              </span>
-            )}
-          </div>
+       <div className={styles.productPrice}>
+  {/* Original Price */}
+  <span
+    className={`${product?.discount ? styles.discountPrice : styles.originalPrice}`}
+  >
+    ${product?.price?.toFixed(2)}
+  </span>
+
+  {/* Discounted Price */}
+  {product?.discount && (
+    <span className={styles.originalPrice}>
+      $
+      {(
+        product.price! -
+        (product.price! * product.discount) / 100
+      ).toFixed(2)}
+    </span>
+  )}
+</div>
           <p className={styles.productDescription}>{product?.description}</p>
 
           {/* Add to Cart Form */}
-          <Formik
+
+<Formik
   initialValues={{
     size: "", // Default size
     sizeId: "", // Default size ID
@@ -183,9 +176,19 @@ const SingleItem = ({ product }: Props) => {
     if (!values.sizeId) {
       errors.sizeId = "Please select a size";
     }
+
+    // Find the selected size's stock quantity
+    const selectedSize = product?.SizeItems?.find(
+      (size) => size.id === values.sizeId
+    );
+    const availableStock = selectedSize?.quantity || 0;
+
     if (values.quantity < 1) {
       errors.quantity = "Quantity must be at least 1";
+    } else if (values.quantity > availableStock) {
+      errors.quantity = `Quantity cannot exceed available stock (${availableStock})`;
     }
+
     return errors;
   }}
 >
@@ -201,6 +204,10 @@ const SingleItem = ({ product }: Props) => {
           type="number"
           name="quantity"
           min={1}
+          max={
+            product?.SizeItems?.find((size) => size.id === values.sizeId)
+              ?.quantity || 1
+          } // Dynamically set max attribute based on stock
         />
         {errors.quantity && touched.quantity && (
           <div className={styles.errorMsg}>{errors.quantity}</div>
@@ -220,9 +227,14 @@ const SingleItem = ({ product }: Props) => {
                 type="radio"
                 name="sizeId"
                 value={size.id}
-                onClick={() => setFieldValue("size", size.Size?.size)} // Update size field
+                onClick={() => {
+                  setFieldValue("size", size.Size?.size); // Update size field
+                  setFieldValue("quantity", 1); // Reset quantity when size changes
+                }}
               />
-              <span className={`${styles.sizeMark}`}>{size.Size?.size}</span>
+              <span className={`${styles.sizeMark}`}>
+                {size.Size?.size} 
+              </span>
             </div>
           ))}
         </div>
