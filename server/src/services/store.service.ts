@@ -9,7 +9,7 @@ import { IStoreAttributes } from 'interfaces/types/models/store.model.types';
      try {
           var Store =  storeData
          if (files.length > 0) {
-              Store = await db.Store.create({ ...storeData , imgUrl :`/uploads/${files[0].filename}`});
+              Store = await db.Store.create({ ...storeData , imgUrl :`${files[0].filename}`});
          }
          else {
              throw Error

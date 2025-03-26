@@ -4,7 +4,7 @@ export interface IStoreModel {
     id?: string;
     name: string;
     description: string;
-    categoryId : Number;
+    categoryId : number;
     photos: ImageListType;
     croppedImages: ImageListType;
     
@@ -18,18 +18,6 @@ export interface IStoreModelErrors {
     photos: ImageListType;
     croppedImages: string;
 }
-
-
-export interface IStoreModel {
-    id?: string;
-    name: string;
-    description: string;
-    categoryId : Number;
-    photos: ImageListType;
-    croppedImages: ImageListType;
-
-}
-
 
 export interface IStoreResponseModel {
     createdAt?: string | number | Date  | undefined;

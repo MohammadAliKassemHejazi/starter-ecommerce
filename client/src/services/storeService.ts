@@ -16,6 +16,7 @@ export const requestStoreById = async (id: string) => {
 	const { data: response } = await httpClient.get(
 		`/store/get?id=${id}`
 	)
+	console.log(response)
 	return response
 }
 
@@ -31,6 +32,17 @@ export const requestArticleByAuthor = async () => {
 
 export const requestCreateStore = async (Store: FormData) => {
 	const { data: response } = await httpClient.post("/store/create", Store)
+	return response
+}
+
+export const requestUpdateStoreImage = async (Store: FormData) => {
+	const { data: response } = await httpClient.post("/store/update/image", Store)
+	return response
+}
+
+
+export const requestUpdateStore = async (Store: FormData) => {
+	const { data: response } = await httpClient.post("/store/update", Store)
 	return response
 }
 

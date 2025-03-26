@@ -31,8 +31,12 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ productImages , isonline = fa
   };
   const handleDeleteImage = (index: number) => {
    
-    if (productImages.length > 1) {
+    if (productImages.length > 1 && isonline === true) {
       if (onDeleteImage) {
+      onDeleteImage(index);
+      }
+    }else{
+       if (onDeleteImage) {
       onDeleteImage(index);
       }
     }

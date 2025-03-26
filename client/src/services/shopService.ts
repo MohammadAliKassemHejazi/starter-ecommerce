@@ -67,13 +67,13 @@ export const requestUpdateProductImages = async (Product: FormData): Promise<any
 }
 
 export const requestDeleteProduct = async (id: string): Promise<void> => {
-  debugger
+  
 	const { data: response } = await httpClient.delete("/shop/delete/" + id)
 	return response
 }
 
 export const requestDeleteProductImage = async (id: string): Promise<void> => {
-  debugger
+  
 	const { data: response } = await httpClient.delete("/shop/delete/image/" + id)
 	return response
 }

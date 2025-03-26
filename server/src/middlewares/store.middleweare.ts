@@ -8,14 +8,15 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
   try {
     const files = req.files as Express.Multer.File[];
     if(!files || files === undefined){
-    
+     next();
+     return
     }else{
     // Process each uploaded file (resize and compress if it's an image)
     const processedFiles = await Promise.all(
       files.map(async (file) => {
         const filePath = file.path; // Get the path of the uploaded file
-        const fileName = file.filename;
-        const outputPath = path.join(__dirname, 'compressed', fileName); // Specify output path for compressed file
+               const fileName = file.filename;
+               const outputPath = path.join(__dirname,"..","..", 'compressed', fileName); // Specify output path for compressed file
 
         if (file.mimetype.startsWith('image/')) {
           // Read file buffer from file path

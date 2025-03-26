@@ -8,20 +8,56 @@ import { CustomRequest } from '../interfaces/types/middlewares/request.middlewar
 import { IStoreCreateProduct } from "interfaces/types/controllers/store.controller.types";
 
 
-export const handleCreateStore = async (request: CustomRequest, response: Response, next: NextFunction) => {
-    try {
-      const UserId = request.UserId
-        const StoreData = {...request.body ,"userId":UserId} as IStoreCreateProduct;
-        const files = request.files as  Express.Multer.File[];
- 
+import path from "node:path";
+import fs from "fs";
+import { validationResult } from "express-validator";
 
-        // Process product creation with data and files
-        const results: IStoreCreateProduct =  await storeService.createStoreWithImages(StoreData, files);
-     
-        response.status(200).json(results);
-    } catch (error) {
-        next(error); // Pass error to Express error handling middleware
+
+
+export const handleCreateStore = async (
+  request: CustomRequest,
+  response: Response,
+  next: NextFunction
+) => {
+  const files = request.files as Express.Multer.File[];
+
+  try {
+    // Validate request
+    const errors = validationResult(request);
+  if (!errors.isEmpty()) {
+    return response.status(400).json({ errors: errors.array() });
+  }
+
+    if (!files || files.length === 0) {
+      throw new Error("Images are missing while creating a store");
     }
+
+    const UserId = request.UserId;
+    const StoreData = { ...request.body, userId: UserId } as IStoreCreateProduct;
+
+    // Process store creation with data and files
+    const results = await storeService.createStoreWithImages(StoreData, files);
+    response.status(200).json(results);
+
+  } catch (error) {
+    try {
+      // Cleanup uploaded files
+      if (files?.length > 0) {
+        await Promise.all(
+          files.map(async (file) => {
+            const fileName = file.filename;
+            const outputPath = path.join("compressed", fileName);
+            await fs.promises.unlink(outputPath);
+          })
+        );
+      }
+    } catch (deleteError) {
+      console.error("Failed to delete files:", deleteError);
+    }
+    
+    // Pass error to Express error handler
+    next(error);
+  }
 };
 
 

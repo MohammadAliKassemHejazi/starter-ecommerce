@@ -30,7 +30,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   }, [updatedPhotos]);
 
   useEffect(() => {
-  debugger
+  
   if (croppedImages.length > 0) {
     onImagesChange(croppedImages);
   }

@@ -9,7 +9,6 @@ const router = express.Router();
   const Routes = [
       "/create",
       "/update",
-      "/get/:id",
       "/getall",
   ];
 
@@ -19,7 +18,7 @@ protectedRoutes(router, Routes);
 
 router.post("/create",storeController.handleCreateStore);
 router.post("/update",storeController.handleUpdate);
-router.get("/get/:id", storeController.handelGetSingleItem);
+router.get("/get", storeController.handelGetSingleItem);
 router.get("/getall", storeController.handelGetAllStores);
 
 export default router;

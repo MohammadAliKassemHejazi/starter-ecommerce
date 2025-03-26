@@ -155,7 +155,7 @@ const handleDeleteImage = async (index: number) => {
     console.error("ProductImages or photos is undefined or null.");
     return;
   }
-  debugger
+  
  const newProductImages = product.ProductImages!.filter((_, i) => i !== index)
     const newphotos= product.photos!.filter((_, i) => i !== index)
   // Remove the image from both ProductImages and photos

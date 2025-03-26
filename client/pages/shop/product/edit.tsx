@@ -166,10 +166,10 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
 
 
   const handleSubmit = async (values: IProductModel) => {
-    debugger
+    
     console.log(product);
     const formData = new FormData();
-debugger
+
     Object.entries(values).forEach(([key, value]) => {
       if (key !== "photos") {
         if(key !== "id"){
@@ -191,7 +191,7 @@ debugger
     formData.append("sizes", JSON.stringify(values?.SizeItems));
 
     try {
-      debugger
+      
       const response = await dispatch(updateProduct(formData)).unwrap();
 
       router.push(`/shop/product/${response.product.id}`);

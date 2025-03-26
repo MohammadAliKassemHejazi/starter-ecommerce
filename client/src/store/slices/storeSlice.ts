@@ -43,6 +43,22 @@ export const createStore = createAsyncThunk(
   }
 );
 
+export const updateStore = createAsyncThunk(
+  "store/Update",
+  async (store: FormData) => {
+    const response: IStoreResponseModel = await storeService.requestUpdateStore(store);
+    return response;
+  }
+);
+
+export const deleteStoreImage = createAsyncThunk(
+  "store/delete/image",
+  async (store: FormData) => {
+    const response: IStoreResponseModel = await storeService.requestCreateStore(store);
+    return response;
+  }
+);
+
 export const deleteStore = createAsyncThunk(
   "store/delete",
   async (id: string) => {
@@ -58,9 +74,11 @@ const storeSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchStoreById.fulfilled, (state, action) => {
+
         state.store = action.payload;
       })
       .addCase(fetchStoreById.rejected, (state, action) => {
+        
         state.error = action.error.message || "Failed to fetch store.";
         state.store = undefined;
       })

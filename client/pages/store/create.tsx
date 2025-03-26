@@ -55,6 +55,13 @@ const CreateStore = () => {
   };
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
+    if (croppedImages.length > 1) {
+      Toast.fire({
+        icon: "error",
+        title: `you can only upload one image`,
+      });
+      return
+    }
     setStore((prevStore) => ({
       ...prevStore,
       croppedImages: croppedImages,
@@ -95,7 +102,22 @@ const CreateStore = () => {
     }
   };
 
+  const handleDeleteImage = async (index: number) => {
+  if (!store?.croppedImages || !store?.photos) {
+    console.error("ProductImages or photos is undefined or null.");
+    return;
+  }
   
+ const newProductImages = store.croppedImages!.filter((_, i) => i !== index)
+    const newphotos= store.photos!.filter((_, i) => i !== index)
+  // Remove the image from both ProductImages and photos
+  setStore((prevProduct) => ({
+    ...prevProduct,
+    ProductImages: newProductImages,
+    photos: newphotos,
+  }));
+  handlePhotoChange(newProductImages);
+};
 
   return (
     <Layout>
@@ -154,7 +176,12 @@ const CreateStore = () => {
                       defaultImages={store.photos}
                     />
                     <h3 className="mt-4">Cropped Images</h3>
-                    <ImageViewer productImages={store.croppedImages} />
+                      
+                  <ImageViewer
+                    productImages={store.croppedImages ?? []}
+                    isonline={false}
+                    onDeleteImage={handleDeleteImage}
+                  />
                   </div>
                 </div>
 
