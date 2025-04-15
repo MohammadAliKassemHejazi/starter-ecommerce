@@ -16,6 +16,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   updatedPhotos,
   defaultImages = [],
 }) => {
+ 
   const [cropData, setCropData] = useState<{ [key: number]: Crop }>({});
   const [uploadedImages, setUploadedImages] = useState<ImageListType>(defaultImages);
   const [croppedImages, setCroppedImages] = useState<ImageListType>([]);
@@ -30,11 +31,54 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   }, [updatedPhotos]);
 
   useEffect(() => {
-  
+  debugger
   if (croppedImages.length > 0) {
-    onImagesChange(croppedImages);
+    onImagesChange(croppedImages); // Ensure this doesn't indirectly call handlePhotoChange
   }
 }, [croppedImages, onImagesChange]);
+
+const handlePhotoChange = async (imageList: ImageListType) => {
+  const newCropData: { [key: number]: Crop } = {};
+  const updatedCroppedImages: ImageListType = [];
+
+  for (let index = 0; index < imageList.length; index++) {
+    const image = imageList[index];
+    const crop = cropData[index];
+
+    if (image.file && crop) {
+      try {
+        const imgElement = document.getElementById(`${index}_image`) as HTMLImageElement;
+        const scaledImage = await scaleImage(image.file, imgElement.width, imgElement.height);
+        const croppedFile = await getCroppedFile(scaledImage, crop);
+
+        newCropData[index] = crop;
+
+        const newImage: ImageType = {
+          ...image,
+          file: croppedFile,
+          data_url: URL.createObjectURL(croppedFile),
+        };
+
+        updatedCroppedImages.push(newImage);
+      } catch (error) {
+        console.error('Error cropping image:', error);
+      }
+    }
+  }
+
+  if (updatedCroppedImages.length > 0) {
+    setCropData(newCropData);
+    setUploadedImages((prevImages) => prevImages.filter((img, idx) => !newCropData[idx]));
+
+    setCroppedImages((prevCroppedImages) => {
+      const newCroppedImages = [...prevCroppedImages, ...updatedCroppedImages];
+      if (JSON.stringify(newCroppedImages) !== JSON.stringify(prevCroppedImages)) {
+        return newCroppedImages; // Only update if there's a change
+      }
+      return prevCroppedImages;
+    });
+  }
+};
   
   // const handlePhotoChange = async (imageList: ImageListType) => {
   //   const newCropData: { [key: number]: Crop } = {};
@@ -77,42 +121,45 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   //     return newCroppedImages;
   //   });
   // };
+//     const processImage = async (image: ImageType, index: number): Promise<ImageType | null> => {
+//   const crop = cropData[index];
+//   if (!image.file || !crop) {return null;}
 
-  const handlePhotoChange = async (imageList: ImageListType) => {
-  const newCropData: { [key: number]: Crop } = {};
-  const updatedCroppedImages: ImageListType = [];
+//   try {
+//     const imgElement = document.getElementById(`${index}_image`) as HTMLImageElement;
+//     const scaledImage = await scaleImage(image.file, imgElement.width, imgElement.height);
+//     const croppedFile = await getCroppedFile(scaledImage, crop);
 
-  for (let index = 0; index < imageList.length; index++) {
-    const image = imageList[index];
-    const crop = cropData[index];
+//     return {
+//       ...image,
+//       file: croppedFile,
+//       data_url: URL.createObjectURL(croppedFile),
+//     };
+//   } catch (error) {
+//     console.error('Error processing image:', error);
+//     return null;
+//   }
+// };
 
-    if (image.file && crop) {
-      try {
-        const imgElement = document.getElementById(`${index}_image`) as HTMLImageElement;
-        const scaledImage = await scaleImage(image.file, imgElement.width, imgElement.height);
-        const croppedFile = await getCroppedFile(scaledImage, crop);
+// const handlePhotoChange = async (imageList: ImageListType) => {
+//   const newCropData: { [key: number]: Crop } = {};
+//   const updatedCroppedImages: ImageListType = [];
 
-        newCropData[index] = crop;
+//   for (let index = 0; index < imageList.length; index++) {
+//     const processedImage = await processImage(imageList[index], index);
+//     if (processedImage) {
+//       newCropData[index] = cropData[index];
+//       updatedCroppedImages.push(processedImage);
+//     }
+//   }
 
-        const newImage: ImageType = {
-          ...image,
-          file: croppedFile,
-          data_url: URL.createObjectURL(croppedFile),
-        };
+//   if (updatedCroppedImages.length > 0) {
+//     setCropData(newCropData);
+//     setUploadedImages((prevImages) => prevImages.filter((img, idx) => !newCropData[idx]));
+//     setCroppedImages((prevCroppedImages) => [...prevCroppedImages, ...updatedCroppedImages]);
+//   }
+//   };
 
-        updatedCroppedImages.push(newImage);
-      } catch (error) {
-        console.error('Error cropping image:', error);
-      }
-    }
-  }
-
-  if (updatedCroppedImages.length > 0) {
-    setCropData(newCropData);
-    setUploadedImages((prevImages) => prevImages.filter((img, idx) => !newCropData[idx]));
-    setCroppedImages((prevCroppedImages) => [...prevCroppedImages, ...updatedCroppedImages]);
-  }
-};
 
   const handleCropChange = (newCrop: Crop, imageIndex: number) => {
     setCropData((prevData) => ({
@@ -246,6 +293,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
                     <DynamicSizedImage url={image.data_url ?? ""} index={index} constrainWidth={true} />
                   </ReactCrop>
                   <button onClick={(e: React.MouseEvent) => {
+                  
     e.preventDefault(); // Prevent default behavior if needed
     handlePhotoChange([image])// Ensure the function is invoked
   }}>Confirm Crop</button>

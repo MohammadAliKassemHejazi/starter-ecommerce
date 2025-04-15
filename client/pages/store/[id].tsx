@@ -6,14 +6,13 @@ import { useRouter } from "next/router";
 import { singleStoreSelector } from "@/store/slices/storeSlice";
 import { fetchProductsByStore, productSelector } from "@/store/slices/shopSlice";
 import Image from "next/image";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
 import { requestAllStores, requestStoreById } from "@/services/storeService";
 import { requestProductsByStore } from "@/services/shopService";
 import ErrorBoundary from "@/components/Error/ErrorBoundary";
-import { Context } from "vm";
-import { setAuthHeaders } from "@/utils/httpClient";
+
 import protectedRoute from "@/components/protectedRoute";
 
 interface IParams extends ParsedUrlQuery {
@@ -42,7 +41,7 @@ interface SingleStoreProps {
 const SingleStore = ({ initialStore, initialProducts }: SingleStoreProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const id = "c77b3af2-72fa-4d15-8e0f-96b88560c07a"
+  const { id } = router.query;
 
   const store = useSelector(singleStoreSelector) || initialStore;
   const products = useSelector(productSelector) || initialProducts;
@@ -184,52 +183,50 @@ const SingleStore = ({ initialStore, initialProducts }: SingleStoreProps) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const response = await requestAllStores(); // Fetch the data
-    const stores = response?.stores; // Access the `stores` property
-
+    debugger
+    const response = await requestAllStores();
+    console.log("API Response:", response); // Log the API response
+    const stores = response?.stores;
     if (!Array.isArray(stores) || stores.length === 0) {
       console.warn("No stores found in API response");
       return { paths: [], fallback: "blocking" };
     }
-
-    // Generate paths dynamically based on store IDs
     const paths = stores
-      .filter((store: any) => store && store.id) // Filter out invalid stores
+      .filter((store: any) => store && store.id)
       .map((store: any) => ({
-        params: { id: store.id.toString() }, // Ensure `id` is passed as a string
+        params: { id: store.id.toString() },
       }));
-
-    console.log("Generated Paths:", paths); // Log the paths array for debugging
-    return { paths, fallback: "blocking" }; // Use blocking fallback
+    console.log("Generated Paths:", paths); // Log the generated paths
+    return { paths, fallback: "blocking" };
   } catch (error) {
     console.error("Error generating static paths:", error);
-    return { paths: [], fallback: "blocking" }; // Return empty paths if there's an error
+    return { paths: [], fallback: "blocking" };
   }
 };
 
 export const getStaticProps: GetStaticProps<SingleStoreProps> = async (context) => {
-  const { id } = context.params as IParams; // Use `context.params.id`
-
+  const { id } = context.params as IParams;
   try {
+    console.log("Fetching data for store ID:", id); // Log the store ID
     const [store, products] = await Promise.all([
-      requestStoreById("c77b3af2-72fa-4d15-8e0f-96b88560c07a"),
-      requestProductsByStore("c77b3af2-72fa-4d15-8e0f-96b88560c07a", 1, 20),
+      requestStoreById(id),
+      requestProductsByStore(id, 1, 20),
     ]);
-
+    console.log("Fetched Store Data:", store); // Log the store data
+    console.log("Fetched Products Data:", products); // Log the products data
     if (!store) {
-      return { notFound: true }; // Return 404 if store is not found
+      return { notFound: true };
     }
-
     return {
       props: {
         initialStore: store,
         initialProducts: products,
       },
-      revalidate: 3600, // Revalidate every hour
+      revalidate: 3600,
     };
   } catch (error) {
     console.error(`Error fetching data for store ${id}:`, error);
-    return { notFound: true }; // Return 404 on error
+    return { notFound: true };
   }
 };
 

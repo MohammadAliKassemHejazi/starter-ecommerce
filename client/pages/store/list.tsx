@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useAppDispatch } from "@/store/store";
 import { useRouter } from "next/router";
 import {
-  fetchAllStores,
+  fetchAllStoresForUser,
   storeSelector,
 } from "@/store/slices/storeSlice";
 import { useSelector } from "react-redux";
@@ -19,7 +19,7 @@ const StoreListing = () => {
 
   // Fetch all stores on component mount
   useEffect(() => {
-    dispatch(fetchAllStores());
+    dispatch(fetchAllStoresForUser());
   }, [dispatch]);
 
   // Navigate to single store page

@@ -315,13 +315,12 @@ interface SearchCondition {
 
 export const fetchProductsByStore = async ({
   storeId,
-  ownerId,
   page,
   pageSize,
   searchQuery,
 }: FetchProductsByStoreParams) => {
   // Build the "where" clause dynamically
-  const whereClause: any = { storeId, ownerId };
+  const whereClause: any = { storeId };
 
   if (searchQuery) {
     const searchConditions: SearchCondition[] = [

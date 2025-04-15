@@ -4,7 +4,7 @@ export interface IStoreModel {
     id?: string;
     name: string;
     description: string;
-    categoryId : number;
+    categoryId : string;
     photos: ImageListType;
     croppedImages: ImageListType;
     

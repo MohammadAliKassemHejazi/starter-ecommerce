@@ -60,6 +60,22 @@ export const handleCreateStore = async (
   }
 };
 
+export const handleDelete = async (
+  request: CustomRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+
+
+  const id = request.params.id;
+  const userId = request.UserId;
+  try {
+    const result: number = await storeService.deleteStore(id, userId!);
+    response.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 export const handleUpdate = async (
@@ -71,14 +87,28 @@ export const handleUpdate = async (
   response.json(userSession);
 };
 
-export const handelGetAllStores = async (
+export const handelGetAllStoresForUser = async (
   request: CustomRequest,
   response: Response,
   next :NextFunction
 ): Promise<void> => {
   try {
     const UserId = request.UserId;
-    const Stores = await storeService.getAllStores(UserId!);
+    const Stores = await storeService.getAllStoresforuser(UserId!);
+    response.json(Stores);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const handelGetAllStores = async (
+  request: CustomRequest,
+  response: Response,
+  next :NextFunction
+): Promise<void> => {
+  try {
+
+    const Stores = await storeService.getAllStores();
     response.json(Stores);
   } catch (error) {
     next(error);
@@ -102,13 +132,56 @@ export const handelGetSingleItem = async (
 }
 
 };
+export const handleUpdateImages = async (
+  request: CustomRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
 
+
+  try {
+
+    const storeId = request.body.storeID ; // Assuming the product ID is passed as a route parameter
+
+    // Extract files and body data
+    const files = request.files as Express.Multer.File[] || [];
+
+    // Step 2: Update the product
+    const updatedstore = await storeService.updateImages(storeId, files);
+
+    // Step 3: Return the updated product
+    response.status(200).json({ store: updatedstore });
+  } catch (error) {
+    // Step 4: Clean up uploaded files in case of an error
+    try {
+      if (request.files && Array.isArray(request.files)) {
+        await Promise.all(
+          request.files.map(async (file: Express.Multer.File) => {
+            const fileName = file.filename;
+            const outputPath = path.join("compressed", fileName);
+            fs.unlink(outputPath, (err) => {
+              if (err) console.error(`Failed to delete file: ${outputPath}`, err);
+            });
+          })
+        );
+      }
+    } catch (deleteError) {
+      console.error("Failed to clean up files:", deleteError);
+    }
+
+    // Pass the error to the error-handling middleware
+    next(error);
+  }
+};
 
 export default {
+  handleDelete,
   handleCreateStore,
   handleUpdate,
   handelGetAllStores,
   handelGetSingleItem,
+  handleUpdateImages,
+  handelGetAllStoresForUser
 };
 
 

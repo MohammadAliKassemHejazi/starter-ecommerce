@@ -16,7 +16,12 @@ export const requestStoreById = async (id: string) => {
 	const { data: response } = await httpClient.get(
 		`/store/get?id=${id}`
 	)
-	console.log(response)
+	
+	return response
+}
+
+export const requestAllStoresForUser = async () => {
+	const { data: response } = await httpClient.get("/store/getall/user");
 	return response
 }
 
@@ -36,7 +41,7 @@ export const requestCreateStore = async (Store: FormData) => {
 }
 
 export const requestUpdateStoreImage = async (Store: FormData) => {
-	const { data: response } = await httpClient.post("/store/update/image", Store)
+	const { data: response } = await httpClient.patch("/store/update/image", Store)
 	return response
 }
 

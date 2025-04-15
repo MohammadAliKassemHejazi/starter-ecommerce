@@ -8,7 +8,7 @@ const router = express.Router();
 const Routes = [
   "/create",
   "/update",
-  "/get/storeProducts/:storeId",
+
   "/delete/image/:id",
   "/delete/:id",
 

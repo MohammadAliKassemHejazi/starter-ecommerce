@@ -237,7 +237,6 @@ export const getProductsByStore = async (
   try {
     const result = await shopService.fetchProductsByStore({
       storeId,
-      ownerId: UserId!,
       page: Number(page),
       pageSize: Number(pageSize),
       searchQuery: String(searchQuery),
@@ -267,7 +266,6 @@ export const getProductsListing = async (
   try {
     const result = await shopService.fetchProductsListing({
       storeId: "",
-      ownerId: "",
       page: Number(page),
       pageSize: Number(pageSize),
     });

@@ -14,13 +14,30 @@ const initialState: StoresState = {
 export const fetchStoreById = createAsyncThunk(
   "store/by-id",
   async (id: string) => {
-    const response = await storeService.requestStoreById(id);
+    const { store: response } = await storeService.requestStoreById(id);
+    console.log(response, " response from storeSlice");
+    return response;
+  }
+);
+
+export const updateStoreImages = createAsyncThunk(
+  "requestUpdateStoreImage/update",
+  async (Images: FormData) => {
+    const response = await storeService.requestUpdateStoreImage(Images);
+    return response;
+  }
+);
+
+export const fetchAllStoresForUser = createAsyncThunk(
+  "store/fetch",
+  async () => {
+    const response = await storeService.requestAllStoresForUser();
     return response;
   }
 );
 
 export const fetchAllStores = createAsyncThunk(
-  "store/fetch",
+  "store/fetch/all",
   async () => {
     const response = await storeService.requestAllStores();
     return response;
@@ -51,13 +68,7 @@ export const updateStore = createAsyncThunk(
   }
 );
 
-export const deleteStoreImage = createAsyncThunk(
-  "store/delete/image",
-  async (store: FormData) => {
-    const response: IStoreResponseModel = await storeService.requestCreateStore(store);
-    return response;
-  }
-);
+
 
 export const deleteStore = createAsyncThunk(
   "store/delete",
@@ -82,7 +93,14 @@ const storeSlice = createSlice({
         state.error = action.error.message || "Failed to fetch store.";
         state.store = undefined;
       })
-      .addCase(fetchAllStores.fulfilled, (state, action) => {
+      .addCase(fetchAllStoresForUser.fulfilled, (state, action) => {
+        state.stores = action.payload.stores;
+      })
+      .addCase(fetchAllStoresForUser.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to fetch stores.";
+        state.stores = [];
+      })
+         .addCase(fetchAllStores.fulfilled, (state, action) => {
         state.stores = action.payload.stores;
       })
       .addCase(fetchAllStores.rejected, (state, action) => {

@@ -6,7 +6,7 @@ import { useAppDispatch } from "@/store/store";
 import { 
   fetchStoreById, 
   updateStore, 
-  deleteStoreImage 
+  updateStoreImages
 } from "@/store/slices/storeSlice";
 import ImageUploadComponent from "@/components/UI/General/ImageUploadComponent/ImageUploadComponent";
 import ImageViewer from "../../src/components/UI/General/imageViewer/imageViewer";
@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 import { utileCategoriesSelector, fetchAllCategories } from "@/store/slices/utilsSlice";
+
 import protectedRoute from "@/components/protectedRoute";
 
 const Toast = Swal.mixin({
@@ -41,21 +42,23 @@ useEffect(() => {
   if (id) {
     dispatch(fetchStoreById(id as string))
       .unwrap()
-        .then((store: IStoreResponseModel) => {
-          debugger
-        // Map backend image to ImageListType format
-        const formattedImages: ImageListType = store.imgUrl
+        .then((REStore: IStoreResponseModel) => {
+         
+      
+        const formattedImages: ImageListType = REStore.imgUrl
           ? [{
-              id: store.id,
-              data_url: store.imgUrl, // Use backend URL
+              id: REStore.id,
+              imageUrl: REStore.imgUrl, // Use backend URL
               file: undefined, // Must be `undefined`, NOT `null`
             }]
           : [];
 
-        setStore({
-          ...store,
-          categoryId: Number(store.categoryId), // Convert string to number if needed
-          croppedImages: formattedImages,
+          setStore({
+           id: REStore.id,
+    name: REStore.name,
+    description: REStore.description,
+            categoryId: REStore.categoryId,
+            croppedImages: formattedImages,
           photos: [], // Initialize photos as empty (for new uploads)
         });
       })
@@ -70,39 +73,107 @@ useEffect(() => {
     dispatch(fetchAllCategories());
   }, [dispatch]);
 
+
+
   // Handle image changes (cropping/uploading)
-const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
-  setStore((prevStore) => ({
-    ...prevStore!,
-    croppedImages: croppedImages.map((img) => ({
-      ...img,
-      file: img.file || undefined, // Normalize null to undefined
-    })),
+const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
+
+
+  // Normalize `file` values to `undefined`
+  const newCroppedImages = croppedImages.map((img) => ({
+    ...img,
+    file: img.file || undefined,
   }));
-}, []);
 
-  // Handle image deletion (similar to EditProduct)
-const handleDeleteImage = async (index: number) => {
-  if (!store?.croppedImages) {return;}
-
-  const imageToDelete = store.croppedImages[index];
-  const isOnline = !!imageToDelete.id; // Check if image is already uploaded
+  // Check if there are any valid cropped images to process
+  const hasValidImages = newCroppedImages.some((image) => image.file instanceof File);
+  if (!hasValidImages) {
+    console.log("No valid images to upload. Skipping API call.");
+    return; // Exit early if no valid images are found
+  }
 
   try {
-    if (isOnline) {
-      await dispatch(deleteStoreImage(imageToDelete.id!)).unwrap();
-    }
+    // Prepare FormData for the API call
+    const formData = new FormData();
+    formData.append("storeID", id!.toString()); // Include the store ID
 
-    // Remove the image from croppedImages (maintain type safety)
-    setStore((prevStore) => ({
-      ...prevStore!,
-      croppedImages: prevStore!.croppedImages.filter((_, i) => i !== index),
-    }));
+    // Append the new images to the FormData object
+    newCroppedImages.forEach((image) => {
+      if (image.file instanceof File) {
+        formData.append("photos", image.file, image.file.name);
+      }
+    });
 
-    Toast.fire({ icon: "success", title: "Image deleted successfully" });
+    // Call the backend API to update the store images
+    const response = await dispatch(updateStoreImages(formData)).unwrap();
+debugger
+    // Extract the updated images from the response
+    const updatedImagesFromResponse = Array.isArray(response.store)
+      ? response.store.map((uploadedImage: any) => ({
+          id: uploadedImage.storeId, // ID of the uploaded image
+          imageUrl: uploadedImage.updatedImageUrl, // URL of the uploaded image
+          file: null, // Clear the file reference since it's already uploaded
+        }))
+      : [
+          {
+            id: response.store.storeId, // ID of the uploaded image
+            imageUrl: response.store.updatedImageUrl, // URL of the uploaded image
+            file: null, // Clear the file reference since it's already uploaded
+          },
+        ];
+
+    // Update the local state with the response data
+    setStore((prevStore) => {
+      if (!prevStore) {
+        return prevStore; // Prevent errors if `store` is undefined
+      }
+
+      const updatedImages = [ ...updatedImagesFromResponse];
+
+      console.log("Updated store images from response:", updatedImages);
+
+      return {
+        ...prevStore,
+        croppedImages: updatedImages,
+      };
+    });
+
+    // Show success toast
+    Toast.fire({
+      icon: "success",
+      title: "Store images updated successfully",
+    });
   } catch (error: any) {
-    Toast.fire({ icon: "error", title: `Failed to delete image: ${error.message}` });
+    // Show error toast
+    Toast.fire({
+      icon: "error",
+      title: `Failed to update store images: ${error.message}`,
+    });
   }
+}, [id, dispatch]);
+
+  // Handle image deletion (similar to EditProduct)
+const handleDeleteImage = async () => {
+  // if (!store?.croppedImages) {return;}
+
+  // const imageToDelete = store.croppedImages[index];
+  // const isOnline = !!imageToDelete.id; // Check if image is already uploaded
+
+  // try {
+  //   if (isOnline) {
+  //     await dispatch(deleteStoreImage(imageToDelete.id!)).unwrap();
+  //   }
+
+  //   // Remove the image from croppedImages (maintain type safety)
+  //   setStore((prevStore) => ({
+  //     ...prevStore!,
+  //     croppedImages: prevStore!.croppedImages.filter((_, i) => i !== index),
+  //   }));
+
+  //   Toast.fire({ icon: "success", title: "Image deleted successfully" });
+  // } catch (error: any) {
+    Toast.fire({ icon: "error", title: `update image by uploading new one` });
+  // }
 };
 
   // Handle form submission
@@ -151,7 +222,7 @@ const handleDeleteImage = async (index: number) => {
         <div className="container">
           <h2 className="text-center mb-4">Edit Store</h2>
           <Formik
-            initialValues={store} // Initialize with fetched store data
+           initialValues={store || { name: "", description: "", storeId: "", categoryId: "",  ProductImages: [] }} // Initialize with fetched store data
             onSubmit={handleSubmit}
             enableReinitialize // Allow form to update when store changes
             validate={(values) => {
@@ -197,7 +268,8 @@ const handleDeleteImage = async (index: number) => {
                   <div className="card-body">
                     <ImageUploadComponent
                       onImagesChange={handlePhotoChange}
-                      defaultImages={store.croppedImages} // Existing images (from backend)
+                       updatedPhotos={store?.croppedImages || []}
+                      defaultImages={store.photos} // Existing images (from backend)
                     />
                     <h3 className="mt-4">Cropped Images</h3>
                     <ImageViewer
