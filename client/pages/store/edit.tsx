@@ -268,13 +268,15 @@ const handleDeleteImage = async () => {
                   <div className="card-body">
                     <ImageUploadComponent
                       onImagesChange={handlePhotoChange}
-                       updatedPhotos={store?.croppedImages || []}
+                      updatedPhotos={store?.croppedImages || []}
+                      isStore={true}
                       defaultImages={store.photos} // Existing images (from backend)
                     />
                     <h3 className="mt-4">Cropped Images</h3>
                     <ImageViewer
                       productImages={store.croppedImages}
                       isonline={true} // Assume images are online if they have an ID
+                      isStore={true}
                       onDeleteImage={handleDeleteImage}
                     />
                   </div>

@@ -9,12 +9,14 @@ interface ImageUploadProps {
   onImagesChange: (images: ImageListType) => void;
   defaultImages?: ImageListType;
   updatedPhotos?: ImageListType;
+  isStore?: boolean;
 }
 
 const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   onImagesChange,
   updatedPhotos,
   defaultImages = [],
+  isStore,
 }) => {
  
   const [cropData, setCropData] = useState<{ [key: number]: Crop }>({});
@@ -288,7 +290,7 @@ const handlePhotoChange = async (imageList: ImageListType) => {
                     onChange={(newCrop) => handleCropChange(newCrop, index)}
                     minWidth={20}
                     minHeight={20}
-                    aspect={500 / 720}
+                    aspect={isStore ? (16 / 9) : (500/700)}
                   >
                     <DynamicSizedImage url={image.data_url ?? ""} index={index} constrainWidth={true} />
                   </ReactCrop>

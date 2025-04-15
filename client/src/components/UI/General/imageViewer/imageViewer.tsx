@@ -12,16 +12,20 @@ import { ImageListType, ImageType } from "react-images-uploading";
 interface ImageViewerProps {
   productImages: ImageListType;
   isonline?: Boolean;
+  isStore?: Boolean;
   onDeleteImage?: (index: number) => void; // Add onDeleteImage prop
 }
 
-const ImageViewer: React.FC<ImageViewerProps> = ({ productImages , isonline = false,onDeleteImage}) => {
+const ImageViewer: React.FC<ImageViewerProps> = ({ productImages ,isStore =false, isonline = false,onDeleteImage}) => {
   const [fullscreen, setFullscreen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
   SwiperCore.use([Navigation, Pagination]);
 
   const handleImageClick = (index: number) => {
+    if (isStore === true) { 
+      return
+    }
     setActiveIndex(index);
     setFullscreen(true);
   };
@@ -51,8 +55,8 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ productImages , isonline = fa
         <div key={index} onClick={() => handleImageClick(index)}>
           <Image
               src={(isonline === true) ? (process.env.NEXT_PUBLIC_BASE_URL_Images + image.imageUrl) : (image.data_url ?? "")}
-            height={720/2}
-            width={500/2}
+            height={isStore ? (800/2):(720/2)}
+            width={isStore ? (1200/2):(500/2)}
             alt={index + ""}
           />
         </div>

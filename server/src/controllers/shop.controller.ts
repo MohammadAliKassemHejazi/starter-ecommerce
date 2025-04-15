@@ -230,9 +230,9 @@ export const getProductsByStore = async (
     return;
   }
 
-  const UserId = request.UserId;
+
   const { storeId } = request.params;
-  const { page = 1, pageSize = 10, searchQuery } = request.query;
+  const { page = 1, pageSize = 10, searchQuery ,orderBy} = request.query;
 
   try {
     const result = await shopService.fetchProductsByStore({
@@ -240,6 +240,7 @@ export const getProductsByStore = async (
       page: Number(page),
       pageSize: Number(pageSize),
       searchQuery: String(searchQuery),
+      orderBy: String(orderBy),
     });
  
     response.json({

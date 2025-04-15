@@ -40,20 +40,23 @@ export const fetchProductsByStore = createAsyncThunk(
     storeId,
     page,
     pageSize,
-    searchQuery = "", // Add searchQuery as an optional parameter
+    searchQuery = "",
+    orderBy = "",// Add searchQuery as an optional parameter
   }: {
     storeId: string;
     page: number;
     pageSize: number;
-    searchQuery?: string;
+      searchQuery?: string;
+   orderBy?: string
   }) => {
     const response = await shopService.requestProductsByStore(
       storeId,
       page,
       pageSize,
-      searchQuery // Pass searchQuery to the API
+      searchQuery,
+      orderBy// Pass searchQuery to the API
     );
-    console.log(response);
+  
     return response;
   }
 );
@@ -134,7 +137,7 @@ export const articleSlice = createSlice({
     });
 
     builder.addCase(fetchProductsByStore.fulfilled, (state, action) => {
-      console.log(action.payload);
+     
       state.Storeproducts = action.payload.products;
       state.total = action.payload.total;
       state.page = action.payload.page;
@@ -180,5 +183,5 @@ export const productByStoreSelector = (store: RootState): IProductModel[] | unde
 export const totalProductsSelector = (store: RootState): number => store.products.total;
 export const pageSelector = (store: RootState): number => store.products.page;
 export const pageSizeSelector = (store: RootState): number => store.products.pageSize;
-
+export const productListingforStore = (store: RootState): ProductsState | undefined => store.products;
 export default articleSlice.reducer;

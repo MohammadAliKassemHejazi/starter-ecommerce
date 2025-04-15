@@ -6,7 +6,7 @@ import { IProductAttributes, } from 'interfaces/types/models/product.model.types
 // import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 import db from '../models/index';
 import path from 'path';
-import { Op } from "sequelize"; // Import Op
+import { Op, or } from "sequelize"; // Import Op
 import { promises as fsPromises } from 'fs';
 
 import { validate as uuidValidate } from "uuid";
@@ -313,11 +313,13 @@ interface SearchCondition {
   id?: { [Op.eq]: string };
 }
 
+
 export const fetchProductsByStore = async ({
   storeId,
   page,
   pageSize,
   searchQuery,
+  orderBy,
 }: FetchProductsByStoreParams) => {
   // Build the "where" clause dynamically
   const whereClause: any = { storeId };
@@ -335,34 +337,64 @@ export const fetchProductsByStore = async ({
     whereClause[Op.or] = searchConditions;
   }
 
-const { rows: products, count: total } = await db.Product.findAndCountAll({
-  where: whereClause,
-  offset: (page - 1) * pageSize,
-  limit: pageSize,
-  raw: true,
-  nest: true,
-});
+  // Define the order clause based on the searchQuery (filtering option)
+  let orderClause: [string, string][] = [];
 
-// Fetch associated images
-const productIds = products.map((product:IProductAttributes) => product.id);
-const images = await db.ProductImage.findAll({
-  where: { productId: productIds },
-  order: [["createdAt", "DESC"]],
-  raw: true,
-});
+  switch (orderBy) {
+    case "rating":
+      orderClause = [["ratings", "DESC"]]; // Sort by highest rating first
+      break;
 
-// Combine products and images
-const productsWithImages = products.map((product:IProductAttributes) => {
-  const productImages = images.filter((image:IProductImageAttributes) => image.productId === product.id);
-  return {
-    ...product,
-    photos: productImages,
-  };
-});
+    case "price-low-high":
+      orderClause = [["price", "ASC"]]; // Sort by price in ascending order
+      break;
 
-return { products: productsWithImages, total, page, pageSize };
+    case "price-high-low":
+      orderClause = [["price", "DESC"]]; // Sort by price in descending order
+      break;
 
+    case "a-z":
+      orderClause = [["name", "ASC"]]; // Sort alphabetically A-Z
+      break;
 
+    case "z-a":
+      orderClause = [["name", "DESC"]]; // Sort alphabetically Z-A
+      break;
+    default:
+      orderClause = []; // No specific sorting if no filter is applied
+      break;
+  }
+
+  // Fetch products with pagination and sorting
+  const { rows: products, count: total } = await db.Product.findAndCountAll({
+    where: whereClause,
+    offset: (page - 1) * pageSize,
+    limit: pageSize,
+    order: orderClause, // Apply the dynamic order clause
+    raw: true,
+    nest: true,
+  });
+
+  // Fetch associated images
+  const productIds = products.map((product: IProductAttributes) => product.id);
+  const images = await db.ProductImage.findAll({
+    where: { productId: productIds },
+    order: [["createdAt", "DESC"]],
+    raw: true,
+  });
+
+  // Combine products and images
+  const productsWithImages = products.map((product: IProductAttributes) => {
+    const productImages = images.filter(
+      (image: IProductImageAttributes) => image.productId === product.id
+    );
+    return {
+      ...product,
+      photos: productImages,
+    };
+  });
+
+  return { products: productsWithImages, total, page, pageSize };
 };
 
 

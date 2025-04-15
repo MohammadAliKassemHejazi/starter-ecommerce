@@ -24,4 +24,5 @@ export interface FetchProductsByStoreParams {
   page: number;
     pageSize: number;
     searchQuery?: string;
+    orderBy?: string;
 }

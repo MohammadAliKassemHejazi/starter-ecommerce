@@ -40,8 +40,8 @@ export const requestAllProductID = async () => {
 	return response
 }
 
-export const requestProductsByStore = async ( storeId: string, page: number, pageSize: number, searchQuery?: string ) => {
-  const { data: response } = await httpClient.get(`/shop/get/storeProducts/${storeId}?page=${page}&pageSize=${pageSize}&searchQuery=${searchQuery}`);
+export const requestProductsByStore = async ( storeId: string, page: number, pageSize: number, searchQuery?: string ,orderBy? :string ) => {
+  const { data: response } = await httpClient.get(`/shop/get/storeProducts/${storeId}?page=${page}&pageSize=${pageSize}&searchQuery=${searchQuery}&orderBy=${orderBy}`);
   return response;
 };
 
