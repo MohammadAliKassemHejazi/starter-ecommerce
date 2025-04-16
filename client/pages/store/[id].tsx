@@ -4,12 +4,12 @@ import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { singleStoreSelector } from "@/store/slices/storeSlice";
-import { fetchProductsByStore, productByStoreSelector, productSelector } from "@/store/slices/shopSlice";
+import { fetchProductsByStore, productByStoreSelector } from "@/store/slices/shopSlice";
 import Image from "next/image";
 import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
 import { requestAllStores, requestStoreById } from "@/services/storeService";
-import { requestProductsByStore } from "@/services/shopService";
+
 import ErrorBoundary from "@/components/Error/ErrorBoundary";
 import protectedRoute from "@/components/protectedRoute";
 import { setAuthHeaders } from "@/utils/httpClient";
@@ -167,9 +167,9 @@ export const getStaticProps: GetStaticProps<SingleStoreProps> = async (context) 
   const { id } = context.params as IParams;
 
   try {
-    const [store, products] = await Promise.all([
+    const [store] = await Promise.all([
       requestStoreById(id),
-      requestProductsByStore(id, 1, 20),
+
     ]); 
     
 
@@ -180,7 +180,7 @@ export const getStaticProps: GetStaticProps<SingleStoreProps> = async (context) 
     return {
       props: {
         initialStore: store.store,
-        initialProducts: products,
+  
       },
       revalidate: 3600,
     };

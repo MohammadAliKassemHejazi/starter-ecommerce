@@ -22,7 +22,7 @@ const BubbleAnimation: React.FC<BubbleAnimationProps> = ({ stores }) => {
             }}
           >
             <div className={styles["bubble-logo"]}>
-              <Image src={store.imgUrl} alt={`${store.name} logo`} width={100} height={100} />
+              <Image src={ process.env.NEXT_PUBLIC_BASE_URL_Images + store.imgUrl} alt={`${store.name} logo`} width={100} height={100} />
             </div>
           </div>
         ))}
