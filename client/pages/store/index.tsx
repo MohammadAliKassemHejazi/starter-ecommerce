@@ -14,6 +14,7 @@ import Link from "next/link";
 import Moment from "react-moment";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -93,6 +94,11 @@ const Stores = () => {
     debouncedFetchStores(searchQuery);
   };
 
+    const handleStoreClick = (storeId: string) => {
+    router.push(`/store/${storeId}`);
+  };
+
+
   // Pagination calculation
   const totalStores = stores?.length;
   const totalPages = Math.ceil(totalStores! / pageSize);
@@ -133,6 +139,7 @@ const Stores = () => {
                 <thead>
                   <tr className="text-center text-light bg-dark">
                     <th>ID</th>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Created At</th>
                     <th>Action</th>
@@ -143,6 +150,24 @@ const Stores = () => {
                     <tr key={idx} className="text-center">
                       <td>{store.id}</td>
                       <td>{store.name}</td>
+                      <td>
+                        <div
+                                      key={store.id}
+                                      className="store-card bg-white rounded-lg shadow-lg p-4 cursor-pointer"
+                                      onClick={() => handleStoreClick(store.id ?? "")}
+                                    >
+                                      <Image
+                                        src={process.env.NEXT_PUBLIC_BASE_URL_Images + store.imgUrl}
+                                        alt={store.name}
+                                        width={300}
+                                        height={200}
+                                        className="rounded"
+                                      />
+                                      <h3 className="text-lg font-semibold mt-4">{store.name}</h3>
+                                      <span className="badge bg-blue-500 text-white px-3 py-1 rounded-full mt-2 inline-block">
+                                        {store.categoryId}
+                                      </span>
+                                    </div></td>
                       <td>
                         <Moment format="DD/MM/YYYY HH:mm">{store.createdAt}</Moment>
                       </td>
