@@ -23,12 +23,11 @@ import { shopMiddleWare } from './src/middlewares/shop.middleware';
 import fs from 'fs';
 
 
-// Use process.cwd() instead of __dirname for more reliable paths
-const uploadsDir = path.join(process.cwd(), 'uploads');
-const compressedDir = path.join(process.cwd(), 'compressed');
+// Create directories relative to the dist folder where the app is running
+const uploadsDir = path.join(__dirname, 'uploads');      // This will be dist/uploads
+const compressedDir = path.join(__dirname, 'compressed'); // This will be dist/compressed
 
-// Add some debugging
-console.log('Current working directory:', process.cwd());
+// Add debugging to confirm the paths
 console.log('__dirname:', __dirname);
 console.log('Uploads directory:', uploadsDir);
 console.log('Compressed directory:', compressedDir);
@@ -188,8 +187,21 @@ app.use((error: CustomError, req: Request, res: Response, next: NextFunction) =>
 
 // Set up the server
 const PORT = process.env.PORT || config.port;
-app.listen(Number(PORT), () => {
-  seedDatabase()
+app.listen(Number(PORT), async () => {
+  try {
+    console.log('🔄 Performing complete database reset...');
+    
+    // Drop all tables and recreate them
+    await db.sequelize.sync({ force: true });
+    console.log('✅ Database schema has been reset.');
+    
+    // Now seed the database
+    await seedDatabase();
+    
+  } catch (error) {
+    console.error('❌ Failed to reset and seed database:', error);
+    throw error;
+  }
   logger.info(`Server is running on port ${PORT} in ${app.get('env')} mode`);
 
 });
