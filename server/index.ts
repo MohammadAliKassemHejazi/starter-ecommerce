@@ -17,6 +17,16 @@ import seedDatabase from './seedDataBase';
 import { storeMiddleWear } from './src/middlewares/store.middleweare';
 import { shopMiddleWare } from './src/middlewares/shop.middleware';
 
+
+// Extend NodeJS global type to include __basedir
+declare global {
+  // eslint-disable-next-line no-var
+  var __basedir: string;
+}
+
+// Define the base directory (project root)
+global.__basedir = __dirname; // This ensures the base directory is consistent across all files
+
 // Create directories relative to the dist folder where the app is running
 const uploadsDir = path.join(__dirname, 'uploads');      // This will be dist/uploads
 const compressedDir = path.join(__dirname, 'compressed'); // This will be dist/compressed

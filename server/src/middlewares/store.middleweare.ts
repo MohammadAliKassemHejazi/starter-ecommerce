@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import path from 'node:path';
+import path from 'path';
 import fs from 'fs';
 import sharp from 'sharp';
 
@@ -8,7 +8,7 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
   
   try {
     const files = req.files as Express.Multer.File[];
-    
+
     // Debug: Log initial file info
     console.log('📁 Files received:', files ? files.length : 0);
     if (files) {
@@ -29,14 +29,9 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
       return;
     }
 
-    // Debug: Log directory info
-    console.log('📍 Directory info:');
-    console.log('__dirname:', __dirname);
-    console.log('Current working directory:', process.cwd());
-    
     // Define paths for uploads and compressed directories
-    const uploadsDir = path.join(__dirname, 'uploads');
-    const compressedDir = path.join(__dirname, 'compressed');
+    const uploadsDir = path.join(global.__basedir, 'uploads');
+    const compressedDir = path.join(global.__basedir, 'compressed');
 
     // Debug: Log contents of uploads directory before processing
     console.log('📂 Contents of uploads directory before processing:');
