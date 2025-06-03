@@ -19,6 +19,21 @@ import seedDatabase from './seedDataBase';
 import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.types';
 import { storeMiddleWear } from './src/middlewares/store.middleweare';
 import { shopMiddleWare } from './src/middlewares/shop.middleware';
+
+import fs from 'fs';
+
+
+// At the start of your middleware or app initialization
+const uploadsDir = path.join(__dirname,   'uploads');
+const compressedDir = path.join(__dirname,   'compressed');
+
+// Create directories if they don't exist
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+if (!fs.existsSync(compressedDir)) {
+  fs.mkdirSync(compressedDir, { recursive: true });
+}
 // Set up Winston for logging
 const logger = winston.createLogger({
   level: 'info',
