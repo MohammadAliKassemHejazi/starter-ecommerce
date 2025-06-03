@@ -47,31 +47,32 @@ try {
   console.log("🔄 Falling back to environment variables...");
   
   // Fallback to environment variables
-  config = {
-    username: process.env.DB_USER || process.env.DATABASE_USER,
-    password: process.env.DB_PASSWORD || process.env.DATABASE_PASSWORD,
-    database: env === 'production' 
-      ? (process.env.DB_NAME_PROD || process.env.DATABASE_NAME || 'ecommerce_prod')
-      : env === 'test'
-      ? (process.env.DB_NAME_TEST || 'ecommerce_test')
-      : (process.env.DB_NAME_DEV || process.env.DATABASE_NAME || 'ecommerce_dev'),
-    host: process.env.DB_HOST || process.env.DATABASE_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || process.env.DATABASE_PORT || '5432'),
-    dialect: process.env.DB_DIALECT || 'postgres',
-    dialectOptions: env === 'production' ? {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    } : {},
-    logging: env === 'development' ? console.log : false,
-    pool: {
-      max: env === 'production' ? 10 : 5,
-      min: env === 'production' ? 2 : 0,
-      acquire: 30000,
-      idle: 10000
+
+config = {
+  username: process.env.DB_USERNAME || process.env.DB_USER || process.env.DATABASE_USER,
+  password: process.env.DB_PASSWORD || process.env.DATABASE_PASSWORD,
+  database: env === 'production' 
+    ? (process.env.DB_DATABASE_PRODUCTION || process.env.DB_NAME_PROD || process.env.DATABASE_NAME || 'ecommerce_prod')
+    : env === 'test'
+    ? (process.env.DB_DATABASE_TEST || process.env.DB_NAME_TEST || 'ecommerce_test')
+    : (process.env.DB_DATABASE_DEVELOPMENT || process.env.DB_NAME_DEV || process.env.DATABASE_NAME || 'ecommerce_dev'),
+  host: process.env.DB_HOST || process.env.DATABASE_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || process.env.DATABASE_PORT || '5432'),
+  dialect: process.env.DB_DIALECT || 'postgres',
+  dialectOptions: env === 'production' ? {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
     }
-  };
+  } : {},
+  logging: env === 'development' ? console.log : false,
+  pool: {
+    max: env === 'production' ? 10 : 5,
+    min: env === 'production' ? 2 : 0,
+    acquire: 30000,
+    idle: 10000
+  }
+};
   
   // If DATABASE_URL is available (common in production), use it
   if (process.env.DATABASE_URL && env === 'production') {
