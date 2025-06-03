@@ -9,9 +9,9 @@ const config = require(__dirname + "/../config/db.config")[env];
 const db: any = {};
 
 let sequelize: any;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
+// if (config.use_env_variable) {
+//   sequelize = new Sequelize(process.env[config.use_env_variable], config);
+// } else {
   sequelize = new Sequelize(
     config.database, // Database name
     config.username, // Database username
@@ -24,7 +24,7 @@ if (config.use_env_variable) {
       logging: config.logging, // Enable/disable logging
     }
   );
-}
+// }
 
 fs.readdirSync(__dirname)
   .filter((file: string) => {
