@@ -52,16 +52,8 @@ app.use(express.json({
 }));
 // Increase the request body size limit for URL-encoded bodies
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = ['http://localhost:3000','https://starter-ecommerce.vercel.app','https://starter-ecommerce-git-main-mohammads-projects-1a06c9f6.vercel.app/','https://starter-ecommerce-ayzbpklrl-mohammads-projects-1a06c9f6.vercel.app/']; // Add more origins as needed
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-}));
+app.use(cors()); // Open to all
+
 
 app.use(morgan('combined', { stream: { write: (message: string) => logger.info(message.trim()) } })); // HTTP logging
 // Set up rate limiting
