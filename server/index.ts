@@ -23,11 +23,16 @@ import { shopMiddleWare } from './src/middlewares/shop.middleware';
 import fs from 'fs';
 
 
-// At the start of your middleware or app initialization
-const uploadsDir = path.join(__dirname,   'uploads');
-const compressedDir = path.join(__dirname,   'compressed');
+// Use process.cwd() instead of __dirname for more reliable paths
+const uploadsDir = path.join(process.cwd(), 'uploads');
+const compressedDir = path.join(process.cwd(), 'compressed');
 
-// Create directories if they don't exist
+// Add some debugging
+console.log('Current working directory:', process.cwd());
+console.log('__dirname:', __dirname);
+console.log('Uploads directory:', uploadsDir);
+console.log('Compressed directory:', compressedDir);
+
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -192,7 +197,7 @@ app.listen(Number(PORT), () => {
 
 // Sync the database
 if (process.env.NODE_ENV !== 'production') {
-  db.sequelize.sync().then(() => {
+  db.sequelize.sync({force : true}).then(() => {
     logger.info('Database synced');
     // seedDatabase()
   }).catch((err: Error) => {
