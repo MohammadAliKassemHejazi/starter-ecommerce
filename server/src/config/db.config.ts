@@ -1,5 +1,6 @@
 import config from "./config"; // this is important!
 
+
 module.exports = {
   development: {
     username: config.database.username,
