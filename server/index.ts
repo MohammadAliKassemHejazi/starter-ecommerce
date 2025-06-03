@@ -14,7 +14,7 @@ import path from 'node:path';
 
 // import * as spdy from 'spdy';
 
-// import seedDatabase from './seedDataBase';
+import seedDatabase from './seedDataBase';
 
 import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.types';
 import { storeMiddleWear } from './src/middlewares/store.middleweare';
@@ -169,7 +169,7 @@ app.use((error: CustomError, req: Request, res: Response, next: NextFunction) =>
 // Set up the server
 const PORT = process.env.PORT || config.port;
 app.listen(Number(PORT), () => {
-  // seedDatabase()
+  seedDatabase()
   logger.info(`Server is running on port ${PORT} in ${app.get('env')} mode`);
 
 });
