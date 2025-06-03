@@ -54,7 +54,7 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = ['http://localhost:3000']; // Add more origins as needed
+    const allowedOrigins = ['https://starter-ecommerce.vercel.app']; // Add more origins as needed
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
