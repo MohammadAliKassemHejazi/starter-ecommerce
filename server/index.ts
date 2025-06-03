@@ -38,6 +38,19 @@ if (!fs.existsSync(uploadsDir)) {
 if (!fs.existsSync(compressedDir)) {
   fs.mkdirSync(compressedDir, { recursive: true });
 }
+
+console.log('\n📋 Contents of dist directory:');
+try {
+  const distContents = fs.readdirSync(__dirname);
+  distContents.forEach(item => {
+    const itemPath = path.join(__dirname, item);
+    const isDir = fs.statSync(itemPath).isDirectory();
+    console.log(`${isDir ? '📁' : '📄'} ${item}`);
+  });
+} catch (error) {
+  console.log('Error listing dist contents:', error);
+}
+
 // Set up Winston for logging
 const logger = winston.createLogger({
   level: 'info',
