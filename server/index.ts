@@ -40,7 +40,38 @@ app.use('/compressed', express.static(path.join(__dirname, 'compressed')));
 //static paths
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.set('trust proxy', true);
+// Enable trust proxy - this should be one of the first configurations
+// For Render, use a more specific configuration to avoid security warnings
+if (process.env.NODE_ENV === 'production') {
+  // In production (Render), trust the first proxy
+  app.set('trust proxy', 1);
+} else {
+  // In development, trust loopback addresses
+  app.set('trust proxy', 'loopback');
+}
+
+// Alternative configurations for different scenarios:
+// app.set('trust proxy', true); // Too permissive - avoid this
+// app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']); // Trust specific ranges
+// app.set('trust proxy', function (ip) { return ip === '127.0.0.1' || ip === '::1' }); // Custom function
+
+// Now configure your rate limiting middleware
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  
+  // Skip validation warnings for trusted proxy setup
+  validate: {
+    trustProxy: false, // Disable trust proxy validation warnings
+    xForwardedForHeader: false, // Disable X-Forwarded-For validation warnings
+  }
+});
+
 
 // Apply middleware
 app.use(helmet()); // Apply helmet for security headers
@@ -58,17 +89,7 @@ app.use(cors()); // Open to all
 
 
 app.use(morgan('combined', { stream: { write: (message: string) => logger.info(message.trim()) } })); // HTTP logging
-// Set up rate limiting
-// Now configure your rate limiting middleware
-const rateLimit = require('express-rate-limit');
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.',
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
 
 // Apply rate limiting to all requests
 app.use(limiter);
