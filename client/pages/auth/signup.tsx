@@ -255,12 +255,12 @@ export default function SignUp({}: Props) {
                       <Image
                         alt="logo"
                         className="logo "
-                        src="/resources/static/img/billowdev-logo.png"
+                        src="/resources/static/img/logo.png"
                         height={150}
                         width={150}
                         priority
                       />
-                      <h2 className="mt-3">billowdev&apos;s example</h2>
+                      <h2 className="mt-3">astra&apos;s example</h2>
                     </div>
                   </div>
                 </div>
