@@ -5,7 +5,7 @@ import {
   IAuthRegisterBodyRequest,
 } from "../interfaces/types/controllers/auth.controller.types";
 import authErrors from "../utils/errors/auth.errors";
-import customError from "../utils/customError";
+
 import { IUserAttributes } from "../interfaces/types/models/user.model.types";
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 

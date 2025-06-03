@@ -1,6 +1,6 @@
 import db from "../models";
 import { IPermissionAttributes } from "../interfaces/types/models/permission.model.types";
-import { createAuditLog } from "../services/auditlog.service";
+import { createAuditLog }  from "../services/auditLog.service";
 import customError from "../utils/customError";
 import permissionErrors from "../utils/errors/permission.errors";
 

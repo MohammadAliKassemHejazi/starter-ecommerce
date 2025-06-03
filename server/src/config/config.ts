@@ -11,11 +11,20 @@ const config = {
   database: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE_DEVELOPMENT,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
+    logging: false,
     dbDevelopment: process.env.DB_DATABASE_DEVELOPMENT,
     dbProduction: process.env.DB_DATABASE_PRODUCTION,
     dbTest: process.env.DB_DATABASE_TEST,
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
   },
 };
 

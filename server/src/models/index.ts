@@ -13,11 +13,16 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   sequelize = new Sequelize(
-    
-    config.database,
-    config.username,
-    config.password,
-    config
+    config.database, // Database name
+    config.username, // Database username
+    config.password, // Database password
+    {
+      host: config.host, // Database host
+      port: config.port, // Database port
+      dialect: config.dialect, // Database dialect (e.g., 'postgres')
+      dialectOptions: config.dialectOptions, // SSL/TLS options
+      logging: config.logging, // Enable/disable logging
+    }
   );
 }
 
