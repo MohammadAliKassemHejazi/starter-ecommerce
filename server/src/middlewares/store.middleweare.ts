@@ -34,8 +34,28 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
     console.log('__dirname:', __dirname);
     console.log('Current working directory:', process.cwd());
     
-    // Check if compressed directory exists
+    // Define paths for uploads and compressed directories
+    const uploadsDir = path.join(__dirname, 'uploads');
     const compressedDir = path.join(__dirname, 'compressed');
+
+    // Debug: Log contents of uploads directory before processing
+    console.log('📂 Contents of uploads directory before processing:');
+    try {
+      const uploadsContents = fs.readdirSync(uploadsDir);
+      if (uploadsContents.length === 0) {
+        console.log('📦 Uploads directory is empty.');
+      } else {
+        uploadsContents.forEach((file) => {
+          const filePath = path.join(uploadsDir, file);
+          const isDirectory = fs.statSync(filePath).isDirectory();
+          console.log(`${isDirectory ? '📁' : '📄'} ${file}`);
+        });
+      }
+    } catch (err) {
+      console.error('❌ Failed to read uploads directory:', err);
+    }
+
+    // Check if compressed directory exists
     console.log('🗂️ Compressed directory path:', compressedDir);
     console.log('🗂️ Compressed directory exists:', fs.existsSync(compressedDir));
     
@@ -151,6 +171,40 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
         }
       })
     );
+
+    // Debug: Log contents of uploads directory after processing
+    console.log('📂 Contents of uploads directory after processing:');
+    try {
+      const uploadsContents = fs.readdirSync(uploadsDir);
+      if (uploadsContents.length === 0) {
+        console.log('📦 Uploads directory is empty.');
+      } else {
+        uploadsContents.forEach((file) => {
+          const filePath = path.join(uploadsDir, file);
+          const isDirectory = fs.statSync(filePath).isDirectory();
+          console.log(`${isDirectory ? '📁' : '📄'} ${file}`);
+        });
+      }
+    } catch (err) {
+      console.error('❌ Failed to read uploads directory:', err);
+    }
+
+    // Debug: Log contents of compressed directory after processing
+    console.log('📂 Contents of compressed directory after processing:');
+    try {
+      const compressedContents = fs.readdirSync(compressedDir);
+      if (compressedContents.length === 0) {
+        console.log('📦 Compressed directory is empty.');
+      } else {
+        compressedContents.forEach((file) => {
+          const filePath = path.join(compressedDir, file);
+          const isDirectory = fs.statSync(filePath).isDirectory();
+          console.log(`${isDirectory ? '📁' : '📄'} ${file}`);
+        });
+      }
+    } catch (err) {
+      console.error('❌ Failed to read compressed directory:', err);
+    }
 
     console.log('✅ All files processed successfully');
     console.log(`📊 Processed ${processedFiles.length} files`);
