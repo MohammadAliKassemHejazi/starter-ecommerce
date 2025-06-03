@@ -1,6 +1,6 @@
 // @/store/slices/subCategorySlice.ts
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import * as subCategoryService from "@/services/subcategoryService";
+import * as subCategoryService from "@/services/subCategoryService";
 import { RootState } from "../store";
 
 interface SubCategoryState {

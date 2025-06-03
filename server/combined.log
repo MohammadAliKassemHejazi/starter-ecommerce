@@ -3503,3 +3503,5 @@
 {"level":"info","message":"::1 - - [03/Jun/2025:12:19:54 +0000] \"GET /api/store/getall HTTP/1.1\" 200 13 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36\""}
 {"level":"info","message":"::1 - - [03/Jun/2025:12:19:54 +0000] \"GET /api/shop/get/productListing/?page=1&pageSize=10 HTTP/1.1\" 200 48 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36\""}
 {"level":"info","message":"Database synced"}
+{"level":"info","message":"Server is running on port 5300 in production mode"}
+{"level":"info","message":"Server is running on port 5300 in production mode"}
