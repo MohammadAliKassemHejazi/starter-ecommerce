@@ -41,7 +41,7 @@ const CreateStore = () => {
   const [store, setStore] = useState<IStoreModel>({
     name: "",
     description: "",
-    categoryId: 0,
+    categoryId: "",
     photos: [],
     croppedImages: [],
   });
@@ -49,7 +49,7 @@ const CreateStore = () => {
   const initialValues: IStoreModel = {
     name: "",
     description: "",
-    categoryId: 0,
+    categoryId: "",
     photos: [],
     croppedImages: [],
   };
