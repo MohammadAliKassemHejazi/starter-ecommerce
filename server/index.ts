@@ -54,7 +54,7 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = ['https://starter-ecommerce.vercel.app']; // Add more origins as needed
+    const allowedOrigins = ['http://localhost:3000','https://starter-ecommerce.vercel.app','https://starter-ecommerce-git-main-mohammads-projects-1a06c9f6.vercel.app/','https://starter-ecommerce-ayzbpklrl-mohammads-projects-1a06c9f6.vercel.app/']; // Add more origins as needed
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
