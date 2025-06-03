@@ -2,7 +2,7 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+
 import morgan from 'morgan';
 import winston from 'winston';
 import { orderRouter, cartRouter, authRouter, userRouter, articleRouter, shopRouter, storeRouter, utileRouter, paymentRouter, categoriesRouter, usersRouter, ordersRouter, permissionsRouter, rolesRouter, subcategoriesRouter, dashboardRouter } from './src/routes';
@@ -40,6 +40,8 @@ app.use('/compressed', express.static(path.join(__dirname, 'compressed')));
 //static paths
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.set('trust proxy', true);
+
 // Apply middleware
 app.use(helmet()); // Apply helmet for security headers
 // Increase the request body size limit for JSON bodies
@@ -57,10 +59,18 @@ app.use(cors()); // Open to all
 
 app.use(morgan('combined', { stream: { write: (message: string) => logger.info(message.trim()) } })); // HTTP logging
 // Set up rate limiting
+// Now configure your rate limiting middleware
+const rateLimit = require('express-rate-limit');
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // Limit each IP to 100 requests per 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
+
+// Apply rate limiting to all requests
 app.use(limiter);
 
 //Storage
