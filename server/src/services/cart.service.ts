@@ -85,10 +85,12 @@ export const addToCart = async (
   productId: string,
   quantity: number,
   sizeId: string,
-): Promise<ICartItemAttributes> => {
+): Promise<any> => {
   try {
     // Check if the product exists
+    console.log("Looking for product with ID:", productId);
     const product = await db.Product.findByPk(productId);
+    console.log("Found product:", product ? "YES" : "NO");
     if (!product) {
       throw customError({
         message: "Product not found",
@@ -100,7 +102,7 @@ export const addToCart = async (
     // Check if the size exists and has sufficient quantity
     const sizeItem = await db.SizeItem.findOne({
       where: { productId, id: sizeId },
-      raw:true
+      raw: true
     });
     if (!sizeItem) {
       throw customError({
@@ -120,25 +122,34 @@ export const addToCart = async (
 
     // Find or create the user's cart
     let cart = await getCartByUserId(userId);
-    if (!cart?.id) {
+    console.log("Existing cart:", cart);
+    
+    // If no cart exists, create one
+    if (!cart) {
+      console.log("Creating new cart for user:", userId);
+      cart = await createCartForUser(userId);
+      console.log("Created cart:", cart);
+    }
+
+    // Verify cart has an ID after creation/retrieval
+    const cartId = cart?.id || cart?.dataValues?.id;
+    if (!cart || !cartId) {
+      console.error("Cart validation failed:", { cart, hasId: cartId });
       throw customError({
         message: "Cart is missing an ID",
         code: "INVALID_CART",
         statusCode: 500,
       });
     }
-    
-    if (!cart) {
-      cart = await createCartForUser(userId);
-    }
 
     // Find or create the cart item
     const [cartItem, created] = await db.CartItem.findOrCreate({
-      where: { cartId: cart.id, productId, sizeItemId:sizeId },
-      defaults: { cartId: cart.id, productId, sizeItemId: sizeId, quantity },
-  
+      where: { cartId: cartId, productId, sizeItemId: sizeId },
+      defaults: { cartId: cartId, productId, sizeItemId: sizeId, quantity },
     });
-      const cartitemJson = cartItem.toJSON()
+    
+    const cartitemJson = cartItem.toJSON();
+    
     // If the cart item already exists, update its quantity
     if (!created) {
       const newQuantity = cartitemJson.quantity + quantity;
@@ -156,6 +167,13 @@ export const addToCart = async (
     return cartItem;
   } catch (error) {
     console.error("Error in addToCart:", error);
+    
+    // Re-throw custom errors as-is
+    if (error && typeof error === 'object' && 'code' in error) {
+      throw error;
+    }
+    
+    // Wrap other errors
     throw customError({
       message: "Failed to add product to cart",
       code: "CART_ADD_FAILED",
@@ -164,12 +182,14 @@ export const addToCart = async (
   }
 };
 
-export const getCartByUserId = async (userId: string): Promise<any | null> => {
-  return await db.Cart.findOne({ where: { userId } }); 
+export const getCartByUserId = async (userId: string): Promise<any> => {
+  return await db.Cart.findOne({ 
+    where: { userId },
+    raw: false  // Remove raw: true to get proper Sequelize instance
+  }); 
 };
 
-
-export const createCartForUser = async (userId: string): Promise<ICartAttributes> => {
+export const createCartForUser = async (userId: string): Promise<any> => {
   return await db.Cart.create({ userId }); 
 };
 
