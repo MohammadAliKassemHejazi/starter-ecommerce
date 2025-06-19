@@ -321,12 +321,12 @@ async function createApp(): Promise<Express> {
   }));
   
   // CORS configuration
-  const corsOptions = {
-    origin: IS_PRODUCTION ? process.env.ALLOWED_ORIGINS?.split(',') : true,
-    credentials: true,
-    optionsSuccessStatus: 200
-  };
-  app.use(cors(corsOptions));
+  // const corsOptions = {
+  //   origin: IS_PRODUCTION ? process.env.ALLOWED_ORIGINS?.split(',') : true,
+  //   credentials: true,
+  //   optionsSuccessStatus: 200
+  // };
+  app.use(cors());
   
   // HTTP request logging
   app.use(morgan('combined', { 
