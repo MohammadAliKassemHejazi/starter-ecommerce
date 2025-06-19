@@ -443,6 +443,7 @@ async function initializeDatabase(): Promise<void> {
       await db.sequelize.authenticate();
       console.log('✅ Database connection established.');
       
+      await seedDatabase();
       // Run migrations in production instead of force sync
       // await db.sequelize.sync({ alter: true }); // Uncomment if needed
     }
