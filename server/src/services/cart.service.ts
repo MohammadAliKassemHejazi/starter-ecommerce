@@ -120,6 +120,14 @@ export const addToCart = async (
 
     // Find or create the user's cart
     let cart = await getCartByUserId(userId);
+    if (!cart?.id) {
+      throw customError({
+        message: "Cart is missing an ID",
+        code: "INVALID_CART",
+        statusCode: 500,
+      });
+    }
+    
     if (!cart) {
       cart = await createCartForUser(userId);
     }
@@ -156,12 +164,13 @@ export const addToCart = async (
   }
 };
 
-export const getCartByUserId = async (userId: string): Promise<ICartAttributes | null> => {
-  return await db.Cart.findOne({ where: { userId }, raw: true  });
+export const getCartByUserId = async (userId: string): Promise<any | null> => {
+  return await db.Cart.findOne({ where: { userId } }); 
 };
 
+
 export const createCartForUser = async (userId: string): Promise<ICartAttributes> => {
-  return await db.Cart.create({ userId } );
+  return await db.Cart.create({ userId }); 
 };
 
 export const decreaseCart = async (
