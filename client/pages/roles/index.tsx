@@ -4,6 +4,7 @@ import { fetchRoles, deleteRole, rolesSelector } from "@/store/slices/roleSlice"
 import { useAppDispatch } from "@/store/store";
 import Swal from "sweetalert2";
 import Layout from "@/components/Layouts/Layout";
+import router from "next/router";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -68,7 +69,12 @@ const RolesGrid = () => {
             <span className="text-muted">
               Total Roles: {roles?.length || 0}
             </span>
-            <button className="btn btn-primary">New Role</button>
+            <button 
+              className="btn btn-primary"
+              onClick={() => router.push('/roles/create')}
+            >
+              New Role
+            </button>
           </div>
           <div className="table-responsive shadow-sm bg-white">
             <table className="table table-hover table-bordered border-secondary">
@@ -92,14 +98,30 @@ const RolesGrid = () => {
                     </td>
                     <td>
                       <div className="btn-group">
-                        <button className="btn btn-primary btn-sm me-2">Edit</button>
+                        <button 
+                          className="btn btn-primary btn-sm me-2"
+                          onClick={() => router.push({
+                            pathname: '/roles/edit',
+                            query: { role: JSON.stringify(role) }
+                          })}
+                        >
+                          Edit
+                        </button>
                         <button
                           className="btn btn-danger btn-sm me-2"
                           onClick={() => handleDeleteRole(role.id)}
                         >
                           Delete
                         </button>
-                        <button className="btn btn-success btn-sm">Assign Permissions</button>
+                        <button 
+                          className="btn btn-success btn-sm"
+                          onClick={() => router.push({
+                            pathname: '/roles/Assignment',
+                            query: { role: JSON.stringify(role) }
+                          })}
+                        >
+                          Assign Permissions
+                        </button>
                       </div>
                     </td>
                   </tr>

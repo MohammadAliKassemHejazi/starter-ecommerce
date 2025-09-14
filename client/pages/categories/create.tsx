@@ -6,6 +6,10 @@ import Layout from "@/components/Layouts/Layout";
 import protectedRoute from "@/components/protectedRoute";
 import router from "next/router";
 import Link from "next/link";
+import FormInput from "@/components/UI/FormInput";
+import LoadingSpinner from "@/components/UI/LoadingSpinner";
+import { useTranslation } from 'react-i18next';
+import { validateForm, commonRules } from '@/utils/validation';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -20,79 +24,147 @@ const Toast = Swal.mixin({
 });
 
 const CreateCategory = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [formData, setFormData] = useState({
+    name: "",
+    description: ""
+  });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(false);
+
+  const validationRules = {
+    name: { ...commonRules.required, minLength: 2, maxLength: 100 },
+    description: { maxLength: 500 }
+  };
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
 
   const handleCreateCategory = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validate form
+    const validationErrors = validateForm(formData, validationRules);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setLoading(true);
     try {
-      const response = await dispatch(createCategory({ name, description })).unwrap();
+      const response = await dispatch(createCategory(formData)).unwrap();
       Toast.fire({
         icon: "success",
         title: "Category created successfully",
       });
       if (response.id) {
-        void router.push(`/categories`); // Redirect to the new category page
+        void router.push(`/categories`);
       }
     } catch (error) {
       Toast.fire({
         icon: "error",
         title: "Failed to create category",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return (
+      <Layout>
+        <div className="container mt-5">
+          <LoadingSpinner text="Creating category..." />
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
-      <div className="container">
-        <div className="row justify-content-center py-5 vh-100">
-          <div className="col-lg-9 col-md-12 mb-4">
-            <form onSubmit={handleCreateCategory} className="mt-5">
-              <h1 className="mb-4">Create Category</h1>
-              <div className="form-group">
-                <label htmlFor="InputCategoryName" className="form-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  maxLength={150}
-                  className="form-control"
-                  id="InputCategoryName"
-                  placeholder="Enter category name"
-                  required
-                />
-                <small id="categoryNameHelp" className="form-text text-muted">
-                  Input your category name here.
-                </small>
-              </div>
-              <div className="form-group">
-                <label htmlFor="InputCategoryDescription" className="form-label">
-                  Description
-                </label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={4}
-                  className="form-control"
-                  id="InputCategoryDescription"
-                  placeholder="Input your category description here."
-                />
-                <small id="categoryDescriptionHelp" className="form-text text-muted">
-                  Input your category description here.
-                </small>
-              </div>
-              <Link href="/categories">
-                <button type="button" className="btn btn-secondary mt-3 me-3">
-                  Cancel
-                </button>
+      <div className="container mt-5">
+        <div className="row justify-content-center">
+          <div className="col-lg-8 col-md-10">
+            {/* Header */}
+            <div className="d-flex align-items-center mb-4">
+              <Link href="/categories" className="btn btn-outline-secondary me-3">
+                <i className="bi bi-arrow-left"></i>
               </Link>
-              <button type="submit" className="btn btn-primary mt-3">
-                Create
-              </button>
-            </form>
+              <div>
+                <h1 className="h2 fw-bold text-dark mb-1">{t('categories.createCategory')}</h1>
+                <p className="text-muted mb-0">Add a new category to organize your products</p>
+              </div>
+            </div>
+
+            {/* Form */}
+            <div className="card shadow-sm">
+              <div className="card-body p-4">
+                <form onSubmit={handleCreateCategory}>
+                  <div className="row">
+                    <div className="col-12">
+                      <FormInput
+                        label="Category Name"
+                        name="name"
+                        type="text"
+                        value={formData.name}
+                        onChange={(value) => handleInputChange('name', value)}
+                        placeholder="Enter category name"
+                        required={true}
+                        validation={validationRules.name}
+                        error={errors.name}
+                      />
+                    </div>
+                    <div className="col-12">
+                      <FormInput
+                        label="Description"
+                        name="description"
+                        type="textarea"
+                        value={formData.description}
+                        onChange={(value) => handleInputChange('description', value)}
+                        placeholder="Enter category description (optional)"
+                        rows={4}
+                        validation={validationRules.description}
+                        error={errors.description}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Form Actions */}
+                  <div className="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                    <Link href="/categories">
+                      <button type="button" className="btn btn-outline-secondary">
+                        <i className="bi bi-x-circle me-2"></i>
+                        Cancel
+                      </button>
+                    </Link>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Creating...
+                        </>
+                      ) : (
+                        <>
+                          <i className="bi bi-check-circle me-2"></i>
+                          Create Category
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>

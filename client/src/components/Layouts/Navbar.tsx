@@ -2,14 +2,24 @@ import { signOut, userSelector } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
 import Link from "next/link";
 import Script from "next/script";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Router from "next/router";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../LanguageSwitcher';
+import RoleBasedAccess from '../RoleBasedAccess';
+import { usePermissions } from '@/hooks/usePermissions';
+import Navigation from './Navigation';
+import { getQuickActions } from '@/config/navigation';
 
 export default function Navbar() {
   const dispatch = useAppDispatch();
   const user = useSelector(userSelector);
+  const { t } = useTranslation();
+  const { isAdmin, isVendor, hasPermission } = usePermissions();
+  const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -41,6 +51,28 @@ export default function Navbar() {
     }
   };
 
+  // Fetch cart count
+  React.useEffect(() => {
+    const fetchCartCount = async () => {
+      if (user) {
+        try {
+          const response = await fetch('/api/cart');
+          if (response.ok) {
+            const data = await response.json();
+            setCartCount(data.data?.items?.length || 0);
+          }
+        } catch (error) {
+          console.error('Error fetching cart count:', error);
+        }
+      }
+    };
+
+    fetchCartCount();
+  }, [user]);
+
+  const userRole = user?.role || 'user';
+  const quickActions = getQuickActions(userRole);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-80 shadow-sm sticky-top">
       <div className="container">
@@ -50,10 +82,7 @@ export default function Navbar() {
         <button
           className="navbar-toggler border-black"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#mainNav"
-          aria-controls="mainNav"
-          aria-expanded="false"
+          onClick={() => setIsNavigationOpen(true)}
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
@@ -102,10 +131,15 @@ export default function Navbar() {
                     </li>
                     <li>
                       <Link
-                        className="dropdown-item text-white hover-text-dark"
+                        className="dropdown-item text-white hover-text-dark d-flex align-items-center justify-content-between"
                         href="/cart"
                       >
-                        Cart
+                        <span>Cart</span>
+                        {cartCount > 0 && (
+                          <span className="badge bg-primary rounded-pill">
+                            {cartCount}
+                          </span>
+                        )}
                       </Link>
                     </li>
                     <li>
@@ -129,7 +163,15 @@ export default function Navbar() {
                         className="dropdown-item text-white hover-text-dark"
                         href="/subcategories"
                       >
-                        Subcategories
+                        {t('admin.subcategories')}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="dropdown-item text-white hover-text-dark"
+                        href="/favorites"
+                      >
+                        {t('navigation.favorites')}
                       </Link>
                     </li>
                     
@@ -191,74 +233,139 @@ export default function Navbar() {
                 </li>
 
                 {/* Dashboard Dropdown */}
-                <li className="nav-item dropdown">
-                  <Link
-                    className="nav-link dropdown-toggle text-black"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                  >
-                    Dashboard
-                  </Link>
-                  <ul className="dropdown-menu bg-dark bg-opacity-90 border-black">
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/dashboard"
-                      >
-                        Overview
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/users"
-                      >
-                        Users
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/roles"
-                      >
-                        Roles
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/roles/Assignment"
-                      >
-                        Roles Assignment
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/permissions"
-                      >
-                        Permissions
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
+                <RoleBasedAccess requiredRoles={['admin', 'vendor']}>
+                  <li className="nav-item dropdown">
+                    <Link
+                      className="nav-link dropdown-toggle text-black"
+                      href="#"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                    >
+                      {t('navigation.dashboard')}
+                    </Link>
+                    <ul className="dropdown-menu bg-dark bg-opacity-90 border-black">
+                      <li>
+                        <Link
+                          className="dropdown-item text-white hover-text-dark"
+                          href="/dashboard"
+                        >
+                          {t('admin.dashboard')}
+                        </Link>
+                      </li>
+                      <RoleBasedAccess requiredRoles={['admin']}>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/users"
+                          >
+                            {t('admin.users')}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/roles"
+                          >
+                            {t('admin.roles')}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/roles/Assignment"
+                          >
+                            {t('roles.assignPermissions')}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/permissions"
+                          >
+                            {t('admin.permissions')}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/promotions"
+                          >
+                            {t('admin.promotions')}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/analytics"
+                          >
+                            {t('admin.analytics')}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/packages"
+                          >
+                            Packages
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/shipping"
+                          >
+                            Shipping
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/sizes"
+                          >
+                            Sizes
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/taxes"
+                          >
+                            Taxes
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/returns"
+                          >
+                            Returns
+                          </Link>
+                        </li>
+                      </RoleBasedAccess>
+                    </ul>
+                  </li>
+                </RoleBasedAccess>
               </>
             )}
           </ul>
+
+          {/* Language Switcher */}
+          <div className="me-3">
+            <LanguageSwitcher />
+          </div>
 
           {/* Authentication Section */}
           <div className="d-flex align-items-center gap-3">
             {user.isAuthenticated ? (
               <div className="d-flex align-items-center gap-3">
                 <span className="d-none d-md-block text-black">
-                  Welcome, <strong>{user.name}</strong>
+                  {t('common.welcome')}, <strong>{user.name}</strong>
                 </span>
                 <button
                   onClick={handleSignOut}
                   className="btn btn-outline-black btn-sm"
                 >
-                  <i className="bi bi-box-arrow-right me-2"></i> Sign Out
+                  <i className="bi bi-box-arrow-right me-2"></i> {t('navigation.logout')}
                 </button>
               </div>
             ) : (
@@ -267,13 +374,13 @@ export default function Navbar() {
                   href="/auth/signin"
                   className="btn btn-outline-black btn-sm"
                 >
-                  Sign In
+                  {t('navigation.login')}
                 </Link>
                 <Link
                   href="/auth/signup"
                   className="btn btn-black btn-sm text-white"
                 >
-                  Sign Up
+                  {t('navigation.register')}
                 </Link>
               </div>
             )}
@@ -283,6 +390,12 @@ export default function Navbar() {
       <Script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
         strategy="lazyOnload"
+      />
+      
+      {/* Mobile Navigation */}
+      <Navigation 
+        isOpen={isNavigationOpen} 
+        onClose={() => setIsNavigationOpen(false)} 
       />
     </nav>
   );

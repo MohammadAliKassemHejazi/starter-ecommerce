@@ -14,4 +14,24 @@ import permissionsRouter from "./permission.route";
 import rolesRouter from "./role.route";
 import subcategoriesRouter from "./subcategory.route";
 import dashboardRouter from "./dashboard.route";
-export { dashboardRouter,subcategoriesRouter,rolesRouter,permissionsRouter,ordersRouter,orderRouter,cartRouter,userRouter, authRouter, articleRouter,shopRouter,storeRouter,utileRouter,paymentRouter,categoriesRouter,usersRouter};
+import favoriteRouter from "./favorite.route";
+import commentRouter from "./comment.route";
+import promotionRouter from "./promotion.route";
+import analyticsRouter from "./analytics.route";
+import auditLogRouter from "./auditLog.route";
+import translationRouter from "./translation.route";
+import packageRouter from "./package.route";
+import shippingRouter from "./shipping.route";
+import sizeRouter from "./size.route";
+import taxRouter from "./tax.route";
+import userSessionRouter from "./userSession.route";
+import returnRouter from "./return.route";
+
+export { 
+  dashboardRouter, subcategoriesRouter, rolesRouter, permissionsRouter, ordersRouter, 
+  orderRouter, cartRouter, userRouter, authRouter, articleRouter, shopRouter, 
+  storeRouter, utileRouter, paymentRouter, categoriesRouter, usersRouter, 
+  favoriteRouter, commentRouter, promotionRouter, analyticsRouter, auditLogRouter,
+  translationRouter, packageRouter, shippingRouter, sizeRouter, taxRouter,
+  userSessionRouter, returnRouter
+};

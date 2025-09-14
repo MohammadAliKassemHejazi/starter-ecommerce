@@ -9,15 +9,18 @@ import winston from 'winston';
 import path from 'node:path';
 import fs from 'fs/promises';
 import multer, { FileFilterCallback } from 'multer';
-import { fileURLToPath } from 'url';
-
+import bcrypt from 'bcrypt';
 // Import routes and middlewares
 import { 
   orderRouter, cartRouter, authRouter, userRouter, articleRouter, 
   shopRouter, storeRouter, utileRouter, paymentRouter, categoriesRouter, 
   usersRouter, ordersRouter, permissionsRouter, rolesRouter, 
-  subcategoriesRouter, dashboardRouter 
+  subcategoriesRouter, dashboardRouter, favoriteRouter, commentRouter, promotionRouter,
+  analyticsRouter, auditLogRouter, translationRouter, packageRouter, shippingRouter,
+  sizeRouter, taxRouter, userSessionRouter, returnRouter
 } from './src/routes';
+import swaggerUi from 'swagger-ui-express';
+import { createSwaggerFile } from './src/config/swagger';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
@@ -356,12 +359,23 @@ async function createApp(): Promise<Express> {
   // Health check endpoint
   app.get('/health', healthCheck);
   
+  // Swagger documentation
+  try {
+    // await createSwaggerFile();
+    const swaggerDocument = require('./src/routes/swaggerSchema/swagger.json');
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    console.log('📚 Swagger documentation available at /api-docs');
+  } catch (error) {
+    console.warn('⚠️ Swagger documentation setup failed:', error);
+  }
+  
   // Main route
   app.get('/', (req: Request, res: Response) => {
     res.json({
       message: 'API Server is running',
       version: process.env.npm_package_version || '1.0.0',
-      environment: NODE_ENV
+      environment: NODE_ENV,
+      documentation: '/api-docs'
     });
   });
   
@@ -377,6 +391,15 @@ async function createApp(): Promise<Express> {
   app.use('/api/users', userRouter);
   app.use('/api/articles', articleRouter);
   app.use('/api/categories', categoriesRouter);
+  app.use('/api/comments', commentRouter);
+  app.use('/api/promotions', promotionRouter);
+  app.use('/api/analytics', analyticsRouter);
+  app.use('/api/translations', translationRouter);
+  app.use('/api/packages', packageRouter);
+  app.use('/api/shipping', shippingRouter);
+  app.use('/api/sizes', sizeRouter);
+  app.use('/api/taxes', taxRouter);
+  app.use('/api/returns', returnRouter);
   
   // Admin routes (could add admin middleware here)
   app.use('/api/admin/users', usersRouter);
@@ -385,6 +408,11 @@ async function createApp(): Promise<Express> {
   app.use('/api/admin/roles', rolesRouter);
   app.use('/api/admin/subcategories', subcategoriesRouter);
   app.use('/api/admin/inventory', dashboardRouter);
+  app.use('/api/admin/audit-logs', auditLogRouter);
+  app.use('/api/admin/user-sessions', userSessionRouter);
+  
+  // User-specific routes (require authentication)
+  app.use('/api/favorites', favoriteRouter);
   
   // Routes with file upload capabilities
   app.use('/api/shop', shopUploadMiddleware, shopMiddleWare, shopRouter);
@@ -458,7 +486,7 @@ async function startServer(): Promise<void> {
   try {
     // Initialize database
     await initializeDatabase();
-    
+    await createAdminUser();
     // Create app
     const app = await createApp();
     const logger = app.get('logger');
@@ -488,6 +516,86 @@ process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
   process.exit(1);
 });
+const createAdminUser = async () => {
+  try {
+    console.log('Creating default admin user...');
 
+    // Check if admin user already exists
+    const existingAdmin = await db.User.findOne({
+      where: { email: 'admin@admin.com' }
+    });
+
+    if (existingAdmin) {
+      console.log('Admin user already exists');
+      return;
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash('admin', 10);
+
+    // Create admin user
+    const adminUser = await db.User.create({
+      name: 'Admin',
+      email: 'admin@admin.com',
+      password: hashedPassword,
+      role: 'admin',
+      isActive: true,
+      isVerified: true
+    });
+
+    console.log('Admin user created successfully:', {
+      id: adminUser.id,
+      name: adminUser.name,
+      email: adminUser.email,
+      role: adminUser.role
+    });
+
+    // Create default permissions
+    const defaultPermissions = [
+      'view_users', 'create_users', 'edit_users', 'delete_users',
+      'view_roles', 'create_roles', 'edit_roles', 'delete_roles',
+      'view_permissions', 'create_permissions', 'edit_permissions', 'delete_permissions',
+      'view_categories', 'create_categories', 'edit_categories', 'delete_categories',
+      'view_products', 'create_products', 'edit_products', 'delete_products',
+      'view_orders', 'create_orders', 'edit_orders', 'delete_orders',
+      'view_promotions', 'create_promotions', 'edit_promotions', 'delete_promotions',
+      'view_analytics', 'view_audit_logs', 'manage_packages', 'manage_shipping',
+      'manage_sizes', 'manage_taxes', 'manage_returns', 'manage_translations'
+    ];
+
+    // Create permissions
+    for (const permissionName of defaultPermissions) {
+      await db.Permission.findOrCreate({
+        where: { name: permissionName },
+        defaults: { name: permissionName, description: `Permission to ${permissionName.replace('_', ' ')}` }
+      });
+    }
+
+    // Create admin role
+    const adminRole = await db.Role.findOrCreate({
+      where: { name: 'admin' },
+      defaults: { 
+        name: 'admin', 
+        description: 'Administrator role with full access',
+        isActive: true
+      }
+    });
+
+    // Assign all permissions to admin role
+    const allPermissions = await db.Permission.findAll();
+    await adminRole[0].setPermissions(allPermissions);
+
+    // Assign admin role to admin user
+    await adminUser.setRoles([adminRole[0]]);
+
+    console.log('Default admin user setup completed successfully!');
+    console.log('Login credentials:');
+    console.log('Email: admin@admin.com');
+    console.log('Password: admin');
+
+  } catch (error) {
+    console.error('Error creating admin user:', error);
+  }
+};
 // Start the application
 startServer();

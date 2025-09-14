@@ -96,6 +96,8 @@ export const userSlice = createSlice({
 			state.email = action.payload.email;
 			state.name = action.payload.name;
 			state.address = action.payload.address;
+			state.roles = action.payload.roles || [];
+			state.permissions = action.payload.permissions || [];
 			state.isAuthenticated = true;
 			state.isAuthenticating = false;
 		});
@@ -115,6 +117,8 @@ export const userSlice = createSlice({
 				state.email = action.payload.email;
 				state.name = action.payload.name;
 				state.address = action.payload.address;
+				state.roles = action.payload.roles || [];
+				state.permissions = action.payload.permissions || [];
 				state.isAuthenticated = true;
 			}
 		});
@@ -126,7 +130,8 @@ export const userSlice = createSlice({
 			state.name = "";
 			state.address = "";
 			state.accessToken = "";
-			
+			state.roles = [];
+			state.permissions = [];
 		});
 	}
 })

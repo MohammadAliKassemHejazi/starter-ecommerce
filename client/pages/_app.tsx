@@ -5,6 +5,8 @@ import { store } from "@/store/store";
 import { Provider } from "react-redux";
 import * as React from "react";
 import { fetchSession } from "@/store/slices/userSlice";
+import "../src/i18n";
+import { ToastProvider } from "@/contexts/ToastContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   
@@ -15,7 +17,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <ToastProvider>
+        <Component {...pageProps} />
+      </ToastProvider>
     </Provider>
   );
 }

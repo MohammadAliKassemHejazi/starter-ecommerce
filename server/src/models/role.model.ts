@@ -11,6 +11,14 @@ module.exports = (sequelize: any) => {
     static associate(models: any) {
       Role.hasMany(models.RoleUser, { foreignKey: 'roleId' , onDelete: 'CASCADE' }); // Role has many RoleUsers
       Role.hasMany(models.RolePermission, { foreignKey: 'roleId', onDelete: 'CASCADE'  }); // Role has many RolePermissions
+      
+      // Many-to-many relations through RolePermission
+      Role.belongsToMany(models.Permission, { 
+        through: models.RolePermission, 
+        foreignKey: "roleId", 
+        otherKey: "permissionId",
+        as: "permissions"
+      });
     }
   }
 

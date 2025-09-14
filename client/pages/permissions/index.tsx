@@ -4,6 +4,7 @@ import { fetchPermissions, deletePermission, permissionsSelector } from "@/store
 import { useAppDispatch } from "@/store/store";
 import Swal from "sweetalert2";
 import Layout from "@/components/Layouts/Layout";
+import router from "next/router";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -68,7 +69,12 @@ const PermissionsGrid = () => {
             <span className="text-muted">
               Total Permissions: {permissions?.length || 0}
             </span>
-            <button className="btn btn-primary">New Permission</button>
+            <button 
+              className="btn btn-primary"
+              onClick={() => router.push('/permissions/create')}
+            >
+              New Permission
+            </button>
           </div>
           <div className="table-responsive shadow-sm bg-white">
             <table className="table table-hover table-bordered border-secondary">
@@ -86,7 +92,15 @@ const PermissionsGrid = () => {
                     <td className="fw-semibold">{perm.name}</td>
                     <td>
                       <div className="btn-group">
-                        <button className="btn btn-primary btn-sm me-2">Edit</button>
+                        <button 
+                          className="btn btn-primary btn-sm me-2"
+                          onClick={() => router.push({
+                            pathname: '/permissions/edit',
+                            query: { permission: JSON.stringify(perm) }
+                          })}
+                        >
+                          Edit
+                        </button>
                         <button
                           className="btn btn-danger btn-sm"
                           onClick={() => handleDeletePermission(perm.id)}

@@ -29,11 +29,42 @@ const createToken = (UserId: string): string => {
   return token;
 };
 
-const mapUserResponseObject = (
+const mapUserResponseObject = async (
   userId: string,
   user: IUserAttributes,
   accessToken?: string
-): IAuthLoginBodyResponse => {
+): Promise<IAuthLoginBodyResponse> => {
+  // Fetch user with roles and permissions
+  const userWithRoles = await db.User.findByPk(userId, {
+    include: [
+      {
+        model: db.Role,
+        as: 'roles',
+        through: { attributes: [] }, // Exclude join table attributes
+        include: [
+          {
+            model: db.Permission,
+            as: 'permissions',
+            through: { attributes: [] } // Exclude join table attributes
+          }
+        ]
+      }
+    ]
+  });
+
+  // Extract roles and permissions
+  const roles = userWithRoles?.roles?.map(role => ({
+    id: role.id,
+    name: role.name
+  })) || [];
+
+  const permissions = userWithRoles?.roles?.flatMap(role => 
+    role.permissions?.map(permission => ({
+      id: permission.id,
+      name: permission.name
+    })) || []
+  ) || [];
+
   const response: IAuthLoginBodyResponse = {
     id: userId,
     email: user.email,
@@ -41,6 +72,8 @@ const mapUserResponseObject = (
     address: user.address || "",
     phone: user.phone || "",
     accessToken,
+    roles,
+    permissions
   };
   return response;
 };
@@ -49,6 +82,16 @@ export const createUser = async (
   data: IUserAttributes
 ): Promise<IUserAttributes> => {
   data.password = passwordHashing(data.password);
+  
+  // Find admin user to set as createdByUser
+  const adminUser = await db.User.findOne({
+    where: { email: 'admin@admin.com' } // Assuming admin email
+  });
+  
+  if (adminUser) {
+    data.createdById = adminUser.id;
+  }
+  
   const user: IUserAttributes = await db.User.create(data);
   return user;
 };
@@ -72,7 +115,7 @@ export const userLogin = async (
   comparePassword(password, user.password);
   const UserId: string = user.id;
   const accessToken = createToken(UserId);
-  const response: IAuthLoginBodyResponse = mapUserResponseObject(
+  const response: IAuthLoginBodyResponse = await mapUserResponseObject(
     UserId,
     user,
     accessToken
@@ -96,7 +139,7 @@ export const userSession = async (
   }
   const UserId: string = id;
   const accessToken = createToken(UserId);
-  const response: IAuthLoginBodyResponse = mapUserResponseObject(
+  const response: IAuthLoginBodyResponse = await mapUserResponseObject(
     UserId,
     user,
     accessToken
@@ -111,7 +154,7 @@ export const getUserById = async (
   if (user == null) {
      customError(authErrors.AuthJWTError);
   }
-  const response: IAuthLoginBodyResponse = mapUserResponseObject(UserId, user);
+  const response: IAuthLoginBodyResponse = await mapUserResponseObject(UserId, user);
   return response;
 };
 

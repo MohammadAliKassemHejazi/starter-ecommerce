@@ -12,6 +12,9 @@
     "stop": "pm2 stop server",
     "restart": "pm2 restart server",
     "dev": "nodemon index.ts",
+    "setup": "ts-node src/scripts/runScripts.ts",
+    "create-admin": "ts-node src/scripts/createAdminUser.ts",
+    "assign-admin-role": "ts-node src/scripts/assignAdminRole.ts",
     "prettier": "prettier src/**/*.ts",
     "prettier:fix": "prettier --write src/**/*.ts",
     "eslint:fix": "eslint --fix"

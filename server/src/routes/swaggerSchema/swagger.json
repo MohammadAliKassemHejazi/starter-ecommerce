@@ -1,0 +1,2577 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Node Express App - Swagger",
+    "description": "Testing the express swagger API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5300"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "getArticleRouteSchema": {
+        "tags": [
+          "article"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "querystring": {
+          "id": {
+            "type": "string",
+            "description": "article id for query"
+          }
+        },
+        "response": {
+          "200": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "id"
+              },
+              "title": {
+                "type": "string",
+                "format": "string"
+              },
+              "text": {
+                "type": "string",
+                "format": "string"
+              },
+              "UserId": {
+                "type": "string",
+                "format": "id"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        }
+      },
+      "createArticleRouteSchema": {
+        "tags": [
+          "article"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "body": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "id"
+              },
+              "title": {
+                "type": "string",
+                "format": "string"
+              },
+              "text": {
+                "type": "string",
+                "format": "string"
+              },
+              "UserId": {
+                "type": "string",
+                "format": "id"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        }
+      },
+      "updateArticleRouteSchema": {
+        "tags": [
+          "article"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "params": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "the article identifier, as id"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        }
+      },
+      "deleteArticleRouteSchema": {
+        "tags": [
+          "article"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "params": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "the article identifier, as id"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        }
+      },
+      "getArticleListRouteSchema": {
+        "tags": [
+          "article"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "response": {
+          "200": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "UserId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "getAllArticleRouteSchema": {
+        "tags": [
+          "article"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "response": {
+          "200": {
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "User": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "surname": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "loginRouteSchema": {
+        "tags": [
+          "auth"
+        ],
+        "body": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "id"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "name": {
+                "type": "string",
+                "format": "string"
+              },
+              "surname": {
+                "type": "string",
+                "format": "id"
+              },
+              "phone": {
+                "type": "string",
+                "format": "string"
+              },
+              "accessToken": {
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        }
+      },
+      "isAuthenticatedRouteSchema": {
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "response": {
+          "200": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "id"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "name": {
+                "type": "string",
+                "format": "string"
+              },
+              "phone": {
+                "type": "string",
+                "format": "string"
+              },
+              "surname": {
+                "type": "string",
+                "format": "id"
+              },
+              "accessToken": {
+                "type": "string",
+                "format": "jwt"
+              }
+            }
+          }
+        }
+      },
+      "registerRouteSchema": {
+        "tags": [
+          "auth"
+        ],
+        "body": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "password": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "surname": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "password": {
+                "type": "string",
+                "format": "password"
+              },
+              "name": {
+                "type": "string",
+                "format": "string"
+              },
+              "surname": {
+                "type": "string",
+                "format": "id"
+              },
+              "phone": {
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        }
+      },
+      "commentsRouteSchema": {
+        "get": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Get product comments",
+          "parameters": [
+            {
+              "name": "productId",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successfully retrieved comments",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "text": {
+                              "type": "string"
+                            },
+                            "rating": {
+                              "type": "number",
+                              "minimum": 1,
+                              "maximum": 5
+                            },
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Add comment to product",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "productId",
+                    "text",
+                    "rating"
+                  ],
+                  "properties": {
+                    "productId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "rating": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Comment added successfully"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Update comment",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "rating": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Comment updated successfully"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Comments"
+          ],
+          "summary": "Delete comment",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Comment deleted successfully"
+            }
+          }
+        }
+      },
+      "favoritesRouteSchema": {
+        "get": {
+          "tags": [
+            "Favorites"
+          ],
+          "summary": "Get user favorites",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successfully retrieved favorites",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "price": {
+                                  "type": "number"
+                                },
+                                "description": {
+                                  "type": "string"
+                                },
+                                "images": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Favorites"
+          ],
+          "summary": "Add product to favorites",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "productId"
+                  ],
+                  "properties": {
+                    "productId": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Product added to favorites successfully"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Favorites"
+          ],
+          "summary": "Remove product from favorites",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "productId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Product removed from favorites successfully"
+            }
+          }
+        }
+      },
+      "packagesRouteSchema": {
+        "get": {
+          "tags": [
+            "Packages"
+          ],
+          "summary": "Get all packages",
+          "responses": {
+            "200": {
+              "description": "Successfully retrieved packages",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "storeLimit": {
+                              "type": "number"
+                            },
+                            "categoryLimit": {
+                              "type": "number"
+                            },
+                            "price": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Packages"
+          ],
+          "summary": "Create new package",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "storeLimit",
+                    "categoryLimit"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "storeLimit": {
+                      "type": "number"
+                    },
+                    "categoryLimit": {
+                      "type": "number"
+                    },
+                    "price": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Package created successfully"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Packages"
+          ],
+          "summary": "Update package",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "storeLimit": {
+                      "type": "number"
+                    },
+                    "categoryLimit": {
+                      "type": "number"
+                    },
+                    "price": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Package updated successfully"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Packages"
+          ],
+          "summary": "Delete package",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Package deleted successfully"
+            }
+          }
+        }
+      },
+      "promotionsRouteSchema": {
+        "get": {
+          "tags": [
+            "Promotions"
+          ],
+          "summary": "Get all promotions",
+          "responses": {
+            "200": {
+              "description": "Successfully retrieved promotions",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "code": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "PERCENTAGE",
+                                "FIXED"
+                              ]
+                            },
+                            "value": {
+                              "type": "number"
+                            },
+                            "minCartValue": {
+                              "type": "number"
+                            },
+                            "validFrom": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "validTo": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Promotions"
+          ],
+          "summary": "Create new promotion",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "code",
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "PERCENTAGE",
+                        "FIXED"
+                      ]
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "minCartValue": {
+                      "type": "number"
+                    },
+                    "validFrom": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "validTo": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Promotion created successfully"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Promotions"
+          ],
+          "summary": "Update promotion",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "PERCENTAGE",
+                        "FIXED"
+                      ]
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "minCartValue": {
+                      "type": "number"
+                    },
+                    "validFrom": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "validTo": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Promotion updated successfully"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Promotions"
+          ],
+          "summary": "Delete promotion",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Promotion deleted successfully"
+            }
+          }
+        }
+      },
+      "returnsRouteSchema": {
+        "get": {
+          "tags": [
+            "Returns"
+          ],
+          "summary": "Get return requests",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successfully retrieved return requests",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "reason": {
+                              "type": "string"
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "PENDING",
+                                "APPROVED",
+                                "REJECTED"
+                              ]
+                            },
+                            "refundAmount": {
+                              "type": "number"
+                            },
+                            "resolutionNote": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "orderNumber": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Returns"
+          ],
+          "summary": "Create return request",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "orderId",
+                    "reason"
+                  ],
+                  "properties": {
+                    "orderId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "refundAmount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Return request created successfully"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Returns"
+          ],
+          "summary": "Update return request status",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "PENDING",
+                        "APPROVED",
+                        "REJECTED"
+                      ]
+                    },
+                    "resolutionNote": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Return request updated successfully"
+            }
+          }
+        }
+      },
+      "profileRouteSchema": {
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "response": {
+          "200": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "id"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "name": {
+                "type": "string",
+                "format": "string"
+              },
+              "surname": {
+                "type": "string",
+                "format": "id"
+              },
+              "phone": {
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/getarticle": {
+      "tags": [
+        "article"
+      ],
+      "security": [
+        {
+          "apiKey": []
+        }
+      ],
+      "querystring": {
+        "id": {
+          "type": "string",
+          "description": "article id for query"
+        }
+      },
+      "response": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "id"
+            },
+            "title": {
+              "type": "string",
+              "format": "string"
+            },
+            "text": {
+              "type": "string",
+              "format": "string"
+            },
+            "UserId": {
+              "type": "string",
+              "format": "id"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        }
+      }
+    },
+    "/api/createarticle": {
+      "tags": [
+        "article"
+      ],
+      "security": [
+        {
+          "apiKey": []
+        }
+      ],
+      "body": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "response": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "id"
+            },
+            "title": {
+              "type": "string",
+              "format": "string"
+            },
+            "text": {
+              "type": "string",
+              "format": "string"
+            },
+            "UserId": {
+              "type": "string",
+              "format": "id"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        }
+      }
+    },
+    "/api/updatearticle": {
+      "tags": [
+        "article"
+      ],
+      "security": [
+        {
+          "apiKey": []
+        }
+      ],
+      "params": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "the article identifier, as id"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    },
+    "/api/deletearticle": {
+      "tags": [
+        "article"
+      ],
+      "security": [
+        {
+          "apiKey": []
+        }
+      ],
+      "params": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "the article identifier, as id"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    },
+    "/api/getarticlelist": {
+      "tags": [
+        "article"
+      ],
+      "security": [
+        {
+          "apiKey": []
+        }
+      ],
+      "response": {
+        "200": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                },
+                "UserId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/getallarticle": {
+      "tags": [
+        "article"
+      ],
+      "security": [
+        {
+          "apiKey": []
+        }
+      ],
+      "response": {
+        "200": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                },
+                "User": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "surname": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "tags": [
+        "auth"
+      ],
+      "body": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "response": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "id"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "name": {
+              "type": "string",
+              "format": "string"
+            },
+            "surname": {
+              "type": "string",
+              "format": "id"
+            },
+            "phone": {
+              "type": "string",
+              "format": "string"
+            },
+            "accessToken": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/isauthenticated": {
+      "tags": [
+        "auth"
+      ],
+      "security": [
+        {
+          "apiKey": []
+        }
+      ],
+      "response": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "id"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "name": {
+              "type": "string",
+              "format": "string"
+            },
+            "phone": {
+              "type": "string",
+              "format": "string"
+            },
+            "surname": {
+              "type": "string",
+              "format": "id"
+            },
+            "accessToken": {
+              "type": "string",
+              "format": "jwt"
+            }
+          }
+        }
+      }
+    },
+    "/api/register": {
+      "tags": [
+        "auth"
+      ],
+      "body": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      },
+      "response": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "password": {
+              "type": "string",
+              "format": "password"
+            },
+            "name": {
+              "type": "string",
+              "format": "string"
+            },
+            "surname": {
+              "type": "string",
+              "format": "id"
+            },
+            "phone": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/comments": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Get product comments",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved comments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "rating": {
+                            "type": "number",
+                            "minimum": 1,
+                            "maximum": 5
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Add comment to product",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "productId",
+                  "text",
+                  "rating"
+                ],
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comment added successfully"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Update comment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Delete comment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/favorites": {
+      "get": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Get user favorites",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "product": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "price": {
+                                "type": "number"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "images": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Add product to favorites",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "productId"
+                ],
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product added to favorites successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Remove product from favorites",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product removed from favorites successfully"
+          }
+        }
+      }
+    },
+    "/api/packages": {
+      "get": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Get all packages",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved packages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "storeLimit": {
+                            "type": "number"
+                          },
+                          "categoryLimit": {
+                            "type": "number"
+                          },
+                          "price": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Create new package",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "storeLimit",
+                  "categoryLimit"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "storeLimit": {
+                    "type": "number"
+                  },
+                  "categoryLimit": {
+                    "type": "number"
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Package created successfully"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Update package",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "storeLimit": {
+                    "type": "number"
+                  },
+                  "categoryLimit": {
+                    "type": "number"
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Package updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Delete package",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Package deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/promotions": {
+      "get": {
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Get all promotions",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved promotions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "code": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "PERCENTAGE",
+                              "FIXED"
+                            ]
+                          },
+                          "value": {
+                            "type": "number"
+                          },
+                          "minCartValue": {
+                            "type": "number"
+                          },
+                          "validFrom": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "validTo": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Create new promotion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "code",
+                  "type",
+                  "value"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "PERCENTAGE",
+                      "FIXED"
+                    ]
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "minCartValue": {
+                    "type": "number"
+                  },
+                  "validFrom": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "validTo": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Promotion created successfully"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Update promotion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "PERCENTAGE",
+                      "FIXED"
+                    ]
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "minCartValue": {
+                    "type": "number"
+                  },
+                  "validFrom": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "validTo": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Promotion updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Promotions"
+        ],
+        "summary": "Delete promotion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Promotion deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/returns": {
+      "get": {
+        "tags": [
+          "Returns"
+        ],
+        "summary": "Get return requests",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved return requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "PENDING",
+                              "APPROVED",
+                              "REJECTED"
+                            ]
+                          },
+                          "refundAmount": {
+                            "type": "number"
+                          },
+                          "resolutionNote": {
+                            "type": "string"
+                          },
+                          "order": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "orderNumber": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Returns"
+        ],
+        "summary": "Create return request",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderId",
+                  "reason"
+                ],
+                "properties": {
+                  "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "refundAmount": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Return request created successfully"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Returns"
+        ],
+        "summary": "Update return request status",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "PENDING",
+                      "APPROVED",
+                      "REJECTED"
+                    ]
+                  },
+                  "resolutionNote": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return request updated successfully"
+          }
+        }
+      }
+    },
+    "/api/profile": {
+      "tags": [
+        "user"
+      ],
+      "security": [
+        {
+          "apiKey": []
+        }
+      ],
+      "response": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "id"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "name": {
+              "type": "string",
+              "format": "string"
+            },
+            "surname": {
+              "type": "string",
+              "format": "id"
+            },
+            "phone": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

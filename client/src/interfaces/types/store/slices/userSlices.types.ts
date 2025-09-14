@@ -7,6 +7,8 @@ export interface UserState {
 	isAuthenticated: boolean;
 	isAuthenticating: boolean;
 	accessToken: string;
+	roles?: Array<{ id: string; name: string; }>;
+	permissions?: Array<{ id: string; name: string; }>;
 	error?: string;
 }
 

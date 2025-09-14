@@ -4,16 +4,15 @@ import { IUserAttributes } from "../interfaces/types/models/user.model.types";
 
 module.exports = (sequelize: any) => {
   class User extends Model implements IUserAttributes {
-    id!: string;
-    name!: string;
-    email!: string;
-    password!: string;
-    phone!: string;
-    address!: string;
-    createdById!: string | null; // Optional field to track who created the user
+    declare id: string;
+    declare name: string;
+    declare email: string;
+    declare password: string;
+    declare phone: string;
+    declare address: string;
+    declare createdById: string | null; // Optional field to track who created the user
     static associate(models: any) {
       // One-to-one relations
-      User.hasOne(models.RoleUser, { foreignKey: "userId" });
       User.hasOne(models.Package, { foreignKey: "userId" });
       User.hasOne(models.Cart, { foreignKey: "userId" });
       User.hasOne(models.Favorite, { foreignKey: "userId" });
@@ -22,6 +21,15 @@ module.exports = (sequelize: any) => {
       User.hasMany(models.Store, { foreignKey: "userId", onDelete: "CASCADE" });
       User.hasMany(models.Article, { foreignKey: "userId", onDelete: "CASCADE" });
       User.hasMany(models.Order, { foreignKey: "userId", onDelete: "CASCADE" });
+      User.hasMany(models.RoleUser, { foreignKey: "userId", onDelete: "CASCADE" });
+
+      // Many-to-many relations through RoleUser
+      User.belongsToMany(models.Role, { 
+        through: models.RoleUser, 
+        foreignKey: "userId", 
+        otherKey: "roleId",
+        as: "roles"
+      });
 
       // Self-referential relationship for tracking who created the user
       User.belongsTo(models.User, { foreignKey: "createdById", as: "CreatedBy" });

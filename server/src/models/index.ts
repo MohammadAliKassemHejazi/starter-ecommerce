@@ -64,7 +64,9 @@ config = {
       require: true,
       rejectUnauthorized: false
     }
-  } : {},
+  } : {
+    ssl: false
+  },
   logging: env === 'development' ? console.log : false,
   pool: {
     max: env === 'production' ? 10 : 5,
@@ -89,6 +91,22 @@ config = {
       pool: {
         max: 10,
         min: 2,
+        acquire: 30000,
+        idle: 10000
+      }
+    };
+  } else if (process.env.DATABASE_URL && env !== 'production') {
+    // For development, use DATABASE_URL but disable SSL
+    config = {
+      use_env_variable: 'DATABASE_URL',
+      dialect: 'postgres',
+      dialectOptions: {
+        ssl: false
+      },
+      logging: env === 'development' ? console.log : false,
+      pool: {
+        max: env === 'production' ? 10 : 5,
+        min: env === 'production' ? 2 : 0,
         acquire: 30000,
         idle: 10000
       }

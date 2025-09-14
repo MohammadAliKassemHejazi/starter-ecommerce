@@ -5,8 +5,8 @@ import { ISizeAttributes } from "../interfaces/types/models/size.model.types";
 
 module.exports = (sequelize: Sequelize) => {
   class Size extends Model<ISizeAttributes> implements ISizeAttributes {
-    id!: string;
-    size!: string;
+    declare id: string;
+    declare size: string;
 
     static associate(models: any) {
       Size.hasMany(models.SizeItem, { foreignKey: 'sizeId', sourceKey: 'id', onDelete: 'CASCADE'  });

@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/store/store";
 import React from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import router from "next/router";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -66,7 +67,12 @@ const SubCategoriesGrid = () => {
               <span className="text-muted">
                 Total Subcategories: {subCategories?.length || 0}
               </span>
-              <button className="btn btn-primary">New Subcategory</button>
+              <button 
+                className="btn btn-primary"
+                onClick={() => router.push('/subcategories/create')}
+              >
+                New Subcategory
+              </button>
             </div>
             <div className="table-responsive shadow-sm bg-white">
               <table className="table table-hover table-bordered border-secondary">
@@ -86,7 +92,15 @@ const SubCategoriesGrid = () => {
                       <td>{subCategory.category?.name || "N/A"}</td>
                       <td>
                         <div className="btn-group">
-                          <button className="btn btn-primary btn-sm me-2">Edit</button>
+                          <button 
+                            className="btn btn-primary btn-sm me-2"
+                            onClick={() => router.push({
+                              pathname: '/subcategories/edit',
+                              query: { subcategory: JSON.stringify(subCategory) }
+                            })}
+                          >
+                            Edit
+                          </button>
                           <button
                             className="btn btn-danger btn-sm"
                             onClick={() => handleDeleteSubCategory(subCategory.id)}
