@@ -10,6 +10,22 @@ module.exports = (sequelize: any) => {
   }
 
   ReturnRequest.init({
+    orderId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Orders',
+        key: 'id'
+      }
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
     reason: DataTypes.TEXT,
     status: DataTypes.ENUM('PENDING', 'APPROVED', 'REJECTED'),
     refundAmount: DataTypes.FLOAT,

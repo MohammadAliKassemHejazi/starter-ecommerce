@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { getNavigationItems, getQuickActions, NavigationItem } from '@/config/navigation';
-import { usePermissions } from '@/hooks/usePermissions';
+import { getNavigationItems, getAnonymousNavigationItems, getQuickActions, NavigationItem } from '@/config/navigation';
+import { usePermissions } from '../../hooks/usePermissions';
 import LanguageSwitcher from '../LanguageSwitcher';
 
 interface NavigationProps {
@@ -16,17 +16,19 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const user = useSelector((state: any) => state.user.user);
-  const { isAdmin, isVendor, hasPermission } = usePermissions();
+  const { isAdmin, isVendor, hasPermission, isAnonymous, isAuthenticated } = usePermissions();
   
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [cartCount, setCartCount] = useState(0);
 
-  const userRole = user?.role || 'user';
-  const navigationItems = getNavigationItems(userRole, user?.permissions || []);
-  const quickActions = getQuickActions(userRole);
+  // Use anonymous navigation if user is not authenticated
+  const navigationItems = isAnonymous() 
+    ? getAnonymousNavigationItems() 
+    : getNavigationItems(user?.role || 'user', user?.permissions || []);
+  const quickActions = isAnonymous() ? [] : getQuickActions(user?.role || 'user');
 
   useEffect(() => {
-    // Fetch cart count
+    // Fetch cart count (works for both authenticated and anonymous users)
     const fetchCartCount = async () => {
       try {
         const response = await fetch('/api/cart');
@@ -39,9 +41,8 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
       }
     };
 
-    if (user) {
-      fetchCartCount();
-    }
+    // Always fetch cart count (anonymous users can have cart items)
+    fetchCartCount();
   }, [user]);
 
   const toggleExpanded = (key: string) => {

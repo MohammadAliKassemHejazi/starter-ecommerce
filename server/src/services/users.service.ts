@@ -53,13 +53,13 @@ const mapUserResponseObject = async (
   });
 
   // Extract roles and permissions
-  const roles = userWithRoles?.roles?.map(role => ({
+  const roles = userWithRoles?.roles?.map((role: any) => ({
     id: role.id,
     name: role.name
   })) || [];
 
-  const permissions = userWithRoles?.roles?.flatMap(role => 
-    role.permissions?.map(permission => ({
+  const permissions = userWithRoles?.roles?.flatMap((role: any) => 
+    role.permissions?.map((permission: any) => ({
       id: permission.id,
       name: permission.name
     })) || []

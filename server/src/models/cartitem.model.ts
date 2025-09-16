@@ -43,6 +43,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID, 
         allowNull: false,
       },
+      sizeId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: 'Sizes',
+          key: 'id'
+        }
+      },
     },
     {
       sequelize,

@@ -3,15 +3,18 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useAppDispatch } from '@/store/store';
 import { createPayment } from '@/store/slices/paymentSlice';
+import CheckoutGuard from '@/components/Guards/CheckoutGuard';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_Stripe_Key ?? "");
 
 interface CheckoutFormProps {
   amount: number;
   currency: string;
+  onSuccess?: (paymentId: string) => void;
+  onError?: (error: string) => void;
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency, onSuccess, onError }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const stripe = useStripe();
@@ -77,16 +80,23 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency }) => {
         });
 
         if (confirmError) {
-          setError(confirmError.message || "Payment confirmation failed.");
+          const errorMessage = confirmError.message || "Payment confirmation failed.";
+          setError(errorMessage);
+          onError?.(errorMessage);
         } else {
           // Payment succeeded, handle success
+          onSuccess?.(paymentMethod.id);
           alert('Payment successful!');
         }
       } else if (createPayment.rejected.match(response)) {
-        setError(response.payload || "Failed to process payment.");
+        const errorMessage = response.payload || "Failed to process payment.";
+        setError(errorMessage);
+        onError?.(errorMessage);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
+      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setError(errorMessage);
+      onError?.(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -121,13 +131,18 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency }) => {
 interface CheckoutPageProps {
   amount: number;
   currency: string;
+  onSuccess?: (paymentId: string) => void;
+  onError?: (error: string) => void;
 }
+// implement the success and error handlers if needed
 
-const CheckoutPage: React.FC<CheckoutPageProps> = ({ amount, currency }) => {
+const CheckoutPage: React.FC<CheckoutPageProps> = ({ amount, currency ,onSuccess ,onError}) => {
   return (
-    <Elements stripe={stripePromise}>
-      <CheckoutForm amount={amount} currency={currency} />
-    </Elements>
+    <CheckoutGuard>
+      <Elements stripe={stripePromise}>
+        <CheckoutForm amount={amount} currency={currency} onError={onError} onSuccess={onSuccess} />
+      </Elements>
+    </CheckoutGuard>
   );
 };
 

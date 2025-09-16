@@ -8,6 +8,11 @@ const config = {
   Stripekey: process.env.Stripe_Key,
   stripeWebhookSecret: process.env.WebhookSecret,
   client: process.env.CLIENT_URL,
+  paypal: {
+    clientId: process.env.PAYPAL_CLIENT_ID,
+    clientSecret: process.env.PAYPAL_CLIENT_SECRET,
+    environment: process.env.PAYPAL_ENVIRONMENT || 'sandbox'
+  },
   database: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,

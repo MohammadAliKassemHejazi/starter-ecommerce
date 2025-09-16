@@ -1,5 +1,4 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
 import { fetchCategories, deleteCategory, categoriesSelector } from "@/store/slices/categorySlice";
 import { useAppDispatch } from "@/store/store";
 import router from "next/router";
@@ -10,6 +9,7 @@ import DataTable from "@/components/UI/DataTable";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
 import ConfirmationModal from "@/components/UI/ConfirmationModal";
 import { useTranslation } from 'react-i18next';
+import { usePermissions } from "@/hooks/usePermissions";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -27,6 +27,7 @@ const CategoriesGrid = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const categories = useSelector(categoriesSelector);
+  const { isAdmin } = usePermissions();
   const [loading, setLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
     show: boolean;
@@ -103,33 +104,37 @@ const CategoriesGrid = () => {
     }
   ];
 
-  const actions = (row: any) => (
-    <div className="btn-group" role="group">
-      <button
-        className="btn btn-outline-primary btn-sm"
-        onClick={(e) => {
-          e.stopPropagation();
-          router.push({
-            pathname: "/categories/edit",
-            query: { category: JSON.stringify(row) }
-          });
-        }}
-        title="Edit Category"
-      >
-        <i className="bi bi-pencil"></i>
-      </button>
-      <button
-        className="btn btn-outline-danger btn-sm"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleDeleteCategory(row);
-        }}
-        title="Delete Category"
-      >
-        <i className="bi bi-trash"></i>
-      </button>
-    </div>
-  );
+  const actions = (row: any) => {
+    if (!isAdmin()) return null;
+    
+    return (
+      <div className="btn-group" role="group">
+        <button
+          className="btn btn-outline-primary btn-sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push({
+              pathname: "/categories/edit",
+              query: { category: JSON.stringify(row) }
+            });
+          }}
+          title="Edit Category"
+        >
+          <i className="bi bi-pencil"></i>
+        </button>
+        <button
+          className="btn btn-outline-danger btn-sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteCategory(row);
+          }}
+          title="Delete Category"
+        >
+          <i className="bi bi-trash"></i>
+        </button>
+      </div>
+    );
+  };
 
   return (
     <Layout>
@@ -139,53 +144,62 @@ const CategoriesGrid = () => {
             {/* Header */}
             <div className="d-flex justify-content-between align-items-center mb-4">
               <div>
-                <h1 className="h2 fw-bold text-dark mb-1">{t('categories.categories')}</h1>
+                <h1 className="h2 fw-bold text-dark mb-1">
+                  {isAdmin() ? t('categories.categories') : 'Browse Categories'}
+                </h1>
                 <p className="text-muted mb-0">
-                  Manage your product categories and organize your inventory
+                  {isAdmin() 
+                    ? 'Manage your product categories and organize your inventory'
+                    : 'Explore our product categories to find what you\'re looking for'
+                  }
                 </p>
               </div>
-              <button 
-                className="btn btn-primary d-flex align-items-center"
-                onClick={() => router.push('/categories/create')}
-              >
-                <i className="bi bi-plus-circle me-2"></i>
-                {t('categories.createCategory')}
-              </button>
+              {isAdmin() && (
+                <button 
+                  className="btn btn-primary d-flex align-items-center"
+                  onClick={() => router.push('/categories/create')}
+                >
+                  <i className="bi bi-plus-circle me-2"></i>
+                  {t('categories.createCategory')}
+                </button>
+              )}
             </div>
 
-            {/* Stats Cards */}
-            <div className="row mb-4">
-              <div className="col-md-3">
-                <div className="card bg-primary text-white">
-                  <div className="card-body">
-                    <div className="d-flex align-items-center">
-                      <div className="flex-grow-1">
-                        <h6 className="card-title mb-0">Total Categories</h6>
-                        <h3 className="mb-0">{categories?.length || 0}</h3>
+            {/* Stats Cards - Only show for admin */}
+            {isAdmin() && (
+              <div className="row mb-4">
+                <div className="col-md-3">
+                  <div className="card bg-primary text-white">
+                    <div className="card-body">
+                      <div className="d-flex align-items-center">
+                        <div className="flex-grow-1">
+                          <h6 className="card-title mb-0">Total Categories</h6>
+                          <h3 className="mb-0">{categories?.length || 0}</h3>
+                        </div>
+                        <div className="fs-1">
+                          <i className="bi bi-tags"></i>
+                        </div>
                       </div>
-                      <div className="fs-1">
-                        <i className="bi bi-tags"></i>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="card bg-success text-white">
+                    <div className="card-body">
+                      <div className="d-flex align-items-center">
+                        <div className="flex-grow-1">
+                          <h6 className="card-title mb-0">Active Categories</h6>
+                          <h3 className="mb-0">{categories?.filter((c: any) => c.isActive !== false).length || 0}</h3>
+                        </div>
+                        <div className="fs-1">
+                          <i className="bi bi-check-circle"></i>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="col-md-3">
-                <div className="card bg-success text-white">
-                  <div className="card-body">
-                    <div className="d-flex align-items-center">
-                      <div className="flex-grow-1">
-                        <h6 className="card-title mb-0">Active Categories</h6>
-                        <h3 className="mb-0">{categories?.filter((c: any) => c.isActive !== false).length || 0}</h3>
-                      </div>
-                      <div className="fs-1">
-                        <i className="bi bi-check-circle"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            )}
 
             {/* Data Table */}
             <div className="card shadow-sm">
@@ -226,4 +240,4 @@ const CategoriesGrid = () => {
   );
 };
 
-export default protectedRoute(CategoriesGrid);
+export default CategoriesGrid;

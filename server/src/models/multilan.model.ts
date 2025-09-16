@@ -4,16 +4,8 @@ import { Model, DataTypes } from "sequelize";
 module.exports = (sequelize: any) => {
   class Translation extends Model {
     static associate(models: any) {
-      // Optional: Add index for faster lookups
-      Translation.addScope('defaultScope', {
-        include: [{
-          model: models.Product,
-          required: false
-        }, {
-          model: models.Category,
-          required: false
-        }]
-      });
+      // Translation doesn't have direct associations with Product/Category
+      // It uses polymorphic relationships via model and recordId fields
     }
   }
 

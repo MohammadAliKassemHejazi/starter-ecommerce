@@ -1,5 +1,4 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
 import {
   deleteProduct,
   fetchProductsByStore,
@@ -19,7 +18,9 @@ import Image from "next/image";
 import Moment from "react-moment";
 import { IProductModel } from "@/models/product.model";
 import { IStoreResponseModel } from "@/models/store.model";
-import debounce from "lodash.debounce"
+import debounce from "lodash.debounce";
+import { usePermissions } from "@/hooks/usePermissions";
+import { addToCart } from "@/store/slices/cartSlice";
 type Props = {};
 
 const Toast = Swal.mixin({
@@ -46,6 +47,7 @@ const Shop = ({}: Props) => {
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const router = useRouter();
+  const { isAdmin, isAuthenticated } = usePermissions();
 
   // Memoized debounced fetch function
   const fetchProducts = useCallback(
@@ -156,6 +158,14 @@ const Shop = ({}: Props) => {
     );
   };
 
+  const handleAddToCart = (product: IProductModel) => {
+    dispatch(addToCart(product));
+    Toast.fire({
+      icon: "success",
+      title: "Product added to cart!",
+    });
+  };
+
   const totalPages = Math.ceil(totalProducts / pageSize);
 
   return (
@@ -163,7 +173,9 @@ const Shop = ({}: Props) => {
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-md-12">
-            <h1 className="mb-5 text-center mt-3">My Products</h1>
+            <h1 className="mb-5 text-center mt-3">
+              {isAdmin() ? "My Products" : "Shop Products"}
+            </h1>
 
             <div className="d-flex justify-content-between mb-3">
               <select
@@ -181,9 +193,11 @@ const Shop = ({}: Props) => {
                 ))}
               </select>
 
-              <Link className="col-md-5 text-end" href="shop/product/create">
-                <span className="btn btn-primary">New Product</span>
-              </Link>
+              {isAdmin() && (
+                <Link className="col-md-5 text-end" href="shop/product/create">
+                  <span className="btn btn-primary">New Product</span>
+                </Link>
+              )}
             </div>
 
             {/* Search Bar */}
@@ -198,74 +212,121 @@ const Shop = ({}: Props) => {
             </div>
 
             <span className="float-start">
-              You have: {totalProducts} products
+              {isAdmin() ? `You have: ${totalProducts} products` : `Found: ${totalProducts} products`}
             </span>
           </div>
 
           {/* Render product list */}
           <div className="col-md-12">
-            <div className="table-responsive">
-              <table className="table table-bordered">
-                <thead>
-                  <tr className="text-center text-light bg-dark">
-                    <th>ID</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Updated At</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
+            {isAdmin() ? (
+              // Admin view - table format
+              <div className="table-responsive">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr className="text-center text-light bg-dark">
+                      <th>ID</th>
+                      <th>Image</th>
+                      <th>Name</th>
+                      <th>Price</th>
+                      <th>Updated At</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {productList?.map((product, idx) => (
-                    <tr key={idx} className="text-center">
-                      <td>{product.id}</td>
-                      <td>
-                        {product.photos && (
-                          <Image
-                            src={
-                              process.env.NEXT_PUBLIC_BASE_URL_Images +
-                              product.photos[0]?.imageUrl
-                            }
-                            alt={product?.name ?? ""}
-                            width={50}
-                            height={50}
-                          />
-                        )}
-                      </td>
-                      <td>{product.name}</td>
-                      <td>{product.price}</td>
-                      <td>
-                        <Moment format="DD/MM/YYYY HH:mm">
-                          {product?.updatedAt ?? ""}
-                        </Moment>
-                      </td>
-                      <td>
-                        <div className="btn-group">
+                  <tbody>
+                    {productList?.map((product, idx) => (
+                      <tr key={idx} className="text-center">
+                        <td>{product.id}</td>
+                        <td>
+                          {product.photos && (
+                            <Image
+                              src={
+                                process.env.NEXT_PUBLIC_BASE_URL_Images +
+                                product.photos[0]?.imageUrl
+                              }
+                              alt={product?.name ?? ""}
+                              width={50}
+                              height={50}
+                            />
+                          )}
+                        </td>
+                        <td>{product.name}</td>
+                        <td>${product.price}</td>
+                        <td>
+                          <Moment format="DD/MM/YYYY HH:mm">
+                            {product?.updatedAt ?? ""}
+                          </Moment>
+                        </td>
+                        <td>
+                          <div className="btn-group">
+                            <button
+                              className="btn btn-danger me-2"
+                              onClick={() =>
+                                handleDeleteProduct(product?.id ?? "", product.name)
+                              }
+                            >
+                              Delete
+                            </button>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() =>
+                                router.push(`/shop/product/edit?id=${product.id}`)
+                              }
+                            >
+                              Edit
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              // Shopping view - card format
+              <div className="row">
+                {productList?.map((product, idx) => (
+                  <div key={idx} className="col-md-4 mb-4">
+                    <div className="card h-100">
+                      {product.photos && (
+                        <Image
+                          src={
+                            process.env.NEXT_PUBLIC_BASE_URL_Images +
+                            product.photos[0]?.imageUrl
+                          }
+                          alt={product?.name ?? ""}
+                          width={300}
+                          height={200}
+                          className="card-img-top"
+                          style={{ objectFit: 'cover' }}
+                        />
+                      )}
+                      <div className="card-body d-flex flex-column">
+                        <h5 className="card-title">{product.name}</h5>
+                        <p className="card-text text-muted">{product.description}</p>
+                        <div className="mt-auto">
+                          <div className="d-flex justify-content-between align-items-center mb-3">
+                            <span className="h4 text-primary">${product.price}</span>
+                            <small className="text-muted">
+                              <Moment format="DD/MM/YYYY">
+                                {product?.updatedAt ?? ""}
+                              </Moment>
+                            </small>
+                          </div>
                           <button
-                            className="btn btn-danger me-2"
-                            onClick={() =>
-                              handleDeleteProduct(product?.id ?? "", product.name)
-                            }
+                            className="btn btn-primary w-100"
+                            onClick={() => handleAddToCart(product)}
                           >
-                            Delete
-                          </button>
-                          <button
-                            className="btn btn-primary"
-                            onClick={() =>
-                              router.push(`/shop/product/edit?id=${product.id}`)
-                            }
-                          >
-                            Edit
+                            <i className="bi bi-cart-plus me-2"></i>
+                            Add to Cart
                           </button>
                         </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Pagination */}
             <div className="d-flex justify-content-between mt-3">
@@ -294,4 +355,4 @@ const Shop = ({}: Props) => {
   );
 };
 
-export default protectedRoute(Shop);
+export default Shop;

@@ -9,6 +9,14 @@ module.exports = (sequelize: any) => {
   }
 
   UserSession.init({
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
     ipAddress: DataTypes.STRING,
     deviceType: DataTypes.STRING,
     loginAt: DataTypes.DATE,

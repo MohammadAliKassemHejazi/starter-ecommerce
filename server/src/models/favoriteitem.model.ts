@@ -20,6 +20,22 @@ module.exports = (sequelize: any, DataTypes: any) => {
       type: DataTypes.UUID,
       defaultValue: UUIDV4,
       primaryKey: true
+    },
+    favoriteId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Favorites',
+        key: 'id'
+      }
+    },
+    productId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Products',
+        key: 'id'
+      }
     }
   }, {
     sequelize,

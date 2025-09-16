@@ -15,16 +15,13 @@ import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";
 import Layout from "@/components/Layouts/Layout";
 import Image from "next/image";
-import CheckoutForm from "../payment/checkoutwithstripe";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import protectedRoute from "@/components/protectedRoute";
-
-const stripePromise = loadStripe(`${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!}`);
+import PaymentMethodSelector from "@/components/Payment/PaymentMethodSelector";
+import { usePermissions } from "@/hooks/usePermissions";
 
 const Cart = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useAppDispatch();
+  const { isAuthenticated, canCheckout } = usePermissions();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -56,6 +53,19 @@ const Cart = () => {
     dispatch(clearCart()).then(() => {
       dispatch(getTotals());
     });
+  };
+
+  const handlePaymentSuccess = (paymentId: string, method: string) => {
+    console.log(`Payment successful with ${method}:`, paymentId);
+    // Clear cart after successful payment
+    dispatch(clearCart());
+    // Redirect to success page or show success message
+    alert(`Payment successful! Payment ID: ${paymentId}`);
+  };
+
+  const handlePaymentError = (error: string) => {
+    console.error('Payment error:', error);
+    alert(`Payment failed: ${error}`);
   };
 
   return (
@@ -148,9 +158,33 @@ const Cart = () => {
               <button className={styles.clearBtn} onClick={handleClearCart}>
                 Clear Cart
               </button>
-              <Elements stripe={stripePromise}>
-                <CheckoutForm amount={cart.cartTotalAmount} currency="USD" />
-              </Elements>
+              
+              {/* Payment Section */}
+              {isAuthenticated ? (
+                <div className="mt-4">
+                  <PaymentMethodSelector
+                    amount={cart.cartTotalAmount}
+                    currency="USD"
+                    onSuccess={handlePaymentSuccess}
+                    onError={handlePaymentError}
+                  />
+                </div>
+              ) : (
+                <div className="mt-4">
+                  <div className="alert alert-info">
+                    <h5>Login Required for Checkout</h5>
+                    <p>Please log in to complete your purchase.</p>
+                    <div className="d-flex gap-2">
+                      <a href="/auth/login" className="btn btn-primary">
+                        Login
+                      </a>
+                      <a href="/auth/register" className="btn btn-outline-primary">
+                        Register
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Continue Shopping */}
@@ -179,4 +213,4 @@ const Cart = () => {
   );
 };
 
-export default protectedRoute(Cart);
+export default Cart;
