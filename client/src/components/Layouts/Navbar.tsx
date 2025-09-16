@@ -70,8 +70,8 @@ export default function Navbar() {
     fetchCartCount();
   }, [user]);
 
-  const userRole = user?.role || 'user';
-  const quickActions = getQuickActions(userRole);
+  const userRole = user?.roles![0] || 'user';
+  const quickActions = getQuickActions(userRole.name);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-80 shadow-sm sticky-top">
