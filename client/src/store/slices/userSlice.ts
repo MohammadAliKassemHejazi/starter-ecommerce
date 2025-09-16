@@ -27,6 +27,8 @@ const initialState: UserState = {
 	accessToken: "",
 	isAuthenticated: false,
 	isAuthenticating: true,
+	roles: [],
+	permissions: []
 };
 
 export const signIn = createAsyncThunk(
