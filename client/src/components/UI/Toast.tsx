@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ToastProps {
@@ -21,6 +21,13 @@ const Toast: React.FC<ToastProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setIsLeaving(true);
+    setTimeout(() => {
+      onClose(id);
+    }, 300);
+  }, [onClose, id]);
+  
   useEffect(() => {
     // Show toast with animation
     const showTimer = setTimeout(() => setIsVisible(true), 100);
@@ -30,18 +37,14 @@ const Toast: React.FC<ToastProps> = ({
       handleClose();
     }, duration);
 
+
     return () => {
       clearTimeout(showTimer);
       clearTimeout(hideTimer);
     };
-  }, [duration]);
+  }, [duration, handleClose]);
 
-  const handleClose = () => {
-    setIsLeaving(true);
-    setTimeout(() => {
-      onClose(id);
-    }, 300);
-  };
+
 
   const getIcon = () => {
     switch (type) {
@@ -134,7 +137,9 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onRemove }) => 
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return null;
+  }
 
   return createPortal(
     <div className="toast-container">

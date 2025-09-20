@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import Layout from '@/components/Layouts/Layout';
 import protectedRoute from '@/components/protectedRoute';
 import Swal from 'sweetalert2';
@@ -45,14 +46,7 @@ const CommentsPage = () => {
     rating: 5
   });
 
-  useEffect(() => {
-    if (productId) {
-      fetchComments();
-      fetchProduct();
-    }
-  }, [productId]);
-
-  const fetchComments = async () => {
+    const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(`/api/comments?productId=${productId}`);
       if (response.ok) {
@@ -64,9 +58,9 @@ const CommentsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId]);
 
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       const response = await fetch(`/api/shop/${productId}`);
       if (response.ok) {
@@ -76,7 +70,16 @@ const CommentsPage = () => {
     } catch (error) {
       console.error('Error fetching product:', error);
     }
-  };
+  }, [productId]);
+
+  useEffect(() => {
+    if (productId) {
+      fetchComments();
+      fetchProduct();
+    }
+  }, [productId, fetchComments, fetchProduct]);
+
+
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -160,9 +163,11 @@ const CommentsPage = () => {
                   <div className="row">
                     <div className="col-md-3">
                       {product.images && product.images.length > 0 && (
-                        <img
+                        <Image
                           src={`${process.env.NEXT_PUBLIC_BASE_URL_Images}${product.images[0].imageUrl}`}
                           alt={product.name}
+                          width={200}
+                          height={200}
                           className="img-fluid rounded"
                         />
                       )}

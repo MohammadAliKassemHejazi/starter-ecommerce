@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layouts/Layout';
 import protectedRoute from '@/components/protectedRoute';
@@ -47,17 +47,17 @@ const ReturnsPage = () => {
     userId: ''
   });
 
-  useEffect(() => {
-    fetchReturns();
-  }, [filters]);
-
-  const fetchReturns = async () => {
+    const fetchReturns = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const queryParams = new URLSearchParams();
       
-      if (filters.status) queryParams.append('status', filters.status);
-      if (filters.userId) queryParams.append('userId', filters.userId);
+      if (filters.status) {
+        queryParams.append('status', filters.status);
+      }
+      if (filters.userId) {
+        queryParams.append('userId', filters.userId);
+      }
 
       const response = await fetch(`/api/returns?${queryParams}`, {
         headers: {
@@ -79,7 +79,13 @@ const ReturnsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+
+  useEffect(() => {
+    fetchReturns();
+  }, [filters, fetchReturns]);
+
 
   const handleStatusUpdate = async (id: string, status: string, resolutionNote?: string) => {
     try {

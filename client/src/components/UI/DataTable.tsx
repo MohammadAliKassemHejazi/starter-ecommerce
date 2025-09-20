@@ -59,8 +59,12 @@ const DataTable: React.FC<DataTableProps> = ({
         const aValue = a[sortField];
         const bValue = b[sortField];
         
-        if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-        if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+        if (aValue < bValue) {
+          return sortDirection === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortDirection === 'asc' ? 1 : -1;
+        }
         return 0;
       });
     }
@@ -69,7 +73,9 @@ const DataTable: React.FC<DataTableProps> = ({
   }, [data, searchTerm, sortField, sortDirection, columns]);
 
   const paginatedData = useMemo(() => {
-    if (!pagination) return filteredData;
+    if (!pagination) {
+      return filteredData;
+    }
     
     const startIndex = (currentPage - 1) * pageSize;
     return filteredData.slice(startIndex, startIndex + pageSize);

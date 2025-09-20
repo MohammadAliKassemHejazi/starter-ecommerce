@@ -15,7 +15,7 @@ const RoleBasedAccess: React.FC<RoleBasedAccessProps> = ({
   requiredPermissions = [],
   fallback = null
 }) => {
-  const user = useSelector((state: RootState) => state.user.user);
+  const user = useSelector((state: RootState) => state.user);
   const userRoles = user?.roles || [];
   const userPermissions = user?.permissions || [];
 

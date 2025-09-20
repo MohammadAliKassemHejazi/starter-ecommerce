@@ -46,7 +46,7 @@ class ErrorBoundary extends Component<Props, State> {
                   </div>
                   <h2 className="text-danger mb-3">Something went wrong</h2>
                   <p className="text-muted mb-4">
-                    We're sorry, but something unexpected happened. Please try refreshing the page.
+                    We&apos;re sorry, but something unexpected happened. Please try refreshing the page.
                   </p>
                   <div className="d-flex justify-content-center gap-3">
                     <button

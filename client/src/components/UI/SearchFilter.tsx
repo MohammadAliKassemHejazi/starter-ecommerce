@@ -52,8 +52,12 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   const handleClear = () => {
     onSearchChange('');
     Object.values(filters).forEach(filter => filter.onChange(''));
-    if (onSortChange) onSortChange('');
-    if (onClear) onClear();
+    if (onSortChange) {
+      onSortChange('');
+    }
+    if (onClear) {
+      onClear();
+    }
   };
 
   const hasActiveFilters = activeFiltersCount > 0 || searchValue || sortValue;
@@ -161,7 +165,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
           <div className="d-flex flex-wrap gap-2">
             {searchValue && (
               <span className="badge bg-primary d-flex align-items-center">
-                Search: "{searchValue}"
+                Search: &quot;{searchValue}&quot;
                 <button
                   className="btn-close btn-close-white ms-2"
                   style={{ fontSize: '0.7em' }}
@@ -170,7 +174,9 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
               </span>
             )}
             {Object.entries(filters).map(([key, filter]) => {
-              if (!filter.value) return null;
+              if (!filter.value) {
+                return null;
+              }
               const option = filter.options.find(opt => opt.value === filter.value);
               return (
                 <span key={key} className="badge bg-secondary d-flex align-items-center">

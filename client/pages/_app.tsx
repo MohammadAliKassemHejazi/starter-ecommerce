@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import * as React from "react";
 import { fetchSession } from "@/store/slices/userSlice";
 import "../src/i18n";
-import { ToastProvider } from "@/contexts/ToastContext";
+import { ToastProvider } from "../src/contexts/ToastContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   

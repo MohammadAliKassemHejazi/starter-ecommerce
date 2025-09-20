@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
 import Layout from '@/components/Layouts/Layout';
@@ -41,20 +41,20 @@ const AnalyticsPage = () => {
     startDate: '',
     endDate: ''
   });
-
-  useEffect(() => {
-    fetchAnalytics();
-    fetchStats();
-  }, [filters]);
-
-  const fetchAnalytics = async () => {
+ const fetchAnalytics = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const queryParams = new URLSearchParams();
       
-      if (filters.eventType) queryParams.append('eventType', filters.eventType);
-      if (filters.startDate) queryParams.append('startDate', filters.startDate);
-      if (filters.endDate) queryParams.append('endDate', filters.endDate);
+      if (filters.eventType) {
+        queryParams.append('eventType', filters.eventType);
+      }
+      if (filters.startDate) {
+        queryParams.append('startDate', filters.startDate);
+      }
+      if (filters.endDate) {
+        queryParams.append('endDate', filters.endDate);
+      }
 
       const response = await fetch(`/api/analytics?${queryParams}`, {
         headers: {
@@ -76,15 +76,19 @@ const AnalyticsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const queryParams = new URLSearchParams();
       
-      if (filters.startDate) queryParams.append('startDate', filters.startDate);
-      if (filters.endDate) queryParams.append('endDate', filters.endDate);
+      if (filters.startDate) {
+        queryParams.append('startDate', filters.startDate);
+      }
+      if (filters.endDate) {
+        queryParams.append('endDate', filters.endDate);
+      }
 
       const response = await fetch(`/api/analytics/stats?${queryParams}`, {
         headers: {
@@ -100,7 +104,14 @@ const AnalyticsPage = () => {
     } catch (error) {
       console.error('Error fetching stats:', error);
     }
-  };
+  }, [filters]);
+  
+  useEffect(() => {
+    fetchAnalytics();
+    fetchStats();
+  }, [filters, fetchAnalytics, fetchStats]);
+
+ 
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters({

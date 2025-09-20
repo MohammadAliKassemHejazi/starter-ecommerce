@@ -8,13 +8,13 @@ interface UseFormValidationProps {
 }
 
 export const useFormValidation = ({ initialData, validationRules, onSubmit }: UseFormValidationProps) => {
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState<typeof initialData>(initialData);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
   const handleInputChange = useCallback((field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev: typeof initialData) => ({ ...prev, [field]: value }));
     
     // Clear error when user starts typing
     if (errors[field]) {
@@ -63,7 +63,7 @@ export const useFormValidation = ({ initialData, validationRules, onSubmit }: Us
     } finally {
       setLoading(false);
     }
-  }, [formData, validateFormData, onSubmit]);
+  }, [formData, validateFormData, onSubmit, validationRules]);
 
   const resetForm = useCallback(() => {
     setFormData(initialData);

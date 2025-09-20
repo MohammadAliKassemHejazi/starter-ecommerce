@@ -2,7 +2,7 @@ import Layout from "@/components/Layouts/Layout";
 import { fetchCategories, deleteCategory, categoriesSelector } from "@/store/slices/categorySlice";
 import { useAppDispatch } from "@/store/store";
 import router from "next/router";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import DataTable from "@/components/UI/DataTable";
@@ -33,12 +33,7 @@ const CategoriesGrid = () => {
     show: boolean;
     category: any;
   }>({ show: false, category: null });
-
-  React.useEffect(() => {
-    fetchCategoriesData();
-  }, [dispatch]);
-
-  const fetchCategoriesData = async () => {
+  const fetchCategoriesData = useCallback(async () => {
     setLoading(true);
     try {
       await dispatch(fetchCategories());
@@ -50,14 +45,22 @@ const CategoriesGrid = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dispatch]);
+  
+  React.useEffect(() => {
+    fetchCategoriesData();
+  }, [dispatch, fetchCategoriesData]);
+
+
 
   const handleDeleteCategory = (category: any) => {
     setDeleteModal({ show: true, category });
   };
 
   const confirmDelete = async () => {
-    if (!deleteModal.category) return;
+    if (!deleteModal.category) {
+      return;
+    }
 
     try {
       await dispatch(deleteCategory(deleteModal.category.id));
@@ -105,7 +108,9 @@ const CategoriesGrid = () => {
   ];
 
   const actions = (row: any) => {
-    if (!isAdmin()) return null;
+    if (!isAdmin()) {
+      return null;
+    }
     
     return (
       <div className="btn-group" role="group">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
 import Layout from '@/components/Layouts/Layout';
@@ -9,7 +9,7 @@ import DataTable from '@/components/UI/DataTable';
 import LoadingSpinner from '@/components/UI/LoadingSpinner';
 import ConfirmationModal from '@/components/UI/ConfirmationModal';
 import { useTranslation } from 'react-i18next';
-import { useToast } from '@/contexts/ToastContext';
+import { useToast } from '../../src/contexts/ToastContext';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -43,12 +43,8 @@ const PromotionsPage = () => {
     show: boolean;
     promotion: Promotion | null;
   }>({ show: false, promotion: null });
-
-  useEffect(() => {
-    fetchPromotions();
-  }, []);
-
-  const fetchPromotions = async () => {
+  
+  const fetchPromotions = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch('/api/promotions');
@@ -64,14 +60,22 @@ const PromotionsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showError]);
+
+  useEffect(() => {
+    fetchPromotions();
+  }, [fetchPromotions]);
+
+
 
   const handleDeletePromotion = (promotion: Promotion) => {
     setDeleteModal({ show: true, promotion });
   };
 
   const confirmDelete = async () => {
-    if (!deleteModal.promotion) return;
+    if (!deleteModal.promotion) {
+      return;
+    }
 
     try {
       const token = localStorage.getItem('token');
