@@ -17,7 +17,7 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const user = useSelector(userSelector);
   const { t } = useTranslation();
-  const { isAdmin, isVendor, hasPermission } = usePermissions();
+  const {  userRoles  } = usePermissions();
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
@@ -70,8 +70,8 @@ export default function Navbar() {
     fetchCartCount();
   }, [user]);
 
-  const userRole = user?.roles![0] || 'user';
-  const quickActions = getQuickActions(userRole.name);
+  const userRole = userRoles?.[0]?.name || 'user';
+  const quickActions = getQuickActions(userRole);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-80 shadow-sm sticky-top">

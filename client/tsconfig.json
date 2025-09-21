@@ -25,6 +25,7 @@
       "@/interfaces/*": ["interfaces/*"],
       "@/utils/*": ["utils/*"],
       "@/styles/*": ["styles/*"],
+      "@/constants/*": ["constants/*"],
       "@/*": ["/*"],
     }
   },

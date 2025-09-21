@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
 import Layout from '@/components/Layouts/Layout';
-import protectedRoute from '@/components/protectedRoute';
+import ProtectedRoute from '@/components/protectedRoute';
 import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 
@@ -265,4 +265,10 @@ const AnalyticsPage = () => {
   );
 };
 
-export default protectedRoute(AnalyticsPage);
+export default function ProtectedAnalytics() {
+  return (
+    <ProtectedRoute>
+      <AnalyticsPage />
+    </ProtectedRoute>
+  );
+}

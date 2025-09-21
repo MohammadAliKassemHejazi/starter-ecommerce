@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 
 import React, { useEffect } from "react";
 
@@ -45,10 +45,12 @@ const Home = () => {
 
     </Layout>
   );
-};
+}
 
-export default protectedRoute(Home);
-
-
-
-
+export default function ProtectedHome() {
+  return (
+    <ProtectedRoute>
+      <Home />
+    </ProtectedRoute>
+  );
+}

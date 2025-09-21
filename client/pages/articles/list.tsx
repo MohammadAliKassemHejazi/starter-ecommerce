@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import { IArticleModelWithUser } from "@/models/article.model";
 import { requestAllArticles } from "@/services/articleService";
 import { setAuthHeaders } from "@/utils/httpClient";
@@ -10,7 +10,7 @@ type Props = {
   articles?: IArticleModelWithUser[];
 };
 
-const articlesList = ({articles}: Props) => {
+const ArticlesList = ({articles}: Props) => {
   return (
     <Layout>
       <div className="container">
@@ -45,7 +45,13 @@ const articlesList = ({articles}: Props) => {
   );
 };
 
-export default protectedRoute(articlesList);
+export default function ProtectedArticlesList() {
+  return (
+    <ProtectedRoute>
+      <ArticlesList />
+    </ProtectedRoute>
+  );
+}
 
 export const getServerSideProps: GetServerSideProps = async (context:any) => {
       const headers = context.req.headers;

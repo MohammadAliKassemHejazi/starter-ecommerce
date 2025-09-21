@@ -11,7 +11,7 @@ import { ParsedUrlQuery } from "querystring";
 import { requestAllStores, requestStoreById } from "@/services/storeService";
 
 import ErrorBoundary from "@/components/Error/ErrorBoundary";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import { setAuthHeaders } from "@/utils/httpClient";
 import ListingProductsByStore from "@/components/UI/General/listingProducts/ListingProductsByStore";
 
@@ -228,4 +228,10 @@ export async function generateMetadata({ params }: { params: { id: string } }, c
   }
 }
 
-export default protectedRoute(SingleStore);
+export default function ProtectedSingleStore() {
+  return (
+    <ProtectedRoute>
+      <SingleStore />
+    </ProtectedRoute>
+  );
+}

@@ -4,7 +4,7 @@ import { createSubCategory } from "@/store/slices/subCategorySlice";
 import { useAppDispatch } from "@/store/store";
 import { categoriesSelector } from "@/store/slices/categorySlice";
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import router from "next/router";
@@ -118,4 +118,10 @@ const CreateSubCategoryModal = () => {
   );
 };
 
-export default protectedRoute(CreateSubCategoryModal);
+export default function ProtectedCreateSubCategoryModal() {
+  return (
+    <ProtectedRoute>
+      <CreateSubCategoryModal />
+    </ProtectedRoute>
+  );
+}

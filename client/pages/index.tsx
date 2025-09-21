@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useEffect } from "react";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import { useAppDispatch } from "@/store/store";
 
 
@@ -17,4 +17,10 @@ const Home: NextPage = () => {
   );
 };
 
-export default protectedRoute(Home);
+export default function ProtectedHome() {
+  return (
+    <ProtectedRoute>
+      <Home />
+    </ProtectedRoute>
+  );
+}

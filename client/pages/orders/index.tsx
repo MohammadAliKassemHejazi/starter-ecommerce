@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import {
   fetchOrdersByStore,
   totalOrdersSelector,
@@ -216,4 +216,10 @@ const Orders = () => {
   );
 };
 
-export default protectedRoute(Orders);
+export default function ProtectedOrders() {
+  return (
+    <ProtectedRoute>
+      <Orders />
+    </ProtectedRoute>
+  );
+}

@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import { createArticles } from "@/store/slices/articleSlice";
 import { useAppDispatch } from "@/store/store";
 import Link from "next/link";
@@ -106,4 +106,10 @@ const CreateArticle = () => {
   );
 };
 
-export default protectedRoute(CreateArticle);
+export default function ProtectedCreateArticle() {
+  return (
+    <ProtectedRoute>
+      <CreateArticle />
+    </ProtectedRoute>
+  );
+}

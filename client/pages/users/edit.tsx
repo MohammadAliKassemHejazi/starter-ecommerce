@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { updateUser } from "@/store/slices/myUsersSlice";
 import { useAppDispatch } from "@/store/store";
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import Link from "next/link";
 
 const Toast = Swal.mixin({
@@ -115,4 +115,10 @@ const EditUserModal = () => {
   );
 };
 
-export default protectedRoute(EditUserModal);
+export default function ProtectedEditUserModal() {
+  return (
+    <ProtectedRoute>
+      <EditUserModal />
+    </ProtectedRoute>
+  );
+}

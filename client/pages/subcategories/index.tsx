@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import {
   fetchSubCategories,
   deleteSubCategory,
@@ -121,4 +121,10 @@ const SubCategoriesGrid = () => {
   );
 };
 
-export default protectedRoute(SubCategoriesGrid);
+export default function ProtectedSubCategoriesGrid() {
+  return (
+    <ProtectedRoute>
+      <SubCategoriesGrid />
+    </ProtectedRoute>
+  );
+}

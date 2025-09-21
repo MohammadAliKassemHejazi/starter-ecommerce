@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layouts/Layout';
-import protectedRoute from '@/components/protectedRoute';
+import ProtectedRoute from '@/components/protectedRoute';
 import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 
@@ -333,4 +333,10 @@ const ShippingPage = () => {
   );
 };
 
-export default protectedRoute(ShippingPage);
+export default function ProtectedShippingPage() {
+  return (
+    <ProtectedRoute>
+      <ShippingPage />
+    </ProtectedRoute>
+  );
+}

@@ -94,10 +94,13 @@ export const userSlice = createSlice({
 			state.isAuthenticated = false;
 		});
 		builder.addCase(signIn.fulfilled, (state, action) => {
+			console.log("sign in", action.payload);
+			state.id = action.payload.id;
 			state.accessToken = action.payload.accessToken;
 			state.email = action.payload.email;
 			state.name = action.payload.name;
 			state.address = action.payload.address;
+			state.phone = action.payload.phone;
 			state.roles = action.payload.roles || [];
 			state.permissions = action.payload.permissions || [];
 			state.isAuthenticated = true;
@@ -113,6 +116,7 @@ export const userSlice = createSlice({
 		});
 		builder.addCase(fetchSession.fulfilled, (state, action) => {
 			state.isAuthenticating = false;
+			console.log("fetch session", action.payload);
 			if (action.payload && action.payload.email && action.payload.accessToken) {
 				state.accessToken = action.payload.accessToken;
 				state.id = action.payload.id;

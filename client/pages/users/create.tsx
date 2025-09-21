@@ -4,7 +4,7 @@ import { createUser, usersSelector } from "@/store/slices/myUsersSlice";
 import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import Link from "next/link";
 import router from "next/router";
 
@@ -138,4 +138,10 @@ const CreateUserModal = () => {
   );
 };
 
-export default protectedRoute(CreateUserModal);
+export default function ProtectedCreateUserModal() {
+  return (
+    <ProtectedRoute>
+      <CreateUserModal />
+    </ProtectedRoute>
+  );
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Layout from '@/components/Layouts/Layout';
-import protectedRoute from '@/components/protectedRoute';
+import ProtectedRoute from '@/components/protectedRoute';
 import Swal from 'sweetalert2';
 
 const Toast = Swal.mixin({
@@ -263,4 +263,10 @@ const CommentsPage = () => {
   );
 };
 
-export default protectedRoute(CommentsPage);
+export default function ProtectedCommentsPage() {
+  return (
+    <ProtectedRoute>
+      <CommentsPage />
+    </ProtectedRoute>
+  );
+}

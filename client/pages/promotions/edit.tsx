@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layouts/Layout';
-import protectedRoute from '@/components/protectedRoute';
+import ProtectedRoute from '@/components/protectedRoute';
 import Swal from 'sweetalert2';
 
 const Toast = Swal.mixin({
@@ -229,4 +229,10 @@ const EditPromotion = () => {
   );
 };
 
-export default protectedRoute(EditPromotion);
+export default function ProtectedEditPromotion() {
+  return (
+    <ProtectedRoute>
+      <EditPromotion />
+    </ProtectedRoute>
+  );
+}

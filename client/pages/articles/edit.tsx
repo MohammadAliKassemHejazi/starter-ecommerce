@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import { IArticleModel } from "@/models/article.model";
 import { requestArticleById } from "@/services/articleService";
 import { updateArticles } from "@/store/slices/articleSlice";
@@ -124,7 +124,13 @@ const EditArticle = ({ article }: Props) => {
   );
 };
 
-export default protectedRoute(EditArticle);
+export default function ProtectedEditArticle() {
+  return (
+    <ProtectedRoute>
+      <EditArticle />
+    </ProtectedRoute>
+  );
+}
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext

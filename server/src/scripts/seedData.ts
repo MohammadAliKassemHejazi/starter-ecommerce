@@ -906,7 +906,6 @@ await db.Promotion.findOrCreate({
             where: {
               eventType: event.eventType,
               userId: event.userId,
-          
             },
             defaults: event
           });

@@ -21,6 +21,7 @@ import { IStoreResponseModel } from "@/models/store.model";
 import debounce from "lodash.debounce";
 import { usePermissions } from "@/hooks/usePermissions";
 import { addToCart } from "@/store/slices/cartSlice";
+import FavoritesButton from "@/components/UI/FavoritesButton";
 type Props = {};
 
 const Toast = Swal.mixin({
@@ -313,13 +314,22 @@ const Shop = ({}: Props) => {
                               </Moment>
                             </small>
                           </div>
-                          <button
-                            className="btn btn-primary w-100"
-                            onClick={() => handleAddToCart(product)}
-                          >
-                            <i className="bi bi-cart-plus me-2"></i>
-                            Add to Cart
-                          </button>
+                          <div className="d-flex gap-2">
+                            <button
+                              className="btn btn-primary flex-grow-1"
+                              onClick={() => handleAddToCart(product)}
+                            >
+                              <i className="bi bi-cart-plus me-2"></i>
+                              Add to Cart
+                            </button>
+                            <FavoritesButton
+                              productId={product.id!}
+                              productName={product.name}
+                              variant="icon"
+                              size="sm"
+                              showText={false}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>

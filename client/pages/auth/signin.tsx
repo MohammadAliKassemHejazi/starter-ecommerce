@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import {  signIn } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
 import Image from "next/image";
@@ -224,4 +224,10 @@ const SignIn = () => {
   );
 };
 
-export default protectedRoute(SignIn);
+export default function ProtectedSignIn() {
+  return (
+    <ProtectedRoute>
+      <SignIn />
+    </ProtectedRoute>
+  );
+}

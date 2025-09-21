@@ -2,7 +2,7 @@
 
 
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import { IArticleModelWithUser } from "@/models/article.model";
 import { requestAllArticles } from "@/services/articleService";
 import { GetServerSideProps } from "next";
@@ -12,6 +12,7 @@ import Link from "next/link";
 import ParticleComponent from "@/components/UI/home/starsbackground/starsbackground";
 import { setAuthHeaders } from "@/utils/httpClient";
 import Image from "next/image";
+import FavoritesButton from "@/components/UI/FavoritesButton";
 type Props = {
   articles?: IArticleModelWithUser[];
 };
@@ -102,9 +103,13 @@ const Home = ({ articles }: Props) => {
                 </li>
             
                 <li className="icon mx-3">
-                <Link href="/favorite" legacyBehavior>
-                  <span className="far fa-heart"></span>
-                  </Link>
+                  <FavoritesButton
+                    productId={product.id.toString()}
+                    productName={product.title}
+                    variant="text"
+                    size="sm"
+                    showText={false}
+                  />
                 </li>
                 <li className="icon">
                 <Link href="/addtocart" legacyBehavior>
@@ -159,7 +164,13 @@ const Home = ({ articles }: Props) => {
   );
 };
 
-export default protectedRoute(Home);
+export default function ProtectedAbout() {
+  return (
+    <ProtectedRoute>
+      <Home />
+    </ProtectedRoute>
+  );
+}
 
 export const getServerSideProps: GetServerSideProps = async (context:any) => {
     const headers = context.req.headers;

@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { getNavigationItems, getAnonymousNavigationItems, getQuickActions, NavigationItem } from '@/config/navigation';
+import { getNavigationItems, getAnonymousNavigationItems, getQuickActions, NavigationItem as NavigationItemType } from '@/config/navigation';
 import { usePermissions } from '../../hooks/usePermissions';
+import NavigationItem from '../NavigationItem';
 import LanguageSwitcher from '../LanguageSwitcher';
 
 interface NavigationProps {
@@ -15,17 +16,18 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const user = useSelector((state: any) => state.user.user);
-  const { isAdmin, isVendor, hasPermission, isAnonymous, isAuthenticated } = usePermissions();
+  const user = useSelector((state: any) => state.user);
+  const { isAdmin, isVendor, hasPermission, isAnonymous, isAuthenticated, userRoles, userPermissions } = usePermissions();
   
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [cartCount, setCartCount] = useState(0);
 
   // Use anonymous navigation if user is not authenticated
+  const userRole = userRoles?.[0]?.name || 'user';
   const navigationItems = isAnonymous() 
     ? getAnonymousNavigationItems() 
-    : getNavigationItems(user?.role || 'user', user?.permissions || []);
-  const quickActions = isAnonymous() ? [] : getQuickActions(user?.role || 'user');
+    : getNavigationItems(userRole, userPermissions || []);
+  const quickActions = isAnonymous() ? [] : getQuickActions(userRole);
 
   useEffect(() => {
     // Fetch cart count (works for both authenticated and anonymous users)
@@ -76,49 +78,16 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
     );
   };
 
-  const renderNavigationItem = (item: NavigationItem, level: number = 0) => {
-    const hasChildren = item.children && item.children.length > 0;
-    const isExpanded = expandedItems.has(item.key);
-    const isItemActive = item.href ? isActive(item.href) : false;
-
+  const renderNavigationItem = (item: NavigationItemType, level: number = 0) => {
     return (
-      <li key={item.key} className={`nav-item ${level > 0 ? 'ms-3' : ''}`}>
-        {hasChildren ? (
-          <>
-            <button
-              className={`nav-link d-flex align-items-center justify-content-between w-100 text-start ${
-                isExpanded ? 'active' : ''
-              }`}
-              onClick={() => toggleExpanded(item.key)}
-            >
-              <span>
-                {item.icon && <i className={`${item.icon} me-2`}></i>}
-                {t(`navigation.${item.label.toLowerCase().replace(/\s+/g, '')}`) || item.label}
-              </span>
-              <i className={`bi bi-chevron-${isExpanded ? 'up' : 'down'}`}></i>
-            </button>
-            {isExpanded && (
-              <ul className="nav flex-column ms-3">
-                {item.children?.map(child => renderNavigationItem(child, level + 1))}
-              </ul>
-            )}
-          </>
-        ) : (
-          <Link
-            href={item.href || '#'}
-            className={`nav-link d-flex align-items-center justify-content-between ${
-              isItemActive ? 'active' : ''
-            }`}
-            onClick={onClose}
-          >
-            <span>
-              {item.icon && <i className={`${item.icon} me-2`}></i>}
-              {t(`navigation.${item.label.toLowerCase().replace(/\s+/g, '')}`) || item.label}
-            </span>
-            {item.badge && renderBadge(item.badge)}
-          </Link>
-        )}
-      </li>
+      <NavigationItem
+        key={item.key}
+        item={item}
+        level={level}
+        onClose={onClose}
+        expandedItems={expandedItems}
+        onToggleExpanded={toggleExpanded}
+      />
     );
   };
 
@@ -162,7 +131,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
                 </div>
                 <div className="flex-grow-1">
                   <div className="fw-semibold">{user.name}</div>
-                  <small className="text-muted text-capitalize">{user.role}</small>
+                  <small className="text-muted text-capitalize">{userRole}</small>
                 </div>
               </div>
             </div>

@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import {
   fetchAllSizes,
@@ -463,4 +463,10 @@ return (
 );
 }
 
-export default protectedRoute(EditProduct);
+export default function ProtectedEditProduct() {
+  return (
+    <ProtectedRoute>
+      <EditProduct />
+    </ProtectedRoute>
+  );
+}

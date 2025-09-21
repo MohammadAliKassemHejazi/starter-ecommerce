@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layouts/Layout';
-import protectedRoute from '@/components/protectedRoute';
+import ProtectedRoute from '@/components/protectedRoute';
 import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 
@@ -330,4 +330,10 @@ const ReturnsPage = () => {
   );
 };
 
-export default protectedRoute(ReturnsPage);
+export default function ProtectedReturnsPage() {
+  return (
+    <ProtectedRoute>
+      <ReturnsPage />
+    </ProtectedRoute>
+  );
+}

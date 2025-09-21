@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import {
   deleteStore,
   fetchAllStoresWithFilter,
@@ -220,4 +220,10 @@ const Stores = () => {
   );
 };
 
-export default protectedRoute(Stores);
+export default function ProtectedStores() {
+  return (
+    <ProtectedRoute>
+      <Stores />
+    </ProtectedRoute>
+  );
+}

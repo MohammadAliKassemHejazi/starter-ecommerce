@@ -10,10 +10,11 @@ import {
   requestProductById,
 } from "@/services/shopService";
 import Head from "next/head";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import { useAppDispatch } from "@/store/store";
 import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
+import FavoritesButton from "@/components/UI/FavoritesButton";
 import { GetStaticPaths, GetStaticProps } from "next";
 import styles from "./SingleItem.module.css";
 type Props = {
@@ -246,15 +247,24 @@ const SingleItem = ({ product }: Props) => {
       {/* Hidden input to submit size text */}
       <input type="hidden" name="size" value={values.size} />
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className={styles.addToCartBtn}
-        name="submit"
-        value="addtocart"
-      >
-        Add To Cart
-      </button>
+      {/* Submit Button and Favorites */}
+      <div className="d-flex gap-3">
+        <button
+          type="submit"
+          className={`${styles.addToCartBtn} flex-grow-1`}
+          name="submit"
+          value="addtocart"
+        >
+          Add To Cart
+        </button>
+        <FavoritesButton
+          productId={product?.id || ''}
+          productName={product?.name || 'Product'}
+          variant="button"
+          size="md"
+          showText={true}
+        />
+      </div>
     </Form>
   )}
 </Formik>
@@ -300,7 +310,13 @@ const SingleItem = ({ product }: Props) => {
   );
 };
 
-export default protectedRoute(SingleItem);
+export default function ProtectedSingleItem() {
+  return (
+    <ProtectedRoute>
+      <SingleItem />
+    </ProtectedRoute>
+  );
+}
 
 // Fetch all product IDs at build time
 export const getStaticPaths: GetStaticPaths = async () => {

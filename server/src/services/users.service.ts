@@ -36,35 +36,37 @@ const mapUserResponseObject = async (
 ): Promise<IAuthLoginBodyResponse> => {
   // Fetch user with roles and permissions
   const userWithRoles = await db.User.findByPk(userId, {
-    include: [
-      {
-        model: db.Role,
-        as: 'roles',
-        through: { attributes: [] }, // Exclude join table attributes
-        include: [
-          {
-            model: db.Permission,
-            as: 'permissions',
-            through: { attributes: [] } // Exclude join table attributes
-          }
-        ]
-      }
-    ]
-  });
+  include: [
+    {
+      model: db.Role,
+      as: 'roles',
+      through: { attributes: [] },
+      include: [
+        {
+          model: db.Permission,
+          as: 'permissions',
+          through: { attributes: [] }
+        }
+      ]
+    }
+  ]
+});
 
-  // Extract roles and permissions
-  const roles = userWithRoles?.roles?.map((role: any) => ({
-    id: role.id,
-    name: role.name
-  })) || [];
+// 👇 Convert to plain object — this recursively unwraps all .dataValues
+const plainUser = userWithRoles?.get({ plain: true });
 
-  const permissions = userWithRoles?.roles?.flatMap((role: any) => 
-    role.permissions?.map((permission: any) => ({
-      id: permission.id,
-      name: permission.name
-    })) || []
-  ) || [];
+// Now safely extract roles and permissions
+const roles = plainUser?.roles?.map((role: any) => ({
+  id: role.id,
+  name: role.name
+})) || [];
 
+const permissions = plainUser?.roles?.flatMap((role: any) => 
+  role.permissions?.map((permission: any) => ({
+    id: permission.id,
+    name: permission.name
+  })) || []
+) || [];
   const response: IAuthLoginBodyResponse = {
     id: userId,
     email: user.email,

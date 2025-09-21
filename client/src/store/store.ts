@@ -16,6 +16,7 @@ import DashboardReducer from "./slices/vendorDashboardSlice";
 import usersReducer from "./slices/myUsersSlice";
 import rolesReducer from "./slices/roleSlice";
 import subCategories from "./slices/subCategorySlice";
+import favoritesReducer from "./slices/favoritesSlice";
 
 const reducer = {
 	user: userReducer,
@@ -32,6 +33,7 @@ const reducer = {
 	users: usersReducer,
 	roles: rolesReducer,
 	subCategories:subCategories,
+	favorites: favoritesReducer,
 };
 
 export const store = configureStore({

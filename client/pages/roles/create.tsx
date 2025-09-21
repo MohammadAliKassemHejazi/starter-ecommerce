@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { createRole } from "@/store/slices/roleSlice";
 import { useAppDispatch } from "@/store/store";
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import Link from "next/link";
 import router from "next/router";
 
@@ -83,4 +83,10 @@ const CreateRoleModal = () => {
   );
 };
 
-export default protectedRoute(CreateRoleModal);
+export default function ProtectedCreateRoleModal() {
+  return (
+    <ProtectedRoute>
+      <CreateRoleModal />
+    </ProtectedRoute>
+  );
+}

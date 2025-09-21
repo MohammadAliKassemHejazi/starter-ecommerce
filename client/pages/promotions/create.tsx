@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layouts/Layout';
-import protectedRoute from '@/components/protectedRoute';
+import ProtectedRoute from '@/components/protectedRoute';
 import Swal from 'sweetalert2';
 
 const Toast = Swal.mixin({
@@ -214,4 +214,10 @@ const CreatePromotion = () => {
   );
 };
 
-export default protectedRoute(CreatePromotion);
+export default function ProtectedCreatePromotion() {
+  return (
+    <ProtectedRoute>
+      <CreatePromotion />
+    </ProtectedRoute>
+  );
+}

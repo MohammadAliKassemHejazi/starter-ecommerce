@@ -16,7 +16,7 @@ import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 import { utileCategoriesSelector, fetchAllCategories } from "@/store/slices/utilsSlice";
 
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 
 const Toast = Swal.mixin({
   toast: true,
@@ -299,4 +299,10 @@ const handleDeleteImage = async () => {
   );
 };
 
-export default protectedRoute(EditStore);
+export default function ProtectedEditStore() {
+  return (
+    <ProtectedRoute>
+      <EditStore />
+    </ProtectedRoute>
+  );
+}

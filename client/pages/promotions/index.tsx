@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
 import Layout from '@/components/Layouts/Layout';
-import protectedRoute from '@/components/protectedRoute';
+import ProtectedRoute from '@/components/protectedRoute';
 import router from 'next/router';
 import Swal from 'sweetalert2';
 import DataTable from '@/components/UI/DataTable';
@@ -330,4 +330,10 @@ const PromotionsPage = () => {
   );
 };
 
-export default protectedRoute(PromotionsPage);
+export default function ProtectedPromotionsPage() {
+  return (
+    <ProtectedRoute>
+      <PromotionsPage />
+    </ProtectedRoute>
+  );
+}

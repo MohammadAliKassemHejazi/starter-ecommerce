@@ -5,7 +5,7 @@ import { updateSubCategory } from "@/store/slices/subCategorySlice";
 import { useAppDispatch } from "@/store/store";
 import { categoriesSelector } from "@/store/slices/categorySlice";
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import Link from "next/link";
 import { useSelector } from "react-redux";
 
@@ -125,4 +125,10 @@ const EditSubCategoryModal = () => {
   );
 };
 
-export default protectedRoute(EditSubCategoryModal);
+export default function ProtectedEditSubCategoryModal() {
+  return (
+    <ProtectedRoute>
+      <EditSubCategoryModal />
+    </ProtectedRoute>
+  );
+}

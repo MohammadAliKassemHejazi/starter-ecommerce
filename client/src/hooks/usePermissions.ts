@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { PERMISSIONS, ROLES, ROUTE_PERMISSIONS } from '@/constants/permissions';
 
 export const usePermissions = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -23,7 +24,7 @@ export const usePermissions = () => {
     // Super admin has access to everything
     if (isSuperAdmin()) { return true };
     // Admin has access to their own system
-    if (isAdmin() && roleName !== 'super_admin') { return true };
+    if (isAdmin() && roleName !== ROLES.SUPER_ADMIN) { return true };
     return userRoles.some(role => role.name === roleName);
   };
 
@@ -31,13 +32,15 @@ export const usePermissions = () => {
     // Anonymous users can only access shopping permissions
     if (isAnonymous()) {
       const shoppingPermissions = [
-        'view_products',
-        'view_categories',
-        'add_to_cart',
-        'view_cart',
-        'browse_shop'
+        PERMISSIONS.VIEW_PRODUCTS,
+        PERMISSIONS.VIEW_CATEGORIES,
+        PERMISSIONS.VIEW_SUBCATEGORIES,
+        PERMISSIONS.VIEW_STORES,
+        PERMISSIONS.VIEW_ARTICLES,
+        PERMISSIONS.VIEW_COMMENTS,
+        PERMISSIONS.VIEW_FAVORITES,
       ];
-      return shoppingPermissions.includes(permissionName);
+      return shoppingPermissions.includes(permissionName as any);
     }
     // Super admin has access to everything
     if (isSuperAdmin()) { return true };
@@ -79,19 +82,47 @@ export const usePermissions = () => {
   };
 
   const isAdmin = (): boolean => {
-    return userRoles.some(role => role.name === 'admin');
+    return userRoles.some(role => role.name === ROLES.ADMIN);
   };
 
   const isSuperAdmin = (): boolean => {
-    return userRoles.some(role => role.name === 'super_admin');
+    return userRoles.some(role => role.name === ROLES.SUPER_ADMIN);
   };
 
   const isVendor = (): boolean => {
-    return userRoles.some(role => role.name === 'vendor' || role.name === 'store_owner');
+    return userRoles.some(role => role.name === ROLES.VENDOR || role.name === ROLES.STORE_OWNER);
   };
 
   const isCustomer = (): boolean => {
-    return userRoles.some(role => role.name === 'customer' || role.name === 'user');
+    return userRoles.some(role => role.name === ROLES.CUSTOMER || role.name === ROLES.USER);
+  };
+
+  // Check if user can access a specific route
+  const canAccessRoute = (route: string): boolean => {
+    const routePermissions = ROUTE_PERMISSIONS[route as keyof typeof ROUTE_PERMISSIONS];
+    
+    if (!routePermissions) {
+      return true; // Route not in our permission list, allow access
+    }
+
+    // Convert to string array to avoid type issues
+    const permissionsArray = [...routePermissions] as string[];
+
+    // If route requires roles
+    const roleValues = Object.values(ROLES);
+    if (permissionsArray.some((role: string) => roleValues.includes(role as any))) {
+      const requiredRoles = permissionsArray.filter((role: string) => roleValues.includes(role as any));
+      return hasAnyRole(requiredRoles);
+    }
+
+    // If route requires permissions
+    const permissionValues = Object.values(PERMISSIONS);
+    if (permissionsArray.some((permission: string) => permissionValues.includes(permission as any))) {
+      const requiredPermissions = permissionsArray.filter((permission: string) => permissionValues.includes(permission as any));
+      return hasAnyPermission(requiredPermissions);
+    }
+
+    return true; // No specific requirements
   };
 
   // Route access control for SaaS
@@ -116,7 +147,7 @@ export const usePermissions = () => {
     // Admin can access their own system (except super admin routes)
     if (isAdmin()) { 
       // Block super admin routes
-      if (requiredRoles?.includes('super_admin')) { return false; }
+      if (requiredRoles?.includes(ROLES.SUPER_ADMIN)) { return false; }
       return true; 
     }
     
@@ -136,6 +167,45 @@ export const usePermissions = () => {
     return isAuthenticated;
   };
 
+  // Check if user can manage a specific resource
+  const canManage = (resource: string): boolean => {
+    const managePermissions = {
+      users: [PERMISSIONS.READ_USERS, PERMISSIONS.CREATE_USERS, PERMISSIONS.UPDATE_USERS, PERMISSIONS.DELETE_USERS],
+      roles: [PERMISSIONS.READ_ROLES, PERMISSIONS.CREATE_ROLES, PERMISSIONS.UPDATE_ROLES, PERMISSIONS.DELETE_ROLES],
+      permissions: [PERMISSIONS.READ_PERMISSIONS, PERMISSIONS.CREATE_PERMISSIONS, PERMISSIONS.UPDATE_PERMISSIONS, PERMISSIONS.DELETE_PERMISSIONS],
+      products: [PERMISSIONS.READ_PRODUCTS, PERMISSIONS.CREATE_PRODUCTS, PERMISSIONS.UPDATE_PRODUCTS, PERMISSIONS.DELETE_PRODUCTS],
+      orders: [PERMISSIONS.READ_ORDERS, PERMISSIONS.CREATE_ORDERS, PERMISSIONS.UPDATE_ORDERS, PERMISSIONS.DELETE_ORDERS],
+      categories: [PERMISSIONS.READ_CATEGORIES, PERMISSIONS.CREATE_CATEGORIES, PERMISSIONS.UPDATE_CATEGORIES, PERMISSIONS.DELETE_CATEGORIES],
+      stores: [PERMISSIONS.READ_STORES, PERMISSIONS.CREATE_STORES, PERMISSIONS.UPDATE_STORES, PERMISSIONS.DELETE_STORES],
+    };
+
+    const permissions = managePermissions[resource as keyof typeof managePermissions];
+    if (!permissions) { return false };
+
+    return hasAnyPermission(permissions);
+  };
+
+  // Check if user can view a specific resource
+  const canView = (resource: string): boolean => {
+    const viewPermissions = {
+      users: PERMISSIONS.VIEW_USERS,
+      roles: PERMISSIONS.VIEW_ROLES,
+      permissions: PERMISSIONS.VIEW_PERMISSIONS,
+      products: PERMISSIONS.VIEW_PRODUCTS,
+      orders: PERMISSIONS.VIEW_ORDERS,
+      categories: PERMISSIONS.VIEW_CATEGORIES,
+      stores: PERMISSIONS.VIEW_STORES,
+      analytics: PERMISSIONS.VIEW_ANALYTICS,
+      dashboard: PERMISSIONS.VIEW_DASHBOARD,
+      audit_logs: PERMISSIONS.VIEW_AUDIT_LOGS,
+    };
+
+    const permission = viewPermissions[resource as keyof typeof viewPermissions];
+    if (!permission) { return false };
+
+    return hasPermission(permission);
+  };
+
   return {
     hasRole,
     hasPermission,
@@ -151,8 +221,16 @@ export const usePermissions = () => {
     canShopAnonymously,
     canCheckout,
     canAccess,
+    canAccessRoute,
+    canManage,
+    canView,
     userRoles,
     userPermissions,
-    isAuthenticated
+    isAuthenticated,
+    // Helper properties
+    user,
+    userId: user?.id,
+    userEmail: user?.email,
+    userName: user?.name,
   };
 };

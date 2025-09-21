@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { createCategory } from "@/store/slices/categorySlice";
 import { useAppDispatch } from "@/store/store";
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import router from "next/router";
 import Link from "next/link";
 import FormInput from "@/components/UI/FormInput";
@@ -172,4 +172,10 @@ const CreateCategory = () => {
   );
 };
 
-export default protectedRoute(CreateCategory);
+export default function ProtectedCreateCategory() {
+  return (
+    <ProtectedRoute>
+      <CreateCategory />
+    </ProtectedRoute>
+  );
+}

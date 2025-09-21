@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
 import Layout from '@/components/Layouts/Layout';
-import protectedRoute from '@/components/protectedRoute';
+import ProtectedRoute from '@/components/protectedRoute';
 import Image from 'next/image';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
+import { fetchFavorites, removeFromFavorites, favoritesSelector, favoritesLoadingSelector } from '@/store/slices/favoritesSlice';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -32,63 +33,25 @@ interface Favorite {
 
 const FavoritesPage = () => {
   const dispatch = useAppDispatch();
-  const [favorites, setFavorites] = useState<Favorite[]>([]);
-  const [loading, setLoading] = useState(true);
+  const favorites = useSelector(favoritesSelector);
+  const loading = useSelector(favoritesLoadingSelector);
 
   useEffect(() => {
-    fetchFavorites();
-  }, []);
+    dispatch(fetchFavorites());
+  }, [dispatch]);
 
-  const fetchFavorites = async () => {
+  const handleRemoveFromFavorites = async (productId: string) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/favorites', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setFavorites(data.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching favorites:', error);
+      await dispatch(removeFromFavorites(productId)).unwrap();
       Toast.fire({
-        icon: 'error',
-        title: 'Failed to load favorites',
+        icon: 'success',
+        title: 'Removed from favorites',
       });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const removeFromFavorites = async (productId: string) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/favorites/${productId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        setFavorites(favorites.filter(fav => fav.product.id !== productId));
-        Toast.fire({
-          icon: 'success',
-          title: 'Removed from favorites',
-        });
-      } else {
-        throw new Error('Failed to remove from favorites');
-      }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error removing from favorites:', error);
       Toast.fire({
         icon: 'error',
-        title: 'Failed to remove from favorites',
+        title: error || 'Failed to remove from favorites',
       });
     }
   };
@@ -140,7 +103,7 @@ const FavoritesPage = () => {
                       <div className="card-body d-flex flex-column">
                         <h5 className="card-title">{favorite.product.name}</h5>
                         <p className="card-text text-muted">
-                          {favorite.product.description.substring(0, 100)}...
+                          {favorite.product.description ? favorite.product.description.substring(0, 100) + '...' : ''}
                         </p>
                         <div className="mt-auto">
                           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -149,7 +112,7 @@ const FavoritesPage = () => {
                             </span>
                             <button
                               className="btn btn-outline-danger btn-sm"
-                              onClick={() => removeFromFavorites(favorite.product.id)}
+                              onClick={() => handleRemoveFromFavorites(favorite.product.id)}
                             >
                               <i className="bi bi-heart-fill"></i> Remove
                             </button>
@@ -174,4 +137,10 @@ const FavoritesPage = () => {
   );
 };
 
-export default protectedRoute(FavoritesPage);
+export default function ProtectedFavoritesPage() {
+  return (
+    <ProtectedRoute>
+      <FavoritesPage />
+    </ProtectedRoute>
+  );
+}

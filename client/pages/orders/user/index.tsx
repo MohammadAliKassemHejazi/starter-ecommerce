@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
 import { fetchLastOrder, fetchOrdersByDate, fetchOrderItems,lastOrderSelector, ordersSelector, loadingSelector  } from "@/store/slices/orderSlice";
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import Moment from "react-moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -163,4 +163,10 @@ return (
 );
 };
 
-export default protectedRoute(Orders);
+export default function ProtectedOrders() {
+  return (
+    <ProtectedRoute>
+      <Orders />
+    </ProtectedRoute>
+  );
+}

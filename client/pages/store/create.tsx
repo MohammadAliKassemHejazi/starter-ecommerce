@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 import { utileCategoriesSelector, fetchAllCategories } from "@/store/slices/utilsSlice";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";;
 import useRunOnce from "../../src/hooks/useRunOnce";
 const Toast = Swal.mixin({
   toast: true,
@@ -198,4 +198,10 @@ const CreateStore = () => {
   );
 }
 
-export default protectedRoute(CreateStore);
+export default function ProtectedCreateStore() {
+  return (
+    <ProtectedRoute>
+      <CreateStore />
+    </ProtectedRoute>
+  );
+}

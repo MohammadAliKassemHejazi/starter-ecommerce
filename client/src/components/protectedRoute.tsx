@@ -1,47 +1,109 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import {
-  isAuthenticatedSelector,
-  isAuthenticatingSelector,
-} from "@/store/slices/userSlice";
-import { isClient } from "@/utils/utils";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { usePermissions } from '@/hooks/usePermissions';
+import { ROUTE_PERMISSIONS, ROLES } from '../constants/permissions';
 
-// eslint-disable-next-line react/display-name
-const protectedRoute = (WrappedComponent: React.FC) => (props: any) => {
-  // this hoc only supports client side rendering.
-  if (isClient()) {
-    const router = useRouter();
-    const { route } = router;
-    const isAuthenticated = useSelector(isAuthenticatedSelector);
-    const isAuthenticating = useSelector(isAuthenticatingSelector);
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  requiredRoles?: string[];
+  requiredPermissions?: string[];
+  requireAll?: boolean;
+  fallback?: React.ReactNode;
+  redirectTo?: string;
+}
 
-    // is fetching session (eg. show spinner)
-    if (isAuthenticating) {
+// Client-side only component that uses hooks
+const ClientProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requiredRoles = [],
+  requiredPermissions = [],
+  requireAll = false,
+  fallback = <div>Access Denied</div>,
+  redirectTo = '/auth/signin',
+}) => {
+  const router = useRouter();
+  const { isAuthenticated, canAccessRoute, canAccess } = usePermissions();
+
+  // Check if user can access the current route
+  const canAccessCurrentRoute = canAccessRoute(router.asPath);
+
+  // Check custom requirements
+  const canAccessWithRequirements = canAccess(requiredRoles, requiredPermissions);
+
+  // If user can't access the route, redirect or show fallback
+  if (!canAccessCurrentRoute || !canAccessWithRequirements) {
+    if (redirectTo && !isAuthenticated) {
+      router.push(redirectTo);
       return null;
     }
-
-    // If user is not logged in, return login component
-    if (route !== "/auth/signin" && route !== "/auth/signup") {
-      if (!isAuthenticated) {
-        router.push(`/auth/signin`);
-        return null;
-      } else if (route === "/") {
-        router.push(`/home`); // default page after login when call root path
-        return null;
-      }
-    } else {
-      if (isAuthenticated) {
-        router.push(`/home`); // default page after login
-        return null;
-      }
-    }
-
-    // If user is logged in, return original component
-    return <WrappedComponent {...props} />;
+    return <>{fallback}</>;
   }
 
-  return null;
+  return <>{children}</>;
 };
 
-export default protectedRoute;
+// Main component that handles client-side rendering
+const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Don't render anything on server side
+  if (!isClient) {
+    return null;
+  }
+
+  // Render the client-side component
+  return <ClientProtectedRoute {...props} />;
+};
+
+// Convenience components for common route protection patterns
+export const AdminRoute: React.FC<{ children: React.ReactNode; fallback?: React.ReactNode }> = ({
+  children,
+  fallback = <div>Admin access required</div>,
+}) => (
+  <ProtectedRoute requiredRoles={[ROLES.ADMIN, ROLES.SUPER_ADMIN]} fallback={fallback}>
+    {children}
+  </ProtectedRoute>
+);
+
+export const SuperAdminRoute: React.FC<{ children: React.ReactNode; fallback?: React.ReactNode }> = ({
+  children,
+  fallback = <div>Super admin access required</div>,
+}) => (
+  <ProtectedRoute requiredRoles={[ROLES.SUPER_ADMIN]} fallback={fallback}>
+    {children}
+  </ProtectedRoute>
+);
+
+export const VendorRoute: React.FC<{ children: React.ReactNode; fallback?: React.ReactNode }> = ({
+  children,
+  fallback = <div>Vendor access required</div>,
+}) => (
+  <ProtectedRoute requiredRoles={[ROLES.VENDOR, ROLES.STORE_OWNER]} fallback={fallback}>
+    {children}
+  </ProtectedRoute>
+);
+
+export const CustomerRoute: React.FC<{ children: React.ReactNode; fallback?: React.ReactNode }> = ({
+  children,
+  fallback = <div>Customer access required</div>,
+}) => (
+  <ProtectedRoute requiredRoles={[ROLES.CUSTOMER, ROLES.USER]} fallback={fallback}>
+    {children}
+  </ProtectedRoute>
+);
+
+export const AuthenticatedRoute: React.FC<{ children: React.ReactNode; fallback?: React.ReactNode }> = ({
+  children,
+  fallback = <div>Please sign in to access this page</div>,
+}) => (
+  <ProtectedRoute requiredRoles={[]} requiredPermissions={[]} fallback={fallback}>
+    {children}
+  </ProtectedRoute>
+);
+
+export default ProtectedRoute;

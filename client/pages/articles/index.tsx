@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 import {
   articleAuthorSelector,
   deleteArticles,
@@ -131,4 +131,10 @@ const Articles = ({}: Props) => {
   );
 };
 
-export default protectedRoute(Articles);
+export default function ProtectedArticles() {
+  return (
+    <ProtectedRoute>
+      <Articles />
+    </ProtectedRoute>
+  );
+}
