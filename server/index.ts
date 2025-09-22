@@ -20,6 +20,15 @@ import {
   sizeRouter, taxRouter, userSessionRouter, returnRouter
 } from './src/routes';
 
+// Import RLS-based tenant routes
+import rlsShopRouter from './src/routes/rls-shop.routes';
+import rlsStoreRouter from './src/routes/rls-store.routes';
+import rlsCartRouter from './src/routes/rls-cart.routes';
+import rlsOrderRouter from './src/routes/rls-order.routes';
+
+// Import backward-compatible tenant middleware
+import { backwardCompatibleTenantMiddleware } from './src/middlewares/backward-compatible-tenant.middleware';
+
 import paypalRouter from './src/routes/paypal.routes';
 import swaggerUi from 'swagger-ui-express';
 import { createSwaggerFile } from './src/config/swagger';
@@ -364,7 +373,7 @@ async function createApp(): Promise<Express> {
   
   // Swagger documentation
   try {
-    // await createSwaggerFile();
+    //await generateSwaggerDocumentation();
     const swaggerDocument = require('./src/routes/swaggerSchema/swagger.json');
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     console.log('📚 Swagger documentation available at /api-docs');
@@ -386,9 +395,15 @@ async function createApp(): Promise<Express> {
   // Auth routes with stricter rate limiting
   app.use('/api/auth', authLimiter, authRouter);
   
-  // Public routes (less strict rate limiting)
-  app.use('/api/cart', cartRouter);
-  app.use('/api/orders', orderRouter);
+  // RLS-based tenant routes (backward compatible with existing frontend)
+  app.use('/api/shop', backwardCompatibleTenantMiddleware, shopUploadMiddleware, rlsShopRouter);
+  app.use('/api/stores', backwardCompatibleTenantMiddleware, storeUploadMiddleware, rlsStoreRouter);
+  app.use('/api/cart', backwardCompatibleTenantMiddleware, rlsCartRouter);
+  app.use('/api/orders', backwardCompatibleTenantMiddleware, rlsOrderRouter);
+  
+  // Legacy routes (keep for backward compatibility)
+  app.use('/api/legacy/cart', cartRouter);
+  app.use('/api/legacy/orders', orderRouter);
   app.use('/api/payment', paymentRouter);
   app.use('/api/utile', utileRouter);
   app.use('/api/users', userRouter);

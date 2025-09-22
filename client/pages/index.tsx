@@ -1,26 +1,24 @@
-import type { NextPage } from "next";
 import { useEffect } from "react";
-import ProtectedRoute from "@/components/protectedRoute";
-import { useAppDispatch } from "@/store/store";
+import { useRouter } from "next/router";
 
-
-const Home: NextPage = () => {
-  const dispatch = useAppDispatch();
+const Home: React.FC = () => {
+  const router = useRouter();
 
   useEffect(() => {
-    
-  }, [dispatch]);
-  return (
-    <>
+    // Redirect to /home
+    router.replace("/home");
+  }, [router]);
 
-    </>
+  return (
+    <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+      <div className="text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3">Redirecting to home...</p>
+      </div>
+    </div>
   );
 };
 
-export default function ProtectedHome() {
-  return (
-    <ProtectedRoute>
-      <Home />
-    </ProtectedRoute>
-  );
-}
+export default Home;

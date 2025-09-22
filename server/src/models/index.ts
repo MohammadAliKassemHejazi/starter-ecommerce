@@ -13,9 +13,7 @@ let config: any;
 try {
   // Try different possible paths for the config file
   const configPaths = [
-    path.join(__dirname, "../config/db.config.js"),
     path.join(__dirname, "../config/db.config"),
-    path.join(__dirname, "../../config/db.config.js"),
     path.join(__dirname, "../../config/db.config")
   ];
   

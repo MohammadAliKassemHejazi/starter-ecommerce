@@ -1,0 +1,348 @@
+import { Response, NextFunction } from "express";
+import { shopService } from "../services";
+import { TenantRequest } from "../middlewares/rls-tenant.middleware";
+import path from "node:path";
+import fs from "fs";
+import { validationResult } from "express-validator";
+
+/**
+ * RLS-Based Shop Controller
+ * Handles product operations with automatic tenant isolation via RLS
+ */
+
+export const handleCreateProduct = async (
+  request: TenantRequest,
+  response: Response,
+  next: NextFunction
+) => {
+  const files = request.files as Express.Multer.File[];
+
+  // Validate request
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) {
+    return response.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    if (!request.tenantId) {
+      return response.status(400).json({ 
+        success: false,
+        error: 'Tenant context required' 
+      });
+    }
+
+    if (files.length > 0) {
+      const UserId = request.UserId;
+      const sizes = JSON.parse(request.body.sizes);
+      const productData = { 
+        ...request.body, 
+        ownerId: UserId, 
+        sizes: sizes,
+        tenantId: request.tenantId  // Add tenant ID for RLS
+      } as any;
+
+      // Process product creation with data and files
+      const results = await shopService.createProductWithImages(productData, files);
+      response.status(200).json({ 
+        success: true,
+        product: results,
+        tenant: {
+          id: request.tenantId,
+          slug: request.tenantSlug
+        }
+      });
+    } else {
+      throw new Error("Images are missing while creating a product");
+    }
+  } catch (error) {
+    try {
+      // Ensure all files are deleted asynchronously
+      await Promise.all(
+        files.map(async (file) => {
+          const fileName = file.filename;
+          const outputPath = path.join("compressed", fileName);
+          fs.unlink(outputPath, (err) => {
+            if (err) throw err;
+          });
+        })
+      );
+    } catch (deleteError) {
+      console.error("Failed to delete files:", deleteError);
+    }
+    next(error);
+  }
+};
+
+export const handleDelete = async (
+  request: TenantRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  const id = request.params.id;
+  const userId = request.UserId;
+
+  if (!request.tenantId) {
+    response.status(400).json({ 
+      success: false,
+      error: 'Tenant context required' 
+    });
+    return;
+  }
+
+  try {
+    // RLS will automatically ensure user can only delete their own products
+    const result: number = await shopService.deleteProduct(id, userId!);
+    
+    response.json({ 
+      success: true,
+      deleted: result,
+      tenant: {
+        id: request.tenantId,
+        slug: request.tenantSlug
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const handleUpdate = async (
+  request: TenantRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  // Step 1: Validate the request
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) {
+    response.status(400).json({ errors: errors.array() });
+    return;
+  }
+
+  if (!request.tenantId) {
+    response.status(400).json({ 
+      success: false,
+      error: 'Tenant context required' 
+    });
+    return;
+  }
+
+  try {
+    // Extract user ID and product ID from the request
+    const userId = request.UserId;
+    const productId = request.body.productID;
+
+    // Extract files and body data
+    const files = request.files as Express.Multer.File[] || [];
+    const sizes = JSON.parse(request.body.sizes || "[]");
+    const productData = { 
+      ...request.body, 
+      ownerId: userId, 
+      sizes,
+      tenantId: request.tenantId  // Add tenant ID for RLS
+    } as any;
+
+    // Step 2: Update the product (RLS ensures tenant isolation)
+    const updatedProduct = await shopService.updateProductWithImages(productId, productData, files);
+
+    // Step 3: Return the updated product
+    response.status(200).json({ 
+      success: true,
+      product: updatedProduct,
+      tenant: {
+        id: request.tenantId,
+        slug: request.tenantSlug
+      }
+    });
+  } catch (error) {
+    // Step 4: Clean up uploaded files in case of an error
+    try {
+      if (request.files && Array.isArray(request.files)) {
+        await Promise.all(
+          request.files.map(async (file: Express.Multer.File) => {
+            const fileName = file.filename;
+            const outputPath = path.join("compressed", fileName);
+            fs.unlink(outputPath, (err) => {
+              if (err) console.error(`Failed to delete file: ${outputPath}`, err);
+            });
+          })
+        );
+      }
+    } catch (deleteError) {
+      console.error("Failed to clean up files:", deleteError);
+    }
+
+    // Pass the error to the error-handling middleware
+    next(error);
+  }
+};
+
+export const handelgetall = async (
+  request: TenantRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  if (!request.tenantId) {
+    response.status(400).json({ 
+      success: false,
+      error: 'Tenant context required' 
+    });
+    return;
+  }
+
+  try {
+    // RLS automatically filters to only show tenant's products
+    const results = await shopService.getTopProductIds();
+    
+    response.status(200).json({ 
+      success: true,
+      products: results,
+      tenant: {
+        id: request.tenantId,
+        slug: request.tenantSlug
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const handleGetSingleItem = async (
+  request: TenantRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) {
+    response.status(400).json({ errors: errors.array() });
+    return;
+  }
+
+  if (!request.tenantId) {
+    response.status(400).json({ 
+      success: false,
+      error: 'Tenant context required' 
+    });
+    return;
+  }
+
+  const id = request.query.id as string;
+  try {
+    // RLS automatically ensures user can only see their tenant's products
+    const product = await shopService.getProductById(id);
+    
+    if (!product) {
+      response.status(404).json({ 
+        success: false,
+        error: "Product not found" 
+      });
+      return;
+    }
+    
+    response.status(200).json({
+      success: true,
+      product: product,
+      tenant: {
+        id: request.tenantId,
+        slug: request.tenantSlug
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getProductsByStore = async (
+  request: TenantRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) {
+    response.status(400).json({ errors: errors.array() });
+    return;
+  }
+
+  if (!request.tenantId) {
+    response.status(400).json({ 
+      success: false,
+      error: 'Tenant context required' 
+    });
+    return;
+  }
+
+  const { storeId } = request.params;
+  const { page = 1, pageSize = 10, searchQuery, orderBy } = request.query;
+
+  try {
+    // RLS automatically filters to tenant's data
+    const result = await shopService.fetchProductsByStore({
+      storeId: storeId,
+      page: Number(page),
+      pageSize: Number(pageSize),
+      searchQuery: String(searchQuery),
+      orderBy: String(orderBy),
+    });
+
+    response.json({
+      success: true,
+      ...result,
+      tenant: {
+        id: request.tenantId,
+        slug: request.tenantSlug
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getProductsListing = async (
+  request: TenantRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) {
+    response.status(400).json({ errors: errors.array() });
+    return;
+  }
+
+  if (!request.tenantId) {
+    response.status(400).json({ 
+      success: false,
+      error: 'Tenant context required' 
+    });
+    return;
+  }
+
+  const { page = 1, pageSize = 10 } = request.query;
+  try {
+    // RLS automatically filters to tenant's data
+    const result = await shopService.fetchProductsListing({
+      storeId: "",
+      page: Number(page),
+      pageSize: Number(pageSize),
+    });
+
+    response.json({
+      success: true,
+      ...result,
+      tenant: {
+        id: request.tenantId,
+        slug: request.tenantSlug
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  handleCreateProduct,
+  handleUpdate,
+  handelgetall,
+  handleGetSingleItem,
+  getProductsByStore,
+  handleDelete,
+  getProductsListing
+};

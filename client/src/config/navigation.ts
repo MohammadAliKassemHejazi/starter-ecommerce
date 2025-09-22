@@ -17,7 +17,7 @@ export const getAnonymousNavigationItems = (): NavigationItem[] => [
   {
     key: 'home',
     label: 'Home',
-    href: '/',
+    href: '/home',
     icon: 'bi-house'
   },
   {
@@ -62,7 +62,7 @@ export const getNavigationItems = (userRole: string, permissions: any[]): Naviga
     {
       key: 'home',
       label: 'Home',
-      href: '/',
+      href: '/home',
       icon: 'bi-house'
     },
     {
@@ -287,6 +287,32 @@ export const getNavigationItems = (userRole: string, permissions: any[]): Naviga
           icon: 'bi-credit-card-2-front'
         }
       ]
+    },
+    {
+      key: 'demo-pages',
+      label: 'Demo Pages',
+      icon: 'bi-laptop',
+      permissions: [PERMISSIONS.VIEW_DASHBOARD],
+      children: [
+        {
+          key: 'navigation-demo',
+          label: 'Navigation Demo',
+          href: '/navigation-demo',
+          icon: 'bi-list-ul'
+        },
+        {
+          key: 'permission-demo',
+          label: 'Permission Demo',
+          href: '/permission-demo',
+          icon: 'bi-shield-check'
+        },
+        {
+          key: 'test-permissions',
+          label: 'Test Permissions',
+          href: '/test-permissions',
+          icon: 'bi-gear'
+        }
+      ]
     }
   ];
 
@@ -297,8 +323,33 @@ export const getNavigationItems = (userRole: string, permissions: any[]): Naviga
       label: 'Super Admin Dashboard',
       href: '/dashboard',
       icon: 'bi-speedometer2',
+      roles: [ROLES.SUPER_ADMIN]
+    },
+    {
+      key: 'demo-pages',
+      label: 'Demo Pages',
+      icon: 'bi-laptop',
       roles: [ROLES.SUPER_ADMIN],
-      permissions: [PERMISSIONS.VIEW_DASHBOARD]
+      children: [
+        {
+          key: 'navigation-demo',
+          label: 'Navigation Demo',
+          href: '/navigation-demo',
+          icon: 'bi-list-ul'
+        },
+        {
+          key: 'permission-demo',
+          label: 'Permission Demo',
+          href: '/permission-demo',
+          icon: 'bi-shield-check'
+        },
+        {
+          key: 'test-permissions',
+          label: 'Test Permissions',
+          href: '/test-permissions',
+          icon: 'bi-gear'
+        }
+      ]
     },
     {
       key: 'platform-management',
@@ -569,9 +620,10 @@ export const getNavigationItems = (userRole: string, permissions: any[]): Naviga
   let items = [...baseItems];
 
   if (userRole === ROLES.SUPER_ADMIN) {
-    items = [...items, ...superAdminItems];
+    // Super admin gets both admin items and super admin specific items
+    items = [...items, ...userItems, ...adminItems, ...superAdminItems];
   } else if (userRole === ROLES.ADMIN) {
-    items = [...items, ...adminItems];
+    items = [...items, ...userItems, ...adminItems];
   } else {
     items = [...items, ...userItems];
   }
@@ -579,6 +631,19 @@ export const getNavigationItems = (userRole: string, permissions: any[]): Naviga
   // Filter items based on permissions and roles
   const filterItems = (items: NavigationItem[]): NavigationItem[] => {
     return items.filter(item => {
+      // Super admin bypasses all permission checks
+      if (userRole === ROLES.SUPER_ADMIN) {
+        // Filter children recursively but don't check permissions for super admin
+        if (item.children) {
+          item.children = filterItems(item.children);
+          // Remove parent if no children are visible
+          if (item.children.length === 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
       // Check roles
       if (item.roles && item.roles.length > 0 && !item.roles.includes(userRole)) {
         return false;
@@ -613,6 +678,9 @@ export const getNavigationItems = (userRole: string, permissions: any[]): Naviga
 export const getQuickActions = (userRole: string): NavigationItem[] => {
   const actions: { [key: string]: NavigationItem[] } = {
     [ROLES.SUPER_ADMIN]: [
+      { key: 'navigation-demo', label: 'Navigation Demo', href: '/navigation-demo', icon: 'bi-list-ul' },
+      { key: 'permission-demo', label: 'Permission Demo', href: '/permission-demo', icon: 'bi-shield-check' },
+      { key: 'test-permissions', label: 'Test Permissions', href: '/test-permissions', icon: 'bi-gear' },
       { key: 'create-admin', label: 'Create Admin', href: '/admin/admins/create', icon: 'bi-person-badge' },
       { key: 'view-platform-analytics', label: 'Platform Analytics', href: '/admin/analytics', icon: 'bi-graph-up' },
       { key: 'manage-tenants', label: 'Manage Tenants', href: '/admin/tenant-dashboards', icon: 'bi-building' },
@@ -627,6 +695,9 @@ export const getQuickActions = (userRole: string): NavigationItem[] => {
       { key: 'manage-store', label: 'Manage Store', href: '/store', icon: 'bi-shop-window' }
     ],
     [ROLES.ADMIN]: [
+      { key: 'navigation-demo', label: 'Navigation Demo', href: '/navigation-demo', icon: 'bi-list-ul' },
+      { key: 'permission-demo', label: 'Permission Demo', href: '/permission-demo', icon: 'bi-shield-check' },
+      { key: 'test-permissions', label: 'Test Permissions', href: '/test-permissions', icon: 'bi-gear' },
       { key: 'create-user', label: 'Create User', href: '/users/create', icon: 'bi-person-plus' },
       { key: 'create-category', label: 'Create Category', href: '/categories/create', icon: 'bi-tag-plus' },
       { key: 'create-product', label: 'Create Product', href: '/shop/product/create', icon: 'bi-box-plus' },

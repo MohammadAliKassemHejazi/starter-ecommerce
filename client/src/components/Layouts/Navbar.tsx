@@ -341,6 +341,33 @@ export default function Navbar() {
                             Returns
                           </Link>
                         </li>
+                        <li>
+                          <hr className="dropdown-divider border-white" />
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/navigation-demo"
+                          >
+                            Navigation Demo
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/permission-demo"
+                          >
+                            Permission Demo
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-white hover-text-dark"
+                            href="/test-permissions"
+                          >
+                            Test Permissions
+                          </Link>
+                        </li>
                       </RoleBasedAccess>
                     </ul>
                   </li>
