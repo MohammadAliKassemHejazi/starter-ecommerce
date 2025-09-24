@@ -5,6 +5,7 @@ import { IProductModel } from "@/models/product.model";
 import { fetchProductsListing } from "@/store/slices/shopSlice"; 
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
+import FavoritesButton from "@/components/UI/FavoritesButton";
 
 interface ProductListProps {}
 
@@ -92,9 +93,12 @@ const ProductList: React.FC<ProductListProps> = () => {
                       </Link>
                     </li>
                     <li className="icon mx-3">
-                      <Link href="/favorite" legacyBehavior>
-                        <span className="far fa-heart"></span>
-                      </Link>
+                      <FavoritesButton 
+                        productId={product.id!} 
+                        variant="icon"
+                        showText={false}
+                        className="p-0 border-0 bg-transparent"
+                      />
                     </li>
                   </ul>
                 </div>

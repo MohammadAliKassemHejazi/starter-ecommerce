@@ -4,6 +4,7 @@ import customError from "../utils/customError";
 import permissionErrors from "../utils/errors/permission.errors";
 import { validationResult } from "express-validator";
 import { CustomRequest } from "interfaces/types/middlewares/request.middleware.types";
+import { isSuperAdmin } from "../services/package.service";
 
 export const handleFetchPermissions = async (
   req: Request,
@@ -30,10 +31,24 @@ export const handleCreatePermission = async (
   }
 
   const { name } = req.body;
+  const userId = req.UserId;
+
+  // Check if user is super admin
+  const isAdmin = await isSuperAdmin(userId!);
+  if (!isAdmin) {
+    return res.status(403).json({ 
+      success: false,
+      message: 'Super admin privileges required to create permissions' 
+    });
+  }
 
   try {
-    const permission = await permissionService.createPermission(name, req.UserId!);
-    res.status(201).json(permission);
+    const permission = await permissionService.createPermission(name, userId!);
+    res.status(201).json({
+      success: true,
+      permission,
+      message: 'Permission created successfully'
+    });
   } catch (error) {
     next(customError(permissionErrors.PermissionCreateFailure));
   }

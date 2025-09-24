@@ -1,12 +1,14 @@
 import { Response, NextFunction } from "express";
 import { shopService, userService } from "../services";
 import { CustomRequest } from "../interfaces/types/middlewares/request.middleware.types";
+import { TenantRequest } from "../middlewares/rls-tenant.middleware";
+import { canCreateProduct, isSuperAdmin } from "../services/package.service";
 import path from "node:path";
 import fs from "fs";
 import { validationResult } from "express-validator";
 
 export const handleCreateProduct = async (
-  request: CustomRequest,
+  request: CustomRequest | TenantRequest,
   response: Response,
   next: NextFunction
 ) => {
@@ -21,12 +23,43 @@ export const handleCreateProduct = async (
   try {
     if (files.length > 0) {
       const UserId = request.UserId;
+      
+      // Check if user can create products based on their package
+      const canCreate = await canCreateProduct(UserId!);
+      if (!canCreate) {
+        return response.status(403).json({ 
+          success: false,
+          message: 'Product creation limit reached. Please upgrade your package.' 
+        });
+      }
+
       const sizes = JSON.parse(request.body.sizes);
-      const productData = { ...request.body, ownerId: UserId, sizes: sizes } as any;
+      const productData = { 
+        ...request.body, 
+        ownerId: UserId, 
+        sizes: sizes,
+        // Add tenant ID if available (for RLS)
+        ...(request.tenantId && { tenantId: request.tenantId })
+      } as any;
 
       // Process product creation with data and files
       const results = await shopService.createProductWithImages(productData, files);
-      response.status(200).json({ product: results });
+      
+      const responseData: any = {
+        success: true,
+        product: results,
+        message: 'Product created successfully'
+      };
+
+      // Add tenant info if available
+      if (request.tenantId) {
+        responseData.tenant = {
+          id: request.tenantId,
+          slug: request.tenantSlug
+        };
+      }
+
+      response.status(200).json(responseData);
     } else {
       throw new Error("Images are missing while creating a product");
     }
@@ -54,13 +87,29 @@ export const handleDelete = async (
   response: Response,
   next: NextFunction
 ): Promise<void> => {
-
-
   const id = request.params.id;
   const userId = request.UserId;
+  
   try {
+    // Check if user is super admin or owns the product
+    const isAdmin = await isSuperAdmin(userId!);
+    if (!isAdmin) {
+      // For non-super admins, check ownership
+      const product = await shopService.getProductById(id);
+      if (!product || product.ownerId !== userId) {
+        return response.status(403).json({
+          success: false,
+          message: 'You can only delete products that you created'
+        });
+      }
+    }
+
     const result: number = await shopService.deleteProduct(id, userId!);
-    response.json(result);
+    response.json({
+      success: true,
+      message: 'Product deleted successfully',
+      result
+    });
   } catch (error) {
     next(error);
   }

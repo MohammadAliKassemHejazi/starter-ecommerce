@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { fetchUsersByCreator, deleteUser, usersSelector } from "@/store/slices/myUsersSlice";
 import Swal from "sweetalert2";
 import { useAppDispatch } from "@/store/store";
 import Layout from "@/components/Layouts/Layout";
+import { UserManager } from "@/components/User/UserManager";
+import { getUserActivePackage } from "@/services/packageService";
 
 const UsersGrid = () => {
   const dispatch = useAppDispatch();
   const users = useSelector(usersSelector);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
   React.useEffect(() => {
     dispatch(fetchUsersByCreator());
+    loadUserPackage();
   }, [dispatch]);
+
+  const loadUserPackage = async () => {
+    try {
+      const packageData = await getUserActivePackage();
+      setIsSuperAdmin(packageData?.Package?.isSuperAdminPackage || false);
+    } catch (error) {
+      console.error('Error loading user package:', error);
+    }
+  };
 
   const handleDeleteUser = async (id: string) => {
     Swal.fire({
@@ -36,6 +49,14 @@ const UsersGrid = () => {
       <div className="row justify-content-center">
         <div className="col-md-10">
           <h1 className="mb-4 text-center fw-bold">Users</h1>
+          
+          {/* Super Admin User Management */}
+          {isSuperAdmin && (
+            <div className="mb-4">
+              <UserManager isSuperAdmin={isSuperAdmin} />
+            </div>
+          )}
+          
           <div className="d-flex justify-content-between align-items-center mb-4">
             <span className="text-muted">
               Total Users: {users?.length || 0}

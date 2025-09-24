@@ -1,17 +1,29 @@
 import { Response } from "express";
 import { orderService } from "../services";
 import { CustomRequest } from "../interfaces/types/middlewares/request.middleware.types";
+import { TenantRequest } from "../middlewares/rls-tenant.middleware";
 
 
 export const getLastOrder = async (
-  request: CustomRequest,
+  request: CustomRequest | TenantRequest,
   response: Response,
   next: any
 ): Promise<void> => {
   try {
     const userId = request.UserId; // Assuming UserId is accessible via middleware
     const lastOrder = await orderService.getLastOrder(userId!);
-    response.json(lastOrder);
+    
+    const responseData: any = lastOrder;
+    
+    // Add tenant info if available
+    if (request.tenantId) {
+      responseData.tenant = {
+        id: request.tenantId,
+        slug: request.tenantSlug
+      };
+    }
+    
+    response.json(responseData);
   } catch (error) {
     next(error);
   }

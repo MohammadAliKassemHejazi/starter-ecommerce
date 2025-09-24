@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import {
   IProductModel,
@@ -12,7 +12,9 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
-import ProtectedRoute from "@/components/protectedRoute";;
+import ProtectedRoute from "@/components/protectedRoute";
+import { getUserPackageLimits } from "@/services/packageService";
+import { PackageLimits } from "@/components/Package/PackageLimits";
 
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import {
@@ -41,15 +43,29 @@ const Toast = Swal.mixin({
 function CreateProduct() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [packageLimits, setPackageLimits] = useState<any>(null);
+  const [canCreateProduct, setCanCreateProduct] = useState(false);
 
   // Correctly using the selector to get single store data
   const listOfStores = useSelector(storeSelector);
   const listOfSubCategories = useSelector(utileSubCategoriesSelector);
   const listOfSizes = useSelector(utileSizes);
+  
   React.useEffect(() => {
     store.dispatch(fetchAllStores());
     store.dispatch(fetchAllSizes());
+    loadPackageLimits();
   }, [dispatch]);
+
+  const loadPackageLimits = async () => {
+    try {
+      const limits = await getUserPackageLimits();
+      setPackageLimits(limits);
+      setCanCreateProduct(limits.canCreateProduct);
+    } catch (error) {
+      console.error('Error loading package limits:', error);
+    }
+  };
 
   const handleStoreChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -109,6 +125,14 @@ function CreateProduct() {
   }, []);
 
   const handleSubmit = async (values: IProductModel) => {
+    if (!canCreateProduct) {
+      Toast.fire({
+        icon: "error",
+        title: "You have reached your product creation limit. Please upgrade your package.",
+      });
+      return;
+    }
+
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
@@ -142,6 +166,9 @@ function CreateProduct() {
         icon: "success",
         title: "Product created successfully",
       });
+      
+      // Reload package limits after successful creation
+      loadPackageLimits();
     } catch (error: any) {
       Toast.fire({
         icon: "error",
@@ -167,11 +194,35 @@ const handleDeleteImage = async (index: number) => {
   handlePhotoChange(newProductImages);
 };
 
+if (!canCreateProduct && packageLimits) {
+  return (
+    <Layout>
+      <section>
+        <div className="container">
+          <h2 className="text-center mb-4">Create Product</h2>
+          <div className="alert alert-warning">
+            <h4>Product Creation Limit Reached</h4>
+            <p>You have reached your product creation limit ({packageLimits.currentProductCount}/{packageLimits.productLimit}).</p>
+            <p>Please upgrade your package to create more products.</p>
+          </div>
+          <PackageLimits />
+        </div>
+      </section>
+    </Layout>
+  );
+}
+
 return (
   <Layout>
     <section>
       <div className="container">
         <h2 className="text-center mb-4">Create Product</h2>
+        
+        {/* Package Limits Display */}
+        <div className="mb-4">
+          <PackageLimits />
+        </div>
+        
         <Formik
           initialValues={initialValues}
           onSubmit={handleSubmit}

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { IAuthLoginBodyResponse } from "../interfaces/types/controllers/auth.controller.types";
 import { userService } from "../services";
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';

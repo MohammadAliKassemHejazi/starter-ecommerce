@@ -1,24 +1,17 @@
 import express from 'express';
-
 import { protectedRoutes } from '../middlewares';
-
 import { usersController } from "../controllers";
 
+const router = express.Router();
 
-  // routes want to protect
-  const Routes = [
-    "/profile",
-  ];
+// Protected routes
+const protectedRoutesList = ["/profile"];
 
+// Apply protection to specified routes
+protectedRoutes(router, protectedRoutesList);
 
-const router = express.Router()
-  protectedRoutes(router, Routes);
-  router.get(
-    "/profile",
-    usersController.handleUserProfile
-  );
+// Protected routes
+router.get("/profile", usersController.handleUserProfile);
 
-
-
-export  default router;
+export default router;
 

@@ -10,6 +10,7 @@ module.exports = (sequelize: any) => {
     public name!: string;
     public description!: string; // Add description property
     public imgUrl!: string; // Add imgUrl property
+    public tenantId?: string; // RLS tenant isolation
 
     static associate(models: any) {
       Store.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
@@ -43,6 +44,11 @@ module.exports = (sequelize: any) => {
       categoryId: {
         type: DataTypes.UUID,
         allowNull: false,
+      },
+      tenantId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        field: 'tenant_id', // RLS tenant isolation
       },
     },
     {

@@ -1,17 +1,26 @@
 import { Request, Response } from 'express';
 import db from '../models';
 import { ResponseFormatter } from '../utils/responseFormatter';
+import { TenantRequest } from '../middlewares/rls-tenant.middleware';
 
 export const trackEvent = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).UserId;
     const { eventType, eventData } = req.body;
+    const request = req as TenantRequest;
 
-    const analytics = await db.Analytics.create({
+    const analyticsData: any = {
       eventType,
       eventData,
       userId
-    });
+    };
+
+    // Add tenant isolation if tenant context is available
+    if (request.tenantId) {
+      analyticsData.tenantId = request.tenantId;
+    }
+
+    const analytics = await db.Analytics.create(analyticsData);
 
     ResponseFormatter.success(res, analytics, 'Event tracked successfully', 201);
   } catch (error) {
@@ -24,6 +33,7 @@ export const getAnalytics = async (req: Request, res: Response) => {
   try {
     const { eventType, startDate, endDate, page = 1, limit = 10 } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
+    const request = req as TenantRequest;
 
     const whereClause: any = {};
     if (eventType) whereClause.eventType = eventType;
@@ -31,6 +41,11 @@ export const getAnalytics = async (req: Request, res: Response) => {
       whereClause.createdAt = {
         [db.Sequelize.Op.between]: [startDate, endDate]
       };
+    }
+
+    // Add tenant isolation if tenant context is available
+    if (request.tenantId) {
+      whereClause.tenantId = request.tenantId;
     }
 
     const { count, rows } = await db.Analytics.findAndCountAll({
@@ -56,12 +71,18 @@ export const getAnalytics = async (req: Request, res: Response) => {
 export const getEventStats = async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.query;
+    const request = req as TenantRequest;
     
     const whereClause: any = {};
     if (startDate && endDate) {
       whereClause.createdAt = {
         [db.Sequelize.Op.between]: [startDate, endDate]
       };
+    }
+
+    // Add tenant isolation if tenant context is available
+    if (request.tenantId) {
+      whereClause.tenantId = request.tenantId;
     }
 
     const stats = await db.Analytics.findAll({

@@ -29,16 +29,12 @@ export const tenantMiddleware = async (req: TenantRequest, res: Response, next: 
 
     console.log(`🔍 Resolving tenant: ${tenantSlug}`);
 
-    // Get tenant info from database
-    const tenant = await db.sequelize.query(
-      'SELECT * FROM tenants WHERE slug = :slug AND is_active = true',
-      {
-        replacements: { slug: tenantSlug },
-        type: db.Sequelize.QueryTypes.SELECT
-      }
-    );
+    // Get tenant info from database using proper model
+    const tenant = await db.Tenant.findOne({
+      where: { slug: tenantSlug, isActive: true }
+    });
 
-    if (!tenant.length) {
+    if (!tenant) {
       console.error(`❌ Tenant not found: ${tenantSlug}`);
       return res.status(404).json({ 
         success: false,
@@ -47,7 +43,7 @@ export const tenantMiddleware = async (req: TenantRequest, res: Response, next: 
       });
     }
 
-    const tenantInfo = tenant[0];
+    const tenantInfo = tenant.toJSON();
     req.tenantId = tenantInfo.id;
     req.tenantSlug = tenantInfo.slug;
     req.tenantName = tenantInfo.name;

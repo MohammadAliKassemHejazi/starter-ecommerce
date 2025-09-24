@@ -5,6 +5,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   class Order extends Model<IOrderAttributes> implements IOrderAttributes {
     id!: string;
     paymentId!: string; // Link to the Payment table
+    tenantId?: string; // RLS tenant isolation
 
     static associate(models: any) {
       Order.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
@@ -26,7 +27,12 @@ Order.hasMany(models.OrderShipping, { foreignKey: "orderId", as: "shippingDetail
   type: DataTypes.STRING(3),
   allowNull: false,
   defaultValue: 'USD'
-}
+},
+      tenantId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        field: 'tenant_id', // RLS tenant isolation
+      }
     },
     {
       sequelize,

@@ -30,6 +30,12 @@ export interface IProductModel {
   sizeId?: string;
   updatedAt?: string;
   createdAt?: string;
+  tenantId?: string;
+  tenant?: {
+    id: string;
+    slug: string;
+    name: string;
+  };
 }
 
 export interface productresponse {

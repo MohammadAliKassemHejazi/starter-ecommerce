@@ -8,8 +8,8 @@ import rateLimit from 'express-rate-limit';
 import winston from 'winston';
 import path from 'node:path';
 import fs from 'fs/promises';
+import fsSync from 'fs';
 import multer, { FileFilterCallback } from 'multer';
-import bcrypt from 'bcrypt';
 // Import routes and middlewares
 import { 
   orderRouter, cartRouter, authRouter, userRouter, articleRouter, 
@@ -17,28 +17,22 @@ import {
   usersRouter, ordersRouter, permissionsRouter, rolesRouter, 
   subcategoriesRouter, dashboardRouter, favoriteRouter, commentRouter, promotionRouter,
   analyticsRouter, auditLogRouter, translationRouter, packageRouter, shippingRouter,
-  sizeRouter, taxRouter, userSessionRouter, returnRouter
+  sizeRouter, taxRouter, returnRouter
 } from './src/routes';
 
-// Import RLS-based tenant routes
-import rlsShopRouter from './src/routes/rls-shop.routes';
-import rlsStoreRouter from './src/routes/rls-store.routes';
-import rlsCartRouter from './src/routes/rls-cart.routes';
-import rlsOrderRouter from './src/routes/rls-order.routes';
+// RLS functionality now integrated into existing routes
 
 // Import backward-compatible tenant middleware
 import { backwardCompatibleTenantMiddleware } from './src/middlewares/backward-compatible-tenant.middleware';
 
 import paypalRouter from './src/routes/paypal.routes';
 import swaggerUi from 'swagger-ui-express';
-import { createSwaggerFile } from './src/config/swagger';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
 
 import { storeMiddleWear } from './src/middlewares/store.middleweare';
 import { shopMiddleWare } from './src/middlewares/shop.middleware';
-import runScripts from './src/scripts/runScripts';
 
 // Extend NodeJS global type to include __basedir
 declare global {
@@ -371,14 +365,20 @@ async function createApp(): Promise<Express> {
   // Health check endpoint
   app.get('/health', healthCheck);
   
-  // Swagger documentation
-  try {
-    //await generateSwaggerDocumentation();
-    const swaggerDocument = require('./src/routes/swaggerSchema/swagger.json');
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-    console.log('📚 Swagger documentation available at /api-docs');
-  } catch (error) {
-    console.warn('⚠️ Swagger documentation setup failed:', error);
+  // Swagger documentation (only in development)
+  if (!IS_PRODUCTION) {
+    try {
+      const swaggerPath = path.join(__dirname, './src/routes/swaggerSchema/swagger.json');
+      if (fsSync.existsSync(swaggerPath)) {
+        const swaggerDocument = require(swaggerPath);
+        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        console.log('📚 Swagger documentation available at /api-docs');
+      } else {
+        console.log('📚 Swagger documentation not found, skipping setup');
+      }
+    } catch (error) {
+      console.warn('⚠️ Swagger documentation setup failed:', error);
+    }
   }
   
   // Main route
@@ -395,15 +395,11 @@ async function createApp(): Promise<Express> {
   // Auth routes with stricter rate limiting
   app.use('/api/auth', authLimiter, authRouter);
   
-  // RLS-based tenant routes (backward compatible with existing frontend)
-  app.use('/api/shop', backwardCompatibleTenantMiddleware, shopUploadMiddleware, rlsShopRouter);
-  app.use('/api/stores', backwardCompatibleTenantMiddleware, storeUploadMiddleware, rlsStoreRouter);
-  app.use('/api/cart', backwardCompatibleTenantMiddleware, rlsCartRouter);
-  app.use('/api/orders', backwardCompatibleTenantMiddleware, rlsOrderRouter);
-  
-  // Legacy routes (keep for backward compatibility)
-  app.use('/api/legacy/cart', cartRouter);
-  app.use('/api/legacy/orders', orderRouter);
+  // Main routes with RLS tenant support (backward compatible with existing frontend)
+  app.use('/api/shop', backwardCompatibleTenantMiddleware, shopUploadMiddleware, shopRouter);
+  app.use('/api/stores', backwardCompatibleTenantMiddleware, storeUploadMiddleware, storeRouter);
+  app.use('/api/cart', backwardCompatibleTenantMiddleware, cartRouter);
+  app.use('/api/orders', backwardCompatibleTenantMiddleware, orderRouter);
   app.use('/api/payment', paymentRouter);
   app.use('/api/utile', utileRouter);
   app.use('/api/users', userRouter);
@@ -428,7 +424,6 @@ async function createApp(): Promise<Express> {
   app.use('/api/admin/subcategories', subcategoriesRouter);
   app.use('/api/admin/inventory', dashboardRouter);
   app.use('/api/admin/audit-logs', auditLogRouter);
-  app.use('/api/admin/user-sessions', userSessionRouter);
   
   // User-specific routes (require authentication)
   app.use('/api/favorites', favoriteRouter);
@@ -480,19 +475,12 @@ async function createApp(): Promise<Express> {
 async function initializeDatabase(): Promise<void> {
   try {
     if (!IS_PRODUCTION) {
-      console.log('🔄 Performing database reset in development...');
+      console.log('🔄 Syncing database in development...');
       await db.sequelize.sync();
-      console.log('✅ Database schema has been reset.');
-      
-     // await runScripts();
-      console.log('✅ Database seeded successfully.');
+      console.log('✅ Database schema synced.');
     } else {
       await db.sequelize.authenticate();
       console.log('✅ Database connection established.');
-      
-      //await runScripts();
-      // Run migrations in production instead of force sync
-      // await db.sequelize.sync({ alter: true }); // Uncomment if needed
     }
   } catch (error) {
     console.error('❌ Database initialization failed:', error);

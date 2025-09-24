@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   fetchPermissions,
@@ -10,6 +10,8 @@ import { useAppDispatch } from "@/store/store";
 import { rolesSelector } from "@/store/slices/roleSlice";
 import Layout from "@/components/Layouts/Layout";
 import Swal from "sweetalert2";
+import { getUserActivePackage } from "@/services/packageService";
+import ProtectedRoute from "@/components/protectedRoute";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -27,12 +29,34 @@ const RolePermissionGrid = () => {
   const dispatch = useAppDispatch();
   const permissions = useSelector(permissionsSelector);
   const roles = useSelector(rolesSelector);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
     dispatch(fetchPermissions());
+    loadUserPackage();
   }, [dispatch]);
 
+  const loadUserPackage = async () => {
+    try {
+      const packageData = await getUserActivePackage();
+      setIsSuperAdmin(packageData?.Package?.isSuperAdminPackage || false);
+    } catch (error) {
+      console.error('Error loading user package:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleAddPermission = async (roleId: string, permissionId: string) => {
+    if (!isSuperAdmin) {
+      Toast.fire({
+        icon: "error",
+        title: "Only super admins can assign permissions",
+      });
+      return;
+    }
+
     try {
       await dispatch(addPermissionToRole({ roleId, permissionId }));
       Toast.fire({
@@ -48,6 +72,14 @@ const RolePermissionGrid = () => {
   };
 
   const handleRemovePermission = async (roleId: string, permissionId: string) => {
+    if (!isSuperAdmin) {
+      Toast.fire({
+        icon: "error",
+        title: "Only super admins can remove permissions",
+      });
+      return;
+    }
+
     try {
       await dispatch(removePermissionFromRole({ roleId, permissionId }));
       Toast.fire({
@@ -62,12 +94,49 @@ const RolePermissionGrid = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <Layout>
+        <div className="container mt-5">
+          <div className="text-center">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!isSuperAdmin) {
+    return (
+      <Layout>
+        <div className="container mt-5">
+          <div className="row justify-content-center">
+            <div className="col-md-10">
+              <h1 className="mb-4 text-center fw-bold">Role-Permission Assignment</h1>
+              <div className="alert alert-warning">
+                <h4>Access Denied</h4>
+                <p>Only super admins can manage role-permission assignments.</p>
+                <p>Please contact your administrator or upgrade your package.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-md-10">
             <h1 className="mb-4 text-center fw-bold">Role-Permission Assignment</h1>
+            <div className="alert alert-info">
+              <h5>Super Admin Access</h5>
+              <p>You have super admin privileges to manage role-permission assignments for your organization.</p>
+            </div>
             <div className="table-responsive shadow-sm bg-white">
               <table className="table table-hover table-bordered border-secondary">
                 <thead className="bg-dark text-light text-center">
@@ -173,4 +242,10 @@ const RolePermissionGrid = () => {
   );
 };
 
-export default RolePermissionGrid;
+export default function ProtectedRolePermissionGrid() {
+  return (
+    <ProtectedRoute>
+      <RolePermissionGrid />
+    </ProtectedRoute>
+  );
+}

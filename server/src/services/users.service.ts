@@ -95,6 +95,20 @@ export const createUser = async (
   }
   
   const user: IUserAttributes = await db.User.create(data);
+  
+  // Assign default free package to new user
+  const freePackage = await db.Package.findOne({
+    where: { name: 'Free' }
+  });
+  
+  if (freePackage) {
+    await db.UserPackage.create({
+      userId: user.id,
+      packageId: freePackage.id,
+      createdById: adminUser?.id || null
+    });
+  }
+  
   return user;
 };
 

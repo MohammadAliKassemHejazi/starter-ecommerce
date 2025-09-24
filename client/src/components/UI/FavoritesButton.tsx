@@ -97,12 +97,23 @@ const FavoritesButton: React.FC<FavoritesButtonProps> = ({
   if (variant === 'icon') {
     return (
       <button
-        className={`btn ${isInFavorites ? 'btn-danger' : 'btn-outline-danger'} ${getSizeClasses()} ${className}`}
+        className={`btn btn-link p-0 border-0 bg-transparent ${className}`}
         onClick={handleToggleFavorite}
         disabled={isDisabled}
         title={isInFavorites ? 'Remove from favorites' : 'Add to favorites'}
+        style={{ 
+          color: isInFavorites ? '#dc3545' : '#6c757d',
+          transition: 'color 0.3s ease',
+          cursor: isDisabled ? 'not-allowed' : 'pointer'
+        }}
       >
-        <i className={`bi ${isInFavorites ? 'bi-heart-fill' : 'bi-heart'} ${getIconSize()}`}></i>
+        <span 
+          className={`${isInFavorites ? 'fas' : 'far'} fa-heart ${getIconSize()}`}
+          style={{ 
+            opacity: isDisabled ? 0.6 : 1,
+            transition: 'all 0.3s ease'
+          }}
+        />
         {showText && (
           <span className="ms-1">
             {isInFavorites ? 'Remove' : 'Add'}
@@ -118,10 +129,21 @@ const FavoritesButton: React.FC<FavoritesButtonProps> = ({
         className={`btn btn-link p-0 text-decoration-none ${className}`}
         onClick={handleToggleFavorite}
         disabled={isDisabled}
+        style={{ 
+          color: isInFavorites ? '#dc3545' : '#6c757d',
+          transition: 'color 0.3s ease',
+          cursor: isDisabled ? 'not-allowed' : 'pointer'
+        }}
       >
-        <i className={`bi ${isInFavorites ? 'bi-heart-fill text-danger' : 'bi-heart text-muted'} ${getIconSize()}`}></i>
+        <span 
+          className={`${isInFavorites ? 'fas' : 'far'} fa-heart ${getIconSize()}`}
+          style={{ 
+            opacity: isDisabled ? 0.6 : 1,
+            transition: 'all 0.3s ease'
+          }}
+        />
         {showText && (
-          <span className={`ms-1 ${isInFavorites ? 'text-danger' : 'text-muted'}`}>
+          <span className="ms-1">
             {isInFavorites ? 'Remove from favorites' : 'Add to favorites'}
           </span>
         )}
@@ -136,7 +158,7 @@ const FavoritesButton: React.FC<FavoritesButtonProps> = ({
       onClick={handleToggleFavorite}
       disabled={isDisabled}
     >
-      <i className={`bi ${isInFavorites ? 'bi-heart-fill' : 'bi-heart'} ${getIconSize()}`}></i>
+      <span className={`${isInFavorites ? 'fas' : 'far'} fa-heart ${getIconSize()}`}></span>
       {showText && (
         <span className="ms-2">
           {isInFavorites ? 'Remove from Favorites' : 'Add to Favorites'}

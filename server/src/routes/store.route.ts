@@ -3,6 +3,7 @@ import express from 'express';
 import { storeController } from "../controllers/index";
 
 import { protectedRoutes } from "../middlewares";
+import { checkStoreCreationLimit } from "../middlewares/package.middleware";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ const Routes = [
 
 protectedRoutes(router, Routes); 
 
-router.post("/create",storeController.handleCreateStore);
+router.post("/create", checkStoreCreationLimit, storeController.handleCreateStore);
 router.post("/update",storeController.handleUpdate);
 router.get("/get", storeController.handelGetSingleItem);
 router.get("/getall/user", storeController.handelGetAllStoresForUser);

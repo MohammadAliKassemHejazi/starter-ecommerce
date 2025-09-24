@@ -8,12 +8,18 @@ module.exports = (sequelize: any, DataTypes: any) => {
     public description?: string;
     public storeLimit!: number;
     public categoryLimit!: number;
+    public productLimit!: number;
+    public userLimit!: number;
+    public isSuperAdminPackage!: boolean;
+    public price!: number;
+    public isActive!: boolean;
 
     static associate(models: any) {
+      Package.hasMany(models.UserPackage, { foreignKey: 'packageId' });
       Package.belongsToMany(models.User, {
         through: models.UserPackage,
         foreignKey: 'packageId',
-         targetKey: 'id'
+        otherKey: 'userId'
       });
     }
 
@@ -40,6 +46,32 @@ module.exports = (sequelize: any, DataTypes: any) => {
           categoryLimit: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 0,
+          },
+          productLimit: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+          },
+          userLimit: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+          },
+          isSuperAdminPackage: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+          },
+          price: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false,
+            defaultValue: 0.00,
+          },
+          isActive: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
           },
         },
         {

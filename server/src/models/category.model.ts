@@ -6,6 +6,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: string;
     name!: string;
     description?: string;
+    tenantId?: string; // RLS tenant isolation
 
     static associate(models: any) {
       Category.hasMany(models.SubCategory, {  foreignKey: 'categoryId' });
@@ -26,6 +27,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
+    },
+    tenantId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      field: 'tenant_id', // RLS tenant isolation
     },
   }, {
     sequelize,

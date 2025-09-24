@@ -26,4 +26,10 @@ export interface IStoreResponseModel {
     description: string;
     categoryId : string;
     imgUrl: string;
+    tenantId?: string;
+    tenant?: {
+        id: string;
+        slug: string;
+        name: string;
+    };
 }

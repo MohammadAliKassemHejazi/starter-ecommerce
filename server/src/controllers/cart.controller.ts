@@ -8,13 +8,25 @@ import {
   clearCart as clearCartService,
 } from '../services/cart.service';
 import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.types';
+import { TenantRequest } from '../middlewares/rls-tenant.middleware';
 
 // Get the user's cart
-export const getCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const getCart = async (req: CustomRequest | TenantRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.UserId ?? "";
     const cart = await getCartService(userId);
-    res.status(200).json(cart);
+    
+    const responseData: any = cart;
+    
+    // Add tenant info if available
+    if (req.tenantId) {
+      responseData.tenant = {
+        id: req.tenantId,
+        slug: req.tenantSlug
+      };
+    }
+    
+    res.status(200).json(responseData);
   } catch (error) {
     next(error);
   }

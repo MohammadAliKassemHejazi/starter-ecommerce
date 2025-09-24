@@ -13,9 +13,17 @@ module.exports = (sequelize: any) => {
     declare createdById: string | null; // Optional field to track who created the user
     static associate(models: any) {
       // One-to-one relations
-      User.hasOne(models.Package, { foreignKey: "userId" });
       User.hasOne(models.Cart, { foreignKey: "userId" });
       User.hasOne(models.Favorite, { foreignKey: "userId" });
+      
+      // Package relationships
+      User.hasMany(models.UserPackage, { foreignKey: "userId" });
+      User.belongsToMany(models.Package, { 
+        through: models.UserPackage, 
+        foreignKey: "userId", 
+        otherKey: "packageId",
+        as: "packages"
+      });
 
       // One-to-many relations
       User.hasMany(models.Store, { foreignKey: "userId", onDelete: "CASCADE" });

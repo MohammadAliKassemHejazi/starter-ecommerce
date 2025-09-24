@@ -5,8 +5,9 @@ import { userService } from "../services"
 import { storeService } from "../services"
 
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
+import { TenantRequest } from '../middlewares/rls-tenant.middleware';
 import { IStoreCreateProduct } from "interfaces/types/controllers/store.controller.types";
-
+import { canCreateStore, isSuperAdmin } from "../services/package.service";
 
 import path from "node:path";
 import fs from "fs";
@@ -15,7 +16,7 @@ import { validationResult } from "express-validator";
 
 
 export const handleCreateStore = async (
-  request: CustomRequest,
+  request: CustomRequest | TenantRequest,
   response: Response,
   next: NextFunction
 ) => {
@@ -33,11 +34,41 @@ export const handleCreateStore = async (
     }
 
     const UserId = request.UserId;
-    const StoreData = { ...request.body, userId: UserId } as IStoreCreateProduct;
+    
+    // Check if user can create stores based on their package
+    const canCreate = await canCreateStore(UserId!);
+    if (!canCreate) {
+      return response.status(403).json({ 
+        success: false,
+        message: 'Store creation limit reached. Please upgrade your package.' 
+      });
+    }
+
+    const StoreData = { 
+      ...request.body, 
+      userId: UserId,
+      // Add tenant ID if available (for RLS)
+      ...(request.tenantId && { tenantId: request.tenantId })
+    } as IStoreCreateProduct;
 
     // Process store creation with data and files
     const results = await storeService.createStoreWithImages(StoreData, files);
-    response.status(200).json(results);
+    
+    const responseData: any = {
+      success: true,
+      store: results,
+      message: 'Store created successfully'
+    };
+
+    // Add tenant info if available
+    if (request.tenantId) {
+      responseData.tenant = {
+        id: request.tenantId,
+        slug: request.tenantSlug
+      };
+    }
+
+    response.status(200).json(responseData);
 
   } catch (error) {
     try {
@@ -65,13 +96,29 @@ export const handleDelete = async (
   response: Response,
   next: NextFunction
 ): Promise<void> => {
-
-
   const id = request.params.id;
   const userId = request.UserId;
+  
   try {
+    // Check if user is super admin or owns the store
+    const isAdmin = await isSuperAdmin(userId!);
+    if (!isAdmin) {
+      // For non-super admins, check ownership
+      const store = await storeService.getStoreById(id);
+      if (!store || store.userId !== userId) {
+        return response.status(403).json({
+          success: false,
+          message: 'You can only delete stores that you created'
+        });
+      }
+    }
+
     const result: number = await storeService.deleteStore(id, userId!);
-    response.json(result);
+    response.json({
+      success: true,
+      message: 'Store deleted successfully',
+      result
+    });
   } catch (error) {
     next(error);
   }
