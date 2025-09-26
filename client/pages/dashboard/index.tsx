@@ -16,10 +16,9 @@ import InventoryAlerts from '@/components/Vendor/InventoryAlerts';
 import OrderFulfillmentStatus from '@/components/Vendor/OrderFulfillmentStatus';
 import { PackageLimits } from '@/components/Package/PackageLimits';
 import { PackageManager } from '@/components/Package/PackageManager';
-import Layout from '@/components/Layouts/Layout';
+import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from '@/components/protectedRoute';
-import { getUserActivePackage } from '@/services/packageService';
-import { useState } from 'react';
+import { usePageData } from '@/hooks/usePageData';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -28,33 +27,39 @@ const Dashboard = () => {
   const orderStatuses = useSelector(selectOrderStatuses);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
-  const [userPackage, setUserPackage] = useState<any>(null);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const { isSuperAdmin } = usePageData({ loadUserPackage: true });
 
   useEffect(() => {
     dispatch(fetchSalesData());
     dispatch(fetchInventoryAlerts());
     dispatch(fetchOrderStatuses());
-    loadUserPackage();
   }, [dispatch]);
 
-  const loadUserPackage = async () => {
-    try {
-      const packageData = await getUserActivePackage();
-      setUserPackage(packageData);
-      setIsSuperAdmin(packageData?.Package?.isSuperAdminPackage || false);
-    } catch (error) {
-      console.error('Error loading user package:', error);
-    }
-  };
+  if (loading) {
+    return (
+      <PageLayout title="Vendor Dashboard" protected={true}>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
 
-    if (loading) { return <p>Loading...</p> };
-    if (error) { return <p>Error: {error}</p> };
+  if (error) {
+    return (
+      <PageLayout title="Vendor Dashboard" protected={true}>
+        <div className="alert alert-danger">
+          <h5>Error Loading Dashboard</h5>
+          <p>Error: {error}</p>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
-    <Layout>
-      <h1 className="text-2xl font-bold mb-4">Vendor Dashboard</h1>
-      
+    <PageLayout title="Vendor Dashboard" protected={true}>
       {/* Package Information */}
       <div className="mb-6">
         <PackageLimits />
@@ -67,12 +72,21 @@ const Dashboard = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <SalesAnalytics salesData={salesData} />
-        <InventoryAlerts alerts={inventoryAlerts} />
+      <div className="row">
+        <div className="col-md-6 mb-4">
+          <SalesAnalytics salesData={salesData} />
+        </div>
+        <div className="col-md-6 mb-4">
+          <InventoryAlerts alerts={inventoryAlerts} />
+        </div>
       </div>
-      <OrderFulfillmentStatus orders={orderStatuses} />
-    </Layout>
+      
+      <div className="row">
+        <div className="col-12">
+          <OrderFulfillmentStatus orders={orderStatuses} />
+        </div>
+      </div>
+    </PageLayout>
   );
 };
 

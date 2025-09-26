@@ -44,8 +44,9 @@ module.exports = (sequelize: any) => {
       },
       startDate: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
         defaultValue: DataTypes.NOW,
+        field: 'startDate',
       },
       endDate: {
         type: DataTypes.DATE,

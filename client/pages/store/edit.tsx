@@ -108,16 +108,16 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
     const response = await dispatch(updateStoreImages(formData)).unwrap();
 debugger
     // Extract the updated images from the response
-    const updatedImagesFromResponse = Array.isArray(response.store)
-      ? response.store.map((uploadedImage: any) => ({
+    const updatedImagesFromResponse = Array.isArray(response.data)
+      ? response.data.map((uploadedImage: any) => ({
           id: uploadedImage.storeId, // ID of the uploaded image
           imageUrl: uploadedImage.updatedImageUrl, // URL of the uploaded image
           file: null, // Clear the file reference since it's already uploaded
         }))
       : [
           {
-            id: response.store.storeId, // ID of the uploaded image
-            imageUrl: response.store.updatedImageUrl, // URL of the uploaded image
+            id: response.data.storeId, // ID of the uploaded image
+            imageUrl: response.data.updatedImageUrl, // URL of the uploaded image
             file: null, // Clear the file reference since it's already uploaded
           },
         ];

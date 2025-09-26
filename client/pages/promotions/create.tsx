@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Layout from '@/components/Layouts/Layout';
+import { FormPage } from '@/components/UI/PageComponents';
+import { usePageData } from '@/hooks/usePageData';
 import ProtectedRoute from '@/components/protectedRoute';
-import Swal from 'sweetalert2';
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  },
-});
+import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 
 const CreatePromotion = () => {
   const router = useRouter();
+  const { isAuthenticated } = usePageData();
   const [formData, setFormData] = useState({
     code: '',
     type: 'PERCENTAGE' as 'PERCENTAGE' | 'FIXED',
@@ -52,10 +42,7 @@ const CreatePromotion = () => {
       });
 
       if (response.ok) {
-        Toast.fire({
-          icon: 'success',
-          title: 'Promotion created successfully',
-        });
+        showToast.success('Promotion created successfully');
         router.push('/promotions');
       } else {
         const errorData = await response.json();
@@ -63,154 +50,100 @@ const CreatePromotion = () => {
       }
     } catch (error) {
       console.error('Error creating promotion:', error);
-      Toast.fire({
-        icon: 'error',
-        title: error instanceof Error ? error.message : 'Failed to create promotion',
-      });
+      showToast.error(error instanceof Error ? error.message : 'Failed to create promotion');
     } finally {
       setLoading(false);
     }
   };
 
+  const formFields = [
+    {
+      type: "text",
+      name: "code",
+      label: "Promotion Code",
+      value: formData.code,
+      onChange: handleInputChange,
+      placeholder: "e.g., SAVE20",
+      required: true,
+      helpText: "Enter a unique promotion code"
+    },
+    {
+      type: "select",
+      name: "type",
+      label: "Discount Type",
+      value: formData.type,
+      onChange: handleInputChange,
+      required: true,
+      options: [
+        { value: "PERCENTAGE", label: "Percentage" },
+        { value: "FIXED", label: "Fixed Amount" }
+      ]
+    },
+    {
+      type: "number",
+      name: "value",
+      label: "Discount Value",
+      value: formData.value,
+      onChange: handleInputChange,
+      placeholder: formData.type === 'PERCENTAGE' ? '20' : '10.00',
+      required: true,
+      min: 0,
+      step: formData.type === 'PERCENTAGE' ? '1' : '0.01',
+      helpText: formData.type === 'PERCENTAGE' 
+        ? 'Enter percentage (e.g., 20 for 20%)' 
+        : 'Enter amount in dollars'
+    },
+    {
+      type: "number",
+      name: "minCartValue",
+      label: "Minimum Cart Value",
+      value: formData.minCartValue,
+      onChange: handleInputChange,
+      placeholder: "0.00",
+      min: 0,
+      step: "0.01",
+      helpText: "Minimum cart value to use this promotion"
+    },
+    {
+      type: "datetime-local",
+      name: "validFrom",
+      label: "Valid From",
+      value: formData.validFrom,
+      onChange: handleInputChange
+    },
+    {
+      type: "datetime-local",
+      name: "validTo",
+      label: "Valid To",
+      value: formData.validTo,
+      onChange: handleInputChange
+    }
+  ];
+
+  const formActions = [
+    {
+      type: "button" as const,
+      variant: "secondary" as const,
+      label: "Cancel",
+      onClick: () => router.push('/promotions')
+    },
+    {
+      type: "submit" as const,
+      variant: "primary" as const,
+      label: loading ? 'Creating...' : 'Create Promotion',
+      disabled: loading
+    }
+  ];
+
   return (
-    <Layout>
-      <div className="container">
-        <div className="row justify-content-center py-5">
-          <div className="col-lg-8 col-md-10">
-            <form onSubmit={handleSubmit} className="mt-5">
-              <h1 className="mb-4">Create Promotion</h1>
-              
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="code" className="form-label">
-                    Promotion Code *
-                  </label>
-                  <input
-                    type="text"
-                    id="code"
-                    name="code"
-                    value={formData.code}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="e.g., SAVE20"
-                    required
-                  />
-                  <div className="form-text">Enter a unique promotion code</div>
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="type" className="form-label">
-                    Discount Type *
-                  </label>
-                  <select
-                    id="type"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleInputChange}
-                    className="form-select"
-                    required
-                  >
-                    <option value="PERCENTAGE">Percentage</option>
-                    <option value="FIXED">Fixed Amount</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="value" className="form-label">
-                    Discount Value *
-                  </label>
-                  <input
-                    type="number"
-                    id="value"
-                    name="value"
-                    value={formData.value}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    placeholder={formData.type === 'PERCENTAGE' ? '20' : '10.00'}
-                    min="0"
-                    step={formData.type === 'PERCENTAGE' ? '1' : '0.01'}
-                    required
-                  />
-                  <div className="form-text">
-                    {formData.type === 'PERCENTAGE' 
-                      ? 'Enter percentage (e.g., 20 for 20%)' 
-                      : 'Enter amount in dollars'
-                    }
-                  </div>
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="minCartValue" className="form-label">
-                    Minimum Cart Value
-                  </label>
-                  <input
-                    type="number"
-                    id="minCartValue"
-                    name="minCartValue"
-                    value={formData.minCartValue}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="0.00"
-                    min="0"
-                    step="0.01"
-                  />
-                  <div className="form-text">Minimum cart value to use this promotion</div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="validFrom" className="form-label">
-                    Valid From
-                  </label>
-                  <input
-                    type="datetime-local"
-                    id="validFrom"
-                    name="validFrom"
-                    value={formData.validFrom}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="validTo" className="form-label">
-                    Valid To
-                  </label>
-                  <input
-                    type="datetime-local"
-                    id="validTo"
-                    name="validTo"
-                    value={formData.validTo}
-                    onChange={handleInputChange}
-                    className="form-control"
-                  />
-                </div>
-              </div>
-
-              <div className="d-flex gap-3 mt-4">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => router.push('/promotions')}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={loading}
-                >
-                  {loading ? 'Creating...' : 'Create Promotion'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </Layout>
+    <FormPage
+      title="Create Promotion"
+      subtitle="Add a new promotion to boost sales"
+      formFields={formFields}
+      formActions={formActions}
+      onSubmit={handleSubmit}
+      protected={true}
+    />
   );
 };
 

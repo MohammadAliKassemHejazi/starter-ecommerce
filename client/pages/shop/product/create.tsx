@@ -61,7 +61,7 @@ function CreateProduct() {
     try {
       const limits = await getUserPackageLimits();
       setPackageLimits(limits);
-      setCanCreateProduct(limits.canCreateProduct);
+      setCanCreateProduct(limits.data.canCreateProduct);
     } catch (error) {
       console.error('Error loading package limits:', error);
     }

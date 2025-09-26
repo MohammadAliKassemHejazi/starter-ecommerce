@@ -154,6 +154,7 @@ export const assignPackageToUser = async (
     const userPackage = await db.UserPackage.create({
       userId,
       packageId,
+      startDate: new Date(),
       createdById: assignedById,
       endDate
     });

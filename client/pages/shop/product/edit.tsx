@@ -119,16 +119,16 @@ debugger
     const response = await dispatch(updateProductImages(formData)).unwrap();
 
     // Extract the updated images from the response
-    const updatedImagesFromResponse = Array.isArray(response.product)
-      ? response.product.map((uploadedImage: any) => ({
+    const updatedImagesFromResponse = Array.isArray(response.data)
+      ? response.data.map((uploadedImage: any) => ({
           id: uploadedImage.id, // ID of the uploaded image
           imageUrl: uploadedImage.imageUrl, // URL of the uploaded image
           file: null, // Clear the file reference since it's already uploaded
         }))
       : [
           {
-            id: response.product.id, // ID of the uploaded image
-            imageUrl: response.product.imageUrl, // URL of the uploaded image
+            id: response.data.id, // ID of the uploaded image
+            imageUrl: response.data.imageUrl, // URL of the uploaded image
             file: null, // Clear the file reference since it's already uploaded
           },
         ];
@@ -194,7 +194,7 @@ debugger
       
       const response = await dispatch(updateProduct(formData)).unwrap();
 
-      router.push(`/shop/product/${response.product.id}`);
+      router.push(`/shop/product/${response.data.id}`);
 
       Toast.fire({
         icon: "success",

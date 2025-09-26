@@ -1,36 +1,24 @@
-import Layout from "@/components/Layouts/Layout";
+import { FormPage } from "@/components/UI/PageComponents";
 import ProtectedRoute from "@/components/protectedRoute";
 import { IArticleModel } from "@/models/article.model";
 import { requestArticleById } from "@/services/articleService";
 import { updateArticles } from "@/store/slices/articleSlice";
 import { useAppDispatch } from "@/store/store";
 import { setAuthHeaders } from "@/utils/httpClient";
-
+import { usePageData } from "@/hooks/usePageData";
+import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import Link from "next/link";
 
 type Props = {
   article?: IArticleModel;
 };
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
-
 const EditArticle = ({ article }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { isAuthenticated } = usePageData();
   const [title, setTitle] = useState<string>("");
   const [text, setText] = useState<string>("");
 
@@ -47,80 +35,59 @@ const EditArticle = ({ article }: Props) => {
       const id = article?.id;
       const response = await dispatch(updateArticles({ id, title, text }));
       if (response.meta.requestStatus === "fulfilled") {
-        Toast.fire({
-          icon: "success",
-          title: "Article updated successfully",
-        });
+        showToast.success("Article updated successfully");
         router.push("/articles");
       } else {
-        Toast.fire({
-          icon: "error",
-          title: "Failed to update article",
-        });
+        showToast.error("Failed to update article");
       }
     } catch (error) {
-      Toast.fire({
-        icon: "error",
-        title: "Failed to update article",
-      });
+      showToast.error("Failed to update article");
     }
   };
 
+  const formFields = [
+    {
+      type: "text" as const,
+      name: "title",
+      label: "Title",
+      value: title,
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setTitle(e.target.value),
+      placeholder: "Enter article title",
+      required: true,
+      maxLength: 150,
+      helpText: "Input your article title here."
+    },
+    {
+      type: "textarea" as const,
+      name: "text",
+      label: "Text",
+      value: text,
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setText(e.target.value),
+      placeholder: "Input your article text here.",
+      required: true,
+      rows: 4,
+      helpText: "Input your article text here."
+    }
+  ];
+
+  const formActions = [
+    {
+      type: "button" as const,
+      variant: "secondary" as const,
+      label: "Cancel",
+      href: "/articles"
+    }
+  ];
+
   return (
-    <Layout>
-      <div className="container">
-        <div className="row justify-content-center py-5 vh-100">
-          <div className="col-lg-9 col-md-12 mb-4">
-            <form onSubmit={handleUpdateArticle} className="mt-5">
-              <h1 className="mb-4">Edit Article</h1>
-              <div className="form-group">
-                <label htmlFor="InputArticleTitle" className="form-label">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  maxLength={150}
-                  className="form-control"
-                  id="InputArticleTitle"
-                  placeholder="Enter article title"
-                  required
-                />
-                <small id="articleTitleHelp" className="form-text text-muted">
-                  Input your article title here.
-                </small>
-              </div>
-              <div className="form-group">
-                <label htmlFor="InputArticleText" className="form-label">
-                  Text
-                </label>
-                <textarea
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  rows={4}
-                  className="form-control"
-                  id="InputArticleText"
-                  placeholder="Input your article text here."
-                  required
-                />
-                <small id="articleTextHelp" className="form-text text-muted">
-                  Input your article text here.
-                </small>
-              </div>
-              <Link href="/articles">
-                <button type="button" className="btn btn-secondary mt-3 me-3">
-                  Cancel
-                </button>
-              </Link>
-              <button type="submit" className="btn btn-primary mt-3">
-                Update
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </Layout>
+    <FormPage
+      title="Edit Article"
+      subtitle="Update article information"
+      formFields={formFields}
+      formActions={formActions}
+      onSubmit={handleUpdateArticle}
+      protected={true}
+    />
   );
 };
 

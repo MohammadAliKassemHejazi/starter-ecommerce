@@ -26,6 +26,7 @@ export interface IProductAttributes {
   slug?: string;                       // Optional SEO friendly URL slug
   tags?: string;                       // Optional tags for the product
   discount?: number;
+  tenantId?: string;                   // RLS tenant isolation
   productImages?: IProductImageAttributes[];
   rating?: number;
   sizes?: [ISizeItemAttributes];

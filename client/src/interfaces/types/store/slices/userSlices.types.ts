@@ -9,6 +9,18 @@ export interface UserState {
 	accessToken: string;
 	roles?: Array<{ id: string; name: string; }>;
 	permissions?: Array<{ id: string; name: string; }>;
+	subscription?: {
+		packageId: string;
+		packageName: string;
+		limits: {
+			storeLimit: number;
+			productLimit: number;
+			userLimit: number;
+			isSuperAdmin: boolean;
+		};
+		isActive: boolean;
+		endDate: string | null;
+	};
 	error?: string;
 }
 

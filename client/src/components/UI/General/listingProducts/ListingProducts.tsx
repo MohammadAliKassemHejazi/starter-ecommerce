@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IProductModel } from "@/models/product.model";
-import { fetchProductsListing } from "@/store/slices/shopSlice"; 
+import { fetchPublicProducts, loadMorePublicProducts, selectPublicProducts, selectPublicPagination, selectPublicLoading } from "@/store/slices/publicSlice"; 
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
 import FavoritesButton from "@/components/UI/FavoritesButton";
@@ -11,15 +11,15 @@ interface ProductListProps {}
 
 const ProductList: React.FC<ProductListProps> = () => {
   const dispatch = useAppDispatch();
-  const products = useSelector((state: any) => state.products.products) as IProductModel[]; 
-  const productStatus = useSelector((state: any) => state.products.status);
-  const page = useSelector((state: any) => state.products.page);
+  const products = useSelector(selectPublicProducts) as IProductModel[]; 
+  const loading = useSelector(selectPublicLoading);
+  const pagination = useSelector(selectPublicPagination);
   
   const observer = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    dispatch(fetchProductsListing({ page: 1, pageSize: 10 }));
+    dispatch(fetchPublicProducts({ page: 1, pageSize: 10 }));
   }, [dispatch]);
 
   const getTagAndColor = (product: IProductModel) => {
@@ -42,23 +42,23 @@ const ProductList: React.FC<ProductListProps> = () => {
 
   const lastProductRef = useCallback(
     (node: HTMLDivElement | null) => {
-      if (productStatus === "loading") { return; }
+      if (loading.products) { return; }
       if (observer.current) { observer.current.disconnect(); }
       
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          dispatch(fetchProductsListing(page));
+        if (entries[0].isIntersecting && pagination.products.hasMore) {
+          dispatch(loadMorePublicProducts());
         }
       });
 
       if (node) { observer.current.observe(node); }
     },
-    [dispatch, productStatus, page]
+    [dispatch, loading.products, pagination.products.hasMore]
   );
 
   return (
     <div className="container bg-white">
-      {productStatus === "loading" && products.length === 0 ? (
+      {loading.products && products.length === 0 ? (
         <div>Loading...</div>
       ) : (
         <div className="row">

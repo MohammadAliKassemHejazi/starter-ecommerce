@@ -1,7 +1,7 @@
 import express from "express";
 import { shopController } from "../controllers/index";
 import { protectedRoutes } from "../middlewares";
-import { checkProductCreationLimit } from "../middlewares/package.middleware";
+// import { checkProductCreationLimit } from "../middlewares/package.middleware";
 import { body, param, query, validationResult } from "express-validator";
 
 const router = express.Router();
@@ -27,7 +27,7 @@ router.post(
     body("price").isFloat({ min: 0 }).toFloat(), // Validate price
 
   ],
-  checkProductCreationLimit,
+  // checkProductCreationLimit,
   shopController.handleCreateProduct
 );
 

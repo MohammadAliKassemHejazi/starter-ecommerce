@@ -1,34 +1,23 @@
 import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 import { updateUser } from "@/store/slices/myUsersSlice";
 import { useAppDispatch } from "@/store/store";
-import Layout from "@/components/Layouts/Layout";
+import { FormPage } from "@/components/UI/PageComponents";
+import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
-import Link from "next/link";
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
+import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 
 const EditUserModal = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { isAuthenticated } = usePageData();
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
     if (router.isReady && router.query.user) {
-      const user = JSON.parse(router.query.user as string); // Parse the user object
+      const user = JSON.parse(router.query.user as string);
       setName(user.name || "");
       setEmail(user.email || "");
     }
@@ -38,80 +27,55 @@ const EditUserModal = () => {
     e.preventDefault();
     try {
       await dispatch(updateUser({ id: router.query.id as string, name, email }));
-      Toast.fire({
-        icon: "success",
-        title: "User updated successfully",
-      });
-      router.push("/users"); // Redirect to users list
+      showToast.success("User updated successfully");
+      router.push("/users");
     } catch (error) {
-      Toast.fire({
-        icon: "error",
-        title: "Failed to update user",
-      });
+      showToast.error("Failed to update user");
     }
   };
 
+  const formFields = [
+    {
+      type: "text" as const,
+      name: "name",
+      label: "Name",
+      value: name,
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setName(e.target.value),
+      placeholder: "Enter user name",
+      required: true,
+      maxLength: 150,
+      helpText: "Input the user name here."
+    },
+    {
+      type: "email" as const,
+      name: "email",
+      label: "Email",
+      value: email,
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setEmail(e.target.value),
+      placeholder: "Enter user email",
+      required: true,
+      helpText: "Input the users email here."
+    }
+  ];
+
+  const formActions = [
+    {
+      type: "button" as const,
+      variant: "secondary" as const,
+      label: "Cancel",
+      href: "/users"
+    }
+  ];
+
   return (
-    <Layout>
-      <div className="container">
-        <div className="row justify-content-center py-5 vh-100">
-          <div className="col-lg-9 col-md-12 mb-4">
-            <form onSubmit={handleSubmit} className="mt-5">
-              <h1 className="mb-4">Edit User</h1>
-
-              {/* Name Field */}
-              <div className="form-group">
-                <label htmlFor="InputUserName" className="form-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  maxLength={150}
-                  className="form-control"
-                  id="InputUserName"
-                  placeholder="Enter user name"
-                  required
-                />
-                <small id="userNameHelp" className="form-text text-muted">
-                  Input the user name here.
-                </small>
-              </div>
-
-              {/* Email Field */}
-              <div className="form-group">
-                <label htmlFor="InputUserEmail" className="form-label">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="form-control"
-                  id="InputUserEmail"
-                  placeholder="Enter user email"
-                  required
-                />
-                <small id="userEmailHelp" className="form-text text-muted">
-                  Input the users email here.
-                </small>
-              </div>
-
-              {/* Buttons */}
-              <Link href="/users">
-                <button type="button" className="btn btn-secondary mt-3 me-3">
-                  Cancel
-                </button>
-              </Link>
-              <button type="submit" className="btn btn-primary mt-3">
-                Update
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </Layout>
+    <FormPage
+      title="Edit User"
+      subtitle="Update user information"
+      formFields={formFields}
+      formActions={formActions}
+      onSubmit={handleSubmit}
+      protected={true}
+    />
   );
 };
 

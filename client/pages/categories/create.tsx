@@ -1,31 +1,18 @@
 import React, { useState } from "react";
-import Swal from "sweetalert2";
 import { createCategory } from "@/store/slices/categorySlice";
 import { useAppDispatch } from "@/store/store";
-import Layout from "@/components/Layouts/Layout";
+import { FormPage } from "@/components/UI/PageComponents";
+import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import router from "next/router";
-import Link from "next/link";
-import FormInput from "@/components/UI/FormInput";
-import LoadingSpinner from "@/components/UI/LoadingSpinner";
+import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { useTranslation } from 'react-i18next';
 import { validateForm, commonRules } from '@/utils/validation';
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
 
 const CreateCategory = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { isAuthenticated } = usePageData();
   const [formData, setFormData] = useState({
     name: "",
     description: ""
@@ -60,115 +47,77 @@ const CreateCategory = () => {
     setLoading(true);
     try {
       const response = await dispatch(createCategory(formData)).unwrap();
-      Toast.fire({
-        icon: "success",
-        title: "Category created successfully",
-      });
+      showToast.success("Category created successfully");
       if (response.id) {
         void router.push(`/categories`);
       }
     } catch (error) {
-      Toast.fire({
-        icon: "error",
-        title: "Failed to create category",
-      });
+      showToast.error("Failed to create category");
     } finally {
       setLoading(false);
     }
   };
 
+  const formFields = [
+    {
+      type: "text",
+      name: "name",
+      label: "Category Name",
+      value: formData.name,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange('name', e.target.value),
+      placeholder: "Enter category name",
+      required: true,
+      validation: validationRules.name,
+      error: errors.name
+    },
+    {
+      type: "textarea",
+      name: "description",
+      label: "Description",
+      value: formData.description,
+      onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange('description', e.target.value),
+      placeholder: "Enter category description (optional)",
+      rows: 4,
+      validation: validationRules.description,
+      error: errors.description
+    }
+  ];
+
+  const formActions = [
+    {
+      type: "button" as const,
+      variant: "outline-secondary" as const,
+      label: "Cancel",
+      href: "/categories"
+    },
+    {
+      type: "submit" as const,
+      variant: "primary" as const,
+      label: loading ? "Creating..." : "Create Category",
+      disabled: loading
+    }
+  ];
+
   if (loading) {
     return (
-      <Layout>
-        <div className="container mt-5">
-          <LoadingSpinner text="Creating category..." />
-        </div>
-      </Layout>
+      <FormPage
+        title={t('categories.createCategory')}
+        subtitle="Add a new category to organize your products"
+        loading={true}
+        protected={true}
+      />
     );
   }
 
   return (
-    <Layout>
-      <div className="container mt-5">
-        <div className="row justify-content-center">
-          <div className="col-lg-8 col-md-10">
-            {/* Header */}
-            <div className="d-flex align-items-center mb-4">
-              <Link href="/categories" className="btn btn-outline-secondary me-3">
-                <i className="bi bi-arrow-left"></i>
-              </Link>
-              <div>
-                <h1 className="h2 fw-bold text-dark mb-1">{t('categories.createCategory')}</h1>
-                <p className="text-muted mb-0">Add a new category to organize your products</p>
-              </div>
-            </div>
-
-            {/* Form */}
-            <div className="card shadow-sm">
-              <div className="card-body p-4">
-                <form onSubmit={handleCreateCategory}>
-                  <div className="row">
-                    <div className="col-12">
-                      <FormInput
-                        label="Category Name"
-                        name="name"
-                        type="text"
-                        value={formData.name}
-                        onChange={(value) => handleInputChange('name', value)}
-                        placeholder="Enter category name"
-                        required={true}
-                        validation={validationRules.name}
-                        error={errors.name}
-                      />
-                    </div>
-                    <div className="col-12">
-                      <FormInput
-                        label="Description"
-                        name="description"
-                        type="textarea"
-                        value={formData.description}
-                        onChange={(value) => handleInputChange('description', value)}
-                        placeholder="Enter category description (optional)"
-                        rows={4}
-                        validation={validationRules.description}
-                        error={errors.description}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Form Actions */}
-                  <div className="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
-                    <Link href="/categories">
-                      <button type="button" className="btn btn-outline-secondary">
-                        <i className="bi bi-x-circle me-2"></i>
-                        Cancel
-                      </button>
-                    </Link>
-                    <button 
-                      type="submit" 
-                      className="btn btn-primary"
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                          Creating...
-                        </>
-                      ) : (
-                        <>
-                          <i className="bi bi-check-circle me-2"></i>
-                          Create Category
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Layout>
+    <FormPage
+      title={t('categories.createCategory')}
+      subtitle="Add a new category to organize your products"
+      formFields={formFields}
+      formActions={formActions}
+      onSubmit={handleCreateCategory}
+      protected={true}
+    />
   );
 };
 

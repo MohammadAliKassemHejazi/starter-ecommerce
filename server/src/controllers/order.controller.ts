@@ -5,7 +5,7 @@ import { TenantRequest } from "../middlewares/rls-tenant.middleware";
 
 
 export const getLastOrder = async (
-  request: CustomRequest | TenantRequest,
+  request: TenantRequest,
   response: Response,
   next: any
 ): Promise<void> => {

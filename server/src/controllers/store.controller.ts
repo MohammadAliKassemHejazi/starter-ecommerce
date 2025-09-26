@@ -16,7 +16,7 @@ import { validationResult } from "express-validator";
 
 
 export const handleCreateStore = async (
-  request: CustomRequest | TenantRequest,
+  request: TenantRequest,
   response: Response,
   next: NextFunction
 ) => {
@@ -105,11 +105,12 @@ export const handleDelete = async (
     if (!isAdmin) {
       // For non-super admins, check ownership
       const store = await storeService.getStoreById(id);
-      if (!store || store.userId !== userId) {
-        return response.status(403).json({
+      if (!store || store.store.userId !== userId) {
+        response.status(403).json({
           success: false,
           message: 'You can only delete stores that you created'
         });
+        return;
       }
     }
 

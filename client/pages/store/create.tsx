@@ -47,7 +47,7 @@ const CreateStore = () => {
     try {
       const limits = await getUserPackageLimits();
       setPackageLimits(limits);
-      setCanCreateStore(limits.canCreateStore);
+      setCanCreateStore(limits.data.canCreateStore);
     } catch (error) {
       console.error('Error loading package limits:', error);
     }

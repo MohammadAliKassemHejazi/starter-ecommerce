@@ -1,4 +1,6 @@
-module.exports = {
+import type { Linter } from 'eslint';
+
+const config: Linter.Config = {
 	parser: '@typescript-eslint/parser',
 	extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint', 'plugin:prettier/recommended'],
 	parserOptions: {
@@ -19,3 +21,5 @@ module.exports = {
 		'prefer-const': 'error',
 	},
 };
+
+export default config;

@@ -1,22 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
-import Layout from '@/components/Layouts/Layout';
-import ProtectedRoute from '@/components/protectedRoute';
+import { PageLayout, FilterCard, StatsGrid } from '@/components/UI/PageComponents';
+import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
-import Swal from 'sweetalert2';
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  },
-});
+import { showToast } from '@/components/UI/PageComponents/ToastConfig';
+import ProtectedRoute from '@/components/protectedRoute';
 
 interface AnalyticsEvent {
   id: string;
@@ -33,6 +22,7 @@ interface AnalyticsEvent {
 
 const AnalyticsPage = () => {
   const { t } = useTranslation();
+  const { isAuthenticated } = usePageData();
   const [events, setEvents] = useState<AnalyticsEvent[]>([]);
   const [stats, setStats] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +31,8 @@ const AnalyticsPage = () => {
     startDate: '',
     endDate: ''
   });
- const fetchAnalytics = useCallback(async () => {
+
+  const fetchAnalytics = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const queryParams = new URLSearchParams();
@@ -69,10 +60,7 @@ const AnalyticsPage = () => {
       }
     } catch (error) {
       console.error('Error fetching analytics:', error);
-      Toast.fire({
-        icon: 'error',
-        title: 'Failed to load analytics',
-      });
+      showToast.error('Failed to load analytics');
     } finally {
       setLoading(false);
     }
@@ -111,8 +99,6 @@ const AnalyticsPage = () => {
     fetchStats();
   }, [filters, fetchAnalytics, fetchStats]);
 
- 
-
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters({
       ...filters,
@@ -120,148 +106,170 @@ const AnalyticsPage = () => {
     });
   };
 
+  // Table columns for analytics events
+  const eventColumns = [
+    {
+      key: 'eventType',
+      label: 'Event Type',
+      render: (value: string) => (
+        <span className="badge bg-primary text-capitalize">
+          {value.replace('_', ' ')}
+        </span>
+      )
+    },
+    {
+      key: 'User',
+      label: 'User',
+      render: (value: any) => value ? (
+        <div>
+          <div className="fw-bold">{value.name}</div>
+          <small className="text-muted">{value.email}</small>
+        </div>
+      ) : 'Anonymous'
+    },
+    {
+      key: 'eventData',
+      label: 'Data',
+      render: (value: any) => (
+        <small className="text-muted">
+          {JSON.stringify(value).substring(0, 50)}...
+        </small>
+      )
+    },
+    {
+      key: 'createdAt',
+      label: 'Date',
+      sortable: true,
+      render: (value: string) => new Date(value).toLocaleString()
+    }
+  ];
+
+  // Statistics cards data
+  const statsCards = stats.map((stat) => ({
+    title: stat.eventType.replace('_', ' '),
+    value: stat.count,
+    icon: 'bi bi-graph-up',
+    color: 'primary' as const
+  }));
+
+  // Filters component
+  const AnalyticsFilters = () => (
+    <FilterCard
+      title="Filter Analytics"
+      onClear={() => setFilters({ eventType: '', startDate: '', endDate: '' })}
+    >
+      <div className="row g-3">
+        <div className="col-md-3">
+          <label className="form-label">Event Type</label>
+          <select
+            className="form-select"
+            name="eventType"
+            value={filters.eventType}
+            onChange={handleFilterChange}
+          >
+            <option value="">All Events</option>
+            <option value="page_view">Page View</option>
+            <option value="product_view">Product View</option>
+            <option value="add_to_cart">Add to Cart</option>
+            <option value="purchase">Purchase</option>
+            <option value="search">Search</option>
+          </select>
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">Start Date</label>
+          <input
+            type="date"
+            className="form-control"
+            name="startDate"
+            value={filters.startDate}
+            onChange={handleFilterChange}
+          />
+        </div>
+        <div className="col-md-3">
+          <label className="form-label">End Date</label>
+          <input
+            type="date"
+            className="form-control"
+            name="endDate"
+            value={filters.endDate}
+            onChange={handleFilterChange}
+          />
+        </div>
+      </div>
+    </FilterCard>
+  );
+
   if (loading) {
     return (
-      <Layout>
-        <div className="container mt-5">
-          <div className="text-center">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
+      <PageLayout title={t('admin.analytics')} protected={true}>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-      </Layout>
+      </PageLayout>
     );
   }
 
   return (
-    <Layout>
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-12">
-            <h1 className="mb-4 text-center fw-bold">{t('admin.analytics')}</h1>
-            
-            {/* Filters */}
-            <div className="card mb-4">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-md-3">
-                    <label className="form-label">Event Type</label>
-                    <select
-                      className="form-select"
-                      name="eventType"
-                      value={filters.eventType}
-                      onChange={handleFilterChange}
-                    >
-                      <option value="">All Events</option>
-                      <option value="page_view">Page View</option>
-                      <option value="product_view">Product View</option>
-                      <option value="add_to_cart">Add to Cart</option>
-                      <option value="purchase">Purchase</option>
-                      <option value="search">Search</option>
-                    </select>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label">Start Date</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      name="startDate"
-                      value={filters.startDate}
-                      onChange={handleFilterChange}
-                    />
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label">End Date</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      name="endDate"
-                      value={filters.endDate}
-                      onChange={handleFilterChange}
-                    />
-                  </div>
-                  <div className="col-md-3 d-flex align-items-end">
-                    <button
-                      className="btn btn-primary w-100"
-                      onClick={() => {
-                        setFilters({ eventType: '', startDate: '', endDate: '' });
-                      }}
-                    >
-                      Clear Filters
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <PageLayout title={t('admin.analytics')} protected={true}>
+      <AnalyticsFilters />
+      
+      {/* Statistics Cards */}
+      {statsCards.length > 0 && (
+        <StatsGrid stats={statsCards} className="mb-4" />
+      )}
 
-            {/* Statistics Cards */}
-            <div className="row mb-4">
-              {stats.map((stat, index) => (
-                <div key={index} className="col-md-3 mb-3">
-                  <div className="card text-center">
-                    <div className="card-body">
-                      <h5 className="card-title text-capitalize">{stat.eventType.replace('_', ' ')}</h5>
-                      <h2 className="text-primary">{stat.count}</h2>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Events Table */}
-            <div className="card">
-              <div className="card-header">
-                <h5>Recent Events</h5>
-              </div>
-              <div className="card-body">
-                <div className="table-responsive">
-                  <table className="table table-hover">
-                    <thead>
-                      <tr>
-                        <th>Event Type</th>
-                        <th>User</th>
-                        <th>Data</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events.map((event) => (
-                        <tr key={event.id}>
-                          <td>
-                            <span className="badge bg-primary text-capitalize">
-                              {event.eventType.replace('_', ' ')}
-                            </span>
-                          </td>
-                          <td>
-                            {event.User ? (
-                              <div>
-                                <div className="fw-bold">{event.User.name}</div>
-                                <small className="text-muted">{event.User.email}</small>
-                              </div>
-                            ) : (
-                              'Anonymous'
-                            )}
-                          </td>
-                          <td>
-                            <small className="text-muted">
-                              {JSON.stringify(event.eventData).substring(0, 50)}...
-                            </small>
-                          </td>
-                          <td>
-                            {new Date(event.createdAt).toLocaleString()}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+      {/* Events Table */}
+      <div className="card">
+        <div className="card-header">
+          <h5>Recent Events</h5>
+        </div>
+        <div className="card-body">
+          <div className="table-responsive">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Event Type</th>
+                  <th>User</th>
+                  <th>Data</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map((event) => (
+                  <tr key={event.id}>
+                    <td>
+                      <span className="badge bg-primary text-capitalize">
+                        {event.eventType.replace('_', ' ')}
+                      </span>
+                    </td>
+                    <td>
+                      {event.User ? (
+                        <div>
+                          <div className="fw-bold">{event.User.name}</div>
+                          <small className="text-muted">{event.User.email}</small>
+                        </div>
+                      ) : (
+                        'Anonymous'
+                      )}
+                    </td>
+                    <td>
+                      <small className="text-muted">
+                        {JSON.stringify(event.eventData).substring(0, 50)}...
+                      </small>
+                    </td>
+                    <td>
+                      {new Date(event.createdAt).toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </Layout>
+    </PageLayout>
   );
 };
 

@@ -36,10 +36,11 @@ export const handleCreatePermission = async (
   // Check if user is super admin
   const isAdmin = await isSuperAdmin(userId!);
   if (!isAdmin) {
-    return res.status(403).json({ 
+    res.status(403).json({ 
       success: false,
       message: 'Super admin privileges required to create permissions' 
     });
+    return;
   }
 
   try {

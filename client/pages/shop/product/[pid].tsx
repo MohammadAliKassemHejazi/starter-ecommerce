@@ -376,34 +376,34 @@ export async function generateMetadata({
   const product = await requestProductById(pid);
 
   return {
-    title: product?.metaTitle ?? product?.name ?? "Product Page",
+    title: product?.data?.metaTitle ?? product?.data?.name ?? "Product Page",
     description:
-      product?.metaDescription ?? product?.description ?? "Product Description",
+      product?.data?.metaDescription ?? product?.data?.description ?? "Product Description",
     openGraph: {
-      title: product?.metaTitle ?? product?.name ?? "Product Page",
+      title: product?.data?.metaTitle ?? product?.data?.name ?? "Product Page",
       description:
-        product?.metaDescription ??
-        product?.description ??
+        product?.data?.metaDescription ??
+        product?.data?.description ??
         "Product Description",
       images: [
         {
           url:
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            (product?.ProductImages?.[0]?.imageUrl ?? ""),
+            (product?.data?.ProductImages?.[0]?.imageUrl ?? ""),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
     },
     twitter: {
       card: "summary_large_image",
-      title: product?.metaTitle ?? product?.name ?? "Product Page",
+      title: product?.data?.metaTitle ?? product?.data?.name ?? "Product Page",
       description:
-        product?.metaDescription ??
-        product?.description ??
+        product?.data?.metaDescription ??
+        product?.data?.description ??
         "Product Description",
       image:
         process.env.NEXT_PUBLIC_BASE_URL_Images +
-        (product?.ProductImages?.[0]?.imageUrl ?? ""),
+        (product?.data?.ProductImages?.[0]?.imageUrl ?? ""),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };

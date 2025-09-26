@@ -476,10 +476,19 @@ async function initializeDatabase(): Promise<void> {
   try {
     if (!IS_PRODUCTION) {
       console.log('🔄 Syncing database in development...');
-      await db.sequelize.sync();
-      console.log('✅ Database schema synced.');
+      
+      // First try to sync with alter option to handle schema changes
+      try {
+        await db.sequelize.sync({ alter: true });
+        console.log('✅ Database schema synced with alterations.');
+      } catch (syncError) {
+        console.log('⚠️  Sync with alter failed, trying force sync...');
+        // If alter fails, try force sync (this will drop and recreate tables)
+        await db.sequelize.sync({ force: true });
+        console.log('✅ Database schema force synced.');
+      }
     } else {
-      await db.sequelize.authenticate();
+      await db.sequelize.sync({ alter: true,force: true })
       console.log('✅ Database connection established.');
     }
   } catch (error) {

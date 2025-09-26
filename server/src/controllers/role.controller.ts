@@ -34,10 +34,11 @@ export const handleCreateRole = async (
   // Check if user is super admin
   const isAdmin = await isSuperAdmin(userId!);
   if (!isAdmin) {
-    return res.status(403).json({ 
+    res.status(403).json({ 
       success: false,
       message: 'Super admin privileges required to create roles' 
     });
+    return;
   }
 
   try {
@@ -68,10 +69,11 @@ export const handleDeleteRole = async (
   // Check if user is super admin
   const isAdmin = await isSuperAdmin(userId!);
   if (!isAdmin) {
-    return res.status(403).json({ 
+    res.status(403).json({ 
       success: false,
       message: 'Super admin privileges required to delete roles' 
     });
+    return;
   }
 
   try {
@@ -102,10 +104,11 @@ export const handleUpdateRole = async (
   // Check if user is super admin
   const isAdmin = await isSuperAdmin(userId!);
   if (!isAdmin) {
-    return res.status(403).json({ 
+    res.status(403).json({ 
       success: false,
       message: 'Super admin privileges required to update roles' 
     });
+    return;
   }
 
   try {

@@ -8,7 +8,7 @@ import fs from "fs";
 import { validationResult } from "express-validator";
 
 export const handleCreateProduct = async (
-  request: CustomRequest | TenantRequest,
+  request: TenantRequest,
   response: Response,
   next: NextFunction
 ) => {
@@ -97,10 +97,11 @@ export const handleDelete = async (
       // For non-super admins, check ownership
       const product = await shopService.getProductById(id);
       if (!product || product.ownerId !== userId) {
-        return response.status(403).json({
+        response.status(403).json({
           success: false,
           message: 'You can only delete products that you created'
         });
+        return;
       }
     }
 

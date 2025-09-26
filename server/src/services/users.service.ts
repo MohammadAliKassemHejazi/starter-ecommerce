@@ -105,6 +105,7 @@ export const createUser = async (
     await db.UserPackage.create({
       userId: user.id,
       packageId: freePackage.id,
+      startDate: new Date(),
       createdById: adminUser?.id || null
     });
   }

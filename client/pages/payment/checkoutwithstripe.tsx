@@ -4,6 +4,8 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { useAppDispatch } from '@/store/store';
 import { createPayment } from '@/store/slices/paymentSlice';
 import CheckoutGuard from '@/components/Guards/CheckoutGuard';
+import { PageLayout } from '@/components/UI/PageComponents';
+import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_Stripe_Key ?? "");
 
@@ -52,49 +54,24 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency, onSuccess
         return;
       }
 
-      if (!paymentMethod) {
-        setError("Failed to create a payment method.");
-        setLoading(false);
-        return;
-      }
-
-      // Step 2: Dispatch the Redux thunk to create a payment intent
-      const paymentDetails = {
-        amount,
-        currency,
+      // Step 2: Create payment intent on your backend
+      const paymentData = {
+        amount: amount * 100, // Convert to cents
+        currency: currency.toLowerCase(),
         paymentMethodId: paymentMethod.id,
       };
 
-      const response = await dispatch(createPayment(paymentDetails));
-
-      // Check if the payment creation was successful
-      if (createPayment.fulfilled.match(response)) {
-        const clientSecret = response.payload.clientSecret; // Access clientSecret from the response
-
-        // Step 3: Confirm the payment using the clientSecret from the backend
-        const { error: confirmError } = await stripe.confirmPayment({
-          clientSecret, // Use the clientSecret from the response
-          confirmParams: {
-            return_url: `${window.location.origin}/payment-success`, // Redirect URL after payment
-          },
-        });
-
-        if (confirmError) {
-          const errorMessage = confirmError.message || "Payment confirmation failed.";
-          setError(errorMessage);
-          onError?.(errorMessage);
-        } else {
-          // Payment succeeded, handle success
-          onSuccess?.(paymentMethod.id);
-          alert('Payment successful!');
-        }
-      } else if (createPayment.rejected.match(response)) {
-        const errorMessage = response.payload || "Failed to process payment.";
-        setError(errorMessage);
-        onError?.(errorMessage);
+      const result = await dispatch(createPayment(paymentData));
+      
+      if (result.meta.requestStatus === 'fulfilled') {
+        const paymentId = result.payload.id;
+        showToast.success('Payment successful!');
+        onSuccess?.(paymentId);
+      } else {
+        throw new Error(result.payload || 'Payment failed');
       }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+    } catch (err: any) {
+      const errorMessage = err.message || 'An unexpected error occurred';
       setError(errorMessage);
       onError?.(errorMessage);
     } finally {
@@ -103,45 +80,119 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency, onSuccess
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#424770',
-              '::placeholder': {
-                color: '#aab7c4',
+    <form onSubmit={handleSubmit} className="needs-validation">
+      <div className="mb-3">
+        <label htmlFor="card-element" className="form-label">
+          Credit or Debit Card
+        </label>
+        <div className="border rounded p-3">
+          <CardElement
+            id="card-element"
+            options={{
+              style: {
+                base: {
+                  fontSize: '16px',
+                  color: '#424770',
+                  '::placeholder': {
+                    color: '#aab7c4',
+                  },
+                },
+                invalid: {
+                  color: '#9e2146',
+                },
               },
-            },
-            invalid: {
-              color: '#9e2146',
-            },
-          },
-        }}
-      />
-      <button type="submit" disabled={!stripe || loading}>
-        {loading ? 'Processing...' : `Pay ${amount} ${currency}`}
-      </button>
-      {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
+            }}
+          />
+        </div>
+        {error && (
+          <div className="text-danger mt-2">
+            <i className="bi bi-exclamation-circle me-1"></i>
+            {error}
+          </div>
+        )}
+      </div>
+
+      <div className="d-grid gap-2">
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={!stripe || loading}
+        >
+          {loading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Processing...
+            </>
+          ) : (
+            <>
+              <i className="bi bi-credit-card me-2"></i>
+              Pay ${amount} {currency.toUpperCase()}
+            </>
+          )}
+        </button>
+      </div>
     </form>
   );
 };
 
 interface CheckoutPageProps {
-  amount: number;
-  currency: string;
+  package: {
+    id: string;
+    name: string;
+    price: number;
+  };
   onSuccess?: (paymentId: string) => void;
   onError?: (error: string) => void;
+  onCancel?: () => void;
 }
-// implement the success and error handlers if needed
 
-const CheckoutPage: React.FC<CheckoutPageProps> = ({ amount, currency ,onSuccess ,onError}) => {
+const CheckoutPage: React.FC<CheckoutPageProps> = ({ 
+  package: pkg, 
+  onSuccess, 
+  onError, 
+  onCancel 
+}) => {
   return (
     <CheckoutGuard>
-      <Elements stripe={stripePromise}>
-        <CheckoutForm amount={amount} currency={currency} onError={onError} onSuccess={onSuccess} />
-      </Elements>
+      <PageLayout 
+        title="Checkout" 
+        subtitle={`Complete your subscription to ${pkg.name}`}
+        protected={true}
+        headerActions={
+          <button 
+            className="btn btn-outline-secondary"
+            onClick={onCancel}
+          >
+            <i className="bi bi-arrow-left me-2"></i>
+            Back to Plans
+          </button>
+        }
+      >
+        <div className="row justify-content-center">
+          <div className="col-lg-6">
+            <div className="card">
+              <div className="card-header">
+                <h5 className="mb-0">Payment Details</h5>
+              </div>
+              <div className="card-body">
+                <div className="mb-4">
+                  <h6>Package: {pkg.name}</h6>
+                  <h4 className="text-primary">${pkg.price}/month</h4>
+                </div>
+                
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm
+                    amount={pkg.price}
+                    currency="usd"
+                    onSuccess={onSuccess}
+                    onError={onError}
+                  />
+                </Elements>
+              </div>
+            </div>
+          </div>
+        </div>
+      </PageLayout>
     </CheckoutGuard>
   );
 };

@@ -1,28 +1,18 @@
 import React, { useState } from "react";
-import Swal from "sweetalert2";
 import { createUser, usersSelector } from "@/store/slices/myUsersSlice";
 import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
-import Layout from "@/components/Layouts/Layout";
+import { FormPage } from "@/components/UI/PageComponents";
+import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import Link from "next/link";
 import router from "next/router";
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
+import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 
 const CreateUserModal = () => {
   const dispatch = useAppDispatch();
   const currentUser = useSelector(usersSelector);
+  const { isAuthenticated } = usePageData();
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -39,102 +29,73 @@ const CreateUserModal = () => {
           createdById: currentUser.id,
         })
       ).unwrap();
-      Toast.fire({
-        icon: "success",
-        title: "User created successfully",
-      });
-      if (response.id) {
+      showToast.success("User created successfully");
+      if (response.data.id) {
         void router.push(`/users`); // Redirect to the new user page
       }
     } catch (error) {
-      Toast.fire({
-        icon: "error",
-        title: "Failed to create user",
-      });
+      showToast.error("Failed to create user");
     }
   };
 
+  const formFields = [
+    {
+      type: "text",
+      name: "name",
+      label: "Name",
+      value: name,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
+      placeholder: "Enter user name",
+      required: true,
+      maxLength: 150,
+      helpText: "Input the users name here."
+    },
+    {
+      type: "email",
+      name: "email",
+      label: "Email",
+      value: email,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
+      placeholder: "Enter user email",
+      required: true,
+      helpText: "Input the users email here."
+    },
+    {
+      type: "password",
+      name: "password",
+      label: "Password",
+      value: password,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value),
+      placeholder: "Enter user password",
+      required: true,
+      minLength: 6,
+      helpText: "Input the user password here (minimum 6 characters)."
+    }
+  ];
+
+  const formActions = [
+    {
+      type: "button" as const,
+      variant: "secondary" as const,
+      label: "Cancel",
+      href: "/users"
+    },
+    {
+      type: "submit" as const,
+      variant: "primary" as const,
+      label: "Create"
+    }
+  ];
+
   return (
-    <Layout>
-      <div className="container">
-        <div className="row justify-content-center py-5 vh-100">
-          <div className="col-lg-9 col-md-12 mb-4">
-            <form onSubmit={handleCreateUser} className="mt-5">
-              <h1 className="mb-4">Create User</h1>
-
-              {/* Name Field */}
-              <div className="form-group">
-                <label htmlFor="InputUserName" className="form-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  maxLength={150}
-                  className="form-control"
-                  id="InputUserName"
-                  placeholder="Enter user name"
-                  required
-                />
-                <small id="userNameHelp" className="form-text text-muted">
-                  Input the users name here.
-                </small>
-              </div>
-
-              {/* Email Field */}
-              <div className="form-group">
-                <label htmlFor="InputUserEmail" className="form-label">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="form-control"
-                  id="InputUserEmail"
-                  placeholder="Enter user email"
-                  required
-                />
-                <small id="userEmailHelp" className="form-text text-muted">
-                  Input the users email here.
-                </small>
-              </div>
-
-              {/* Password Field */}
-              <div className="form-group">
-                <label htmlFor="InputUserPassword" className="form-label">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  minLength={6}
-                  className="form-control"
-                  id="InputUserPassword"
-                  placeholder="Enter user password"
-                  required
-                />
-                <small id="userPasswordHelp" className="form-text text-muted">
-                  Input the user password here (minimum 6 characters).
-                </small>
-              </div>
-
-              {/* Buttons */}
-              <Link href="/users">
-                <button type="button" className="btn btn-secondary mt-3 me-3">
-                  Cancel
-                </button>
-              </Link>
-              <button type="submit" className="btn btn-primary mt-3">
-                Create
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </Layout>
+    <FormPage
+      title="Create User"
+      subtitle="Add a new user to the system"
+      formFields={formFields}
+      formActions={formActions}
+      onSubmit={handleCreateUser}
+      protected={true}
+    />
   );
 };
 

@@ -1,5 +1,6 @@
-import Layout from "@/components/Layouts/Layout";
-import ProtectedRoute from "@/components/protectedRoute";;
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import {
   fetchOrdersByStore,
   totalOrdersSelector,
@@ -9,9 +10,9 @@ import {
 } from "@/store/slices/orderSlice";
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import { store, useAppDispatch } from "@/store/store";
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
+import { TablePage } from "@/components/UI/PageComponents";
+import { usePageData } from "@/hooks/usePageData";
+import ProtectedRoute from "@/components/protectedRoute";
 import debounce from "lodash.debounce";
 import Moment from "react-moment";
 import DatePicker from "react-datepicker";
@@ -19,25 +20,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import { IOrderModel } from "@/models/order.model";
 import { IStoreResponseModel } from "@/models/store.model";
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
-
 const Orders = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const orderList = useSelector(orderByStoreSelector) as IOrderModel[];
   const totalOrders = useSelector(totalOrdersSelector);
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
   const stores = useSelector(storeSelector) as IStoreResponseModel[];
+  const { isAuthenticated } = usePageData();
 
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -89,130 +80,159 @@ const Orders = () => {
     );
   };
 
-  const totalPages = Math.ceil(totalOrders / pageSize);
+  const handleViewOrder = (order: IOrderModel) => {
+    router.push(`/orders/${order.id}`);
+  };
 
-  return (
-    <Layout>
-      <div className="container mt-5">
-        <div className="row justify-content-center">
-          <div className="col-md-12">
-            <h1 className="mb-4 text-center fw-bold">My Orders</h1>
-            <div className="d-flex flex-column flex-md-row gap-3 mb-4">
-              {/* Store Selector */}
-              <select
-                className="form-select flex-grow-1"
-                value={selectedStore ?? ""}
-                onChange={(e) => setSelectedStore(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select Store
+  // Table columns for orders
+  const orderColumns = [
+    {
+      key: 'customerName',
+      label: 'Customer',
+      sortable: true,
+      render: (value: string) => <span className="fw-semibold">{value}</span>
+    },
+    {
+      key: 'totalPrice',
+      label: 'Total Price',
+      sortable: true,
+      render: (value: number) => `$${value.toFixed(2)}`
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (value: string) => {
+        const statusColors = {
+          pending: 'warning',
+          processing: 'info',
+          shipped: 'primary',
+          delivered: 'success',
+          cancelled: 'danger'
+        };
+        return (
+          <span className={`badge bg-${statusColors[value as keyof typeof statusColors] || 'secondary'}`}>
+            {value}
+          </span>
+        );
+      }
+    },
+    {
+      key: 'updatedAt',
+      label: 'Updated At',
+      sortable: true,
+      render: (value: string) => (
+        <Moment format="DD/MM/YYYY HH:mm">{value}</Moment>
+      )
+    }
+  ];
+
+  // Filters component
+  const OrderFilters = () => (
+    <div className="card mb-4">
+      <div className="card-header">
+        <h6 className="mb-0">Filter Orders</h6>
+      </div>
+      <div className="card-body">
+        <div className="row g-3">
+          <div className="col-md-3">
+            <label className="form-label">Store</label>
+            <select
+              className="form-select"
+              value={selectedStore ?? ""}
+              onChange={(e) => setSelectedStore(e.target.value)}
+            >
+              <option value="" disabled>Select Store</option>
+              {stores?.map((store) => (
+                <option key={store.id} value={store.id}>
+                  {store.name}
                 </option>
-                {stores?.map((store) => (
-                  <option key={store.id} value={store.id}>
-                    {store.name}
-                  </option>
-                ))}
-              </select>
-
-              {/* Date Pickers */}
-              <DatePicker
-                selected={fromDate}
-                onChange={(date) => setFromDate(date)}
-                className="form-control flex-grow-1"
-                placeholderText="From Date"
-                dateFormat="yyyy-MM-dd"
-              />
-              <DatePicker
-                selected={toDate}
-                onChange={(date) => setToDate(date)}
-                className="form-control flex-grow-1"
-                placeholderText="To Date"
-                dateFormat="yyyy-MM-dd"
-              />
-
-              {/* Search Input */}
-              <input
-                type="text"
-                className="form-control flex-grow-1"
-                placeholder="Search orders..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            {/* Total Orders Count */}
-            <span className="text-muted d-block mb-4">
-              You have: {totalOrders} order{totalOrders !== 1 && "s"}
-            </span>
-
-            {/* Orders Table */}
-            <div className="table-responsive shadow-sm bg-white">
-              <table className="table table-hover table-bordered border-secondary">
-                <thead className="bg-dark text-light text-center">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Customer</th>
-                    <th scope="col">Total Price</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Updated At</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orderList?.map((order, idx) => (
-                    <tr key={idx} className="align-middle text-center">
-                      <td>{order.id}</td>
-                      <td>{order.customerName}</td>
-                      <td>${order.totalPrice.toFixed(2)}</td>
-                      <td>{order.status}</td>
-                      <td>
-                        <Moment format="DD/MM/YYYY HH:mm">
-                          {order.updatedAt}
-                        </Moment>
-                      </td>
-                      <td>
-                        <button className="btn btn-primary btn-sm">View</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination */}
-            <nav aria-label="Page navigation" className="mt-4">
-              <ul className="pagination justify-content-center">
-                <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-                  <button
-                    className="page-link"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                  >
-                    Previous
-                  </button>
-                </li>
-                <li className="page-item">
-                  <span className="page-link">
-                    Page {currentPage} of {totalPages}
-                  </span>
-                </li>
-                <li
-                  className={`page-item ${
-                    currentPage === totalPages && "disabled"
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                  >
-                    Next
-                  </button>
-                </li>
-              </ul>
-            </nav>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">From Date</label>
+            <DatePicker
+              selected={fromDate}
+              onChange={(date) => setFromDate(date)}
+              className="form-control"
+              placeholderText="From Date"
+              dateFormat="yyyy-MM-dd"
+            />
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">To Date</label>
+            <DatePicker
+              selected={toDate}
+              onChange={(date) => setToDate(date)}
+              className="form-control"
+              placeholderText="To Date"
+              dateFormat="yyyy-MM-dd"
+            />
+          </div>
+          <div className="col-md-3">
+            <label className="form-label">Search</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search orders..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <div className="col-md-2 d-flex align-items-end">
+            <button
+              className="btn btn-outline-secondary w-100"
+              onClick={() => {
+                setSelectedStore("");
+                setFromDate(null);
+                setToDate(null);
+                setSearchQuery("");
+              }}
+            >
+              Clear Filters
+            </button>
           </div>
         </div>
       </div>
-    </Layout>
+    </div>
+  );
+
+  return (
+    <>
+      <OrderFilters />
+      
+      <TablePage
+        title="My Orders"
+        subtitle="Manage and track your orders"
+        data={orderList || []}
+        columns={orderColumns}
+        searchPlaceholder="Search orders..."
+        emptyMessage="No orders found. Orders will appear here when customers place them."
+        viewPath="/orders"
+        exportButton={{ onClick: () => console.log('Export orders') }}
+        filterButton={{ onClick: () => console.log('Filter orders') }}
+        pagination={true}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        customActions={[
+          {
+            key: 'view',
+            label: 'View',
+            icon: 'bi bi-eye',
+            variant: 'primary',
+            onClick: handleViewOrder
+          }
+        ]}
+        headerActions={
+          <div className="d-flex align-items-center gap-3">
+            <span className="text-muted">
+              You have: {totalOrders} order{totalOrders !== 1 && "s"}
+            </span>
+          </div>
+        }
+      />
+    </>
   );
 };
 

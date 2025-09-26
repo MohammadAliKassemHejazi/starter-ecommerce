@@ -1,21 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import Layout from '@/components/Layouts/Layout';
-import ProtectedRoute from '@/components/protectedRoute';
+import { TablePage, FilterCard } from '@/components/UI/PageComponents';
+import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
-import Swal from 'sweetalert2';
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  },
-});
+import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
+import ProtectedRoute from '@/components/protectedRoute';
 
 interface ReturnRequest {
   id: string;
@@ -40,6 +29,7 @@ interface ReturnRequest {
 const ReturnsPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const { isAuthenticated } = usePageData();
   const [returns, setReturns] = useState<ReturnRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -47,7 +37,7 @@ const ReturnsPage = () => {
     userId: ''
   });
 
-    const fetchReturns = useCallback(async () => {
+  const fetchReturns = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const queryParams = new URLSearchParams();
@@ -72,20 +62,15 @@ const ReturnsPage = () => {
       }
     } catch (error) {
       console.error('Error fetching returns:', error);
-      Toast.fire({
-        icon: 'error',
-        title: 'Failed to load returns',
-      });
+      showToast.error('Failed to load returns');
     } finally {
       setLoading(false);
     }
   }, [filters]);
 
-
   useEffect(() => {
     fetchReturns();
   }, [filters, fetchReturns]);
-
 
   const handleStatusUpdate = async (id: string, status: string, resolutionNote?: string) => {
     try {
@@ -103,60 +88,46 @@ const ReturnsPage = () => {
         setReturns(returns.map(returnReq => 
           returnReq.id === id ? { ...returnReq, status: status as any, resolutionNote } : returnReq
         ));
-        Toast.fire({
-          icon: 'success',
-          title: 'Return status updated successfully',
-        });
+        showToast.success('Return status updated successfully');
       } else {
         throw new Error('Failed to update return status');
       }
     } catch (error) {
       console.error('Error updating return status:', error);
-      Toast.fire({
-        icon: 'error',
-        title: 'Failed to update return status',
-      });
+      showToast.error('Failed to update return status');
     }
   };
 
   const handleDeleteReturn = async (id: string) => {
-    Swal.fire({
+    const result = await showConfirm({
       title: 'Delete Return Request',
       text: 'Are you sure you want to delete this return request?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const token = localStorage.getItem('token');
-          const response = await fetch(`/api/returns/${id}`, {
-            method: 'DELETE',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-
-          if (response.ok) {
-            setReturns(returns.filter(returnReq => returnReq.id !== id));
-            Toast.fire({
-              icon: 'success',
-              title: 'Return request deleted successfully',
-            });
-          } else {
-            throw new Error('Failed to delete return request');
-          }
-        } catch (error) {
-          console.error('Error deleting return request:', error);
-          Toast.fire({
-            icon: 'error',
-            title: 'Failed to delete return request',
-          });
-        }
-      }
+      confirmText: 'Yes, delete it!',
+      cancelText: 'Cancel'
     });
+
+    if (result.isConfirmed) {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/returns/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          setReturns(returns.filter(returnReq => returnReq.id !== id));
+          showToast.success('Return request deleted successfully');
+        } else {
+          throw new Error('Failed to delete return request');
+        }
+      } catch (error) {
+        console.error('Error deleting return request:', error);
+        showToast.error('Failed to delete return request');
+      }
+    }
   };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -166,167 +137,156 @@ const ReturnsPage = () => {
     });
   };
 
-  if (loading) {
-    return (
-      <Layout>
-        <div className="container mt-5">
-          <div className="text-center">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
+  // Table columns for returns
+  const returnColumns = [
+    {
+      key: 'Order',
+      label: 'Order',
+      render: (value: any) => value ? (
+        <div>
+          <div className="fw-bold">{value.orderNumber}</div>
+          <small className="text-muted">${value.totalPrice}</small>
         </div>
-      </Layout>
-    );
-  }
+      ) : 'N/A'
+    },
+    {
+      key: 'User',
+      label: 'Customer',
+      render: (value: any) => value ? (
+        <div>
+          <div className="fw-bold">{value.name}</div>
+          <small className="text-muted">{value.email}</small>
+        </div>
+      ) : 'N/A'
+    },
+    {
+      key: 'reason',
+      label: 'Reason',
+      render: (value: string) => (
+        <div className="text-truncate" style={{ maxWidth: "200px" }} title={value}>
+          {value}
+        </div>
+      )
+    },
+    {
+      key: 'refundAmount',
+      label: 'Refund Amount',
+      sortable: true,
+      render: (value: number) => `$${value.toFixed(2)}`
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (value: string) => (
+        <span className={`badge ${
+          value === 'APPROVED' ? 'bg-success' :
+          value === 'REJECTED' ? 'bg-danger' :
+          value === 'PROCESSED' ? 'bg-info' : 'bg-warning'
+        }`}>
+          {value}
+        </span>
+      )
+    },
+    {
+      key: 'createdAt',
+      label: 'Created At',
+      sortable: true,
+      render: (value: string) => new Date(value).toLocaleDateString()
+    },
+    {
+      key: 'statusUpdate',
+      label: 'Update Status',
+      render: (value: any, row: ReturnRequest) => (
+        <select
+          className="form-select form-select-sm"
+          value={row.status}
+          onChange={(e) => {
+            const newStatus = e.target.value;
+            if (newStatus !== row.status) {
+              showConfirm({
+                title: 'Update Status',
+                text: `Change status to ${newStatus}?`,
+                confirmText: 'Update',
+                cancelText: 'Cancel',
+                input: 'textarea',
+                inputLabel: 'Resolution Note (optional)',
+                inputPlaceholder: 'Enter resolution note...'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  handleStatusUpdate(row.id, newStatus, result.value);
+                }
+              });
+            }
+          }}
+        >
+          <option value="PENDING">Pending</option>
+          <option value="APPROVED">Approved</option>
+          <option value="REJECTED">Rejected</option>
+          <option value="PROCESSED">Processed</option>
+        </select>
+      )
+    }
+  ];
 
-  return (
-    <Layout>
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-12">
-            <h1 className="mb-4 text-center fw-bold">Return Management</h1>
-            
-            {/* Filters */}
-            <div className="card mb-4">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-md-4">
-                    <label className="form-label">Status</label>
-                    <select
-                      className="form-select"
-                      name="status"
-                      value={filters.status}
-                      onChange={handleFilterChange}
-                    >
-                      <option value="">All Statuses</option>
-                      <option value="PENDING">Pending</option>
-                      <option value="APPROVED">Approved</option>
-                      <option value="REJECTED">Rejected</option>
-                      <option value="PROCESSED">Processed</option>
-                    </select>
-                  </div>
-                  <div className="col-md-4 d-flex align-items-end">
-                    <button
-                      className="btn btn-secondary w-100"
-                      onClick={() => {
-                        setFilters({ status: '', userId: '' });
-                      }}
-                    >
-                      Clear Filters
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Returns Table */}
-            <div className="table-responsive shadow-sm bg-white">
-              <table className="table table-hover table-bordered border-secondary">
-                <thead className="bg-dark text-light text-center">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Order</th>
-                    <th scope="col">Customer</th>
-                    <th scope="col">Reason</th>
-                    <th scope="col">Refund Amount</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Created At</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {returns.map((returnReq, idx) => (
-                    <tr key={returnReq.id} className="align-middle text-center">
-                      <td>{idx + 1}</td>
-                      <td>
-                        {returnReq.Order ? (
-                          <div>
-                            <div className="fw-bold">{returnReq.Order.orderNumber}</div>
-                            <small className="text-muted">${returnReq.Order.totalPrice}</small>
-                          </div>
-                        ) : (
-                          'N/A'
-                        )}
-                      </td>
-                      <td>
-                        {returnReq.User ? (
-                          <div>
-                            <div className="fw-bold">{returnReq.User.name}</div>
-                            <small className="text-muted">{returnReq.User.email}</small>
-                          </div>
-                        ) : (
-                          'N/A'
-                        )}
-                      </td>
-                      <td className="text-truncate" style={{ maxWidth: "200px" }}>
-                        {returnReq.reason}
-                      </td>
-                      <td>${returnReq.refundAmount}</td>
-                      <td>
-                        <span className={`badge ${
-                          returnReq.status === 'APPROVED' ? 'bg-success' :
-                          returnReq.status === 'REJECTED' ? 'bg-danger' :
-                          returnReq.status === 'PROCESSED' ? 'bg-info' : 'bg-warning'
-                        }`}>
-                          {returnReq.status}
-                        </span>
-                      </td>
-                      <td>{new Date(returnReq.createdAt).toLocaleDateString()}</td>
-                      <td>
-                        <div className="btn-group">
-                          <select
-                            className="form-select form-select-sm"
-                            value={returnReq.status}
-                            onChange={(e) => {
-                              const newStatus = e.target.value;
-                              if (newStatus !== returnReq.status) {
-                                Swal.fire({
-                                  title: 'Update Status',
-                                  text: `Change status to ${newStatus}?`,
-                                  input: 'textarea',
-                                  inputLabel: 'Resolution Note (optional)',
-                                  inputPlaceholder: 'Enter resolution note...',
-                                  showCancelButton: true,
-                                  confirmButtonText: 'Update',
-                                  cancelButtonText: 'Cancel'
-                                }).then((result) => {
-                                  if (result.isConfirmed) {
-                                    handleStatusUpdate(returnReq.id, newStatus, result.value);
-                                  }
-                                });
-                              }
-                            }}
-                          >
-                            <option value="PENDING">Pending</option>
-                            <option value="APPROVED">Approved</option>
-                            <option value="REJECTED">Rejected</option>
-                            <option value="PROCESSED">Processed</option>
-                          </select>
-                          <button
-                            className="btn btn-danger btn-sm ms-2"
-                            onClick={() => handleDeleteReturn(returnReq.id)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {returns.length === 0 && (
-              <div className="text-center py-5">
-                <h3 className="text-muted">No return requests found</h3>
-                <p className="text-muted">Return requests will appear here when customers submit them.</p>
-              </div>
-            )}
-          </div>
+  // Filters component
+  const ReturnFilters = () => (
+    <FilterCard
+      title="Filter Returns"
+      onClear={() => setFilters({ status: '', userId: '' })}
+    >
+      <div className="row g-3">
+        <div className="col-md-4">
+          <label className="form-label">Status</label>
+          <select
+            className="form-select"
+            name="status"
+            value={filters.status}
+            onChange={handleFilterChange}
+          >
+            <option value="">All Statuses</option>
+            <option value="PENDING">Pending</option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
+            <option value="PROCESSED">Processed</option>
+          </select>
         </div>
       </div>
-    </Layout>
+    </FilterCard>
+  );
+
+  return (
+    <>
+      <ReturnFilters />
+      
+      <TablePage
+        title="Return Management"
+        subtitle="Manage customer return requests and refunds"
+        data={returns}
+        columns={returnColumns}
+        loading={loading}
+        searchPlaceholder="Search returns..."
+        emptyMessage="No return requests found. Return requests will appear here when customers submit them."
+        deleteAction={handleDeleteReturn}
+        exportButton={{ onClick: () => console.log('Export returns') }}
+        filterButton={{ onClick: () => console.log('Filter returns') }}
+        customActions={[
+          {
+            key: 'delete',
+            label: 'Delete',
+            icon: 'bi bi-trash',
+            variant: 'danger',
+            onClick: (returnReq) => handleDeleteReturn(returnReq.id)
+          }
+        ]}
+        headerActions={
+          <div className="d-flex align-items-center gap-3">
+            <span className="text-muted">
+              Total Returns: {returns.length}
+            </span>
+          </div>
+        }
+      />
+    </>
   );
 };
 

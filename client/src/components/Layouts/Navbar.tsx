@@ -9,15 +9,17 @@ import Router from "next/router";
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher';
 import RoleBasedAccess from '../RoleBasedAccess';
+import SubscriptionGate from '../SubscriptionGate';
 import { usePermissions } from '@/hooks/usePermissions';
 import Navigation from './Navigation';
-import { getQuickActions } from '@/config/navigation';
+import { getNavigationItems, getQuickActions } from '@/config/navigation';
+import { ROLES } from '@/constants/permissions';
 
 export default function Navbar() {
   const dispatch = useAppDispatch();
   const user = useSelector(userSelector);
   const { t } = useTranslation();
-  const {  userRoles  } = usePermissions();
+  const { userRoles, isSuperAdmin, isAdmin, isCustomer, hasActiveSubscription } = usePermissions();
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
@@ -72,15 +74,54 @@ export default function Navbar() {
 
   const userRole = userRoles?.[0]?.name || 'user';
   const quickActions = getQuickActions(userRole);
+  const navigationItems = getNavigationItems(userRole, user?.permissions || []);
+
+  // Get navbar styling based on user role with darker, more sophisticated colors
+  const getNavbarStyling = () => {
+    if (isSuperAdmin()) {
+      return "navbar navbar-expand-lg navbar-dark shadow-lg sticky-top";
+    } else if (isAdmin()) {
+      return "navbar navbar-expand-lg navbar-dark shadow-lg sticky-top";
+    } else if (hasActiveSubscription()) {
+      return "navbar navbar-expand-lg navbar-dark shadow-lg sticky-top";
+    } else {
+      return "navbar navbar-expand-lg navbar-dark shadow-lg sticky-top";
+    }
+  };
+
+  // Get navbar background color with custom dark gradients
+  const getNavbarBackground = () => {
+    if (isSuperAdmin()) {
+      return {
+        background: "linear-gradient(135deg, #8B0000 0%, #DC143C 50%, #B22222 100%)",
+        borderBottom: "2px solid #FFD700"
+      };
+    } else if (isAdmin()) {
+      return {
+        background: "linear-gradient(135deg, #001F3F 0%, #003366 50%, #004080 100%)",
+        borderBottom: "2px solid #00BFFF"
+      };
+    } else if (hasActiveSubscription()) {
+      return {
+        background: "linear-gradient(135deg, #0F4C3A 0%, #006400 50%, #228B22 100%)",
+        borderBottom: "2px solid #32CD32"
+      };
+    } else {
+      return {
+        background: "linear-gradient(135deg, #2C2C2C 0%, #404040 50%, #555555 100%)",
+        borderBottom: "2px solid #888888"
+      };
+    }
+  };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-80 shadow-sm sticky-top">
+    <nav className={getNavbarStyling()} style={getNavbarBackground()}>
       <div className="container">
         <Link href="/" className="navbar-brand d-flex align-items-center">
-          <span className="fs-4 fw-bold text-black">YourLogo</span>
+          <span className="fs-4 fw-bold text-white">YourLogo</span>
         </Link>
         <button
-          className="navbar-toggler border-black"
+          className="navbar-toggler border-light"
           type="button"
           onClick={() => setIsNavigationOpen(true)}
           aria-label="Toggle navigation"
@@ -89,290 +130,146 @@ export default function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="mainNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 gap-3">
-            {/* Manage Dropdown */}
-            {user.isAuthenticated && (
-              <>
-                <li className="nav-item dropdown">
-                  <Link
-                    className="nav-link dropdown-toggle text-black"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                  >
-                    Manage
-                  </Link>
-                  <ul className="dropdown-menu bg-dark bg-opacity-90 border-black">
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/articles"
-                      >
-                        Articles
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/shop"
-                      >
-                        Shop
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/store"
-                      >
-                        Stores
-                      </Link>
-                    </li>
-                    <li>
-                      <hr className="dropdown-divider border-white" />
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark d-flex align-items-center justify-content-between"
-                        href="/cart"
-                      >
-                        <span>Cart</span>
-                        {cartCount > 0 && (
-                          <span className="badge bg-primary rounded-pill">
-                            {cartCount}
-                          </span>
-                        )}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/orders"
-                      >
-                        Orders
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/categories"
-                      >
-                        Categories
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/subcategories"
-                      >
-                        {t('admin.subcategories')}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/favorites"
-                      >
-                        {t('navigation.favorites')}
-                      </Link>
-                    </li>
-                    
-                  </ul>
-                </li>
-
-                {/* Create Dropdown */}
-                <li className="nav-item dropdown">
-                  <Link
-                    className="nav-link dropdown-toggle text-black"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                  >
-                    Create
-                  </Link>
-                  <ul className="dropdown-menu bg-dark bg-opacity-90 border-black">
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/store/create"
-                      >
-                        New Store
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/shop/product/create"
-                      >
-                        New Product
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/articles/create"
-                      >
-                        New Article
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/categories/create"
-                      >
-                        New Category
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item text-white hover-text-dark"
-                        href="/subcategories/create"
-                      >
-                        New Subcategory
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-
-                {/* Dashboard Dropdown */}
-                <RoleBasedAccess requiredRoles={['admin', 'vendor']}>
-                  <li className="nav-item dropdown">
+            {/* Dynamic Navigation based on user role */}
+            {user.isAuthenticated && navigationItems.map((item) => {
+              if (item.children && item.children.length > 0) {
+                return (
+                  <li key={item.key} className="nav-item dropdown">
                     <Link
-                      className="nav-link dropdown-toggle text-black"
+                      className="nav-link dropdown-toggle text-white"
                       href="#"
                       role="button"
                       data-bs-toggle="dropdown"
                     >
-                      {t('navigation.dashboard')}
+                      {item.label}
                     </Link>
-                    <ul className="dropdown-menu bg-dark bg-opacity-90 border-black">
-                      <li>
-                        <Link
-                          className="dropdown-item text-white hover-text-dark"
-                          href="/dashboard"
-                        >
-                          {t('admin.dashboard')}
-                        </Link>
-                      </li>
-                      <RoleBasedAccess requiredRoles={['admin']}>
-                        <li>
+                    <ul className="dropdown-menu" style={{
+                      background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+                      border: "1px solid #444",
+                      borderRadius: "8px",
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
+                    }}>
+                      {item.children.map((child) => (
+                        <li key={child.key}>
                           <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/users"
+                            className="dropdown-item text-white"
+                            href={child.href || '#'}
+                            style={{
+                              transition: "all 0.3s ease",
+                              borderRadius: "4px",
+                              margin: "2px 4px"
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = "linear-gradient(135deg, #333 0%, #555 100%)";
+                              e.currentTarget.style.color = "#fff";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "transparent";
+                              e.currentTarget.style.color = "#fff";
+                            }}
                           >
-                            {t('admin.users')}
+                            {child.label}
                           </Link>
                         </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/roles"
-                          >
-                            {t('admin.roles')}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/roles/Assignment"
-                          >
-                            {t('roles.assignPermissions')}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/permissions"
-                          >
-                            {t('admin.permissions')}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/promotions"
-                          >
-                            {t('admin.promotions')}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/analytics"
-                          >
-                            {t('admin.analytics')}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/packages"
-                          >
-                            Packages
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/shipping"
-                          >
-                            Shipping
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/sizes"
-                          >
-                            Sizes
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/taxes"
-                          >
-                            Taxes
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/returns"
-                          >
-                            Returns
-                          </Link>
-                        </li>
-                        <li>
-                          <hr className="dropdown-divider border-white" />
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/navigation-demo"
-                          >
-                            Navigation Demo
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/permission-demo"
-                          >
-                            Permission Demo
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="dropdown-item text-white hover-text-dark"
-                            href="/test-permissions"
-                          >
-                            Test Permissions
-                          </Link>
-                        </li>
-                      </RoleBasedAccess>
+                      ))}
                     </ul>
                   </li>
-                </RoleBasedAccess>
-              </>
+                );
+              } else if (item.href) {
+                return (
+                  <li key={item.key} className="nav-item">
+                    <Link
+                      className="nav-link text-white"
+                      href={item.href}
+                      style={{
+                        transition: "all 0.3s ease",
+                        borderRadius: "6px",
+                        padding: "8px 12px",
+                        position: "relative"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "transparent";
+                        e.currentTarget.style.transform = "translateY(0)";
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              }
+              return null;
+            })}
+
+            {/* Special Cart Item */}
+            {user.isAuthenticated && (
+              <li className="nav-item">
+                <Link
+                  className="nav-link text-white d-flex align-items-center"
+                  href="/cart"
+                  style={{
+                    transition: "all 0.3s ease",
+                    borderRadius: "6px",
+                    padding: "8px 12px",
+                    position: "relative"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <i className="bi bi-cart me-1"></i>
+                  Cart
+                  {cartCount > 0 && (
+                    <span className="badge rounded-pill ms-1" style={{
+                      background: "linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)",
+                      color: "white",
+                      border: "1px solid #fff"
+                    }}>
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            )}
+
+            {/* Plans Link for non-subscribed users */}
+            {user.isAuthenticated && !hasActiveSubscription() && !isSuperAdmin() && !isAdmin() && (
+              <li className="nav-item">
+                <Link
+                  className="nav-link fw-bold"
+                  href="/plans"
+                  style={{
+                    color: "#FFD700",
+                    transition: "all 0.3s ease",
+                    borderRadius: "6px",
+                    padding: "8px 12px",
+                    position: "relative",
+                    background: "linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.1) 100%)",
+                    border: "1px solid rgba(255,215,0,0.3)"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,165,0,0.2) 100%)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(255,215,0,0.3)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.1) 100%)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  <i className="fas fa-crown me-1"></i>
+                  Upgrade Plan
+                </Link>
+              </li>
             )}
           </ul>
 
@@ -385,12 +282,56 @@ export default function Navbar() {
           <div className="d-flex align-items-center gap-3">
             {user.isAuthenticated ? (
               <div className="d-flex align-items-center gap-3">
-                <span className="d-none d-md-block text-black">
+                <span className="d-none d-md-block text-white">
                   {t('common.welcome')}, <strong>{user.name}</strong>
+                  {isSuperAdmin() && (
+                    <span className="badge ms-2" style={{
+                      background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
+                      color: "#000",
+                      border: "1px solid #fff",
+                      fontWeight: "bold"
+                    }}>Super Admin</span>
+                  )}
+                  {isAdmin() && !isSuperAdmin() && (
+                    <span className="badge ms-2" style={{
+                      background: "linear-gradient(135deg, #00BFFF 0%, #1E90FF 100%)",
+                      color: "#fff",
+                      border: "1px solid #fff"
+                    }}>Admin</span>
+                  )}
+                  {hasActiveSubscription() && !isAdmin() && (
+                    <span className="badge ms-2" style={{
+                      background: "linear-gradient(135deg, #32CD32 0%, #228B22 100%)",
+                      color: "#fff",
+                      border: "1px solid #fff"
+                    }}>Subscribed</span>
+                  )}
+                  {!hasActiveSubscription() && !isAdmin() && (
+                    <span className="badge ms-2" style={{
+                      background: "linear-gradient(135deg, #888 0%, #666 100%)",
+                      color: "#fff",
+                      border: "1px solid #fff"
+                    }}>Free User</span>
+                  )}
                 </span>
                 <button
                   onClick={handleSignOut}
-                  className="btn btn-outline-black btn-sm"
+                  className="btn btn-sm"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+                    border: "1px solid rgba(255,255,255,0.3)",
+                    color: "#fff",
+                    transition: "all 0.3s ease",
+                    borderRadius: "6px"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%)";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
                 >
                   <i className="bi bi-box-arrow-right me-2"></i> {t('navigation.logout')}
                 </button>
@@ -399,13 +340,45 @@ export default function Navbar() {
               <div className="d-flex gap-2">
                 <Link
                   href="/auth/signin"
-                  className="btn btn-outline-black btn-sm"
+                  className="btn btn-sm"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+                    border: "1px solid rgba(255,255,255,0.3)",
+                    color: "#fff",
+                    transition: "all 0.3s ease",
+                    borderRadius: "6px"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%)";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
                 >
                   {t('navigation.login')}
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="btn btn-black btn-sm text-white"
+                  className="btn btn-sm"
+                  style={{
+                    background: "linear-gradient(135deg, #007bff 0%, #0056b3 100%)",
+                    border: "1px solid #007bff",
+                    color: "#fff",
+                    transition: "all 0.3s ease",
+                    borderRadius: "6px"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "linear-gradient(135deg, #0056b3 0%, #004085 100%)";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,123,255,0.3)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "linear-gradient(135deg, #007bff 0%, #0056b3 100%)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
                 >
                   {t('navigation.register')}
                 </Link>

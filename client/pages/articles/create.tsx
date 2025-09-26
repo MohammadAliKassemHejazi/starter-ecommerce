@@ -1,108 +1,81 @@
-import Layout from "@/components/Layouts/Layout";
+import { FormPage } from "@/components/UI/PageComponents";
 import ProtectedRoute from "@/components/protectedRoute";
 import { createArticles } from "@/store/slices/articleSlice";
 import { useAppDispatch } from "@/store/store";
-import Link from "next/link";
+import { usePageData } from "@/hooks/usePageData";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import Swal from "sweetalert2";
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
+import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 
 const CreateArticle = () => {
-
   const dispatch = useAppDispatch();
-  const router = useRouter()
+  const router = useRouter();
+  const { isAuthenticated } = usePageData();
   
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  const handleCreateArticle = async (e: any) => {
+  const handleCreateArticle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try{
-    const response = await dispatch(createArticles({ title, text })).unwrap();
-    Toast.fire({
-      icon: "success",
-      title: "create article successfully",
-    });
-    router.push(`/articles/${response.id}`);
-  }catch(error: any){
-    Toast.fire({
-      icon: "error",
-      title: "create article failed",
-    });
-  }
-      
-  
+    try {
+      const response = await dispatch(createArticles({ title, text })).unwrap();
+      showToast.success("Article created successfully");
+      router.push(`/articles/${response.id}`);
+    } catch (error: any) {
+      showToast.error("Failed to create article");
+    }
   };
 
-  return (
-    <Layout>
-      <div className="container">
-        <div className="row justify-content-center py-5 vh-100">
-          <div className="col-lg-9 col-md-12 mb-4">
-            <form className="mt-5">
-              <h1>Create Article</h1>
-              <div className="form-group">
-                <label htmlFor="InputArticleTitle">Title</label>
-                <input
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                  }}
-                  maxLength={150}
-                  type="text"
-                  className="form-control"
-                  id="InputArticleTitle"
-                  aria-describedby="articleTitleHelp"
-                  placeholder="Enter title"
-                />
-                <small id="articleTitleHelp" className="form-text text-muted">
-                  Input your article title here.
-                </small>
-              </div>
-              <div className="form-group">
-                <label htmlFor="InputArticleText">Text</label>
-                <textarea
-                  onChange={(e) => {
-                    setText(e.target.value);
-                  }}
-                  maxLength={500}
-                  rows={4}
-                  className="form-control"
-                  id="InputArticleText"
-                  placeholder="Input your body of your article here."
-                />
-                <small id="articleTitleHelp" className="form-text text-muted">
-                  Input your article text here.
-                </small>
-              </div>
+  const formFields = [
+    {
+      type: "text",
+      name: "title",
+      label: "Title",
+      value: title,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value),
+      placeholder: "Enter title",
+      required: true,
+      maxLength: 150,
+      helpText: "Input your article title here."
+    },
+    {
+      type: "textarea",
+      name: "text",
+      label: "Text",
+      value: text,
+      onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value),
+      placeholder: "Input your body of your article here.",
+      required: true,
+      rows: 4,
+      maxLength: 500,
+      helpText: "Input your article text here."
+    }
+  ];
 
-              <Link href={"/articles"}>
-                <button className="btn btn-secondary mt-3 me-3">Cancel</button>
-              </Link>
-              <button
-                onClick={(e) => {
-                  handleCreateArticle(e);
-                }}
-                className="btn btn-primary mt-3"
-              >
-                Create
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </Layout>
+  const formActions = [
+    {
+      type: "button" as const,
+      variant: "secondary" as const,
+      label: "Cancel",
+      href: "/articles"
+    },
+    {
+      type: "submit" as const,
+      variant: "primary" as const,
+      label: "Create",
+      onClick: handleCreateArticle
+    }
+  ];
+
+  return (
+    <FormPage
+      title="Create Article"
+      subtitle="Write a new article"
+      formFields={formFields}
+      formActions={formActions}
+      onSubmit={handleCreateArticle}
+      protected={true}
+    />
   );
 };
 

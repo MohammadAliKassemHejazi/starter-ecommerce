@@ -97,6 +97,26 @@ export const usePermissions = () => {
     return userRoles.some(role => role.name === ROLES.CUSTOMER || role.name === ROLES.USER);
   };
 
+  // Check if user has an active subscription
+  const hasActiveSubscription = (): boolean => {
+    if (!isAuthenticated) { return false; }
+    if (isSuperAdmin() || isAdmin()) { return true; } // Admins always have access
+    return user?.subscription?.isActive || false;
+  };
+
+  // Check if user can perform actions (create, edit, delete)
+  const canPerformActions = (): boolean => {
+    if (!isAuthenticated) { return false; }
+    if (isSuperAdmin()) {return true;} // Super admin always has access
+    if (isAdmin()) {return true;} // Admins always have access
+    return hasActiveSubscription();
+  };
+
+  // Check if user can only view (no subscription required)
+  const canOnlyView = (): boolean => {
+    return isAuthenticated; // Any authenticated user can view
+  };
+
   // Check if user can access a specific route
   const canAccessRoute = (route: string): boolean => {
     const routePermissions = ROUTE_PERMISSIONS[route as keyof typeof ROUTE_PERMISSIONS];
@@ -224,6 +244,9 @@ export const usePermissions = () => {
     canAccessRoute,
     canManage,
     canView,
+    hasActiveSubscription,
+    canPerformActions,
+    canOnlyView,
     userRoles,
     userPermissions,
     isAuthenticated,

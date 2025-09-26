@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { assignPackageToUser, getUserPackageLimits, IPackageLimits } from '@/services/packageService';
-import { getAllPackages, IPackage } from '@/services/packageService';
+import { getAllPackages, IPackage,assignPackageToUser, getUserPackageLimits, IPackageLimits } from '@/services/packageService';
+import { ModernTable, UserTablePreset, TableAction } from '@/components/UI/ModernTable';
 
 interface UserManagerProps {
   isSuperAdmin: boolean;
@@ -43,8 +43,8 @@ export const UserManager: React.FC<UserManagerProps> = ({ isSuperAdmin }) => {
         getAllPackages(),
         getUserPackageLimits()
       ]);
-      setPackages(packagesData);
-      setPackageLimits(limits);
+      setPackages(packagesData.data);
+      setPackageLimits(limits.data);
       // TODO: Load users from API
       // const usersData = await getUsers();
       // setUsers(usersData);
@@ -56,7 +56,7 @@ export const UserManager: React.FC<UserManagerProps> = ({ isSuperAdmin }) => {
   };
 
   const handleAssignPackage = async () => {
-    if (!selectedUser || !selectedPackageId) return;
+    if (!selectedUser || !selectedPackageId) {return;}
 
     try {
       await assignPackageToUser(selectedUser.id, selectedPackageId);
@@ -74,11 +74,22 @@ export const UserManager: React.FC<UserManagerProps> = ({ isSuperAdmin }) => {
     setShowAssignModal(true);
   };
 
+  // Define table actions
+  const tableActions: TableAction[] = [
+    {
+      key: 'assign-package',
+      label: 'Assign Package',
+      icon: 'bi bi-box-seam',
+      variant: 'primary',
+      onClick: handleAssignPackageClick
+    }
+  ];
+
   if (!isSuperAdmin) {
     return (
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4">User Management</h2>
-        <p className="text-gray-600">You don't have permission to manage users.</p>
+        <p className="text-gray-600">You dont have permission to manage users.</p>
       </div>
     );
   }
@@ -105,57 +116,44 @@ export const UserManager: React.FC<UserManagerProps> = ({ isSuperAdmin }) => {
         </div>
       </div>
 
-      <div className="table-responsive">
-        <table className="table table-hover table-bordered">
-          <thead className="table-dark">
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Current Package</th>
-              <th>Package Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={5} className="text-center">
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                </td>
-              </tr>
-            ) : users.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="text-center text-muted">
-                  No users found
-                </td>
-              </tr>
-            ) : (
-              users.map(user => (
-                <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.packages?.[0]?.name || 'No Package'}</td>
-                  <td>
-                    <span className={`badge ${user.packages?.[0]?.UserPackage?.isActive ? 'bg-success' : 'bg-secondary'}`}>
-                      {user.packages?.[0]?.UserPackage?.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </td>
-                  <td>
-                    <button 
-                      className="btn btn-primary btn-sm"
-                      onClick={() => handleAssignPackageClick(user)}
-                    >
-                      Assign Package
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <ModernTable
+        data={users}
+        columns={[
+          {
+            key: 'name',
+            label: 'Name',
+            sortable: true,
+            render: (value) => <span className="fw-semibold">{value}</span>
+          },
+          {
+            key: 'email',
+            label: 'Email',
+            sortable: true,
+            render: (value) => <a href={`mailto:${value}`} className="text-decoration-none">{value}</a>
+          },
+          {
+            key: 'packages',
+            label: 'Current Package',
+            render: (value) => value?.[0]?.name || 'No Package'
+          },
+          {
+            key: 'packages',
+            label: 'Package Status',
+            render: (value) => (
+              <span className={`badge ${value?.[0]?.UserPackage?.isActive ? 'bg-success' : 'bg-secondary'}`}>
+                {value?.[0]?.UserPackage?.isActive ? 'Active' : 'Inactive'}
+              </span>
+            )
+          }
+        ]}
+        actions={tableActions}
+        loading={loading}
+        searchable={true}
+        searchPlaceholder="Search users..."
+        pagination={true}
+        pageSize={10}
+        emptyMessage="No users found. Users will appear here once they are created."
+      />
 
       {/* Assign Package Modal */}
       {showAssignModal && (

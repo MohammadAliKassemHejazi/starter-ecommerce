@@ -144,7 +144,7 @@ const SingleStore = ({ initialStore, initialProducts }: SingleStoreProps) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
     const response = await requestAllStores();
-    const stores = response?.stores;
+    const stores = response?.data;
 
     if (!Array.isArray(stores) || stores.length === 0) {
       return { paths: [], fallback: "blocking" };
@@ -179,7 +179,7 @@ export const getStaticProps: GetStaticProps<SingleStoreProps> = async (context) 
 
     return {
       props: {
-        initialStore: store.store,
+        initialStore: store.data,
   
       },
       revalidate: 3600,
@@ -204,19 +204,19 @@ export async function generateMetadata({ params }: { params: { id: string } }, c
     }
 
     return {
-      title: store?.metaTitle || store?.name || "Store Page",
-      description: store?.metaDescription || store?.description || "Discover our products",
+      title: store?.data?.metaTitle || store?.data?.name || "Store Page",
+      description: store?.data?.metaDescription || store?.data?.description || "Discover our products",
       openGraph: {
-        title: store?.metaTitle || store?.name || "Store Page",
-        description: store?.metaDescription || store?.description || "Discover our products",
-        images: [{ url: store?.imgUrl || "/default-store-image.jpg" }],
+        title: store?.data?.metaTitle || store?.data?.name || "Store Page",
+        description: store?.data?.metaDescription || store?.data?.description || "Discover our products",
+        images: [{ url: store?.data?.imgUrl || "/default-store-image.jpg" }],
         url: `${process.env.NEXT_PUBLIC_BASE_URL}/stores/${params.id}`,
       },
       twitter: {
         card: "summary_large_image",
-        title: store?.metaTitle || store?.name || "Store Page",
-        description: store?.metaDescription || store?.description || "Discover our products",
-        image: store?.imgUrl || "/default-store-image.jpg",
+        title: store?.data?.metaTitle || store?.data?.name || "Store Page",
+        description: store?.data?.metaDescription || store?.data?.description || "Discover our products",
+        image: store?.data?.imgUrl || "/default-store-image.jpg",
       },
     };
   } catch (error) {

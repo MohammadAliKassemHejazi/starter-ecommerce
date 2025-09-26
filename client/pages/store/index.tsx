@@ -1,47 +1,31 @@
-import Layout from "@/components/Layouts/Layout";
-import ProtectedRoute from "@/components/protectedRoute";;
-import {
-  deleteStore,
-  fetchAllStoresWithFilter,
-  storeSelector,
-} from "@/store/slices/storeSlice";
-import { useAppDispatch } from "@/store/store";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
-
-import Swal from "sweetalert2";
-import Link from "next/link";
-import Moment from "react-moment";
+import { deleteStore, fetchAllStoresWithFilter, storeSelector } from "@/store/slices/storeSlice";
+import { useAppDispatch } from "@/store/store";
+import { StoreTablePreset } from "@/components/UI/ModernTable";
+import { TablePage } from "@/components/UI/PageComponents";
+import { usePageData } from "@/hooks/usePageData";
+import SubscriptionGate from "@/components/SubscriptionGate";
+import ProtectedRoute from "@/components/protectedRoute";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
-import Image from "next/image";
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-});
+import Link from "next/link";
 
 const Stores = () => {
-    const router = useRouter();
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const stores = useSelector(storeSelector); // Fetch store data
-  const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
-  const [currentPage, setCurrentPage] = useState<number>(1); // Pagination state
-  const pageSize = 10; // Number of stores per page
+  const stores = useSelector(storeSelector);
+  const { isAuthenticated } = usePageData();
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 10;
   
   // Memoized debounced fetch function for searching stores
   const fetchStores = useCallback(
     (query: string) => {
       dispatch(fetchAllStoresWithFilter({ searchQuery: query, page: currentPage, pageSize }));
     },
-    [currentPage, dispatch]
+    [currentPage, dispatch, pageSize]
   );
 
   // Debounce the fetchStores function to prevent too many requests
@@ -63,29 +47,8 @@ const Stores = () => {
   }, [debouncedFetchStores]);
 
   // Handle store deletion
-  const handleDeleteStore = async (id: string, name: string) => {
-    Swal.fire({
-      title: "Do you want to delete this store?",
-      html: `<p>${name}</p>`,
-      showCancelButton: true,
-      confirmButtonText: "Delete",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(deleteStore(id)).then((resp: any) => {
-          if (resp.meta.requestStatus === "fulfilled") {
-            Toast.fire({
-              icon: "success",
-              title: "Store deleted successfully",
-            });
-          } else {
-            Toast.fire({
-              icon: "error",
-              title: "Failed to delete store",
-            });
-          }
-        });
-      }
-    });
+  const handleDeleteStore = async (id: string) => {
+    await dispatch(deleteStore(id));
   };
 
   // Handle page change
@@ -94,129 +57,53 @@ const Stores = () => {
     debouncedFetchStores(searchQuery);
   };
 
-    const handleStoreClick = (storeId: string) => {
-    router.push(`/store/${storeId}`);
-  };
+  // Transform stores data for the table
+  const transformedStores = stores?.map((store: any) => ({
+    ...store,
+    imgUrl: process.env.NEXT_PUBLIC_BASE_URL_Images + store.imgUrl
+  })) || [];
 
-
-  // Pagination calculation
-  const totalStores = stores?.length;
-  const totalPages = Math.ceil(totalStores! / pageSize);
+  const totalStores = stores?.length || 0;
 
   return (
-    <Layout>
-      <div className="container mt-5">
-        <div className="row justify-content-center">
-          <div className="col-md-12">
-            <h1 className="mb-5 text-center mt-3">My Stores</h1>
-
-            <div className="d-flex justify-content-between mb-3">
-              <Link className="col-md-12 text-end" href="/shop/store/create">
-                <span className="btn btn-primary">New Store</span>
-              </Link>
-            </div>
-
-            {/* Search Bar */}
-            <div className="mb-3">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search stores by name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <span className="float-start">
-              You have: {totalStores} stores
-            </span>
-          </div>
-
-          {/* Render store list */}
-          <div className="col-md-12">
-            <div className="table-responsive">
-              <table className="table table-bordered">
-                <thead>
-                  <tr className="text-center text-light bg-dark">
-                    <th>ID</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Created At</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stores?.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((store, idx) => (
-                    <tr key={idx} className="text-center">
-                      <td>{store.id}</td>
-                      <td>{store.name}</td>
-                      <td>
-                        <div
-                                      key={store.id}
-                                      className="store-card bg-white rounded-lg shadow-lg p-4 cursor-pointer"
-                                      onClick={() => handleStoreClick(store.id ?? "")}
-                                    >
-                                      <Image
-                                        src={process.env.NEXT_PUBLIC_BASE_URL_Images + store.imgUrl}
-                                        alt={store.name}
-                                        width={300}
-                                        height={200}
-                                        className="rounded"
-                                      />
-                                      <h3 className="text-lg font-semibold mt-4">{store.name}</h3>
-                                      <span className="badge bg-blue-500 text-white px-3 py-1 rounded-full mt-2 inline-block">
-                                        {store.categoryId}
-                                      </span>
-                                    </div></td>
-                      <td>
-                        <Moment format="DD/MM/YYYY HH:mm">{store.createdAt}</Moment>
-                      </td>
-                      <td>
-                        <div className="btn-group">
-                          <button
-                            className="btn btn-danger me-2"
-                            onClick={() => handleDeleteStore(store.id! , store.name)}
-                          >
-                            Delete
-                          </button>
-                          <button
-                            className="btn btn-primary"
-                            onClick={() => router.push(`/store/edit?id=${store.id}`)}
-                          >
-                            Edit
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination */}
-            <div className="d-flex justify-content-between mt-3">
-              <button
-                className="btn btn-secondary"
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                Previous
-              </button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                className="btn btn-secondary"
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
+    <>
+      {/* Store count info */}
+      <div className="mb-3">
+        <span className="text-muted">
+          You have: {totalStores} stores
+        </span>
       </div>
-    </Layout>
+
+      <TablePage
+        title="My Stores"
+        subtitle="Manage your stores and inventory"
+        data={transformedStores}
+        columns={StoreTablePreset.columns}
+        searchPlaceholder="Search stores..."
+        emptyMessage="No stores found. Create your first store to get started!"
+        addButton={{
+          href: '/shop/store/create',
+          label: 'New Store'
+        }}
+        viewPath="/store"
+        editPath="/store/edit"
+        deleteAction={handleDeleteStore}
+        exportButton={{ onClick: () => console.log('Export stores') }}
+        filterButton={{ onClick: () => console.log('Filter stores') }}
+        pagination={true}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        onRowClick={(store) => router.push(`/store/${store.id}`)}
+        headerActions={
+          <SubscriptionGate requireSubscription={true}>
+            <Link href="/shop/store/create">
+              <span className="btn btn-primary">New Store</span>
+            </Link>
+          </SubscriptionGate>
+        }
+      />
+    </>
   );
 };
 

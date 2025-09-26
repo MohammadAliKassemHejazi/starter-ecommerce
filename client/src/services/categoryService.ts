@@ -1,24 +1,31 @@
 // @/services/categoryService.ts
 import httpClient from "@/utils/httpClient";
+import { 
+	CategoriesListResponse, 
+	CreateCategoryResponse, 
+	UpdateCategoryResponse, 
+	DeleteCategoryResponse 
+} from "@/interfaces/api/category.types";
 
-export const fetchCategories = async () => {
-  const response = await httpClient.get("/categories");
-  return response.data;
+export const fetchCategories = async (): Promise<CategoriesListResponse> => {
+  const { data: response } = await httpClient.get<CategoriesListResponse>("/categories");
+  return response;
 };
 
-export const createCategory = async (data: { name: string; description?: string }) => {
-  const response = await httpClient.post("/categories", data);
-  return response.data;
+export const createCategory = async (data: { name: string; description?: string }): Promise<CreateCategoryResponse> => {
+  const { data: response } = await httpClient.post<CreateCategoryResponse>("/categories", data);
+  return response;
 };
 
-export const updateCategory = async (data: { id: string; name: string; description?: string }) => {
-  const response = await httpClient.put(`/categories/${data.id}`, {
+export const updateCategory = async (data: { id: string; name: string; description?: string }): Promise<UpdateCategoryResponse> => {
+  const { data: response } = await httpClient.put<UpdateCategoryResponse>(`/categories/${data.id}`, {
     name: data.name,
     description: data.description,
   });
-  return response.data;
+  return response;
 };
 
-export const deleteCategory = async (id: string) => {
-  await httpClient.delete(`/categories/${id}`);
+export const deleteCategory = async (id: string): Promise<DeleteCategoryResponse> => {
+  const { data: response } = await httpClient.delete<DeleteCategoryResponse>(`/categories/${id}`);
+  return response;
 };
