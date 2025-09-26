@@ -161,7 +161,7 @@ const PlansPage = () => {
   );
 
   const CurrentSubscriptionInfo = () => {
-    if (!isAuthenticated || !hasActiveSubscription()) return null;
+    if (!isAuthenticated || !hasActiveSubscription()) { return null };
 
     return (
       <div className="alert alert-info mb-4">
