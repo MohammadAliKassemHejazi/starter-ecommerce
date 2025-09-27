@@ -105,6 +105,12 @@ export const getNavigationItems = (userRole: string, permissions: any[]): Naviga
       label: 'Order History',
       href: '/orders/user',
       icon: 'bi-clock-history'
+    },
+    {
+      key: 'upgrade-package',
+      label: 'Upgrade Plan',
+      href: '/plans',
+      icon: 'bi-crown'
     }
   ];
 

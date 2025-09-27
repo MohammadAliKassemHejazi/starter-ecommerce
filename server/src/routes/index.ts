@@ -25,6 +25,7 @@ import shippingRouter from "./shipping.route";
 import sizeRouter from "./size.route";
 import taxRouter from "./tax.route";
 import returnRouter from "./return.route";
+import publicRouter from "./public.route";
 
 export { 
   dashboardRouter, subcategoriesRouter, rolesRouter, permissionsRouter, ordersRouter, 
@@ -32,5 +33,5 @@ export {
   storeRouter, utileRouter, paymentRouter, categoriesRouter, usersRouter, 
   favoriteRouter, commentRouter, promotionRouter, analyticsRouter, auditLogRouter,
   translationRouter, packageRouter, shippingRouter, sizeRouter, taxRouter,
-  returnRouter
+  returnRouter, publicRouter
 };

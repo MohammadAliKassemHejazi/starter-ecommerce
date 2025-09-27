@@ -2,8 +2,6 @@ import React from 'react';
 import { NextPage } from 'next';
 import { usePermissions } from '@/hooks/usePermissions';
 import { PERMISSIONS, ROLES } from '@/constants/permissions';
-import Navigation from '@/components/Layouts/Navigation';
-import Navbar from '@/components/Layouts/Navbar';
 import { PageLayout } from '@/components/UI/PageComponents';
 
 const NavigationDemoPage: NextPage = () => {
@@ -21,7 +19,6 @@ const NavigationDemoPage: NextPage = () => {
     userEmail
   } = usePermissions();
 
-  const [isNavigationOpen, setIsNavigationOpen] = React.useState(false);
 
   const UserInfoCard = () => (
     <div className="card mb-4">
@@ -170,12 +167,6 @@ const NavigationDemoPage: NextPage = () => {
       <NavigationTestCard />
       <PermissionStatusCard />
       <InstructionsCard />
-
-      {/* Navigation Component */}
-      <Navigation 
-        isOpen={isNavigationOpen} 
-        onClose={() => setIsNavigationOpen(false)} 
-      />
     </PageLayout>
   );
 };

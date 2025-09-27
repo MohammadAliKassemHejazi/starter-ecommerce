@@ -11,6 +11,7 @@ interface NavigationItemProps {
   onClose?: () => void;
   expandedItems?: Set<string>;
   onToggleExpanded?: (key: string) => void;
+  renderBadge?: (badge: string | number) => React.ReactNode;
 }
 
 // Client-side only component that uses hooks
@@ -19,7 +20,8 @@ const ClientNavigationItem: React.FC<NavigationItemProps> = ({
   level = 0,
   onClose,
   expandedItems = new Set(),
-  onToggleExpanded
+  onToggleExpanded,
+  renderBadge
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -53,13 +55,16 @@ const ClientNavigationItem: React.FC<NavigationItemProps> = ({
   const hasChildren = item.children && item.children.length > 0;
   const isExpanded = expandedItems.has(item.key);
 
-  const renderBadge = (badge: string | number) => {
+  const renderBadgeLocal = (badge: string | number) => {
+    if (renderBadge) {
+      return renderBadge(badge);
+    }
     if (badge === 'cart-count') {
       // This would be handled by the parent component
       return null;
     }
     return (
-      <span className="badge bg-primary rounded-pill ms-auto">
+      <span className="navigation-badge navigation-badge-primary">
         {badge}
       </span>
     );
@@ -73,25 +78,37 @@ const ClientNavigationItem: React.FC<NavigationItemProps> = ({
     }
   };
 
+  const getItemIcon = () => {
+    if (item.icon) {
+      return <i className={`${item.icon} me-2`}></i>;
+    }
+    return null;
+  };
+
+  const getItemLabel = () => {
+    const translationKey = `navigation.${item.label.toLowerCase().replace(/\s+/g, '')}`;
+    return t(translationKey) || item.label;
+  };
+
   return (
-    <li className={`nav-item ${level > 0 ? 'ms-3' : ''}`}>
+    <li className={`navigation-item ${level > 0 ? 'ms-3' : ''}`}>
       {hasChildren ? (
         <>
           <button
-            className={`nav-link d-flex align-items-center justify-content-between w-100 text-start ${
+            className={`navigation-link ${level > 0 ? 'navigation-link-sub' : ''} ${
               isItemActive ? 'active' : ''
             }`}
             onClick={handleClick}
             aria-expanded={isExpanded}
           >
-            <span>
-              {item.icon && <i className={`${item.icon} me-2`}></i>}
-              {t(`navigation.${item.label.toLowerCase().replace(/\s+/g, '')}`) || item.label}
+            <span className="navigation-link-content">
+              {getItemIcon()}
+              <span className="navigation-link-text">{getItemLabel()}</span>
             </span>
-            <i className={`bi bi-chevron-${isExpanded ? 'up' : 'down'}`}></i>
+            <i className={`bi bi-chevron-${isExpanded ? 'up' : 'down'} navigation-chevron ${isExpanded ? 'expanded' : ''}`}></i>
           </button>
           {isExpanded && item.children && (
-            <ul className="nav flex-column ms-2">
+            <ul className="nav flex-column ms-2 mt-1">
               {item.children.map((child) => (
                 <NavigationItem
                   key={child.key}
@@ -108,16 +125,18 @@ const ClientNavigationItem: React.FC<NavigationItemProps> = ({
       ) : (
         <Link
           href={item.href || '#'}
-          className={`nav-link d-flex align-items-center justify-content-between ${
+          className={`navigation-link ${level > 0 ? 'navigation-link-sub' : ''} ${
             isItemActive ? 'active' : ''
           }`}
           onClick={onClose}
         >
-          <span>
-            {item.icon && <i className={`${item.icon} me-2`}></i>}
-            {t(`navigation.${item.label.toLowerCase().replace(/\s+/g, '')}`) || item.label}
+          <span className="navigation-link-content">
+            {getItemIcon()}
+            <span className="navigation-link-text">{getItemLabel()}</span>
           </span>
-          {item.badge && renderBadge(item.badge)}
+          {item.badge && (
+            <span className="navigation-link-badge">{renderBadgeLocal(item.badge)}</span>
+          )}
         </Link>
       )}
     </li>

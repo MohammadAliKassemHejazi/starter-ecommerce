@@ -89,14 +89,15 @@ const getAllStoresforuser = async (UserID: string): Promise<{ stores: IStoreAttr
 };
 
 const getAllStores = async (): Promise<{ stores: IStoreAttributes[] } | null> => {
-  const stores: IStoreAttributes[] | null = await db.Store.findAll();
-  if (!stores) {
+  try {
+    const stores: IStoreAttributes[] | null = await db.Store.findAll();
+    if (!stores) {
+      return null;
+    }
+    return { stores };
+  } catch (error) {
     return null;
   }
-
-
-
-  return { stores };
 };
 
 

@@ -1,4 +1,4 @@
-import { seedData } from './seedData';
+import { seedAll } from './scriptseedall';
 import db from '../models';
 
 const runScripts = async () => {
@@ -7,7 +7,7 @@ const runScripts = async () => {
     
 
     // Run main seed data script (contains all logic)
-    await seedData();
+    await seedAll();
 
     console.log('All scripts completed successfully!');
   } catch (error) {

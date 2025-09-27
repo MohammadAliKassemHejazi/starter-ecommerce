@@ -5,7 +5,7 @@ import {  IStoreResponseModel } from '@/models/store.model';
 
 
 interface BubbleAnimationProps {
-  stores: IStoreResponseModel[]; // Define stores prop
+  stores: IStoreResponseModel[]; 
 }
 
 const BubbleAnimation: React.FC<BubbleAnimationProps> = ({ stores }) => {

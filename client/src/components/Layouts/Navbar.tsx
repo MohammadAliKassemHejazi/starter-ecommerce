@@ -1,5 +1,7 @@
 import { signOut, userSelector } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
+import { fetchCart } from "@/store/slices/cartSlice";
+import { selectAllCartItemCount, selectCartIsLoading } from "@/store/slices/cartSelectors";
 import Link from "next/link";
 import Script from "next/script";
 import React, { useState } from "react";
@@ -8,20 +10,20 @@ import Swal from "sweetalert2";
 import Router from "next/router";
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher';
-import RoleBasedAccess from '../RoleBasedAccess';
-import SubscriptionGate from '../SubscriptionGate';
+
 import { usePermissions } from '@/hooks/usePermissions';
 import Navigation from './Navigation';
 import { getNavigationItems, getQuickActions } from '@/config/navigation';
-import { ROLES } from '@/constants/permissions';
+
 
 export default function Navbar() {
   const dispatch = useAppDispatch();
   const user = useSelector(userSelector);
   const { t } = useTranslation();
-  const { userRoles, isSuperAdmin, isAdmin, isCustomer, hasActiveSubscription } = usePermissions();
+  const { userRoles, isSuperAdmin, isAdmin, hasActiveSubscription } = usePermissions();
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const cartCount = useSelector(selectAllCartItemCount);
+  const cartLoading = useSelector(selectCartIsLoading);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -53,24 +55,15 @@ export default function Navbar() {
     }
   };
 
-  // Fetch cart count
+  // Fetch cart data using Redux dispatch
   React.useEffect(() => {
-    const fetchCartCount = async () => {
-      if (user) {
-        try {
-          const response = await fetch('/api/cart');
-          if (response.ok) {
-            const data = await response.json();
-            setCartCount(data.data?.items?.length || 0);
-          }
-        } catch (error) {
-          console.error('Error fetching cart count:', error);
-        }
-      }
-    };
-
-    fetchCartCount();
-  }, [user]);
+    if (user.isAuthenticated && !user.isGuest) {
+      console.log('Fetching cart for authenticated user:', user.id);
+      dispatch(fetchCart());
+    } else if (user.isGuest) {
+      console.log('User is in guest mode, not fetching cart');
+    }
+  }, [user.isAuthenticated, user.isGuest, user.id, dispatch]);
 
   const userRole = userRoles?.[0]?.name || 'user';
   const quickActions = getQuickActions(userRole);
@@ -116,7 +109,7 @@ export default function Navbar() {
 
   return (
     <nav className={getNavbarStyling()} style={getNavbarBackground()}>
-      <div className="container">
+      <div className="container bg-black bg-opacity-25 rounded-3 p-2">
         <Link href="/" className="navbar-brand d-flex align-items-center">
           <span className="fs-4 fw-bold text-white">YourLogo</span>
         </Link>
@@ -125,8 +118,14 @@ export default function Navbar() {
           type="button"
           onClick={() => setIsNavigationOpen(true)}
           aria-label="Toggle navigation"
+          style={{ 
+            background: 'rgba(255, 255, 255, 0.1)', 
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '8px',
+            padding: '8px 12px'
+          }}
         >
-          <span className="navbar-toggler-icon"></span>
+          <i className="bi bi-list" style={{ color: 'white', fontSize: '1.2rem' }}></i>
         </button>
         <div className="collapse navbar-collapse" id="mainNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 gap-3">
@@ -205,11 +204,11 @@ export default function Navbar() {
             })}
 
             {/* Special Cart Item */}
-            {user.isAuthenticated && (
+            {(user.isAuthenticated || user.isGuest) && (
               <li className="nav-item">
                 <Link
                   className="nav-link text-white d-flex align-items-center"
-                  href="/cart"
+                  href={user.isGuest ? "/auth/signin" : "/cart"}
                   style={{
                     transition: "all 0.3s ease",
                     borderRadius: "6px",
@@ -226,8 +225,24 @@ export default function Navbar() {
                   }}
                 >
                   <i className="bi bi-cart me-1"></i>
-                  Cart
-                  {cartCount > 0 && (
+                  {user.isGuest ? "Sign In to View Cart" : "Cart"}
+                  {user.isGuest ? (
+                    <span className="badge rounded-pill ms-1" style={{
+                      background: "linear-gradient(135deg, #6c757d 0%, #495057 100%)",
+                      color: "white",
+                      border: "1px solid #fff"
+                    }}>
+                      Guest
+                    </span>
+                  ) : cartLoading ? (
+                    <span className="badge rounded-pill ms-1" style={{
+                      background: "linear-gradient(135deg, #6c757d 0%, #495057 100%)",
+                      color: "white",
+                      border: "1px solid #fff"
+                    }}>
+                      <i className="bi bi-arrow-clockwise spin"></i>
+                    </span>
+                  ) : cartCount > 0 ? (
                     <span className="badge rounded-pill ms-1" style={{
                       background: "linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)",
                       color: "white",
@@ -235,7 +250,7 @@ export default function Navbar() {
                     }}>
                       {cartCount}
                     </span>
-                  )}
+                  ) : null}
                 </Link>
               </li>
             )}

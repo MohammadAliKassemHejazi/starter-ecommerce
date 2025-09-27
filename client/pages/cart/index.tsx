@@ -13,7 +13,6 @@ import styles from "./cart.module.css";
 import { RootState, useAppDispatch } from "@/store/store";
 import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";
-import Layout from "@/components/Layouts/Layout";
 import Image from "next/image";
 import PaymentMethodSelector from "@/components/Payment/PaymentMethodSelector";
 import { usePermissions } from "@/hooks/usePermissions";

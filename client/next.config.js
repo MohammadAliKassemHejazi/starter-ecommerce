@@ -26,6 +26,10 @@ const nextConfig = {
         protocol: "https", // Use "https" if your Render server uses HTTPS
         hostname: "starter-ecommerce.onrender.com", // Add your domain here
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 };

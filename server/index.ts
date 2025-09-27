@@ -17,7 +17,7 @@ import {
   usersRouter, ordersRouter, permissionsRouter, rolesRouter, 
   subcategoriesRouter, dashboardRouter, favoriteRouter, commentRouter, promotionRouter,
   analyticsRouter, auditLogRouter, translationRouter, packageRouter, shippingRouter,
-  sizeRouter, taxRouter, returnRouter
+  sizeRouter, taxRouter, returnRouter, publicRouter
 } from './src/routes';
 
 // RLS functionality now integrated into existing routes
@@ -33,6 +33,7 @@ import db from './src/models';
 
 import { storeMiddleWear } from './src/middlewares/store.middleweare';
 import { shopMiddleWare } from './src/middlewares/shop.middleware';
+import runScripts from './src/scripts/runScripts';
 
 // Extend NodeJS global type to include __basedir
 declare global {
@@ -392,6 +393,9 @@ async function createApp(): Promise<Express> {
   });
   
   // API Routes with proper grouping
+  // Public routes (no authentication required)
+  app.use('/api/public', publicRouter);
+  
   // Auth routes with stricter rate limiting
   app.use('/api/auth', authLimiter, authRouter);
   
@@ -479,7 +483,7 @@ async function initializeDatabase(): Promise<void> {
       
       // First try to sync with alter option to handle schema changes
       try {
-        await db.sequelize.sync({ alter: true });
+        await db.sequelize.sync({ force: true });
         console.log('✅ Database schema synced with alterations.');
       } catch (syncError) {
         console.log('⚠️  Sync with alter failed, trying force sync...');
@@ -488,7 +492,7 @@ async function initializeDatabase(): Promise<void> {
         console.log('✅ Database schema force synced.');
       }
     } else {
-      await db.sequelize.sync({ alter: true,force: true })
+      await db.sequelize.sync({force: true })
       console.log('✅ Database connection established.');
     }
   } catch (error) {
@@ -503,6 +507,7 @@ async function startServer(): Promise<void> {
     // Initialize database
     await initializeDatabase();
     // Create app
+    runScripts();
     const app = await createApp();
     const logger = app.get('logger');
     

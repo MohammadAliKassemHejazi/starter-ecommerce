@@ -159,7 +159,6 @@ const SignIn = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-10 offset-lg-1">
-              <h3 className="mb-3">Sign In</h3>
               <div className="bg-white shadow rounded">
                 <div className="row">
                   <LoginForm />

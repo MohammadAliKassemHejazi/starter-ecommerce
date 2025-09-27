@@ -64,6 +64,33 @@ export const isAuthenticated = async (
   }
 };
 
+export const getPublicSession = async (
+  request: CustomRequest,
+  response: Response,
+  next: any
+): Promise<void> => {
+  try {
+    // For guest users, return a default guest session
+    response.status(200).json({
+      message: "Guest session",
+      data: {
+        id: "guest",
+        email: "",
+        name: "Guest User",
+        address: "",
+        phone: "",
+        accessToken: "",
+        isAuthenticated: false,
+        isGuest: true,
+        roles: [],
+        permissions: []
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getUserSessions = async (
   request: CustomRequest,
   response: Response,
@@ -73,7 +100,9 @@ export const getUserSessions = async (
     const UserId = request.UserId;
     const { page = 1, limit = 10 } = request.query;
     const offset = (Number(page) - 1) * Number(limit);
-
+   if (!UserId) {
+     
+  
     const { count, rows } = await db.UserSession.findAndCountAll({
       where: { userId: UserId },
       order: [['loginAt', 'DESC']],
@@ -81,7 +110,7 @@ export const getUserSessions = async (
       offset
     });
 
-    response.json({
+    response.status(200).json({
       success: true,
       sessions: rows,
       pagination: {
@@ -91,6 +120,9 @@ export const getUserSessions = async (
         pages: Math.ceil(count / Number(limit))
       }
     });
+       } else {
+         response.status(200).json({ success: true, sessions: [], pagination: null });
+       }
   } catch (error) {
     console.error('Error getting user sessions:', error);
     next(error);
@@ -117,7 +149,7 @@ export const loggedOut = async (
       );
     }
     
-    response.json({ 
+    response.status(200).json({ 
       success: true, 
       message: 'Logged out successfully',
       userId: UserId 
@@ -135,6 +167,7 @@ export default {
   handleLogin,
   handleRegister,
   isAuthenticated,
+  getPublicSession,
   getUserSessions,
   loggedOut,
 };

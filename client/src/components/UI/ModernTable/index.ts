@@ -8,6 +8,3 @@ export * from './TableUtils';
 export * from './TablePresets';
 
 export type { TableColumn, TableAction, ModernTableProps } from './ModernTable';
-
-// Import CSS
-import './ModernTable.css';

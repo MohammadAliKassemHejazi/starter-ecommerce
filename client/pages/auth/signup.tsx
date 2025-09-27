@@ -14,9 +14,7 @@ export default function SignUp({}: Props) {
   const router = useRouter();
 
   const [eye, setEye] = useState(true);
-  const [messageError, setMessageError] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const handleTogglePassword = () => {
     setEye(!eye);
@@ -33,22 +31,32 @@ export default function SignUp({}: Props) {
     passwordConfirmationElement.setAttribute("type", type);
   };
 
-  useEffect(() => {
-    if (password !== passwordConfirmation) {
-      setMessageError("password not match");
+  const validatePasswords = (password: string, passwordConfirmation: string) => {
+    if (password && passwordConfirmation && password !== passwordConfirmation) {
+      setPasswordError("Passwords do not match");
+      return false;
     } else {
-      setMessageError("");
+      setPasswordError("");
+      return true;
     }
-  }, [password, passwordConfirmation]);
+  };
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const passwordConfirmation = formData.get("passwordConfirmation") as string;
     const name = formData.get("name") as string;
     const address = formData.get("address") as string;
     const phone = formData.get("phone") as string;
+    
+    // Check if passwords match before submitting
+    if (!validatePasswords(password, passwordConfirmation)) {
+      showToast.error("Passwords do not match!");
+      return;
+    }
     
     const response = await dispatch(signUp({ email, password, name, address, phone }));
 
@@ -131,10 +139,7 @@ export default function SignUp({}: Props) {
 
           <div className="col-12">
             <label>
-              Password
-              <span className="text-danger">
-                *{messageError ? ` - ${messageError}` : ''}
-              </span>
+              Password <span className="text-danger">*</span>
             </label>
             <div className="input-group">
               <div className="input-group-text">
@@ -142,22 +147,19 @@ export default function SignUp({}: Props) {
               </div>
               <input
                 type="password"
+                id="password"
                 name="password"
                 className="form-control"
                 placeholder="Enter Password"
                 minLength={8}
                 maxLength={150}
-                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
           </div>
           <div className="col-12">
             <label>
-              Password confirmation
-              <span className="text-danger">
-                &nbsp;{messageError ? ` - ${messageError}` : ''}
-              </span>
+              Password confirmation <span className="text-danger">*</span>
             </label>
             <div className="input-group">
               <div className="input-group-text">
@@ -165,15 +167,20 @@ export default function SignUp({}: Props) {
               </div>
               <input
                 type="password"
+                id="passwordConfirmation"
                 name="passwordConfirmation"
                 className="form-control"
                 minLength={8}
                 maxLength={150}
                 placeholder="Confirm Password"
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
                 required
               />
             </div>
+            {passwordError && (
+              <div className="text-danger mt-1">
+                {passwordError}
+              </div>
+            )}
           </div>
           <div className="col-sm-6">
             <div className="form-check">
@@ -197,7 +204,6 @@ export default function SignUp({}: Props) {
             <button
               type="submit"
               className="me-3 btn btn-primary px-4 float-end mt-4"
-              disabled={!!messageError}
             >
               Sign Up
             </button>

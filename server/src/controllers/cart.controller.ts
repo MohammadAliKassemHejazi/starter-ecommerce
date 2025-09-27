@@ -13,6 +13,9 @@ import { TenantRequest } from '../middlewares/rls-tenant.middleware';
 // Get the user's cart
 export const getCart = async (req: TenantRequest, res: Response, next: NextFunction) => {
   try {
+    if (!req.UserId) {
+      return res.status(200).json({ message: '' });
+    }
     const userId = req.UserId ?? "";
     const cart = await getCartService(userId);
     

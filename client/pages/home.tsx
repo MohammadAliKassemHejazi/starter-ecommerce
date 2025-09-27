@@ -1,4 +1,3 @@
-import Layout from "@/components/Layouts/Layout";
 import React, { useEffect } from "react";
 import ParticleComponent from "@/components/UI/home/starsbackground/starsbackground";
 import BubbleAnimation from "@/components/UI/home/bubbleanimation/BubbleAnimation";

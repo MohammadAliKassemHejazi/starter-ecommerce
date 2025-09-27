@@ -1,0 +1,1872 @@
+
+
+
+===== analytics.model.ts =====
+
+
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class Analytics extends Model {
+    static associate(models: any) {
+      Analytics.belongsTo(models.User);
+    }
+  }
+
+  Analytics.init({
+    eventType: DataTypes.STRING,
+    eventData: DataTypes.JSON,
+    userId: DataTypes.UUID
+  }, {
+    sequelize,
+    modelName: 'Analytics',
+    indexes: [{
+      fields: ['eventType']
+    }]
+  });
+
+  return Analytics;
+};
+
+
+===== article.model.ts =====
+
+
+"use strict";
+import {  Model, UUIDV4 } from "sequelize";
+import { IArticleAttributes } from "../interfaces/types/models/article.model.types";
+
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Article extends Model<IArticleAttributes> implements IArticleAttributes {
+    id!: string;
+    title!: string;
+    text!: string;
+    type!: string;
+    // userId!: ForeignKey<IUserAttributes['id']>; 
+    static associate(models: any) {
+      Article.belongsTo(models.User, { foreignKey: 'userId' , targetKey: 'id'}); 
+    }
+  }
+
+  Article.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      text: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
+      },
+       userId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Article",
+    }
+  );
+  
+  return Article;
+};
+
+
+
+===== cart.model.ts =====
+
+
+"use strict";
+
+import { Model, UUIDV4 } from "sequelize";
+import { ICartAttributes } from "../interfaces/types/models/cart.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Cart extends Model<ICartAttributes> implements ICartAttributes {
+    id!: string;
+    tenantId?: string; // RLS tenant isolation
+
+    static associate(models: any) {
+      // Define the relationship with User
+      Cart.belongsTo(models.User, {
+        foreignKey: "userId",
+        onDelete: "CASCADE",
+      });
+
+      // Define the relationship with CartItem
+      Cart.hasMany(models.CartItem, {
+        foreignKey: "cartId", // Foreign key in CartItem pointing to Cart
+        onDelete: "CASCADE",
+      });
+    }
+  }
+
+  Cart.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      tenantId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        field: 'tenant_id', // RLS tenant isolation
+      },
+    },
+    {
+      sequelize,
+      modelName: "Cart",
+    }
+  );
+
+  return Cart;
+};
+
+
+===== cartitem.model.ts =====
+
+
+"use strict";
+
+import { Model } from "sequelize";
+import { ICartItemAttributes } from "../interfaces/types/models/cartitem.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class CartItem extends Model<ICartItemAttributes> implements ICartItemAttributes {
+    id!: string;
+    quantity!: number;
+      sizeId!: string; // Add sizeId to track the selected size
+    static associate(models: any) {
+      // Define the relationship with Cart
+      CartItem.belongsTo(models.Cart, {foreignKey: "cartId"});
+
+      // Define the relationship with Product
+      CartItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      
+      CartItem.belongsTo(models.SizeItem, { foreignKey: 'sizeItemId', onDelete: 'CASCADE' });
+    }
+    
+  }
+
+  CartItem.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      cartId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      productId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      sizeItemId: {
+        type: DataTypes.UUID, 
+        allowNull: false,
+      },
+      sizeId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: 'Sizes',
+          key: 'id'
+        }
+      },
+    },
+    {
+      sequelize,
+      modelName: "CartItem",
+    }
+  );
+
+  return CartItem;
+};
+
+
+===== category.model.ts =====
+
+
+import { Model } from 'sequelize';
+import { ICategoryAttributes } from '../interfaces/types/models/category.model.types';
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Category extends Model<ICategoryAttributes> implements ICategoryAttributes {
+    id!: string;
+    name!: string;
+    description?: string;
+    tenantId?: string; // RLS tenant isolation
+
+    static associate(models: any) {
+      Category.hasMany(models.SubCategory, {  foreignKey: 'categoryId' });
+      Category.hasMany(models.Product, { foreignKey: 'categoryId' });
+    }
+  }
+
+  Category.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    tenantId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      field: 'tenant_id', // RLS tenant isolation
+    },
+  }, {
+    sequelize,
+    modelName: 'Category',
+  });
+
+
+  return  Category ;
+};
+
+
+===== comments.model.ts =====
+
+
+"use strict";
+
+import { Model, UUIDV4, DataTypes, Sequelize } from "sequelize";
+import { ICommentAttributes } from "../interfaces/types/models/comment.model.types";
+
+module.exports = (sequelize: Sequelize) => {
+  class Comment extends Model<ICommentAttributes> implements ICommentAttributes {
+    id!: string;
+ 
+      text!: string;
+      rating!: number;
+
+    static associate(models: any) {
+      Comment.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+      Comment.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' });
+    }
+  }
+
+  Comment.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    productId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    text: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      },
+    rating: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
+  }, {
+    sequelize,
+    modelName: "Comment",
+    tableName: "Comments",
+    timestamps: true,
+  });
+
+  return Comment;
+};
+
+
+
+===== favorite.model.ts =====
+
+
+"use strict";
+
+import { Model, UUIDV4 } from "sequelize";
+
+import { IFavoriteAttributes } from "../interfaces/types/models/favorite.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Favorite extends Model<IFavoriteAttributes> implements IFavoriteAttributes {
+    id!: string;
+
+    static associate(models: any) {
+ Favorite.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+    Favorite.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+    }
+  }
+
+  Favorite.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Favorite",
+    }
+  );
+
+  return Favorite;
+};
+
+
+
+===== favoriteitem.model.ts =====
+
+
+"use strict";
+
+import { Model, UUIDV4 } from "sequelize";
+import { IFavoriteItemAttributes } from "../interfaces/types/models/favoriteitem.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class FavoriteItem extends Model<IFavoriteItemAttributes> implements IFavoriteItemAttributes {
+    id!: string;
+    // favoriteId?: string;
+    // productId?: string;
+
+    static associate(models: any) {
+      FavoriteItem.belongsTo(models.Favorite, { foreignKey: 'favoriteId' , targetKey: 'id'});
+      FavoriteItem.belongsTo(models.Product, { foreignKey: 'productId', targetKey: 'id' });
+    }
+  }
+
+  FavoriteItem.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
+      primaryKey: true
+    },
+    favoriteId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Favorites',
+        key: 'id'
+      }
+    },
+    productId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Products',
+        key: 'id'
+      }
+    }
+  }, {
+    sequelize,
+    modelName: 'FavoriteItem'
+  });
+
+  return FavoriteItem;
+};
+
+
+
+===== index.ts =====
+
+
+// src/models/index.ts
+"use strict";
+
+import fs from "fs";
+import path from "path";
+import { Sequelize, DataTypes } from "sequelize";
+
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || "development";
+
+// Add error handling for config loading
+let config: any;
+try {
+  // Try different possible paths for the config file
+  const configPaths = [
+    path.join(__dirname, "../config/db.config"),
+    path.join(__dirname, "../../config/db.config")
+  ];
+  
+  let configFound = false;
+  for (const configPath of configPaths) {
+    try {
+      if (fs.existsSync(configPath)) {
+        const configModule = require(configPath);
+        config = configModule.default || configModule;
+        if (config && config[env]) {
+          config = config[env];
+          configFound = true;
+          console.log(`✅ Config loaded from: ${configPath}`);
+          break;
+        }
+      }
+    } catch (err) {
+      console.log(`❌ Failed to load config from: ${configPath}`);
+      continue;
+    }
+  }
+  
+  if (!configFound) {
+    throw new Error("Config file not found in any expected location");
+  }
+  
+} catch (error) {
+  console.error("Failed to load database config file:", error);
+  console.log("🔄 Falling back to environment variables...");
+  
+  // Fallback to environment variables
+
+config = {
+  username: process.env.DB_USERNAME || process.env.DB_USER || process.env.DATABASE_USER,
+  password: process.env.DB_PASSWORD || process.env.DATABASE_PASSWORD,
+  database: env === 'production' 
+    ? (process.env.DB_DATABASE_PRODUCTION || process.env.DB_NAME_PROD || process.env.DATABASE_NAME || 'ecommerce_prod')
+    : env === 'test'
+    ? (process.env.DB_DATABASE_TEST || process.env.DB_NAME_TEST || 'ecommerce_test')
+    : (process.env.DB_DATABASE_DEVELOPMENT || process.env.DB_NAME_DEV || process.env.DATABASE_NAME || 'ecommerce_dev'),
+  host: process.env.DB_HOST || process.env.DATABASE_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || process.env.DATABASE_PORT || '5432'),
+  dialect: process.env.DB_DIALECT || 'postgres',
+  dialectOptions: env === 'production' ? {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  } : {
+    ssl: false
+  },
+  logging: env === 'development' ? console.log : false,
+  pool: {
+    max: env === 'production' ? 10 : 5,
+    min: env === 'production' ? 2 : 0,
+    acquire: 30000,
+    idle: 10000
+  }
+};
+  
+  // If DATABASE_URL is available (common in production), use it
+  if (process.env.DATABASE_URL && env === 'production') {
+    config = {
+      use_env_variable: 'DATABASE_URL',
+      dialect: 'postgres',
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      },
+      logging: false,
+      pool: {
+        max: 10,
+        min: 2,
+        acquire: 30000,
+        idle: 10000
+      }
+    };
+  } else if (process.env.DATABASE_URL && env !== 'production') {
+    // For development, use DATABASE_URL but disable SSL
+    config = {
+      use_env_variable: 'DATABASE_URL',
+      dialect: 'postgres',
+      dialectOptions: {
+        ssl: false
+      },
+      logging: env === 'development' ? console.log : false,
+      pool: {
+        max: env === 'production' ? 10 : 5,
+        min: env === 'production' ? 2 : 0,
+        acquire: 30000,
+        idle: 10000
+      }
+    };
+  }
+}
+
+// Validate configuration
+if (!config) {
+  throw new Error("❌ Database configuration is completely missing!");
+}
+
+console.log("🔧 Database config:", {
+  dialect: config.dialect,
+  host: config.host,
+  port: config.port,
+  database: config.database,
+  use_env_variable: config.use_env_variable,
+  hasUsername: !!config.username,
+  hasPassword: !!config.password
+});
+
+const db: any = {};
+
+let sequelize: any;
+
+try {
+  if (config.use_env_variable) {
+    const envVar = process.env[config.use_env_variable];
+    if (!envVar) {
+      throw new Error(`Environment variable ${config.use_env_variable} is not set!`);
+    }
+    console.log(`🔗 Connecting using environment variable: ${config.use_env_variable}`);
+    sequelize = new Sequelize(envVar, config);
+  } else {
+    if (!config.database || !config.username) {
+      throw new Error("❌ Missing required database configuration: database name or username");
+    }
+    console.log(`🔗 Connecting to database: ${config.database} at ${config.host}:${config.port}`);
+    sequelize = new Sequelize(
+      config.database, // Database name
+      config.username, // Database username
+      config.password, // Database password
+      {
+        host: config.host, // Database host
+        port: config.port, // Database port
+        dialect: config.dialect, // Database dialect (e.g., 'postgres')
+        dialectOptions: config.dialectOptions, // SSL/TLS options
+        logging: config.logging, // Enable/disable logging
+        pool: config.pool // Connection pool settings
+      }
+    );
+  }
+} catch (error) {
+  console.error("❌ Failed to initialize Sequelize:", error);
+  throw error;
+}
+
+// Test the connection
+sequelize.authenticate()
+  .then(() => {
+    console.log("✅ Database connection established successfully.");
+  })
+  .catch((err: any) => {
+    console.error("❌ Unable to connect to the database:", err);
+  });
+
+// Load models
+const modelFiles = fs.readdirSync(__dirname)
+  .filter((file: string) => {
+    return (
+      file.indexOf(".") !== 0 && 
+      file !== basename && 
+      (file.slice(-3) === ".ts" || file.slice(-3) === ".js") &&
+      file !== "index.ts" &&
+      file !== "index.js"
+    );
+  });
+
+console.log(`📁 Loading ${modelFiles.length} model files:`, modelFiles);
+
+modelFiles.forEach((file: string) => {
+  try {
+    const model = require(path.join(__dirname, file))(
+      sequelize,
+      DataTypes
+    );
+    db[model.name] = model;
+    console.log(`✅ Loaded model: ${model.name}`);
+  } catch (error) {
+    console.error(`❌ Failed to load model from file: ${file}`, error);
+  }
+});
+
+// Set up associations
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    try {
+      db[modelName].associate(db);
+      console.log(`🔗 Set up associations for: ${modelName}`);
+    } catch (error) {
+      console.error(`❌ Failed to set up associations for: ${modelName}`, error);
+    }
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+console.log(`🎉 Database initialization complete. Models loaded: ${Object.keys(db).filter(key => key !== 'sequelize' && key !== 'Sequelize').join(', ')}`);
+
+export default db;
+
+
+===== log.model.ts =====
+
+
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class AuditLog extends Model {
+    static associate(models: any) {
+      AuditLog.belongsTo(models.User, { 
+        foreignKey: 'performedById',
+        as: 'PerformedBy'
+      });
+    }
+  }
+
+  AuditLog.init({
+    action: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    entity: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    entityId: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    performedById: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    snapshot: {
+      type: DataTypes.JSON,
+      allowNull: true
+    }
+  }, {
+    sequelize,
+    modelName: 'AuditLog',
+    paranoid: true // Soft deletes
+  });
+
+  return AuditLog;
+};
+
+
+===== multilan.model.ts =====
+
+
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class Translation extends Model {
+    static associate(models: any) {
+      // Translation doesn't have direct associations with Product/Category
+      // It uses polymorphic relationships via model and recordId fields
+    }
+  }
+
+  Translation.init({
+    model: DataTypes.STRING,
+    recordId: DataTypes.UUID,
+    language: DataTypes.STRING(2),
+    field: DataTypes.STRING,
+    translation: DataTypes.TEXT
+  }, {
+    sequelize,
+    modelName: 'Translation',
+    indexes: [
+      { fields: ['model', 'recordId'] },
+      { unique: true, fields: ['model', 'recordId', 'language', 'field'] }
+    ]
+  });
+
+  return Translation;
+};
+
+
+===== order.model.ts =====
+
+
+import { Model, UUIDV4 } from "sequelize";
+import { IOrderAttributes } from "../interfaces/types/models/order.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Order extends Model<IOrderAttributes> implements IOrderAttributes {
+    id!: string;
+    paymentId!: string; // Link to the Payment table
+    tenantId?: string; // RLS tenant isolation
+
+    static associate(models: any) {
+      Order.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+      Order.belongsTo(models.Payment, { foreignKey: 'paymentId', targetKey: 'id' }); // Link to Payment
+Order.hasMany(models.OrderItem, { foreignKey: "orderId", as: "orderItems" });
+Order.hasMany(models.OrderShipping, { foreignKey: "orderId", as: "shippingDetails" });
+    }
+  }
+
+  Order.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
+      currency: {
+  type: DataTypes.STRING(3),
+  allowNull: false,
+  defaultValue: 'USD'
+},
+      tenantId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        field: 'tenant_id', // RLS tenant isolation
+      }
+    },
+    {
+      sequelize,
+      modelName: "Order",
+    }
+  );
+
+  return Order;
+};
+
+
+===== orderitem.model.ts =====
+
+
+import { Model } from "sequelize";
+import { IOrderItemAttributes } from "../interfaces/types/models/orderitem.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class OrderItem extends Model<IOrderItemAttributes> implements IOrderItemAttributes {
+    id!: string;
+    orderId!: string;
+    productId!: string;
+    quantity!: number;
+    price!: number; // Price at the time of purchase
+
+    static associate(models: any) {
+      OrderItem.belongsTo(models.Order, { foreignKey: 'orderId', targetKey: 'id' });
+      OrderItem.belongsTo(models.Product, { foreignKey: 'productId' });
+    }
+  }
+
+  OrderItem.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
+    orderId: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    productId: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    }
+  }, {
+    sequelize,
+    modelName: 'OrderItem'
+  });
+
+  return OrderItem;
+};
+
+
+===== package.model.ts =====
+
+
+import { Model } from 'sequelize';
+import { IPackageAttributes } from "../interfaces/types/models/package.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Package extends Model<IPackageAttributes> implements IPackageAttributes {
+    public id!: string;
+    public name!: string;
+    public description?: string;
+    public storeLimit!: number;
+    public categoryLimit!: number;
+    public productLimit!: number;
+    public userLimit!: number;
+    public isSuperAdminPackage!: boolean;
+    public price!: number;
+    public isActive!: boolean;
+
+    static associate(models: any) {
+      Package.hasMany(models.UserPackage, { foreignKey: 'packageId' });
+      Package.belongsToMany(models.User, {
+        through: models.UserPackage,
+        foreignKey: 'packageId',
+        otherKey: 'userId'
+      });
+    }
+
+  }
+      Package.init(
+        {
+          id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
+          },
+          name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+          },
+          description: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+          },
+          storeLimit: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+          },
+          categoryLimit: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+          },
+          productLimit: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+          },
+          userLimit: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+          },
+          isSuperAdminPackage: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+          },
+          price: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false,
+            defaultValue: 0.00,
+          },
+          isActive: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
+          },
+        },
+        {
+          sequelize,
+          modelName: 'Package',
+        }
+      );
+    
+  
+
+  return Package;
+}
+
+
+===== payment.model.ts =====
+
+
+import { Model, UUIDV4 } from "sequelize";
+import { IPaymentAttributes } from "../interfaces/types/models/payment.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class Payment extends Model<IPaymentAttributes> implements IPaymentAttributes {
+    id!: string;
+    paymentIntentId!: string; // Stripe payment intent ID
+    amount!: number; // Total amount paid
+    currency!: string; // Currency of the payment
+    status!: string; // Payment status (e.g., 'succeeded', 'failed', 'pending')
+    orderId!: string; // Link to the associated order
+
+    static associate(models: any) {
+      Payment.belongsTo(models.Order, { foreignKey: 'orderId', targetKey: 'id' });
+    }
+  }
+
+  Payment.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
+      paymentIntentId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      amount: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      currency: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'pending', // Default status
+      }
+    },
+    {
+      sequelize,
+      modelName: "Payment",
+    }
+  );
+
+  return Payment;
+};
+
+
+===== permission.model.ts =====
+
+
+"use strict";
+
+import { Model, DataTypes } from "sequelize";
+import { IPermissionAttributes } from "../interfaces/types/models/permission.model.types";
+
+module.exports = (sequelize: any) => {
+  class Permission extends Model<IPermissionAttributes> implements IPermissionAttributes {
+    id!: string;
+    name!: string;
+
+    static associate(models: any) {
+      Permission.hasMany(models.RolePermission, { foreignKey: 'permissionId' }); // Permission has many RolePermissions
+    }
+  }
+
+  Permission.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Permission",
+    }
+  );
+
+  return Permission;
+};
+
+
+
+===== product.model.ts =====
+
+
+"use strict";
+
+import { Model, UUIDV4, DataTypes, ForeignKey, Sequelize } from "sequelize";
+import { IProductAttributes } from "../interfaces/types/models/product.model.types";
+
+module.exports = (sequelize: Sequelize) => {
+  class Product extends Model<IProductAttributes> implements IProductAttributes {
+    id!: string;
+    name!: string;
+    description!: string;
+    price!: number;
+    isActive?: boolean;
+    metaTitle?: string;
+    metaDescription?: string;
+    slug?: string;
+    tags?: string;
+    discount?: number;
+    tenantId?: string; // RLS tenant isolation
+
+    static associate(models: any) {
+      Product.belongsTo(models.User, { foreignKey: 'ownerId', targetKey: 'id', onDelete: 'CASCADE' });
+      Product.belongsTo(models.Category, { foreignKey: 'categoryId', targetKey: 'id', onDelete: 'CASCADE' });
+      Product.belongsTo(models.SubCategory, { foreignKey: 'subcategoryId', targetKey: 'id', onDelete: 'CASCADE' });
+      Product.belongsTo(models.Store, { foreignKey: 'storeId', targetKey: 'id', onDelete: 'CASCADE' });
+
+      Product.hasMany(models.ProductImage, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.CartItem, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.Favorite, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.OrderItem, { foreignKey: 'productId'});
+      Product.hasMany(models.Comment, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Product.hasMany(models.SizeItem, { foreignKey: 'productId', onDelete: 'CASCADE' });
+    }
+  }
+
+  Product.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    ownerId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: 'ownerId',  // Explicit field name
+    },
+    categoryId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: 'categoryId',  // Explicit field name
+    },
+    subcategoryId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: 'subcategoryId',  // Explicit field name
+    },
+    storeId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: 'storeId',  // Explicit field name
+    },
+    metaTitle: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    metaDescription: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    tags: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    discount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    tenantId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      field: 'tenant_id', // RLS tenant isolation
+    },
+    
+  }, {
+    sequelize,
+    modelName: "Product",
+    tableName: "Products", // Ensure the table name is consistent
+    timestamps: true, // If you want timestamps like createdAt and updatedAt
+  });
+
+  return Product;
+};
+
+
+
+===== productimage.ts =====
+
+
+"use strict";
+
+import { Model } from "sequelize";
+import { IProductImageAttributes } from "../interfaces/types/models/productimage.model.types";
+
+module.exports = (sequelize: any, DataTypes: any) => {
+  class ProductImage extends Model<IProductImageAttributes> implements IProductImageAttributes {
+    id!: string;
+    // productId!: string;
+    imageUrl!: string;
+
+    static associate(models: any) {
+      ProductImage.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+    }
+  }
+  
+  ProductImage.init({
+
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
+    productId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }, {
+    sequelize,
+    modelName: "ProductImage",
+  });
+
+  return ProductImage;
+};
+
+
+
+===== promotion.model.ts =====
+
+
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class Promotion extends Model {
+    static associate(models: any) {
+      Promotion.belongsToMany(models.Order, {
+        through: 'PromotionOrders'
+      });
+    }
+  }
+
+  Promotion.init({
+    code: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+    type: DataTypes.ENUM('PERCENTAGE', 'FIXED'),
+    value: DataTypes.FLOAT,
+    minCartValue: DataTypes.FLOAT,
+    validFrom: DataTypes.DATE,
+    validTo: DataTypes.DATE
+  }, {
+    sequelize,
+    modelName: 'Promotion'
+  });
+
+  return Promotion;
+};
+
+
+===== return.model.ts =====
+
+
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class ReturnRequest extends Model {
+    static associate(models: any) {
+      ReturnRequest.belongsTo(models.Order);
+      ReturnRequest.belongsTo(models.User);
+    }
+  }
+
+  ReturnRequest.init({
+    orderId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Orders',
+        key: 'id'
+      }
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
+    reason: DataTypes.TEXT,
+    status: DataTypes.ENUM('PENDING', 'APPROVED', 'REJECTED'),
+    refundAmount: DataTypes.FLOAT,
+    resolutionNote: DataTypes.TEXT
+  }, {
+    sequelize,
+    modelName: 'ReturnRequest'
+  });
+
+  return ReturnRequest;
+};
+
+
+===== role.model.ts =====
+
+
+"use strict";
+
+import { Model, DataTypes } from "sequelize";
+import { IRoleAttributes } from "../interfaces/types/models/role.model.types";
+
+module.exports = (sequelize: any) => {
+  class Role extends Model<IRoleAttributes> implements IRoleAttributes {
+    id!: string;
+    name!: string;
+
+    static associate(models: any) {
+      Role.hasMany(models.RoleUser, { foreignKey: 'roleId' , onDelete: 'CASCADE' }); // Role has many RoleUsers
+      Role.hasMany(models.RolePermission, { foreignKey: 'roleId', onDelete: 'CASCADE'  }); // Role has many RolePermissions
+      
+      // Many-to-many relations through RolePermission
+      Role.belongsToMany(models.Permission, { 
+        through: models.RolePermission, 
+        foreignKey: "roleId", 
+        otherKey: "permissionId",
+        as: "permissions"
+      });
+    }
+  }
+
+  Role.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Role",
+    }
+  );
+
+  return Role;
+};
+
+
+
+===== rolepermission .model.ts =====
+
+
+"use strict";
+
+import { Model, DataTypes } from "sequelize";
+import { IRolePermissionAttributes } from "../interfaces/types/models/rolepermission.model.types";
+
+module.exports = (sequelize: any) => {
+  class RolePermission extends Model<IRolePermissionAttributes> implements IRolePermissionAttributes {
+    id!: string;
+    roleId!: string;
+    permissionId!: string;
+
+    static associate(models: any) {
+      RolePermission.belongsTo(models.Role, { foreignKey: 'roleId' }); // RolePermission belongs to Role
+      RolePermission.belongsTo(models.Permission, { foreignKey: 'permissionId' }); // RolePermission belongs to Permission
+    }
+  }
+
+  RolePermission.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      roleId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      permissionId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "RolePermission",
+    }
+  );
+
+  return RolePermission;
+};
+
+
+
+===== roleuser.model.ts =====
+
+
+"use strict";
+
+import { Model, DataTypes } from "sequelize";
+import { IRoleUserAttributes } from "../interfaces/types/models/roleuser.model.types";
+
+module.exports = (sequelize: any) => {
+  class RoleUser extends Model<IRoleUserAttributes> implements IRoleUserAttributes {
+    id!: string;
+    roleId!: string;
+    userId!: string;
+
+    static associate(models: any) {
+      RoleUser.belongsTo(models.User, { foreignKey: 'userId' }); // RoleUser belongs to User
+      RoleUser.belongsTo(models.Role, { foreignKey: 'roleId' }); // RoleUser belongs to Role
+    }
+  }
+
+  RoleUser.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      roleId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "RoleUser",
+    }
+  );
+
+  return RoleUser;
+};
+
+
+
+===== shippment.model.ts =====
+
+
+
+
+// OrderShipping.model.ts
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class OrderShipping extends Model {
+    static associate(models: any) {
+      OrderShipping.belongsTo(models.Order);
+      OrderShipping.belongsTo(models.ShippingMethod);
+    }
+  }
+
+  OrderShipping.init({
+    trackingNumber: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+    carrier: DataTypes.STRING,
+    status: DataTypes.ENUM('PENDING', 'SHIPPED', 'DELIVERED')
+  }, {
+    sequelize,
+    modelName: 'OrderShipping'
+  });
+
+  return OrderShipping;
+};
+
+
+===== shippmentmethod.model.ts =====
+
+
+// ShippingMethod.model.ts
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class ShippingMethod extends Model {
+    static associate(models: any) {
+      ShippingMethod.hasMany(models.OrderShipping);
+    }
+  }
+
+  ShippingMethod.init({
+    name: DataTypes.STRING,
+    cost: DataTypes.FLOAT,
+    deliveryEstimate: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'ShippingMethod'
+  });
+
+  return ShippingMethod;
+};
+
+
+===== size.model.ts =====
+
+
+"use strict";
+
+import { Model, UUIDV4, DataTypes, Sequelize } from "sequelize";
+import { ISizeAttributes } from "../interfaces/types/models/size.model.types";
+
+module.exports = (sequelize: Sequelize) => {
+  class Size extends Model<ISizeAttributes> implements ISizeAttributes {
+    declare id: string;
+    declare size: string;
+
+    static associate(models: any) {
+      Size.hasMany(models.SizeItem, { foreignKey: 'sizeId', sourceKey: 'id', onDelete: 'CASCADE'  });
+    }
+  }
+
+  Size.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
+    size: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }, {
+    sequelize,
+    modelName: "Size",
+    tableName: "Sizes",
+    timestamps: true,
+  });
+
+  return Size;
+};
+
+
+
+===== sizeitem.model.ts =====
+
+
+"use strict";
+
+import { Model, UUIDV4, DataTypes, Sequelize } from "sequelize";
+import { ISizeItemAttributes } from "../interfaces/types/models/sizeitem.model.types";
+
+module.exports = (sequelize: Sequelize) => {
+  class SizeItem extends Model<ISizeItemAttributes> implements ISizeItemAttributes {
+    id!: string;
+    quantity!: number;
+
+    static associate(models: any) {
+      SizeItem.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      SizeItem.belongsTo(models.Size, { foreignKey: 'sizeId', targetKey: 'id' });
+      SizeItem.hasMany(models.CartItem, { foreignKey: 'sizeItemId', onDelete: 'CASCADE' });
+    }
+  }
+
+  SizeItem.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
+    productId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    sizeId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  }, {
+    sequelize,
+    modelName: "SizeItem",
+    tableName: "SizeItems",
+    timestamps: true,
+  });
+
+  return SizeItem;
+};
+
+
+
+===== store.model.ts =====
+
+
+// src/models/store.ts
+
+import { Model } from 'sequelize';
+import { DataTypes } from 'sequelize';
+import { IStoreAttributes } from "../interfaces/types/models/store.model.types"
+
+module.exports = (sequelize: any) => {
+  class Store extends Model<IStoreAttributes> implements IStoreAttributes {
+    public id!: string;
+    public name!: string;
+    public description!: string; // Add description property
+    public imgUrl!: string; // Add imgUrl property
+    public tenantId?: string; // RLS tenant isolation
+
+    static associate(models: any) {
+      Store.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+      Store.belongsTo(models.Category, { foreignKey: 'categoryId', targetKey: 'id' });
+    }
+  }
+
+  Store.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT, // Define description as TEXT type
+        allowNull: true,
+      },
+      imgUrl: {
+        type: DataTypes.STRING, // Define imgUrl as STRING type
+        allowNull: true,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      categoryId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      tenantId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        field: 'tenant_id', // RLS tenant isolation
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Store',
+    }
+  );
+
+  return Store;
+}
+
+
+
+===== subcategory.model.ts =====
+
+
+import {  Model } from 'sequelize';
+import  { ISubCategoryAttributes }  from 'interfaces/types/models/subcategory.model.types';
+
+
+module.exports = (sequelize: any, DataTypes: any) => {
+
+
+  class SubCategory extends Model<ISubCategoryAttributes> implements ISubCategoryAttributes {
+    id!: string;
+
+    name!: string;
+
+    static associate(models: any) {
+      SubCategory.belongsTo(models.Category, {  targetKey: 'id' ,foreignKey: 'categoryId' });
+      SubCategory.hasMany(models.Product, {  foreignKey: 'subcategoryId' , onDelete: 'CASCADE'  });
+    }
+  }
+
+  SubCategory.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }, {
+    sequelize,
+    modelName: 'SubCategory',
+  });
+
+  return SubCategory;
+};
+
+
+
+===== Tax.model.ts =====
+
+
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class TaxRule extends Model {
+    static associate(models: any) {
+      TaxRule.hasMany(models.Order);
+    }
+  }
+
+  TaxRule.init({
+    region: DataTypes.STRING,
+    rate: DataTypes.FLOAT,
+    taxType: DataTypes.ENUM('VAT', 'GST', 'SALES_TAX')
+  }, {
+    sequelize,
+    modelName: 'TaxRule'
+  });
+
+  return TaxRule;
+};
+
+
+===== userpackage.model.ts =====
+
+
+"use strict";
+
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class UserPackage extends Model {
+    id!: string;
+    userId!: string;
+    packageId!: string;
+    startDate!: Date;
+    endDate!: Date | null;
+    isActive!: boolean;
+    createdById!: string | null; // Track who assigned this package
+
+    static associate(models: any) {
+      UserPackage.belongsTo(models.User, { foreignKey: 'userId' });
+      UserPackage.belongsTo(models.Package, { foreignKey: 'packageId' });
+      UserPackage.belongsTo(models.User, { foreignKey: 'createdById', as: 'CreatedBy' });
+    }
+  }
+
+  UserPackage.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
+      },
+      packageId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Packages',
+          key: 'id'
+        }
+      },
+      startDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: DataTypes.NOW,
+        field: 'startDate',
+      },
+      endDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      createdById: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
+      },
+    },
+    {
+      sequelize,
+      modelName: "UserPackage",
+    }
+  );
+
+  return UserPackage;
+};
+
+
+===== users.model.ts =====
+
+
+"use strict";
+import { Model, DataTypes } from "sequelize";
+import { IUserAttributes } from "../interfaces/types/models/user.model.types";
+
+module.exports = (sequelize: any) => {
+  class User extends Model implements IUserAttributes {
+    declare id: string;
+    declare name: string;
+    declare email: string;
+    declare password: string;
+    declare phone: string;
+    declare address: string;
+    declare createdById: string | null; // Optional field to track who created the user
+    static associate(models: any) {
+      // One-to-one relations
+      User.hasOne(models.Cart, { foreignKey: "userId" });
+      User.hasOne(models.Favorite, { foreignKey: "userId" });
+      
+      // Package relationships
+      User.hasMany(models.UserPackage, { foreignKey: "userId" });
+      User.belongsToMany(models.Package, { 
+        through: models.UserPackage, 
+        foreignKey: "userId", 
+        otherKey: "packageId",
+        as: "packages"
+      });
+
+      // One-to-many relations
+      User.hasMany(models.Store, { foreignKey: "userId", onDelete: "CASCADE" });
+      User.hasMany(models.Article, { foreignKey: "userId", onDelete: "CASCADE" });
+      User.hasMany(models.Order, { foreignKey: "userId", onDelete: "CASCADE" });
+      User.hasMany(models.RoleUser, { foreignKey: "userId", onDelete: "CASCADE" });
+
+      // Many-to-many relations through RoleUser
+      User.belongsToMany(models.Role, { 
+        through: models.RoleUser, 
+        foreignKey: "userId", 
+        otherKey: "roleId",
+        as: "roles"
+      });
+
+      // Self-referential relationship for tracking who created the user
+      User.belongsTo(models.User, { foreignKey: "createdById", as: "CreatedBy" });
+    }
+  }
+
+  User.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      email: {
+        type: DataTypes.STRING(150),
+        unique: true,
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      phone: {
+        type: DataTypes.STRING(30),
+        allowNull: true,
+      },
+      address: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      createdById: {
+        type: DataTypes.UUID,
+        allowNull: true, // Optional field
+      },
+    },
+    {
+      sequelize,
+      modelName: "User",
+    }
+  );
+
+  return User;
+};
+
+
+===== usersession.model.ts =====
+
+
+"use strict";
+import { Model, DataTypes } from "sequelize";
+
+module.exports = (sequelize: any) => {
+  class UserSession extends Model {
+    static associate(models: any) {
+      UserSession.belongsTo(models.User);
+    }
+  }
+
+  UserSession.init({
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
+    ipAddress: DataTypes.STRING,
+    deviceType: DataTypes.STRING,
+    loginAt: DataTypes.DATE,
+    logoutAt: DataTypes.DATE
+  }, {
+    sequelize,
+    modelName: 'UserSession'
+  });
+
+  return UserSession;
+};

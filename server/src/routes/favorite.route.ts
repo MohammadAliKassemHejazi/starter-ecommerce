@@ -1,11 +1,18 @@
 import express from 'express';
 import { getFavorites, addToFavorites, removeFromFavorites } from '../controllers/favorite.controller';
-import { verifyToken } from '../middlewares/auth.middleware';
+
+import { protectedRoutes } from "../middlewares";
 
 const router = express.Router();
 
+const protectedRoutesList = [
+    "/",
+    "/:id",
+  ];
+  
+  // Apply protection to specified routes
+protectedRoutes(router, protectedRoutesList);
 // All routes require authentication
-router.use(verifyToken);
 
 // GET /api/favorites - Get user's favorites
 router.get('/', getFavorites);
@@ -14,6 +21,6 @@ router.get('/', getFavorites);
 router.post('/', addToFavorites);
 
 // DELETE /api/favorites/:productId - Remove product from favorites
-router.delete('/:productId', removeFromFavorites);
+router.delete('/:id', removeFromFavorites);
 
 export default router;

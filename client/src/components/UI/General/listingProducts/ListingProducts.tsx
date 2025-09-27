@@ -6,6 +6,7 @@ import { fetchPublicProducts, loadMorePublicProducts, selectPublicProducts, sele
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
 import FavoritesButton from "@/components/UI/FavoritesButton";
+import AddToCartButton from "@/components/UI/AddToCartButton";
 
 interface ProductListProps {}
 
@@ -98,6 +99,13 @@ const ProductList: React.FC<ProductListProps> = () => {
                         variant="icon"
                         showText={false}
                         className="p-0 border-0 bg-transparent"
+                      />
+                    </li>
+                    <li className="icon">
+                      <AddToCartButton 
+                        product={product} 
+                        variant="icon"
+                        showText={false}
                       />
                     </li>
                   </ul>

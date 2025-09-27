@@ -40,6 +40,12 @@ export const getSession = async (): Promise<SessionResponse> => {
 	return response;
 };
 
+// server api - public session for guest users
+export const getPublicSession = async (): Promise<SessionResponse> => {
+	const { data: response } = await httpClient.get<SessionResponse>(`/auth/session/public`);
+	return response;
+};
+
 // Get user sessions
 export const getUserSessions = async (): Promise<UserSessionsResponse> => {
 	const { data: response } = await httpClient.get<UserSessionsResponse>(`/auth/sessions`);

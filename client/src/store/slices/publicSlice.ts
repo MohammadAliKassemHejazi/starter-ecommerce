@@ -59,12 +59,16 @@ const initialState: PublicState = {
   },
 };
 
+
 // Async thunks for public data
 export const fetchPublicStores = createAsyncThunk(
   "public/fetchStores",
   async () => {
     const response = await publicService.getPublicStores();
-    return response.data;
+   return response.data.map(store => ({
+      ...store,
+      description: store.description ?? "", // ensures string
+    }));
   }
 );
 
@@ -142,7 +146,8 @@ const publicSlice = createSlice({
       })
       .addCase(fetchPublicStores.fulfilled, (state, action) => {
         state.loading.stores = false;
-        state.stores = action.payload;
+        console.log("Fetched stores:", action.payload);
+        state.stores = action.payload || [];
       })
       .addCase(fetchPublicStores.rejected, (state, action) => {
         state.loading.stores = false;
@@ -157,13 +162,35 @@ const publicSlice = createSlice({
       })
       .addCase(fetchPublicProducts.fulfilled, (state, action) => {
         state.loading.products = false;
-        state.products = action.payload.products;
-        state.pagination.products = {
-          page: action.payload.pagination.page,
-          pageSize: action.payload.pagination.pageSize,
-          total: action.payload.pagination.total,
-          hasMore: action.payload.pagination.page < action.payload.pagination.totalPages,
-        };
+        // Handle different response formats
+        if (action.payload.products && action.payload.pagination) {
+          // Expected format with products and pagination
+          state.products = action.payload.products;
+          state.pagination.products = {
+            page: action.payload.pagination.page,
+            pageSize: action.payload.pagination.pageSize,
+            total: action.payload.pagination.total,
+            hasMore: action.payload.pagination.page < action.payload.pagination.totalPages,
+          };
+        } else if (action.payload.products) {
+          // Backend returns { message: results } format
+          state.products = Array.isArray(action.payload.products) ? action.payload.products : [];
+          state.pagination.products = {
+            page: 1,
+            pageSize: 10,
+            total: state.products.length,
+            hasMore: false,
+          };
+        } else {
+          // Fallback for unexpected format
+          state.products = [];
+          state.pagination.products = {
+            page: 1,
+            pageSize: 10,
+            total: 0,
+            hasMore: false,
+          };
+        }
       })
       .addCase(fetchPublicProducts.rejected, (state, action) => {
         state.loading.products = false;
