@@ -98,8 +98,12 @@ const Orders = () => {
     )
   );
 
-  const FilteredOrdersTable = () => (
-    (orders?.length ?? 0) > 0 && (
+  const FilteredOrdersTable = () => {
+    if ((orders?.length ?? 0) === 0) {
+      return null;
+    }
+    
+    return (
       <div className="card p-4 shadow-sm mb-4">
         <h3 className="mb-4">Filtered Orders</h3>
         <div className="table-responsive">
@@ -130,11 +134,15 @@ const Orders = () => {
           </table>
         </div>
       </div>
-    )
-  );
+    );
+  };
 
-  const OrderItemsList = () => (
-    selectedOrderId && (
+  const OrderItemsList = () => {
+    if (!selectedOrderId) {
+      return null;
+    }
+    
+    return (
       <div className="card p-4 shadow-sm">
         <h3 className="mb-4">Order Items</h3>
         <ul className="list-group">
@@ -147,8 +155,8 @@ const Orders = () => {
             )) || <p>No items available for the selected order.</p>}
         </ul>
       </div>
-    )
-  );
+    );
+  };
 
   if (loading) {
     return (

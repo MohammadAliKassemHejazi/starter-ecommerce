@@ -151,18 +151,6 @@ const TableDemo = () => {
       title="Modern Table Demo" 
       subtitle="Demonstration of the ModernTable component features"
       protected={false}
-      headerActions={
-        <div className="d-flex gap-2">
-          <button className="btn btn-primary">
-            <i className="bi bi-plus-circle me-2"></i>
-            Add New
-          </button>
-          <button className="btn btn-outline-secondary">
-            <i className="bi bi-download me-2"></i>
-            Export
-          </button>
-        </div>
-      }
     >
       {selectedRows.length > 0 && (
         <div className="alert alert-info mb-4">

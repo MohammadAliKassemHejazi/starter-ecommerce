@@ -207,13 +207,10 @@ const ReturnsPage = () => {
                 title: 'Update Status',
                 text: `Change status to ${newStatus}?`,
                 confirmText: 'Update',
-                cancelText: 'Cancel',
-                input: 'textarea',
-                inputLabel: 'Resolution Note (optional)',
-                inputPlaceholder: 'Enter resolution note...'
+                cancelText: 'Cancel'
               }).then((result) => {
                 if (result.isConfirmed) {
-                  handleStatusUpdate(row.id, newStatus, result.value);
+                  handleStatusUpdate(row.id, newStatus, '');
                 }
               });
             }

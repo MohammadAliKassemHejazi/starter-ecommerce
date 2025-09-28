@@ -12,6 +12,7 @@ import { selectCartItemCount, selectCartIsLoading } from '@/store/slices/cartSel
 import { signOut } from '@/store/slices/userSlice';
 import Swal from 'sweetalert2';
 import Router from 'next/router';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 interface NavigationProps {
   isOpen: boolean;
@@ -30,7 +31,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useSelector((state: any) => state.user);
-  const { isAnonymous, userRoles, userPermissions, isSuperAdmin, isAdmin, hasActiveSubscription } = usePermissions();
+  const { isAnonymous, userRoles, userPermissions, isSuperAdmin, isAdmin, hasActiveSubscription, hasPermission } = usePermissions();
   
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['main', 'user']));
@@ -38,6 +39,49 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const cartCount = useSelector(selectCartItemCount);
   const cartLoading = useSelector(selectCartIsLoading);
+
+  // Helper function to check if user can access a specific page
+  const canAccessPage = (pageKey: string) => {
+    if (!user.isAuthenticated) return false;
+    
+    // Define page permissions
+    const pagePermissions: { [key: string]: string[] } = {
+      'dashboard': ['view_dashboard'],
+      'shop': ['view_shop'],
+      'orders': ['view_orders'],
+      'analytics': ['view_analytics'],
+      'cart': ['view_cart'],
+      'users': ['manage_users'],
+      'roles': ['manage_roles'],
+      'permissions': ['manage_permissions'],
+      'categories': ['manage_categories'],
+      'subcategories': ['manage_subcategories'],
+      'products': ['manage_products'],
+      'articles': ['manage_articles'],
+      'comments': ['manage_comments'],
+      'promotions': ['manage_promotions'],
+      'returns': ['manage_returns'],
+      'store': ['manage_store'],
+      'packages': ['manage_packages'],
+      'shipping': ['manage_shipping'],
+      'sizes': ['manage_sizes'],
+      'taxes': ['manage_taxes'],
+      'settings': ['manage_settings'],
+      'admin-admins': ['super_admin'],
+      'admin-users': ['super_admin'],
+      'admin-stores': ['super_admin'],
+      'admin-analytics': ['super_admin'],
+      'audit-logs': ['super_admin'],
+      'user-sessions': ['super_admin'],
+      'system-health': ['super_admin']
+    };
+
+    const requiredPermissions = pagePermissions[pageKey];
+    if (!requiredPermissions) return true; // If no specific permissions defined, allow access
+
+    // Check if user has any of the required permissions
+    return requiredPermissions.some(permission => hasPermission(permission));
+  };
 
   // Use anonymous navigation if user is not authenticated
   const userRole = userRoles?.[0]?.name || 'user';
@@ -56,6 +100,35 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
       console.log('Navigation: User is in guest mode, not fetching cart');
     }
   }, [user.isAuthenticated, user.isGuest, user.id, dispatch]);
+
+  // Close sidebar when clicking outside on mobile and manage body blur
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (window.innerWidth < 1200) {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleBtn = document.querySelector('.toggle-btn');
+        
+        if (isOpen && sidebar && toggleBtn) {
+          if (!sidebar.contains(event.target as Node) && !toggleBtn.contains(event.target as Node)) {
+            onClose();
+          }
+        }
+      }
+    };
+
+    // Add/remove body class for blur effect
+    if (isOpen) {
+      document.body.classList.add('sidebar-open');
+      document.addEventListener('click', handleClickOutside);
+    } else {
+      document.body.classList.remove('sidebar-open');
+    }
+
+    return () => {
+      document.body.classList.remove('sidebar-open');
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   // Organize navigation items into logical sections
   const navigationSections = useMemo((): NavigationSection[] => {
@@ -375,176 +448,331 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
       )}
       
       {/* Sidebar Container */}
-      <div className={`navigation-container ${isOpen ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
-        {/* Navigation Header */}
-        <div className="navigation-header">
-          <div className="navigation-brand">
-            <div className="navigation-logo">
-              <i className="bi bi-shop"></i>
-            </div>
-            <div className="navigation-brand-text">
-              <h3>YourLogo</h3>
-              <span>Modern Platform</span>
-            </div>
-          </div>
-          <button 
-            className="navigation-close"
-            onClick={onClose}
-            aria-label="Close navigation"
-          >
-            <i className="bi bi-x"></i>
-          </button>
+      <div className={`sidebar ${isOpen ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
+        {/* Sidebar Header */}
+        <div className="sidebar-header">
+          <i className="fas fa-cube" style={{fontSize: '28px', color: '#8b5cf6'}}></i>
+          <div className="logo">NexusAdmin</div>
         </div>
-
+        
         {/* User Info */}
-        {user && (
-          <div className="navigation-user-info">
-            <div className="navigation-user-avatar">
-              <i className="bi bi-person"></i>
+        {user && user.isAuthenticated ? (
+          <div className="user-info">
+            <div className="user-name">{user.name || 'Super Admin'}</div>
+            <div className="badges">
+              {isSuperAdmin() && (
+                <span className="badge badge-super-admin">Super Admin</span>
+              )}
+              {isAdmin() && !isSuperAdmin() && (
+                <span className="badge badge-admin">Admin</span>
+              )}
+              {hasActiveSubscription() && !isAdmin() && (
+                <span className="badge badge-subscribed">Subscribed</span>
+              )}
+              {!hasActiveSubscription() && !isAdmin() && (
+                <span className="badge badge-free">Free User</span>
+              )}
             </div>
-            <div className="navigation-user-details">
-              <div className="navigation-user-name">{user.name}</div>
-              <div className="navigation-user-role">
-                {userRole}
-                {isSuperAdmin() && (
-                  <span className="navigation-role-badge navigation-role-badge-super-admin">
-                    Super Admin
-                  </span>
-                )}
-                {isAdmin() && !isSuperAdmin() && (
-                  <span className="navigation-role-badge navigation-role-badge-admin">
-                    Admin
-                  </span>
-                )}
-                {hasActiveSubscription() && !isAdmin() && (
-                  <span className="navigation-role-badge navigation-role-badge-subscribed">
-                    Subscribed
-                  </span>
-                )}
-                {!hasActiveSubscription() && !isAdmin() && (
-                  <span className="navigation-role-badge navigation-role-badge-free">
-                    Free User
-                  </span>
-                )}
-              </div>
+          </div>
+        ) : (
+          <div className="user-info">
+            <div className="user-name">Guest User</div>
+            <div className="badges">
+              <span className="badge badge-guest">Guest</span>
             </div>
           </div>
         )}
 
-        {/* Search */}
-        <div className="navigation-search">
-          <div className={`navigation-search-container ${isSearchFocused ? 'focused' : ''}`}>
-            <i className="bi bi-search navigation-search-icon"></i>
-            <input
-              type="text"
-              className="navigation-search-input"
-              placeholder="Search navigation..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
-            />
-            {searchQuery && (
-              <button
-                className="navigation-search-clear"
-                onClick={() => setSearchQuery('')}
-              >
-                <i className="bi bi-x"></i>
-              </button>
-            )}
+        {/* Language Switcher */}
+        <div className="language-section">
+          <div className="section-title">Language</div>
+          <div className="language-switcher-wrapper">
+            <LanguageSwitcher />
           </div>
         </div>
 
-        {/* Main Navigation */}
-        <div className="navigation-body">
-          <div className="navigation-content">
-            {filteredSections.map((section, index) => (
-              <div key={section.title} className="navigation-section">
-                {/* Section Header */}
-                <div 
-                  className={`navigation-section-header ${section.collapsible ? 'collapsible' : ''}`}
-                  onClick={() => section.collapsible && toggleSection(section.title)}
-                >
-                  <div className="navigation-section-title">
-                    {section.icon && <i className={`${section.icon} navigation-section-icon`}></i>}
-                    {section.title}
-                  </div>
-                  {section.collapsible && (
-                    <i className={`bi bi-chevron-${expandedSections.has(section.title) ? 'up' : 'down'} navigation-section-chevron`}></i>
-                  )}
-                </div>
-
-                {/* Section Items */}
-                {(!section.collapsible || expandedSections.has(section.title)) && (
-                  <div className="navigation-section-items">
-                    {section.items.map(item => (
-                      <NavigationItem
-                        key={item.key}
-                        item={item}
-                        level={0}
-                        expandedItems={expandedItems}
-                        onToggleExpanded={toggleExpanded}
-                        renderBadge={renderBadge}
-                        onClose={onClose}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {/* No results message */}
-            {searchQuery && filteredSections.length === 0 && (
-              <div className="navigation-empty-state">
-                <i className="bi bi-search navigation-empty-state-icon"></i>
-                <p className="navigation-empty-state-text">No results found for &quot;{searchQuery}&quot;</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        {quickActions.length > 0 && (
-          <div className="navigation-quick-actions">
-            <div className="navigation-quick-actions-title">Quick Actions</div>
-            <div className="navigation-quick-actions-grid">
-              {quickActions.slice(0, 4).map(action => (
-                <Link
-                  key={action.key}
-                  href={action.href || '#'}
-                  className="navigation-quick-action"
-                  onClick={onClose}
-                >
-                  {action.icon && <i className={`${action.icon} navigation-quick-action-icon`}></i>}
-                  <span className="navigation-quick-action-text">{action.label}</span>
-                </Link>
-              ))}
+        {/* Sidebar Menu */}
+        <div className="sidebar-menu">
+          {/* Core Navigation - Always visible for authenticated users */}
+          {user.isAuthenticated && (
+            <div className="menu-section">
+              <a href="/dashboard" className={router.pathname === '/dashboard' ? 'active' : ''}>
+                <i className="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+              </a>
+              <a href="/shop" className={router.pathname === '/shop' ? 'active' : ''}>
+                <i className="fas fa-shopping-bag"></i>
+                <span>Shop</span>
+              </a>
+              <a href="/orders" className={router.pathname === '/orders' ? 'active' : ''}>
+                <i className="fas fa-receipt"></i>
+                <span>Orders</span>
+              </a>
+              <a href="/analytics" className={router.pathname === '/analytics' ? 'active' : ''}>
+                <i className="fas fa-chart-line"></i>
+                <span>Analytics</span>
+              </a>
+              <a href="/cart" className={router.pathname === '/cart' ? 'active' : ''}>
+                <i className="fas fa-shopping-cart"></i>
+                <span>Cart</span>
+                {user.isGuest ? (
+                  <span className="badge" style={{background: 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)', color: 'white', border: '1px solid #cbd5e1', padding: '2px 6px', fontSize: '10px', marginLeft: '8px'}}>Guest</span>
+                ) : cartCount > 0 ? (
+                  <span className="badge" style={{background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)', color: 'white', border: '1px solid #cbd5e1', padding: '2px 6px', fontSize: '10px', marginLeft: '8px'}}>{cartCount}</span>
+                ) : null}
+              </a>
             </div>
-          </div>
-        )}
-
-        {/* User Actions */}
-        {user && (
-          <div className="navigation-footer">
-            <div className="navigation-user-actions">
-              <Link href="/profile" className="navigation-user-action" onClick={onClose}>
-                <i className="bi bi-person navigation-user-action-icon"></i>
+          )}
+          
+          {/* User Management */}
+          {(canAccessPage('users') || canAccessPage('roles') || canAccessPage('permissions')) && (
+            <div className="menu-section">
+              <div className="section-title">User Management</div>
+              {canAccessPage('users') && (
+                <a href="/users" className={router.pathname === '/users' ? 'active' : ''}>
+                  <i className="fas fa-users"></i>
+                  <span>Users</span>
+                </a>
+              )}
+              {canAccessPage('roles') && (
+                <a href="/roles" className={router.pathname === '/roles' ? 'active' : ''}>
+                  <i className="fas fa-shield-alt"></i>
+                  <span>Roles</span>
+                </a>
+              )}
+              {canAccessPage('roles') && (
+                <a href="/roles/Assignment" className={router.pathname === '/roles/Assignment' ? 'active' : ''}>
+                  <i className="fas fa-user-check"></i>
+                  <span>Role Assignment</span>
+                </a>
+              )}
+              {canAccessPage('permissions') && (
+                <a href="/permissions" className={router.pathname === '/permissions' ? 'active' : ''}>
+                  <i className="fas fa-lock"></i>
+                  <span>Permissions</span>
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* Content Management */}
+          {(canAccessPage('categories') || canAccessPage('subcategories') || canAccessPage('products') || canAccessPage('articles') || canAccessPage('comments')) && (
+            <div className="menu-section">
+              <div className="section-title">Content Management</div>
+              {canAccessPage('categories') && (
+                <a href="/categories" className={router.pathname === '/categories' ? 'active' : ''}>
+                  <i className="fas fa-tags"></i>
+                  <span>Categories</span>
+                </a>
+              )}
+              {canAccessPage('subcategories') && (
+                <a href="/subcategories" className={router.pathname === '/subcategories' ? 'active' : ''}>
+                  <i className="fas fa-tag"></i>
+                  <span>Subcategories</span>
+                </a>
+              )}
+              {canAccessPage('products') && (
+                <a href="/products" className={router.pathname === '/products' ? 'active' : ''}>
+                  <i className="fas fa-box"></i>
+                  <span>Products</span>
+                </a>
+              )}
+              {canAccessPage('articles') && (
+                <a href="/articles" className={router.pathname === '/articles' ? 'active' : ''}>
+                  <i className="fas fa-newspaper"></i>
+                  <span>Articles</span>
+                </a>
+              )}
+              {canAccessPage('comments') && (
+                <a href="/comments" className={router.pathname === '/comments' ? 'active' : ''}>
+                  <i className="fas fa-comments"></i>
+                  <span>Comments</span>
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* Business Operations */}
+          {(canAccessPage('promotions') || canAccessPage('returns') || canAccessPage('store')) && (
+            <div className="menu-section">
+              <div className="section-title">Business Operations</div>
+              {canAccessPage('promotions') && (
+                <a href="/promotions" className={router.pathname === '/promotions' ? 'active' : ''}>
+                  <i className="fas fa-percentage"></i>
+                  <span>Promotions</span>
+                </a>
+              )}
+              {canAccessPage('returns') && (
+                <a href="/returns" className={router.pathname === '/returns' ? 'active' : ''}>
+                  <i className="fas fa-undo"></i>
+                  <span>Returns</span>
+                </a>
+              )}
+              {canAccessPage('store') && (
+                <a href="/store" className={router.pathname === '/store' ? 'active' : ''}>
+                  <i className="fas fa-store"></i>
+                  <span>My Store</span>
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* System Management */}
+          {(canAccessPage('packages') || canAccessPage('shipping') || canAccessPage('sizes') || canAccessPage('taxes') || canAccessPage('settings')) && (
+            <div className="menu-section">
+              <div className="section-title">System Management</div>
+              {canAccessPage('packages') && (
+                <a href="/packages" className={router.pathname === '/packages' ? 'active' : ''}>
+                  <i className="fas fa-boxes"></i>
+                  <span>Packages</span>
+                </a>
+              )}
+              {canAccessPage('shipping') && (
+                <a href="/shipping" className={router.pathname === '/shipping' ? 'active' : ''}>
+                  <i className="fas fa-truck"></i>
+                  <span>Shipping</span>
+                </a>
+              )}
+              {canAccessPage('sizes') && (
+                <a href="/sizes" className={router.pathname === '/sizes' ? 'active' : ''}>
+                  <i className="fas fa-ruler"></i>
+                  <span>Sizes</span>
+                </a>
+              )}
+              {canAccessPage('taxes') && (
+                <a href="/taxes" className={router.pathname === '/taxes' ? 'active' : ''}>
+                  <i className="fas fa-calculator"></i>
+                  <span>Taxes</span>
+                </a>
+              )}
+              {canAccessPage('settings') && (
+                <a href="/settings" className={router.pathname === '/settings' ? 'active' : ''}>
+                  <i className="fas fa-cog"></i>
+                  <span>System Settings</span>
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* Platform Management - Super Admin Only */}
+          {(canAccessPage('admin-admins') || canAccessPage('admin-users') || canAccessPage('admin-stores') || canAccessPage('admin-analytics')) && (
+            <div className="menu-section">
+              <div className="section-title">Platform Management</div>
+              {canAccessPage('admin-admins') && (
+                <a href="/admin/admins" className={router.pathname === '/admin/admins' ? 'active' : ''}>
+                  <i className="fas fa-user-tie"></i>
+                  <span>All Admins</span>
+                </a>
+              )}
+              {canAccessPage('admin-users') && (
+                <a href="/admin/users" className={router.pathname === '/admin/users' ? 'active' : ''}>
+                  <i className="fas fa-users-cog"></i>
+                  <span>All Users</span>
+                </a>
+              )}
+              {canAccessPage('admin-stores') && (
+                <a href="/admin/stores" className={router.pathname === '/admin/stores' ? 'active' : ''}>
+                  <i className="fas fa-building"></i>
+                  <span>All Stores</span>
+                </a>
+              )}
+              {canAccessPage('admin-analytics') && (
+                <a href="/admin/analytics" className={router.pathname === '/admin/analytics' ? 'active' : ''}>
+                  <i className="fas fa-chart-bar"></i>
+                  <span>Platform Analytics</span>
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* Monitoring - Super Admin Only */}
+          {(canAccessPage('audit-logs') || canAccessPage('user-sessions') || canAccessPage('system-health')) && (
+            <div className="menu-section">
+              <div className="section-title">Monitoring</div>
+              {canAccessPage('audit-logs') && (
+                <a href="/admin/audit-logs" className={router.pathname === '/admin/audit-logs' ? 'active' : ''}>
+                  <i className="fas fa-clipboard-list"></i>
+                  <span>Audit Logs</span>
+                </a>
+              )}
+              {canAccessPage('user-sessions') && (
+                <a href="/admin/user-sessions" className={router.pathname === '/admin/user-sessions' ? 'active' : ''}>
+                  <i className="fas fa-desktop"></i>
+                  <span>User Sessions</span>
+                </a>
+              )}
+              {canAccessPage('system-health') && (
+                <a href="/admin/system-health" className={router.pathname === '/admin/system-health' ? 'active' : ''}>
+                  <i className="fas fa-heartbeat"></i>
+                  <span>System Health</span>
+                </a>
+              )}
+            </div>
+          )}
+          
+          {/* User Actions */}
+          {user.isAuthenticated && (
+            <div className="menu-section">
+              <div className="section-title">Account</div>
+              <a href="/profile" className={router.pathname === '/profile' ? 'active' : ''}>
+                <i className="fas fa-user"></i>
                 <span>Profile</span>
-              </Link>
-              <Link href="/settings" className="navigation-user-action" onClick={onClose}>
-                <i className="bi bi-gear navigation-user-action-icon"></i>
+              </a>
+              <a href="/settings" className={router.pathname === '/settings' ? 'active' : ''}>
+                <i className="fas fa-cog"></i>
                 <span>Settings</span>
-              </Link>
+              </a>
             </div>
-            <button 
-              className="navigation-logout"
-              onClick={handleSignOut}
-            >
-              <i className="bi bi-box-arrow-right navigation-logout-icon"></i>
-              <span>Sign Out</span>
-            </button>
+          )}
+
+          {/* Testing Pages - Admin & Super Admin Only */}
+          {user.isAuthenticated && (isAdmin() || isSuperAdmin()) && (
+            <div className="menu-section testing-section">
+              <div className="section-title">Testing & Demos</div>
+              <a href="/test-permissions" className={router.pathname === '/test-permissions' ? 'active' : ''}>
+                <i className="fas fa-shield-alt"></i>
+                <span>Test Permissions</span>
+                <span className="testing-badge">TEST</span>
+              </a>
+              <a href="/navigation-demo" className={router.pathname === '/navigation-demo' ? 'active' : ''}>
+                <i className="fas fa-bars"></i>
+                <span>Navigation Demo</span>
+                <span className="testing-badge">DEMO</span>
+              </a>
+              <a href="/permission-demo" className={router.pathname === '/permission-demo' ? 'active' : ''}>
+                <i className="fas fa-key"></i>
+                <span>Permission Demo</span>
+                <span className="testing-badge">DEMO</span>
+              </a>
+              <a href="/table-demo" className={router.pathname === '/table-demo' ? 'active' : ''}>
+                <i className="fas fa-table"></i>
+                <span>Table Demo</span>
+                <span className="testing-badge">DEMO</span>
+              </a>
+            </div>
+          )}
+
+          {/* Authentication */}
+          <div className="menu-section">
+            {user.isAuthenticated ? (
+              <a href="/auth/signin" style={{background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.1) 100%)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.3)'}} onClick={handleSignOut}>
+                <i className="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+              </a>
+            ) : (
+              <>
+                <a href="/auth/signin" className={router.pathname === '/auth/signin' ? 'active' : ''}>
+                  <i className="fas fa-sign-in-alt"></i>
+                  <span>Login</span>
+                </a>
+                <a href="/auth/signup" className={router.pathname === '/auth/signup' ? 'active' : ''}>
+                  <i className="fas fa-user-plus"></i>
+                  <span>Register</span>
+                </a>
+              </>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </>
   );

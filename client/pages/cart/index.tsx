@@ -9,7 +9,7 @@ import {
   removeFromCart,
 } from "@/store/slices/cartSlice";
 import Link from "next/link";
-import styles from "./cart.module.css";
+import styles from "./cart.module.scss";
 import { RootState, useAppDispatch } from "@/store/store";
 import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";

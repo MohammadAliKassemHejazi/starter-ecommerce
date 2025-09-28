@@ -1,7 +1,8 @@
-import "../styles/globals.css";
-import "../styles/ModernTable.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/test-styles.css";
+import "../styles/scss/main-theme.scss";
+import "../styles/scss/_theme-switcher.scss";
 import type { AppProps } from "next/app";
-import "bootstrap/dist/css/bootstrap.css";
 import { store } from "@/store/store";
 import { Provider } from "react-redux";
 import * as React from "react";
@@ -40,7 +41,9 @@ function AppContent({ Component, pageProps, router }: AppProps) {
   return (
     <ClientOnlyWrapper>
       <GuestDataSyncWrapper />
-      <Component {...pageProps} router={router} />
+      <div className="">
+        <Component {...pageProps} router={router} />
+      </div>
     </ClientOnlyWrapper>
   );
 }

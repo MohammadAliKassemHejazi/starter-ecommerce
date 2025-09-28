@@ -21,7 +21,7 @@ export const UserTablePreset = {
       label: 'Avatar',
       width: '80px',
       align: 'center' as const,
-      render: (value, row) => renderImage(
+      render: (value: any, row: any) => renderImage(
         value || '/default-avatar.png', 
         row.name || 'User', 
         'sm'
@@ -34,7 +34,7 @@ export const UserTablePreset = {
       label: 'Role',
       width: '120px',
       align: 'center' as const,
-      render: (value) => renderBadge(value?.name || 'No Role', 'info')
+      render: (value: any) => renderBadge(value?.name || 'No Role', 'info')
     },
     createStatusColumn(),
     createDateColumn('createdAt', 'Created')
@@ -46,14 +46,14 @@ export const UserTablePreset = {
       label: 'Edit',
       icon: 'bi bi-pencil',
       variant: 'primary' as const,
-      onClick: (row) => console.log('Edit user', row)
+      onClick: (row: any) => console.log('Edit user', row)
     },
     {
       key: 'delete',
       label: 'Delete',
       icon: 'bi bi-trash',
       variant: 'danger' as const,
-      onClick: (row) => console.log('Delete user', row)
+      onClick: (row: any) => console.log('Delete user', row)
     }
   ]
 };
@@ -67,7 +67,7 @@ export const StoreTablePreset = {
       label: 'Image',
       width: '100px',
       align: 'center' as const,
-      render: (value, row) => renderImage(
+      render: (value: any, row: any) => renderImage(
         value || '/default-store.png', 
         row.name || 'Store', 
         'sm'
@@ -77,7 +77,7 @@ export const StoreTablePreset = {
     {
       key: 'description',
       label: 'Description',
-      render: (value) => (
+      render: (value: any) => (
         <span className="text-truncate" title={value} style={{ maxWidth: '200px' }}>
           {value || '-'}
         </span>
@@ -88,7 +88,7 @@ export const StoreTablePreset = {
       label: 'Category',
       width: '120px',
       align: 'center' as const,
-      render: (value) => renderBadge(value, 'secondary')
+      render: (value: any) => renderBadge(value, 'secondary')
     },
     createStatusColumn(),
     createDateColumn('createdAt', 'Created')
@@ -100,21 +100,21 @@ export const StoreTablePreset = {
       label: 'View',
       icon: 'bi bi-eye',
       variant: 'info' as const,
-      onClick: (row) => console.log('View store', row)
+      onClick: (row: any) => console.log('View store', row)
     },
     {
       key: 'edit',
       label: 'Edit',
       icon: 'bi bi-pencil',
       variant: 'primary' as const,
-      onClick: (row) => console.log('Edit store', row)
+      onClick: (row: any) => console.log('Edit store', row)
     },
     {
       key: 'delete',
       label: 'Delete',
       icon: 'bi bi-trash',
       variant: 'danger' as const,
-      onClick: (row) => console.log('Delete store', row)
+      onClick: (row: any) => console.log('Delete store', row)
     }
   ]
 };
@@ -128,9 +128,9 @@ export const ProductTablePreset = {
       label: 'Image',
       width: '100px',
       align: 'center' as const,
-      render: (value, row) => {
-        const imageUrl = value?.[0]?.url || '/default-product.png';
-        return renderImage(imageUrl, row.name || 'Product', 'sm');
+      render: (value: any, row: any) => {
+        const imageUrl = value?.[0]?.url || '/default-product.png';     
+        return renderImage(imageUrl, row.name || 'Product', 'sm');      
       }
     },
     createNameColumn(),
@@ -139,21 +139,21 @@ export const ProductTablePreset = {
       label: 'Price',
       width: '120px',
       align: 'right' as const,
-      render: (value) => renderPrice(value)
+      render: (value: any) => renderPrice(value)
     },
     {
       key: 'stockQuantity',
       label: 'Stock',
       width: '100px',
       align: 'center' as const,
-      render: (value) => renderCount(value)
+      render: (value: any) => renderCount(value)
     },
     {
       key: 'discount',
       label: 'Discount',
       width: '100px',
       align: 'center' as const,
-      render: (value) => value > 0 ? (
+      render: (value: any) => value > 0 ? (
         <span className="badge bg-danger">{value}%</span>
       ) : (
         <span className="text-muted">-</span>
@@ -169,21 +169,21 @@ export const ProductTablePreset = {
       label: 'View',
       icon: 'bi bi-eye',
       variant: 'info' as const,
-      onClick: (row) => console.log('View product', row)
+      onClick: (row: any) => console.log('View product', row)
     },
     {
       key: 'edit',
       label: 'Edit',
       icon: 'bi bi-pencil',
       variant: 'primary' as const,
-      onClick: (row) => console.log('Edit product', row)
+      onClick: (row: any) => console.log('Edit product', row)
     },
     {
       key: 'delete',
       label: 'Delete',
       icon: 'bi bi-trash',
       variant: 'danger' as const,
-      onClick: (row) => console.log('Delete product', row)
+      onClick: (row: any) => console.log('Delete product', row)
     }
   ]
 };
@@ -196,8 +196,8 @@ export const CategoryTablePreset = {
     {
       key: 'description',
       label: 'Description',
-      render: (value) => (
-        <span className="text-truncate" title={value} style={{ maxWidth: '300px' }}>
+      render: (value: any) => (
+        <span className="text-truncate" title={value} style={{ maxWidth: '300px' }}>                                                                    
           {value || '-'}
         </span>
       )
@@ -212,14 +212,14 @@ export const CategoryTablePreset = {
       label: 'Edit',
       icon: 'bi bi-pencil',
       variant: 'primary' as const,
-      onClick: (row) => console.log('Edit category', row)
+      onClick: (row: any) => console.log('Edit category', row)
     },
     {
       key: 'delete',
       label: 'Delete',
       icon: 'bi bi-trash',
       variant: 'danger' as const,
-      onClick: (row) => console.log('Delete category', row)
+      onClick: (row: any) => console.log('Delete category', row)
     }
   ]
 };
@@ -232,26 +232,26 @@ export const OrderTablePreset = {
       key: 'orderNumber',
       label: 'Order #',
       width: '120px',
-      render: (value) => <code>{value}</code>
+      render: (value: any) => <code>{value}</code>
     },
     {
       key: 'customerName',
       label: 'Customer',
-      render: (value) => value || 'Guest'
+      render: (value: any) => value || 'Guest'
     },
     {
       key: 'totalAmount',
       label: 'Total',
       width: '120px',
       align: 'right' as const,
-      render: (value) => renderPrice(value)
+      render: (value: any) => renderPrice(value)
     },
     {
       key: 'status',
       label: 'Status',
       width: '120px',
       align: 'center' as const,
-      render: (value) => {
+      render: (value: any) => {
         const statusColors = {
           pending: 'warning',
           processing: 'info',
@@ -259,7 +259,7 @@ export const OrderTablePreset = {
           delivered: 'success',
           cancelled: 'danger'
         };
-        return renderBadge(value, statusColors[value as keyof typeof statusColors] || 'secondary');
+        return renderBadge(value, (statusColors[value as keyof typeof statusColors] || 'secondary') as any);
       }
     },
     createDateColumn('createdAt', 'Order Date')
@@ -271,14 +271,14 @@ export const OrderTablePreset = {
       label: 'View',
       icon: 'bi bi-eye',
       variant: 'info' as const,
-      onClick: (row) => console.log('View order', row)
+      onClick: (row: any) => console.log('View order', row)
     },
     {
       key: 'edit',
       label: 'Edit',
       icon: 'bi bi-pencil',
       variant: 'primary' as const,
-      onClick: (row) => console.log('Edit order', row)
+      onClick: (row: any) => console.log('Edit order', row)
     }
   ]
 };
@@ -291,8 +291,8 @@ export const PackageTablePreset = {
     {
       key: 'description',
       label: 'Description',
-      render: (value) => (
-        <span className="text-truncate" title={value} style={{ maxWidth: '250px' }}>
+      render: (value: any) => (
+        <span className="text-truncate" title={value} style={{ maxWidth: '250px' }}>                                                                    
           {value || '-'}
         </span>
       )
@@ -302,7 +302,7 @@ export const PackageTablePreset = {
       label: 'Price',
       width: '120px',
       align: 'right' as const,
-      render: (value) => value === 0 ? (
+      render: (value: any) => value === 0 ? (
         <span className="badge bg-success">Free</span>
       ) : (
         renderPrice(value)
@@ -313,28 +313,28 @@ export const PackageTablePreset = {
       label: 'Stores',
       width: '100px',
       align: 'center' as const,
-      render: (value) => value === -1 ? '∞' : value
+      render: (value: any) => value === -1 ? '∞' : value
     },
     {
       key: 'productLimit',
       label: 'Products',
       width: '100px',
       align: 'center' as const,
-      render: (value) => value === -1 ? '∞' : value
+      render: (value: any) => value === -1 ? '∞' : value
     },
     {
       key: 'userLimit',
       label: 'Users',
       width: '100px',
       align: 'center' as const,
-      render: (value) => value === -1 ? '∞' : value
+      render: (value: any) => value === -1 ? '∞' : value
     },
     {
       key: 'isSuperAdminPackage',
       label: 'Admin',
       width: '100px',
       align: 'center' as const,
-      render: (value) => renderBadge(value ? 'Yes' : 'No', value ? 'warning' : 'secondary')
+      render: (value: any) => renderBadge(value ? 'Yes' : 'No', value ? 'warning' : 'secondary')
     },
     createStatusColumn()
   ],
@@ -345,14 +345,14 @@ export const PackageTablePreset = {
       label: 'Edit',
       icon: 'bi bi-pencil',
       variant: 'primary' as const,
-      onClick: (row) => console.log('Edit package', row)
+      onClick: (row: any) => console.log('Edit package', row)
     },
     {
       key: 'delete',
       label: 'Delete',
       icon: 'bi bi-trash',
       variant: 'danger' as const,
-      onClick: (row) => console.log('Delete package', row)
+      onClick: (row: any) => console.log('Delete package', row)
     }
   ]
 };

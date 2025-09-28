@@ -48,9 +48,7 @@ const CreateCategory = () => {
     try {
       const response = await dispatch(createCategory(formData)).unwrap();
       showToast.success("Category created successfully");
-      if (response.id) {
-        void router.push(`/categories`);
-      }
+      void router.push(`/categories`);
     } catch (error) {
       showToast.error("Failed to create category");
     } finally {
@@ -60,22 +58,22 @@ const CreateCategory = () => {
 
   const formFields = [
     {
-      type: "text",
+      type: "text" as const,
       name: "name",
       label: "Category Name",
       value: formData.name,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange('name', e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => handleInputChange('name', e.target.value),
       placeholder: "Enter category name",
       required: true,
       validation: validationRules.name,
       error: errors.name
     },
     {
-      type: "textarea",
+      type: "textarea" as const,
       name: "description",
       label: "Description",
       value: formData.description,
-      onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange('description', e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => handleInputChange('description', e.target.value),
       placeholder: "Enter category description (optional)",
       rows: 4,
       validation: validationRules.description,

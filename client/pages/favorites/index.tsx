@@ -49,7 +49,7 @@ const FavoritesPage = () => {
     }
   };
 
-  const FavoriteCard = ({ favorite }: { favorite: Favorite }) => (
+  const FavoriteCard = ({ favorite }: { favorite: any }) => (
     <div className="col-md-4 col-lg-3 mb-4">
       <div className="card h-100">
         {favorite.product.images && favorite.product.images.length > 0 && (
@@ -126,13 +126,6 @@ const FavoritesPage = () => {
       title="My Favorites" 
       subtitle="Your saved products"
       protected={true}
-      headerActions={
-        <div className="d-flex align-items-center gap-3">
-          <span className="text-muted">
-            {favorites.length} favorite{favorites.length !== 1 ? 's' : ''}
-          </span>
-        </div>
-      }
     >
       {favorites.length === 0 ? <EmptyFavorites /> : <FavoritesGrid />}
     </PageLayout>

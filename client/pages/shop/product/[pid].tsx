@@ -16,7 +16,7 @@ import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import { GetStaticPaths, GetStaticProps } from "next";
-import styles from "./SingleItem.module.css";
+import styles from "./SingleItem.module.scss";
 type Props = {
   product?: IProductModel;
 };
@@ -389,7 +389,7 @@ export async function generateMetadata({
         {
           url:
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            (product?.data?.ProductImages?.[0]?.imageUrl ?? ""),
+            ((product?.data?.ProductImages?.[0] as any)?.imageUrl ?? ""),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
@@ -403,7 +403,7 @@ export async function generateMetadata({
         "Product Description",
       image:
         process.env.NEXT_PUBLIC_BASE_URL_Images +
-        (product?.data?.ProductImages?.[0]?.imageUrl ?? ""),
+        ((product?.data?.ProductImages?.[0] as any)?.imageUrl ?? ""),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };

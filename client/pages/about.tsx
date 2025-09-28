@@ -2,7 +2,7 @@ import { IArticleModelWithUser } from "@/models/article.model";
 import { requestAllArticles } from "@/services/articleService";
 import { GetServerSideProps } from "next";
 import React, { useState, useEffect } from "react";
-import styles from "./Home.module.css";
+import styles from "./Home.module.scss";
 import Link from "next/link";
 import ParticleComponent from "@/components/UI/home/starsbackground/starsbackground";
 import { setAuthHeaders } from "@/utils/httpClient";

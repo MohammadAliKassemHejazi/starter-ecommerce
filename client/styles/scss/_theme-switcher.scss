@@ -1,0 +1,363 @@
+// ===========================================
+// THEME SWITCHER STYLES
+// ===========================================
+
+.theme-switcher {
+  background: var(--bs-component-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  max-width: 400px;
+  margin: 0 auto;
+
+  .theme-switcher-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    h4 {
+      color: var(--theme-text-primary);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    p {
+      color: var(--theme-text-secondary);
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  }
+
+  .theme-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .theme-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid var(--bs-border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    background: var(--bs-component-bg);
+
+    &:hover {
+      border-color: var(--theme-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    &.active {
+      border-color: var(--theme-primary);
+      background: rgba(var(--theme-primary), 0.05);
+      box-shadow: 0 0 0 3px rgba(var(--theme-primary), 0.1);
+    }
+
+    .theme-preview {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-right: 1rem;
+
+      .theme-colors {
+        display: flex;
+        gap: 0.25rem;
+
+        .color-swatch {
+          width: 20px;
+          height: 20px;
+          border-radius: var(--radius-sm);
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      .theme-icon {
+        font-size: 1.5rem;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bs-body-bg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--bs-border-color);
+      }
+    }
+
+    .theme-info {
+      flex: 1;
+
+      h5 {
+        color: var(--theme-text-primary);
+        margin: 0 0 0.25rem 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      p {
+        color: var(--theme-text-secondary);
+        margin: 0;
+        font-size: 0.875rem;
+      }
+    }
+
+    .theme-check {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 24px;
+      height: 24px;
+      background: var(--theme-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+  }
+
+  .theme-actions {
+    text-align: center;
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+    }
+  }
+}
+
+// ===========================================
+// THEME SWITCHER MODAL
+// ===========================================
+
+.theme-switcher-modal {
+  .modal-content {
+    background: var(--bs-component-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-header {
+    border-bottom: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+
+    .modal-title {
+      color: var(--theme-text-primary);
+      font-weight: 600;
+    }
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .modal-footer {
+    border-top: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+  }
+}
+
+// ===========================================
+// THEME SWITCHER DROPDOWN
+// ===========================================
+
+.theme-switcher-dropdown {
+  .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bs-component-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--radius-md);
+    color: var(--theme-text-primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: var(--bs-body-bg);
+      border-color: var(--theme-primary);
+      color: var(--theme-primary);
+    }
+
+    .theme-preview-mini {
+      display: flex;
+      gap: 0.25rem;
+
+      .color-swatch {
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .dropdown-menu {
+    background: var(--bs-component-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 0.5rem;
+    min-width: 200px;
+
+    .dropdown-item {
+      color: var(--theme-text-primary);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: var(--bs-body-bg);
+        color: var(--theme-primary);
+      }
+
+      &.active {
+        background: rgba(var(--theme-primary), 0.1);
+        color: var(--theme-primary);
+      }
+    }
+  }
+}
+
+// ===========================================
+// THEME SWITCHER FLOATING
+// ===========================================
+
+.theme-switcher-floating {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+
+  .theme-toggle-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--theme-primary);
+    color: white;
+    border: none;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-xl);
+    }
+  }
+
+  .theme-options-floating {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: var(--bs-component-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: 1rem;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+
+    &.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .theme-option-mini {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: var(--bs-body-bg);
+      }
+
+      .theme-colors-mini {
+        display: flex;
+        gap: 0.25rem;
+
+        .color-swatch {
+          width: 16px;
+          height: 16px;
+          border-radius: 2px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      .theme-name {
+        color: var(--theme-text-primary);
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// ===========================================
+// RESPONSIVE DESIGN
+// ===========================================
+
+@media (max-width: 768px) {
+  .theme-switcher {
+    margin: 1rem;
+    padding: 1rem;
+
+    .theme-option {
+      padding: 0.75rem;
+
+      .theme-preview {
+        .theme-colors .color-swatch {
+          width: 16px;
+          height: 16px;
+        }
+
+        .theme-icon {
+          width: 28px;
+          height: 28px;
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+
+  .theme-switcher-floating {
+    bottom: 1rem;
+    right: 1rem;
+
+    .theme-options-floating {
+      right: -1rem;
+      left: -1rem;
+      min-width: auto;
+    }
+  }
+}
+

@@ -92,8 +92,6 @@ const Stores = () => {
         filterButton={{ onClick: () => console.log('Filter stores') }}
         pagination={true}
         pageSize={pageSize}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
         onRowClick={(store) => router.push(`/store/${store.id}`)}
         headerActions={
           <SubscriptionGate requireSubscription={true}>

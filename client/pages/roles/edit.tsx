@@ -38,7 +38,7 @@ const EditRoleModal = () => {
   const loadUserPackage = async () => {
     try {
       const packageData = await getUserActivePackage();
-      setIsSuperAdmin(packageData?.Package?.isSuperAdminPackage || false);
+      setIsSuperAdmin((packageData as any)?.Package?.isSuperAdminPackage || false);
     } catch (error) {
       console.error('Error loading user package:', error);
     } finally {

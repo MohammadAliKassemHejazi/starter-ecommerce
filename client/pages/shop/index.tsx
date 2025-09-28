@@ -246,8 +246,6 @@ const Shop = () => {
           filterButton={{ onClick: () => console.log('Filter products') }}
           pagination={true}
           pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
           customActions={[
             {
               key: 'view',

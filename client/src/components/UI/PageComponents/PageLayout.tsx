@@ -27,7 +27,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
 }) => {
   const content = (
     <Layout>
-      <div className={`container mt-5 ${className}`}>
+      <div className={`container-fluid px-4 py-4 ${className}`}>
         <PageHeader
           title={title}
           subtitle={subtitle}

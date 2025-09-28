@@ -9,6 +9,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_Stripe_Key ?? "");
 interface PaymentMethodSelectorProps {
   amount: number;
   currency: string;
+  package?: any;
   onSuccess?: (paymentId: string, method: string) => void;
   onError?: (error: string) => void;
 }
@@ -16,6 +17,7 @@ interface PaymentMethodSelectorProps {
 const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
   amount,
   currency,
+  package: pkg,
   onSuccess,
   onError
 }) => {
@@ -107,8 +109,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
             {selectedMethod === 'stripe' ? (
               <Elements stripe={stripePromise}>
                 <CheckoutForm 
-                  amount={amount} 
-                  currency={currency}
+                  package={pkg}
                   onSuccess={handleStripeSuccess}
                   onError={handleError}
                 />

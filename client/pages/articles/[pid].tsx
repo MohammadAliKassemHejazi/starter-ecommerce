@@ -119,7 +119,6 @@ const ArticleById = () => {
       title={article?.title || "Article Details"} 
       subtitle="View article information"
       actions={headerActions}
-      loading={loading}
     >
       {article ? (
         <div className="row">

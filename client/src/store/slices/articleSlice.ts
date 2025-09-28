@@ -39,7 +39,7 @@ export const fetchAllArticles = createAsyncThunk(
 export const createArticles = createAsyncThunk(
 	"articles/create",
 	async (article: articleService.IArticleProps) => {
-		const response: IArticleModel = await articleService.requestCreateArticles(article);
+		const response = await articleService.requestCreateArticles(article);
 		return response
 	}
 )
@@ -68,14 +68,14 @@ export const articleSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchArticleById.fulfilled, (state, action) => {
-			state.article = action.payload;
+			state.article = action.payload as any;
 		})
 
 		builder.addCase(fetchArticleById.rejected, (state) => {
 			state.article = undefined;
 		})
 		builder.addCase(fetchArticleByAuthor.fulfilled, (state, action) => {
-			state.articleAuthor = action.payload.data;
+			state.articleAuthor = action.payload.data as any;
 		})
 
 		builder.addCase(fetchArticleByAuthor.rejected, (state) => {
@@ -83,7 +83,7 @@ export const articleSlice = createSlice({
 		})
 
 		builder.addCase(fetchAllArticles.fulfilled, (state, action) => {
-			state.articles = action.payload;
+			state.articles = action.payload as any;
 		})
 
 		builder.addCase(fetchAllArticles.rejected, (state) => {
@@ -91,7 +91,7 @@ export const articleSlice = createSlice({
 		})
 
 		builder.addCase(createArticles.fulfilled, (state, action) => {
-			state.article = action.payload
+			state.article = action.payload as any
 		})
 
 

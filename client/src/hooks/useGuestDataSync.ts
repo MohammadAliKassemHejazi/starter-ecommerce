@@ -21,8 +21,8 @@ export const useGuestDataSync = () => {
   }, []);
 
   const dispatch = useAppDispatch();
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  const isGuest = useSelector((state) => state.user.isGuest);
+  const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
+  const isGuest = useSelector((state: any) => state.user.isGuest);
 
   useEffect(() => {
     // Only run on client side, after initialization, and if user is in guest mode

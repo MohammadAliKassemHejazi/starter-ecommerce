@@ -35,22 +35,22 @@ const EditCategory = () => {
 
   const formFields = [
     {
-      type: "text",
+      type: "text" as const,
       name: "name",
       label: "Name",
       value: name,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setName(e.target.value),
       placeholder: "Enter category name",
       required: true,
       maxLength: 150,
       helpText: "Input your category name here."
     },
     {
-      type: "textarea",
+      type: "textarea" as const,
       name: "description",
       label: "Description",
       value: description,
-      onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setDescription(e.target.value),
       placeholder: "Input your category description here.",
       rows: 4,
       helpText: "Input your category description here."

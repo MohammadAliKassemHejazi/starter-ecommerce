@@ -1,0 +1,341 @@
+// ===========================================
+// MAIN THEME FILE
+// Imports Bootstrap with custom overrides and theme
+// ===========================================
+
+// Import theme variables first
+@import '_theme-variables';
+
+// Import Bootstrap with custom variable overrides
+@import '_bootstrap-overrides';
+
+// Import base theme variables for additional customizations
+@import '_base-theme';
+
+// Import global styles
+@import '_globals';
+
+// Import modern table styles
+@import '_modern-table';
+
+// Import sidebar styles
+@import '_sidebar';
+
+// Import footer styles
+@import '_footer';
+
+// Default theme (Normal)
+@import 'themes/_normal';
+
+// Uncomment one of these to switch themes:
+//@import 'themes/_black-friday';
+//@import 'themes/_christmas';
+
+// ===========================================
+// THEME SWITCHER UTILITIES
+// ===========================================
+
+// Theme data attributes for dynamic switching
+[data-theme="normal"] {
+  // Normal theme is already loaded by default
+}
+
+[data-theme="black-friday"] {
+  // Black Friday theme variables
+  --bs-primary: #ff6b35;
+  --bs-secondary: #d32f2f;
+  --bs-body-bg: #0d0d0d;
+  --bs-body-color: #ffffff;
+  --bs-component-bg: #1a1a1a;
+  --bs-border-color: #333333;
+  --theme-primary: #ff6b35;
+  --theme-secondary: #d32f2f;
+  --theme-bg-primary: #1a1a1a;
+  --theme-bg-secondary: #0d0d0d;
+  --theme-bg-dark: #000000;
+  --theme-bg-dark-secondary: #1a1a1a;
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #e0e0e0;
+  --theme-text-tertiary: #b0b0b0;
+  --sidebar-bg: linear-gradient(145deg, #000000 0%, #1a1a1a 100%);
+  --sidebar-border: rgba(255, 107, 53, 0.4);
+  --sidebar-text: #e0e0e0;
+  --sidebar-text-hover: #ffffff;
+  --sidebar-text-active: #ff6b35;
+  --sidebar-bg-hover: rgba(255, 107, 53, 0.1);
+  --sidebar-bg-active: linear-gradient(135deg, #ff6b35 0%, #d32f2f 100%);
+  --footer-bg: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  --footer-text: #ffffff;
+  --footer-text-muted: #b0b0b0;
+  --footer-link-hover: #ff6b35;
+  --toggle-btn-bg: linear-gradient(135deg, #ff6b35 0%, #d32f2f 100%);
+  --toggle-btn-hover-bg: linear-gradient(135deg, #ff5722 0%, #c62828 100%);
+  --toggle-btn-shadow: 0 10px 15px rgba(255, 107, 53, 0.4);
+  --border-light: #333333;
+  --border-dark: #777777;
+  --border-darker: #000000;
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="christmas"] {
+  // Christmas theme variables
+  --bs-primary: #d32f2f;
+  --bs-secondary: #2e7d32;
+  --bs-body-bg: #f8f9fa;
+  --bs-body-color: #1b5e20;
+  --bs-component-bg: #ffffff;
+  --bs-border-color: #c8e6c9;
+  --theme-primary: #d32f2f;
+  --theme-secondary: #2e7d32;
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #f8f9fa;
+  --theme-bg-dark: #1b5e20;
+  --theme-bg-dark-secondary: #2e7d32;
+  --theme-text-primary: #1b5e20;
+  --theme-text-secondary: #4caf50;
+  --theme-text-tertiary: #81c784;
+  --sidebar-bg: linear-gradient(145deg, #1b5e20 0%, #2e7d32 100%);
+  --sidebar-border: rgba(255, 193, 7, 0.3);
+  --sidebar-text: #e8f5e8;
+  --sidebar-text-hover: #ffffff;
+  --sidebar-text-active: #ffc107;
+  --sidebar-bg-hover: rgba(255, 193, 7, 0.1);
+  --sidebar-bg-active: linear-gradient(135deg, #d32f2f 0%, #ffc107 100%);
+  --footer-bg: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+  --footer-text: #ffffff;
+  --footer-text-muted: #a5d6a7;
+  --footer-link-hover: #ffc107;
+  --toggle-btn-bg: linear-gradient(135deg, #d32f2f 0%, #ff5722 100%);
+  --toggle-btn-hover-bg: linear-gradient(135deg, #b71c1c 0%, #e64a19 100%);
+  --toggle-btn-shadow: 0 10px 15px rgba(211, 47, 47, 0.3);
+  --border-light: #c8e6c9;
+  --border-dark: #4caf50;
+  --border-darker: #1b5e20;
+  --shadow-sm: 0 0.125rem 0.25rem rgba(27, 94, 32, 0.1);
+  --shadow-md: 0 0.5rem 1rem rgba(27, 94, 32, 0.15);
+  --shadow-lg: 0 1rem 3rem rgba(27, 94, 32, 0.2);
+}
+
+// ===========================================
+// THEME TRANSITION EFFECTS
+// ===========================================
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+// ===========================================
+// THEME-SPECIFIC COMPONENTS
+// ===========================================
+
+// Black Friday specific components
+[data-theme="black-friday"] {
+  .black-friday-bg {
+    background: linear-gradient(-45deg, #000000, #1a1a1a, #ff6b35, #d32f2f);
+    background-size: 400% 400%;
+    animation: black-friday-pulse 15s ease infinite;
+  }
+  
+  .discount-badge {
+    background: linear-gradient(135deg, #ff6b35 0%, #d32f2f 100%);
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    animation: pulse 2s infinite;
+  }
+  
+  .sale-indicator {
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.4), transparent);
+      animation: shimmer 3s infinite;
+    }
+  }
+}
+
+// Christmas specific components
+[data-theme="christmas"] {
+  .snowflake {
+    position: fixed;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    
+    .snow {
+      position: absolute;
+      color: #ffffff;
+      font-size: 1rem;
+      animation: snow-fall linear infinite;
+      
+      &:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
+      &:nth-child(2) { left: 20%; animation-duration: 10s; animation-delay: 1s; }
+      &:nth-child(3) { left: 30%; animation-duration: 7s; animation-delay: 2s; }
+      &:nth-child(4) { left: 40%; animation-duration: 9s; animation-delay: 0.5s; }
+      &:nth-child(5) { left: 50%; animation-duration: 6s; animation-delay: 1.5s; }
+      &:nth-child(6) { left: 60%; animation-duration: 8s; animation-delay: 2.5s; }
+      &:nth-child(7) { left: 70%; animation-duration: 11s; animation-delay: 0.8s; }
+      &:nth-child(8) { left: 80%; animation-duration: 9s; animation-delay: 1.8s; }
+      &:nth-child(9) { left: 90%; animation-duration: 7s; animation-delay: 3s; }
+    }
+  }
+  
+  .christmas-lights {
+    position: relative;
+    
+    &::before {
+      content: '✨';
+      position: absolute;
+      top: -5px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 1.2rem;
+      animation: christmas-lights 2s infinite;
+    }
+  }
+  
+  .gift-box {
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    border: 2px solid #ffc107;
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #ffc107;
+      transform: translateY(-50%);
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #ffc107;
+      transform: translateX(-50%);
+    }
+  }
+  
+  .christmas-badge {
+    background: linear-gradient(135deg, #d32f2f 0%, #ffc107 100%);
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: shimmer 3s infinite;
+    }
+  }
+}
+
+// Normal theme specific components
+[data-theme="normal"] {
+  .hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+    }
+  }
+  
+  .gradient-bg-primary {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  }
+  
+  .gradient-bg-secondary {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  }
+  
+  .gradient-bg-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  }
+  
+  .clean-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+    
+    &:hover {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .professional-badge {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ===========================================
+// ANIMATIONS
+// ===========================================
+
+@keyframes black-friday-pulse {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes snow-fall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes christmas-lights {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

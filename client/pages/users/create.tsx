@@ -40,32 +40,32 @@ const CreateUserModal = () => {
 
   const formFields = [
     {
-      type: "text",
+      type: "text" as const,
       name: "name",
       label: "Name",
       value: name,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setName(e.target.value),
       placeholder: "Enter user name",
       required: true,
       maxLength: 150,
       helpText: "Input the users name here."
     },
     {
-      type: "email",
+      type: "email" as const,
       name: "email",
       label: "Email",
       value: email,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setEmail(e.target.value),
       placeholder: "Enter user email",
       required: true,
       helpText: "Input the users email here."
     },
     {
-      type: "password",
+      type: "password" as const,
       name: "password",
       label: "Password",
       value: password,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setPassword(e.target.value),
       placeholder: "Enter user password",
       required: true,
       minLength: 6,

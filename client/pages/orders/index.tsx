@@ -213,8 +213,6 @@ const Orders = () => {
         filterButton={{ onClick: () => console.log('Filter orders') }}
         pagination={true}
         pageSize={pageSize}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
         customActions={[
           {
             key: 'view',

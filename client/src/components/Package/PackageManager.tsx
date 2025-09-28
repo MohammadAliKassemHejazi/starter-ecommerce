@@ -41,7 +41,7 @@ export const PackageManager: React.FC<PackageManagerProps> = ({ isSuperAdmin }) 
     setLoading(true);
     try {
       const data = await getAllPackages();
-      setPackages(data);
+      setPackages(data as any);
     } catch (error) {
       console.error('Error loading packages:', error);
     } finally {

@@ -1,4 +1,7 @@
-/* SingleItem.module.css */
+// ===========================================
+// SINGLE ITEM PRODUCT PAGE MODULE STYLES
+// ===========================================
+
 .productContainer {
   max-width: 1200px;
   margin: 2rem auto;
@@ -71,12 +74,12 @@
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out;
-}
 
-.formInput:focus {
-  border-color: #86b7fe;
-  outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(13, 114, 255, 0.25);
+  &:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 114, 255, 0.25);
+  }
 }
 
 .inputError {
@@ -104,31 +107,31 @@
   border-radius: 0.25rem;
   cursor: pointer;
   position: relative;
-}
 
-.sizeOption::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(
-    45deg,
-    transparent 50%,
-    #0d6efd 50%
-  );
-  transform: scale(0);
-  transition: transform 0.2s ease;
-  border-radius: 0.25rem;
-}
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+      45deg,
+      transparent 50%,
+      #0d6efd 50%
+    );
+    transform: scale(0);
+    transition: transform 0.2s ease;
+    border-radius: 0.25rem;
+  }
 
-.sizeOption:checked::before {
-  transform: scale(1);
-}
+  &:checked::before {
+    transform: scale(1);
+  }
 
-.sizeOption.error {
-  border-color: #dc3545;
+  &.error {
+    border-color: #dc3545;
+  }
 }
 
 .addToCartBtn {
@@ -147,10 +150,10 @@
   font-size: 1.125rem;
   transition: all 0.3s ease;
   width: 100%;
-}
 
-.addToCartBtn:hover {
-  background-position: right;
+  &:hover {
+    background-position: right;
+  }
 }
 
 .feedbackSection {
@@ -176,10 +179,10 @@
   font-size: 2rem;
   color: #dee2e6;
   transition: color 0.2s ease;
-}
 
-.star.filled {
-  color: #ffd700;
+  &.filled {
+    color: #ffd700;
+  }
 }
 
 .feedbackInput {
@@ -200,10 +203,10 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
 
-.submitFeedback:hover {
-  background-color: #0b5ed7;
+  &:hover {
+    background-color: #0b5ed7;
+  }
 }
 
 .sizeMark {
@@ -211,12 +214,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-transform: uppercase; /* Makes text uppercase */
-  font-style: italic; /* Makes text italic */
-  font-weight:600;
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: 600;
 }
 
-/* Responsive Design */
+// Responsive Design
 @media (max-width: 768px) {
   .productContainer {
     grid-template-columns: 1fr;

@@ -256,7 +256,7 @@ export const FormPage: React.FC<FormPageProps> = ({
                               key={index}
                               type="submit"
                               className={`btn btn-${action.variant}`}
-                              disabled={action.disabled || loading}
+                              disabled={('disabled' in action ? action.disabled : false) || loading}
                             >
                               {loading ? (
                                 <>

@@ -26,7 +26,7 @@ interface SingleStoreProps {
   initialStore?: {
     id: string;
     name: string;
-    description: string;
+    description?: string;
     imgUrl: string;
     categoryId: string;
     metaTitle?: string;

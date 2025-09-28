@@ -175,7 +175,7 @@ const PromotionsPage = () => {
         emptyMessage="No promotions found. Create your first promotion to get started!"
         addButton={{ href: '/promotions/create', label: 'New Promotion' }}
         editPath="/promotions/edit"
-        deleteAction={(id) => {
+        deleteAction={async (id) => {
           const promotion = promotions.find(p => p.id === id);
           if (promotion) handleDeletePromotion(promotion);
         }}

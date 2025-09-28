@@ -128,7 +128,7 @@ debugger
       : [
           {
             id: response.data.id, // ID of the uploaded image
-            imageUrl: response.data.imageUrl, // URL of the uploaded image
+            imageUrl: (response.data as any).imageUrl, // URL of the uploaded image
             file: null, // Clear the file reference since it's already uploaded
           },
         ];

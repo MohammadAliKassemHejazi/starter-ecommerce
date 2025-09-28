@@ -28,16 +28,18 @@ export const renderDate = (value: string | Date, format: 'short' | 'long' | 'tim
   if (!value) return '-';
   
   const date = new Date(value);
-  const options: Intl.DateTimeFormatOptions = {
-    short: { year: 'numeric', month: 'short', day: 'numeric' },
-    long: { year: 'numeric', month: 'long', day: 'numeric' },
-    time: { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+  const formatOptions = {
+    short: { year: 'numeric', month: 'short', day: 'numeric' } as Intl.DateTimeFormatOptions,
+    long: { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions,
+    time: { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' } as Intl.DateTimeFormatOptions
   };
+  
+  const options = formatOptions[format];
   
   return (
     <span className="text-muted small">
       <i className="bi bi-calendar3 me-1"></i>
-      {date.toLocaleDateString('en-US', options[format])}
+      {date.toLocaleDateString('en-US', options)}
     </span>
   );
 };

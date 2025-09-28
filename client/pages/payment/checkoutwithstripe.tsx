@@ -63,12 +63,12 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency, onSuccess
 
       const result = await dispatch(createPayment(paymentData));
       
-      if (result.meta.requestStatus === 'fulfilled') {
-        const paymentId = result.payload.id;
+      if (result.meta.requestStatus === 'fulfilled' && result.payload && typeof result.payload === 'object' && 'id' in result.payload) {
+        const paymentId = String(result.payload.id);
         showToast.success('Payment successful!');
         onSuccess?.(paymentId);
       } else {
-        throw new Error(result.payload || 'Payment failed');
+        throw new Error(typeof result.payload === 'string' ? result.payload : 'Payment failed');
       }
     } catch (err: any) {
       const errorMessage = err.message || 'An unexpected error occurred';
@@ -158,15 +158,6 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
         title="Checkout" 
         subtitle={`Complete your subscription to ${pkg.name}`}
         protected={true}
-        headerActions={
-          <button 
-            className="btn btn-outline-secondary"
-            onClick={onCancel}
-          >
-            <i className="bi bi-arrow-left me-2"></i>
-            Back to Plans
-          </button>
-        }
       >
         <div className="row justify-content-center">
           <div className="col-lg-6">

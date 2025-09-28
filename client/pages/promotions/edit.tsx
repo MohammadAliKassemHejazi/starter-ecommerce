@@ -33,7 +33,7 @@ const EditPromotion = () => {
     }
   }, [router.isReady, promotion]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -73,7 +73,7 @@ const EditPromotion = () => {
 
   const formFields = [
     {
-      type: "text",
+      type: "text" as const,
       name: "code",
       label: "Promotion Code",
       value: formData.code,
@@ -83,7 +83,7 @@ const EditPromotion = () => {
       helpText: "Enter a unique promotion code"
     },
     {
-      type: "select",
+      type: "select" as const,
       name: "type",
       label: "Discount Type",
       value: formData.type,
@@ -95,7 +95,7 @@ const EditPromotion = () => {
       ]
     },
     {
-      type: "number",
+      type: "number" as const,
       name: "value",
       label: "Discount Value",
       value: formData.value,
@@ -109,7 +109,7 @@ const EditPromotion = () => {
         : 'Enter amount in dollars'
     },
     {
-      type: "number",
+      type: "number" as const,
       name: "minCartValue",
       label: "Minimum Cart Value",
       value: formData.minCartValue,
@@ -120,14 +120,14 @@ const EditPromotion = () => {
       helpText: "Minimum cart value to use this promotion"
     },
     {
-      type: "datetime-local",
+      type: "datetime-local" as const,
       name: "validFrom",
       label: "Valid From",
       value: formData.validFrom,
       onChange: handleInputChange
     },
     {
-      type: "datetime-local",
+      type: "datetime-local" as const,
       name: "validTo",
       label: "Valid To",
       value: formData.validTo,

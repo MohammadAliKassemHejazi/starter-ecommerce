@@ -112,13 +112,13 @@ debugger
       ? response.data.map((uploadedImage: any) => ({
           id: uploadedImage.storeId, // ID of the uploaded image
           imageUrl: uploadedImage.updatedImageUrl, // URL of the uploaded image
-          file: null, // Clear the file reference since it's already uploaded
+          file: undefined, // Clear the file reference since it's already uploaded
         }))
       : [
           {
-            id: response.data.storeId, // ID of the uploaded image
-            imageUrl: response.data.updatedImageUrl, // URL of the uploaded image
-            file: null, // Clear the file reference since it's already uploaded
+            id: (response.data as any).storeId, // ID of the uploaded image
+            imageUrl: (response.data as any).updatedImageUrl, // URL of the uploaded image
+            file: undefined, // Clear the file reference since it's already uploaded
           },
         ];
 

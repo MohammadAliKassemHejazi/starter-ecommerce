@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getUserPackageLimits, IPackageLimits } from '@/services/packageService';
-import { Card } from '@/components/UI/Card';
-import { Progress } from '@/components/UI/Progress';
+import { Card } from 'react-bootstrap';
+import { ProgressBar } from 'react-bootstrap';
 
 export const PackageLimits: React.FC = () => {
   const [limits, setLimits] = useState<IPackageLimits | null>(null);
@@ -14,7 +14,7 @@ export const PackageLimits: React.FC = () => {
   const loadLimits = async () => {
     try {
       const data = await getUserPackageLimits();
-      setLimits(data);
+      setLimits(data as any);
     } catch (error) {
       console.error('Error loading package limits:', error);
     } finally {
@@ -74,8 +74,8 @@ export const PackageLimits: React.FC = () => {
             </span>
           </div>
           {limits.storeLimit !== -1 && limits.storeLimit !== 0 && (
-            <Progress 
-              value={getProgressPercentage(limits.currentStoreCount, limits.storeLimit)} 
+            <ProgressBar 
+              now={getProgressPercentage(limits.currentStoreCount, limits.storeLimit)} 
               className="h-2"
             />
           )}
@@ -96,8 +96,8 @@ export const PackageLimits: React.FC = () => {
             </span>
           </div>
           {limits.productLimit !== -1 && limits.productLimit !== 0 && (
-            <Progress 
-              value={getProgressPercentage(limits.currentProductCount, limits.productLimit)} 
+            <ProgressBar 
+              now={getProgressPercentage(limits.currentProductCount, limits.productLimit)} 
               className="h-2"
             />
           )}
@@ -119,8 +119,8 @@ export const PackageLimits: React.FC = () => {
               </span>
             </div>
             {limits.userLimit !== -1 && limits.userLimit !== 0 && (
-              <Progress 
-                value={getProgressPercentage(limits.currentUserCount, limits.userLimit)} 
+              <ProgressBar 
+                now={getProgressPercentage(limits.currentUserCount, limits.userLimit)}
                 className="h-2"
               />
             )}
@@ -156,6 +156,7 @@ export const PackageLimits: React.FC = () => {
     </Card>
   );
 };
+
 
 
 

@@ -33,11 +33,11 @@ const EditPermissionModal = () => {
 
   const formFields = [
     {
-      type: "text",
+      type: "text" as const,
       name: "name",
       label: "Name",
       value: name,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setName(e.target.value),
       placeholder: "Enter permission name",
       required: true,
       maxLength: 150,
