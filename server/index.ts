@@ -8,8 +8,8 @@ import rateLimit from 'express-rate-limit';
 import winston from 'winston';
 import path from 'node:path';
 import fs from 'fs/promises';
-import fsSync from 'fs';
 import multer, { FileFilterCallback } from 'multer';
+import bcrypt from 'bcrypt';
 // Import routes and middlewares
 import { 
   orderRouter, cartRouter, authRouter, userRouter, articleRouter, 
@@ -17,16 +17,12 @@ import {
   usersRouter, ordersRouter, permissionsRouter, rolesRouter, 
   subcategoriesRouter, dashboardRouter, favoriteRouter, commentRouter, promotionRouter,
   analyticsRouter, auditLogRouter, translationRouter, packageRouter, shippingRouter,
-  sizeRouter, taxRouter, returnRouter, publicRouter
+  sizeRouter, taxRouter, returnRouter
 } from './src/routes';
-
-// RLS functionality now integrated into existing routes
-
-// Import backward-compatible tenant middleware
-import { backwardCompatibleTenantMiddleware } from './src/middlewares/backward-compatible-tenant.middleware';
 
 import paypalRouter from './src/routes/paypal.routes';
 import swaggerUi from 'swagger-ui-express';
+import { createSwaggerFile } from './src/config/swagger';
 import { CustomError } from './src/utils/customError';
 import config from './src/config/config';
 import db from './src/models';
@@ -366,20 +362,14 @@ async function createApp(): Promise<Express> {
   // Health check endpoint
   app.get('/health', healthCheck);
   
-  // Swagger documentation (only in development)
-  if (!IS_PRODUCTION) {
-    try {
-      const swaggerPath = path.join(__dirname, './src/routes/swaggerSchema/swagger.json');
-      if (fsSync.existsSync(swaggerPath)) {
-        const swaggerDocument = require(swaggerPath);
-        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-        console.log('📚 Swagger documentation available at /api-docs');
-      } else {
-        console.log('📚 Swagger documentation not found, skipping setup');
-      }
-    } catch (error) {
-      console.warn('⚠️ Swagger documentation setup failed:', error);
-    }
+  // Swagger documentation
+  try {
+    // await createSwaggerFile();
+    const swaggerDocument = require('./src/routes/swaggerSchema/swagger.json');
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    console.log('📚 Swagger documentation available at /api-docs');
+  } catch (error) {
+    console.warn('⚠️ Swagger documentation setup failed:', error);
   }
   
   // Main route
@@ -393,17 +383,12 @@ async function createApp(): Promise<Express> {
   });
   
   // API Routes with proper grouping
-  // Public routes (no authentication required)
-  app.use('/api/public', publicRouter);
-  
   // Auth routes with stricter rate limiting
   app.use('/api/auth', authLimiter, authRouter);
   
-  // Main routes with RLS tenant support (backward compatible with existing frontend)
-  app.use('/api/shop', backwardCompatibleTenantMiddleware, shopUploadMiddleware, shopRouter);
-  app.use('/api/stores', backwardCompatibleTenantMiddleware, storeUploadMiddleware, storeRouter);
-  app.use('/api/cart', backwardCompatibleTenantMiddleware, cartRouter);
-  app.use('/api/orders', backwardCompatibleTenantMiddleware, orderRouter);
+  // Public routes (less strict rate limiting)
+  app.use('/api/cart', cartRouter);
+  app.use('/api/orders', orderRouter);
   app.use('/api/payment', paymentRouter);
   app.use('/api/utile', utileRouter);
   app.use('/api/users', userRouter);
@@ -479,21 +464,19 @@ async function createApp(): Promise<Express> {
 async function initializeDatabase(): Promise<void> {
   try {
     if (!IS_PRODUCTION) {
-      console.log('🔄 Syncing database in development...');
+      console.log('🔄 Performing database reset in development...');
+      await db.sequelize.sync();
+      console.log('✅ Database schema has been reset.');
       
-      // First try to sync with alter option to handle schema changes
-      try {
-        await db.sequelize.sync({ force: true });
-        console.log('✅ Database schema synced with alterations.');
-      } catch (syncError) {
-        console.log('⚠️  Sync with alter failed, trying force sync...');
-        // If alter fails, try force sync (this will drop and recreate tables)
-        await db.sequelize.sync({ force: true });
-        console.log('✅ Database schema force synced.');
-      }
+     // await runScripts();
+      console.log('✅ Database seeded successfully.');
     } else {
-      await db.sequelize.sync({force: true })
+      await db.sequelize.authenticate();
       console.log('✅ Database connection established.');
+      
+      //await runScripts();
+      // Run migrations in production instead of force sync
+      // await db.sequelize.sync({ alter: true }); // Uncomment if needed
     }
   } catch (error) {
     console.error('❌ Database initialization failed:', error);
@@ -507,7 +490,6 @@ async function startServer(): Promise<void> {
     // Initialize database
     await initializeDatabase();
     // Create app
-    runScripts();
     const app = await createApp();
     const logger = app.get('logger');
     

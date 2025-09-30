@@ -142,7 +142,7 @@ const NavigationDemoPage: NextPage = () => {
       </div>
       <div className="card-body">
         <ol>
-          <li>Make sure you're logged in with a user that has roles and permissions</li>
+          <li>Make sure youre logged in with a user that has roles and permissions</li>
           <li>Click the navigation button (hamburger menu) in the navbar</li>
           <li>Observe which navigation items are visible based on your permissions</li>
           <li>Try logging in with different user roles to see different navigation items</li>

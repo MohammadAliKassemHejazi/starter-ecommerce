@@ -37,7 +37,7 @@ export default function MySwiperComponent({ imageLinks }: Props) {
       </div>
       <div className="col-1 align-self-center">
         <div className="prev" role="button" data-bs-slide="prev">
-          <i className="text-dark fas fa-chevron-left"></i>
+          <i className="fas fa-chevron-left" style={{ color: 'var(--bs-body-color)' }}></i>
           <span className="sr-only">Previous</span>
         </div>
       </div>
@@ -69,7 +69,7 @@ export default function MySwiperComponent({ imageLinks }: Props) {
       </div>
       <div className="col-1 align-self-center">
         <div className="next" role="button" data-bs-slide="next">
-          <i className="text-dark fas fa-chevron-right"></i>
+          <i className="fas fa-chevron-right" style={{ color: 'var(--bs-body-color)' }}></i>
           <span className="sr-only">Next</span>
         </div>
       </div>

@@ -238,12 +238,12 @@ export default function SignUp({}: Props) {
 
   return (
     <PageLayout title="Sign Up" subtitle="Create your account" protected={false}>
-      <div className="login-page bg-light">
+      <div className="login-page" style={{ background: 'var(--bs-body-bg)', color: 'var(--bs-body-color)' }}>
         <div className="container py-5">
           <div className="row">
             <div className="col-lg-12">
               <h3 className="mb-3">Sign Up</h3>
-              <div className="bg-white shadow rounded">
+              <div className="shadow rounded" style={{ background: 'var(--bs-component-bg)', border: '1px solid var(--bs-border-color)' }}>
                 <div className="row">
                   <SignupForm />
                   <SignupSidebar />
@@ -269,9 +269,7 @@ export default function SignUp({}: Props) {
             font-size: 100px;
           }
 
-          .bg-login {
-            background-color: #3b90ff;
-          }
+          .bg-login { background: var(--sidebar-bg, var(--bs-primary)); }
 
           .logo {
             border-radius: 50%;

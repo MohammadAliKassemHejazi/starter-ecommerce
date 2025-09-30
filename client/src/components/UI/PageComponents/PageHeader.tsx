@@ -55,7 +55,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       {/* Title and Actions */}
       <div className="d-flex justify-content-between align-items-start">
         <div>
-          <h1 className="h2 fw-bold text-dark mb-1">{title}</h1>
+          <h1 className="h2 fw-bold text-body mb-1">{title}</h1>
           {subtitle && (
             <p className="text-muted mb-0">{subtitle}</p>
           )}

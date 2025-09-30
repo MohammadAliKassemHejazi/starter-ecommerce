@@ -6,9 +6,9 @@
   max-width: 1200px;
   margin: 4rem auto;
   padding: 2rem;
-  background-color: #f9f9f9;
+  background-color: var(--bs-body-bg);
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
 .cartTitle {
@@ -16,19 +16,19 @@
   font-weight: bold;
   text-align: center;
   margin-bottom: 2rem;
-  color: #333;
+  color: var(--bs-body-color);
 }
 
 .cartEmpty {
   text-align: center;
   padding: 2rem;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: var(--bs-component-bg);
+  border: 1px solid var(--bs-border-color);
   border-radius: 8px;
 
   p {
     font-size: 1.2rem;
-    color: #666;
+    color: var(--bs-text-muted);
   }
 }
 
@@ -42,7 +42,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #007bff;
+    color: var(--bs-primary);
     text-decoration: none;
     font-weight: bold;
   }
@@ -57,10 +57,10 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  background-color: #fff;
+  background-color: var(--bs-component-bg);
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.1));
   margin-bottom: 1rem;
 }
 
@@ -78,12 +78,12 @@
 .productName {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333;
+  color: var(--bs-body-color);
 }
 
 .productPrice {
   font-size: 1rem;
-  color: #666;
+  color: var(--bs-text-muted);
 }
 
 .productActions {
@@ -93,7 +93,7 @@
 }
 
 .quantityBtn {
-  background-color: #007bff;
+  background-color: var(--bs-primary);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -102,20 +102,20 @@
   font-size: 1rem;
   transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: #0056b3;
-  }
+   &:hover {
+    background-color: color-mix(in srgb, var(--bs-primary) 85%, #0000);
+   }
 }
 
 .count {
   margin: 0 0.5rem;
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333;
+  color: var(--bs-body-color);
 }
 
 .removeBtn {
-  background-color: #dc3545;
+  background-color: var(--bs-danger);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -125,20 +125,20 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #bd2130;
+    background-color: color-mix(in srgb, var(--bs-danger) 85%, #0000);
   }
 }
 
 .cartSummary {
-  background-color: #fff;
+  background-color: var(--bs-component-bg);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.1));
   margin-top: 2rem;
 }
 
 .clearBtn {
-  background-color: #dc3545;
+  background-color: var(--bs-danger);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -150,7 +150,7 @@
   margin: 0 auto 1rem;
 
   &:hover {
-    background-color: #bd2130;
+    background-color: color-mix(in srgb, var(--bs-danger) 85%, #0000);
   }
 }
 
@@ -170,11 +170,11 @@
 }
 
 .amount {
-  color: #007bff;
-}
+   color: var(--bs-primary);
+ }
 
 .checkoutBtn {
-  background-color: #28a745;
+  background-color: var(--bs-success);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -185,6 +185,7 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #218838;
+    background-color: color-mix(in srgb, var(--bs-success) 85%, #0000);
   }
 }
+

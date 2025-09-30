@@ -39,3 +39,4 @@ const SimpleThemeToggle: React.FC = () => {
 };
 
 export default SimpleThemeToggle;
+

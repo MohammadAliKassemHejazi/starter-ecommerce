@@ -5,22 +5,22 @@ import { ApiResponse, ApiErrorResponse } from '@/interfaces/api/apiResponse.type
 import { handleApiError } from './apiUtils';
 
 const httpClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL_API
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL_API,
 })
 
-// Request interceptor to add auth token
-httpClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// // Request interceptor to add auth token
+// httpClient.interceptors.request.use(
+//   (config) => {
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 // Response interceptor to handle API responses consistently
 httpClient.interceptors.response.use(

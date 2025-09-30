@@ -139,7 +139,7 @@ const SignIn = () => {
 
   const LoginSidebar = () => (
     <div className="col-md-5 ps-0 d-none d-md-block">
-      <div className="styles.bg-loginform-right h-100 bg-login text-white text-center pt-5">
+      <div className="styles.bg-loginform-right h-100 bg-login text-white text-center pt-5" style={{background: 'var(--sidebar-bg)', color: 'var(--bs-white)'}}>
         <Image
           alt="logo"
           className={styles.logo}
@@ -155,11 +155,11 @@ const SignIn = () => {
 
   return (
     <PageLayout title="Sign In" subtitle="Welcome back! Please sign in to your account" protected={false}>
-      <div className="login-page bg-light">
+      <div className="login-page" style={{background: 'var(--bs-body-bg)', color: 'var(--bs-body-color)'}}>
         <div className="container">
           <div className="row">
             <div className="col-lg-10 offset-lg-1">
-              <div className="bg-white shadow rounded">
+              <div className="shadow rounded" style={{background: 'var(--bs-component-bg)', border: '1px solid var(--bs-border-color)'}}>
                 <div className="row">
                   <LoginForm />
                   <LoginSidebar />
@@ -185,9 +185,7 @@ const SignIn = () => {
             font-size: 100px;
           }
 
-          .bg-login {
-            background-color: #3b90ff;
-          }
+          .bg-login { background: var(--sidebar-bg, var(--bs-primary)); }
 
           .logo {
             border-radius: 50%;

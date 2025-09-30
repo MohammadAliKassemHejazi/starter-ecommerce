@@ -9,7 +9,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--body-color);
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
   height: 100vh;
 }
 
@@ -57,3 +58,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+

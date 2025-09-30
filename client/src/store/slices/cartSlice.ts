@@ -272,9 +272,11 @@ const cartSlice = createSlice({
       .addCase(fetchCart.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchCart.fulfilled, (state, action: PayloadAction<CartItem[]>) => {
+      .addCase(fetchCart.fulfilled, (state, action ) => {
         state.status = "succeeded";
-        state.cartItems = action.payload;
+        console.log("Fetched cart items:", action.payload.data.cartItems);
+        state.cartItems = action.payload.data.cartItems || [];
+            console.log("state.cartItems", state.cartItems);
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.status = "failed";

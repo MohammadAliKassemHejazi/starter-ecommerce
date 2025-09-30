@@ -14,9 +14,9 @@ export default function Layout({ children }: Props) {
       <main className="main-content">
         {children}
         {/* Theme Switcher - You can move this to any page or component */}
-        <div className="theme-switcher-container position-fixed" style={{ top: '20px', right: '20px', zIndex: 1000 }}>
+        {/* <div className="theme-switcher-container position-fixed" style={{ top: '20px', right: '20px', zIndex: 1000 }}>
           <ThemeSwitcher />
-        </div>
+        </div> */}
       </main>
       <Footer />
     </div>

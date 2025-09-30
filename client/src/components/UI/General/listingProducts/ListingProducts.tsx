@@ -58,7 +58,7 @@ const ProductList: React.FC<ProductListProps> = () => {
   );
 
   return (
-    <div className="container bg-white">
+    <div className="container" style={{ background: 'var(--bs-component-bg)' }}>
       {loading.products && products.length === 0 ? (
         <div>Loading...</div>
       ) : (

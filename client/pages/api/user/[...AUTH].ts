@@ -1,66 +1,97 @@
-import {
-	HTTP_METHOD_POST,
-	HTTP_METHOD_GET,
-	ACCESS_TOKEN_KEY,
-} from "@/utils/constant";
+// pages/api/auth/[...AUTH].ts
 
+import { HTTP_METHOD_POST, HTTP_METHOD_GET, ACCESS_TOKEN_KEY } from "@/utils/constant";
 import { clearCookie, setCookie } from "@/utils/cookiesUtil";
 import httpClient from "@/utils/httpClient";
 import type { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
 
-
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-     const action = req.query["AUTH"] ? req.query["AUTH"][1] : undefined;
-
-	if (req.method === HTTP_METHOD_POST && action === "signin") {
-		return signIn(req, res);
-	} else if (req.method === HTTP_METHOD_GET && action === "signout") {
-		return signOut(req, res);
-	} else if (req.method === HTTP_METHOD_GET && action === "session") {
-		return getSession(req, res);
-	} else {
-		return res
-			.status(405)
-			.end(`Error: HTTP ${req.method} is not supported for ${req.url}`);
-	}
+  // Parse action: /api/auth/signin → "signin"
+  const action = req.query.AUTH?.[1] as string | undefined;
+console.log(`API auth action: ${action}, method: ${req.method}`);
+  if (req.method === HTTP_METHOD_POST && action === "login") {
+    return handleSignIn(req, res);
+  } else if (req.method === HTTP_METHOD_POST && action === "register") {
+    return handleSignUp(req, res);
+  } else if (req.method === HTTP_METHOD_GET && action === "logout") {
+    return handleSignOut(req, res);
+  } else if (req.method === HTTP_METHOD_GET && action === "session") {
+    return handleGetSession(req, res);
+  } else if (req.method === HTTP_METHOD_GET && action === "session/public") {
+    return handleGetPublicSession(req, res);
+  } else {
+    return res.status(405).json({ error: `Method ${req.method} not allowed` });
+  }
 }
 
-const signIn = async (req: NextApiRequest, res: NextApiResponse<any>) => {
-	try {
-		const response = await httpClient.post(`/auth/login`, req.body);
+// === Handlers ===
 
-		const { accessToken } = response.data;
-		setCookie(res, ACCESS_TOKEN_KEY, accessToken, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV !== "development",
-			sameSite: "strict",
-			path: "/",
-		});
-		res.json(response.data);
-	} catch (error: any) {
-		res.status(400).end();
-	}
-}
+const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    // Forward to real backend
+    const response = await httpClient.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/login`, req.body);
+  const { accessToken, ...userData } = response.data.data;
 
-const getSession = async (req: NextApiRequest, res: NextApiResponse<any>) => {
-	try {
-		const cookies = cookie.parse(req.headers.cookie || "");
-		const accessToken = cookies[ACCESS_TOKEN_KEY];
-		if (accessToken) {
-			const response = await httpClient.get(`/auth/isauthenticated`, {
-				headers: { Authorization: `Bearer ${accessToken}` },
-			});
-			res.json(response.data);
-		} else {
-			res.json({ success: false, msg: "something wentwrong" });
-		}
-	} catch (error: any) {
-		res.json({ success: false, msg: "something wentwrong" });
-	}
-}
+    // Set HTTP-only cookie
+    setCookie(res, ACCESS_TOKEN_KEY, accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "strict",
+      path: "/",
+    });
 
-const signOut = async (req: NextApiRequest, res: NextApiResponse<any>) => {
-	clearCookie(res, ACCESS_TOKEN_KEY);
-	res.json({ success: true, msg: "sign out successfuly" });
-}
+    // Return user data (without token)
+    res.status(200).json(userData);
+  } catch (error: any) {
+    console.error("Sign-in error:", error.response?.data || error.message);
+    res.status(401).json({ error: "Invalid credentials" });
+  }
+};
+
+const handleSignUp = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const response = await httpClient.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/register`, req.body);
+    res.status(201).json(response.data);
+  } catch (error: any) {
+    console.error("Sign-up error:", error.response?.data || error.message);
+    res.status(400).json({ error: error.response?.data?.message || "Registration failed" });
+  }
+};
+
+const handleGetSession = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const cookies = cookie.parse(req.headers.cookie || "");
+    const accessToken = cookies[ACCESS_TOKEN_KEY];
+
+    if (!accessToken) {
+      return res.status(401).json({ error: "No session" });
+    }
+
+    const response = await httpClient.get(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/isauthenticated`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    res.status(200).json(response.data);
+  } catch (error: any) {
+    console.error("Session error:", error.response?.data || error.message);
+    // Clear invalid cookie
+    clearCookie(res, ACCESS_TOKEN_KEY);
+    res.status(401).json({ error: "Session invalid" });
+  }
+};
+
+const handleGetPublicSession = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const response = await httpClient.get(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/session/public`);
+    res.status(200).json(response.data);
+  } catch (error: any) {
+    console.error("Public session error:", error);
+    res.status(500).json({ error: "Failed to get public session" });
+  }
+};
+
+const handleSignOut = async (_req: NextApiRequest, res: NextApiResponse) => {
+  clearCookie(res, ACCESS_TOKEN_KEY);
+  res.status(200).json({ success: true, message: "Signed out" });
+};

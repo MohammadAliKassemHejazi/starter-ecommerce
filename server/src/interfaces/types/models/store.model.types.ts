@@ -5,5 +5,5 @@ export interface IStoreAttributes {
   categoryId?: string;
   description: string;
   imgUrl: string;
-  tenantId?: string; // RLS tenant isolation
+
 }

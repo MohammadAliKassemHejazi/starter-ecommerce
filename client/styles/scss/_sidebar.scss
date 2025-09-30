@@ -128,7 +128,56 @@
 
   // Sidebar Menu
   .sidebar-menu {
-    padding: 0 1rem;
+    padding: 0.5rem 0.75rem;
+
+    // Menu sections with anchor "buttons" used in Navigation.tsx
+    .menu-section {
+      margin-bottom: 1rem;
+
+      .section-title {
+        color: var(--sidebar-text-secondary, #cbd5e1);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.25rem;
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.65rem 0.875rem;
+        color: var(--sidebar-text, #e2e8f0);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: 0;
+        background: transparent;
+        border-radius: 0.5rem;
+        margin-bottom: 0.25rem;
+        transition: background 0.2s ease, color 0.2s ease;
+
+        i {
+          width: 1.25rem;
+          text-align: center;
+          color: currentColor;
+        }
+
+        &:hover {
+          background: var(--sidebar-bg-hover, rgba(139, 92, 246, 0.1));
+          color: var(--sidebar-text-hover, #ffffff);
+        }
+
+        &.active {
+          background: var(--sidebar-bg-active, linear-gradient(135deg, var(--theme-primary, #8b5cf6) 0%, var(--theme-secondary, #6366f1) 100%));
+          color: #ffffff;
+          box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sidebar-border, rgba(139, 92, 246, 0.2)) 40%, transparent);
+        }
+      }
+    }
   }
 
   // Search Bar

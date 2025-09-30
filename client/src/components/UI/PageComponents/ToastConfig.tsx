@@ -13,13 +13,21 @@ export const Toast = Swal.mixin({
   },
 });
 
+const bsPrimary = (typeof window !== 'undefined' && typeof document !== 'undefined')
+  ? (getComputedStyle(document.documentElement).getPropertyValue('--bs-primary') || '#0d6efd').trim()
+  : '#0d6efd';
+
+const bsDanger = (typeof window !== 'undefined' && typeof document !== 'undefined')
+  ? (getComputedStyle(document.documentElement).getPropertyValue('--bs-danger') || '#dc3545').trim()
+  : '#dc3545';
+
 export const ConfirmDialog = Swal.mixin({
   title: 'Are you sure?',
   text: "You won't be able to revert this!",
   icon: 'warning',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: bsPrimary,
+  cancelButtonColor: bsDanger,
   confirmButtonText: 'Yes, do it!',
   cancelButtonText: 'Cancel'
 });

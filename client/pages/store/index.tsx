@@ -15,7 +15,6 @@ const Stores = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const stores = useSelector(storeSelector);
-  const { isAuthenticated } = usePageData();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 10;

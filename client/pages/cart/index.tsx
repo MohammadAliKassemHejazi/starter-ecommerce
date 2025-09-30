@@ -9,7 +9,7 @@ import {
   removeFromCart,
 } from "@/store/slices/cartSlice";
 import Link from "next/link";
-import styles from "./cart.module.scss";
+import ProtectedRoute from '@/components/protectedRoute';
 import { RootState, useAppDispatch } from "@/store/store";
 import { IProductModel } from "@/models/product.model";
 import { CartItem } from "@/models/cart.model";
@@ -69,16 +69,16 @@ const Cart = () => {
   };
 
   const CartEmpty = () => (
-    <div className={styles.cartEmpty}>
+    <div className='cartEmpty'>
       <p>Your cart is currently empty</p>
-      <div className={styles.startShopping}>
+      <div className='startShopping'>
         <Link href="/">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
             fill="currentColor"
-            className={styles.biArrowLeft}
+            className='biArrowLeft'
             viewBox="0 0 16 16"
           >
             <path
@@ -93,7 +93,7 @@ const Cart = () => {
   );
 
   const CartItem = ({ cartItem }: { cartItem: CartItem }) => (
-    <div key={cartItem.id} className={styles.productCard}>
+    <div key={cartItem.id} className='productCard'>
       {cartItem?.photos && cartItem.photos.length > 0 && (
         <Image
           src={
@@ -101,32 +101,33 @@ const Cart = () => {
             cartItem.photos[0]?.imageUrl
           }
           alt={cartItem.name ?? ""}
-          className={styles.productImage}
+          className='productImage'
           width={100}
           height={100}
         />
       )}
-      <div className={styles.productDetails}>
-        <h3 className={styles.productName}>{cartItem.name}</h3>
-        <p className={styles.productPrice}>${cartItem.price}</p>
-        <p className={styles.productDesc}>{cartItem.description}</p>
+      <div className='productDetails'>
+        <h3 className='productName'>{cartItem.name}</h3>
+        <p className='productPrice'>${cartItem.price}</p>
+        <p className='productDesc'>{cartItem.description}</p>
       </div>
-      <div className={styles.productActions}>
+      <div className='productActions'>
         <button
-          className={styles.quantityBtn}
+          className='quantityBtn'
           onClick={() => handleDecreaseCart(cartItem)}
         >
           -
         </button>
-        <div className={styles.count}>{cartItem.cartQuantity}</div>
+        <div className='count'>{cartItem.cartQuantity}</div>
         <button
-          className={styles.quantityBtn}
+          className='quantityBtn'
           onClick={() => handleAddToCart(cartItem)}
         >
           +
         </button>
         <button
-          className={styles.removeBtn}
+            className='removeBtn'
+          
           onClick={() => handleRemoveFromCart(cartItem)}
         >
           Remove
@@ -136,14 +137,14 @@ const Cart = () => {
   );
 
   const CartSummary = () => (
-    <div className={styles.cartSummary}>
-      <h3 className={styles.summaryTitle}>Cart Summary</h3>
-      <div className={styles.subtotal}>
+    <div className='cartSummary'>
+      <h3 className='summaryTitle'>Cart Summary</h3>
+      <div className='subtotal'>
         <span>Subtotal</span>
-        <span className={styles.amount}>${cart.cartTotalAmount}</span>
+        <span className='amount'>${cart.cartTotalAmount}</span>
       </div>
       <p>Taxes and shipping calculated at checkout</p>
-      <button className={styles.clearBtn} onClick={handleClearCart}>
+      <button className='clearBtn'  onClick={handleClearCart}>
         Clear Cart
       </button>
       
@@ -177,14 +178,14 @@ const Cart = () => {
   );
 
   const ContinueShopping = () => (
-    <div className={styles.continueShopping}>
+    <div className='continueShopping'>
       <Link href="/shop">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
           fill="currentColor"
-          className={styles.biArrowLeft}
+          className='biArrowLeft'
           viewBox="0 0 16 16"
         >
           <path
@@ -222,7 +223,7 @@ const Cart = () => {
 
   return (
     <PageLayout title="Shopping Cart" protected={false}>
-      <div className={styles.cartContainer}>
+      <div className='cartContainer'>
         {cart.cartItems.length === 0 ? (
           <CartEmpty />
         ) : (
@@ -243,5 +244,7 @@ const Cart = () => {
     </PageLayout>
   );
 };
-
-export default Cart;
+export default function ProtectedCartPage() {
+  return (
+    <ProtectedRoute><Cart></Cart></ProtectedRoute>)
+}

@@ -12,7 +12,7 @@ import {
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import { store, useAppDispatch } from "@/store/store";
 import { TablePage, FilterCard } from "@/components/UI/PageComponents";
-import { usePageData } from "@/hooks/usePageData";
+
 import { usePermissions } from "@/hooks/usePermissions";
 import { addToCart } from "@/store/slices/cartSlice";
 import FavoritesButton from "@/components/UI/FavoritesButton";
@@ -33,7 +33,7 @@ const Shop = () => {
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
   const stores = useSelector(storeSelector) as IStoreResponseModel[];
-  const { isAuthenticated } = usePageData();
+ 
   const { isAdmin } = usePermissions();
 
   const [selectedStore, setSelectedStore] = useState<string>("");

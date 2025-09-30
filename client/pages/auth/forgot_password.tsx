@@ -132,12 +132,12 @@ export default function ForgotPassword({}: Props) {
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       />
 
-      <div className="login-page bg-light">
+      <div className="login-page" style={{ background: 'var(--bs-body-bg)', color: 'var(--bs-body-color)' }}>
         <div className="container">
           <div className="row">
             <div className="col-lg-10 offset-lg-1">
               <h3 className="mb-3">Forgot Password?</h3>
-              <div className="bg-white shadow rounded">
+              <div className="shadow rounded" style={{ background: 'var(--bs-component-bg)', border: '1px solid var(--bs-border-color)' }}>
                 <div className="row">
                   <ForgotPasswordForm />
                   <ForgotPasswordSidebar />

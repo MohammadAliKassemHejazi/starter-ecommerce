@@ -118,7 +118,7 @@ const FavoritesButton: React.FC<FavoritesButtonProps> = ({
         disabled={isDisabled}
         title={isInFavorites ? 'Remove from favorites' : 'Add to favorites'}
         style={{ 
-          color: isInFavorites ? '#dc3545' : '#6c757d',
+          color: isInFavorites ? 'var(--bs-danger)' : 'var(--bs-secondary)',
           transition: 'color 0.3s ease',
           cursor: isDisabled ? 'not-allowed' : 'pointer'
         }}
@@ -146,7 +146,7 @@ const FavoritesButton: React.FC<FavoritesButtonProps> = ({
         onClick={handleToggleFavorite}
         disabled={isDisabled}
         style={{ 
-          color: isInFavorites ? '#dc3545' : '#6c757d',
+          color: isInFavorites ? 'var(--bs-danger)' : 'var(--bs-secondary)',
           transition: 'color 0.3s ease',
           cursor: isDisabled ? 'not-allowed' : 'pointer'
         }}

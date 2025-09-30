@@ -15,7 +15,7 @@ module.exports = (sequelize: Sequelize) => {
     slug?: string;
     tags?: string;
     discount?: number;
-    tenantId?: string; // RLS tenant isolation
+
 
     static associate(models: any) {
       Product.belongsTo(models.User, { foreignKey: 'ownerId', targetKey: 'id', onDelete: 'CASCADE' });
@@ -95,11 +95,7 @@ module.exports = (sequelize: Sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    tenantId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      field: 'tenant_id', // RLS tenant isolation
-    },
+
     
   }, {
     sequelize,

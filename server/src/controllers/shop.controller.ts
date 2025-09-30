@@ -1,14 +1,13 @@
 import { Response, NextFunction } from "express";
 import { shopService, userService } from "../services";
 import { CustomRequest } from "../interfaces/types/middlewares/request.middleware.types";
-import { TenantRequest } from "../middlewares/rls-tenant.middleware";
 import { canCreateProduct, isSuperAdmin } from "../services/package.service";
 import path from "node:path";
 import fs from "fs";
 import { validationResult } from "express-validator";
 
 export const handleCreateProduct = async (
-  request: TenantRequest,
+  request: CustomRequest,
   response: Response,
   next: NextFunction
 ) => {
@@ -38,8 +37,7 @@ export const handleCreateProduct = async (
         ...request.body, 
         ownerId: UserId, 
         sizes: sizes,
-        // Add tenant ID if available (for RLS)
-        ...(request.tenantId && { tenantId: request.tenantId })
+     
       } as any;
 
       // Process product creation with data and files
@@ -51,13 +49,7 @@ export const handleCreateProduct = async (
         message: 'Product created successfully'
       };
 
-      // Add tenant info if available
-      if (request.tenantId) {
-        responseData.tenant = {
-          id: request.tenantId,
-          slug: request.tenantSlug
-        };
-      }
+
 
       response.status(200).json(responseData);
     } else {

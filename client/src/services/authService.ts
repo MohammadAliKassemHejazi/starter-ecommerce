@@ -13,36 +13,52 @@ type signProps = {
 	password: string;
 };
 
-// server api
-export const signIn = async (user: signProps): Promise<SignInResponse> => {
-	const { data: response } = await httpClient.post<SignInResponse>(
-		`/auth/login`,
-		user
+// next local api
+export const signIn = async (user: signProps): Promise<SignIn> => {
+	const { data: response } = await httpClient.post<SignIn>(
+		`/user/auth/login`,
+		user,
+    {
+      baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
+    }
 	);
+	
 	return response;
 };
 
-// server api
+// next local api
 export async function signOut(): Promise<LogoutResponse> {
-	const { data: response } = await httpClient.post<LogoutResponse>(`/auth/logout`);
+	const { data: response } = await httpClient.post<LogoutResponse>(`/user/auth/logout`,
+    {
+      baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
+    });
 	return response;
 }
 
 // server api
 export const signUp = async (user: signProps): Promise<SignUpResponse> => {
-	const { data: response } = await httpClient.post<SignUpResponse>("/auth/register", user);
+	const { data: response } = await httpClient.post<SignUpResponse>("/user/auth/register", user,{
+      baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
+	});
+
 	return response;
 };
 
-// server api
+// next local api
 export const getSession = async (): Promise<SessionResponse> => {
-	const { data: response } = await httpClient.get<SessionResponse>(`/auth/session`);
+	const { data: response } = await httpClient.get<SessionResponse>(`/user/auth/session`,
+    {
+      baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
+    });
 	return response;
 };
 
-// server api - public session for guest users
+// next local api
 export const getPublicSession = async (): Promise<SessionResponse> => {
-	const { data: response } = await httpClient.get<SessionResponse>(`/auth/session/public`);
+	const { data: response } = await httpClient.get<SessionResponse>(`/user/auth/session/public`,
+    {
+      baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
+    });
 	return response;
 };
 

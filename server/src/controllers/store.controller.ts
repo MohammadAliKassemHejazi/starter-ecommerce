@@ -5,7 +5,6 @@ import { userService } from "../services"
 import { storeService } from "../services"
 
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
-import { TenantRequest } from '../middlewares/rls-tenant.middleware';
 import { IStoreCreateProduct } from "interfaces/types/controllers/store.controller.types";
 import { canCreateStore, isSuperAdmin } from "../services/package.service";
 
@@ -16,7 +15,7 @@ import { validationResult } from "express-validator";
 
 
 export const handleCreateStore = async (
-  request: TenantRequest,
+  request: CustomRequest,
   response: Response,
   next: NextFunction
 ) => {
@@ -46,9 +45,7 @@ export const handleCreateStore = async (
 
     const StoreData = { 
       ...request.body, 
-      userId: UserId,
-      // Add tenant ID if available (for RLS)
-      ...(request.tenantId && { tenantId: request.tenantId })
+      
     } as IStoreCreateProduct;
 
     // Process store creation with data and files
@@ -60,13 +57,7 @@ export const handleCreateStore = async (
       message: 'Store created successfully'
     };
 
-    // Add tenant info if available
-    if (request.tenantId) {
-      responseData.tenant = {
-        id: request.tenantId,
-        slug: request.tenantSlug
-      };
-    }
+
 
     response.status(200).json(responseData);
 

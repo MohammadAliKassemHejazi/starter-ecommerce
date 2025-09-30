@@ -26,7 +26,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
           {searchable && (
             <div className="search-container">
               <div className="input-group">
-                <span className="input-group-text bg-white border-end-0">
+                <span className="input-group-text border-end-0" style={{ background: 'var(--bs-component-bg)' }}>
                   <i className="bi bi-search text-muted"></i>
                 </span>
                 <input

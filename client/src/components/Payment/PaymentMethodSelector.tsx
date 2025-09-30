@@ -148,22 +148,22 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
       <style jsx>{`
         .payment-method-card {
           transition: all 0.3s ease;
-          border: 2px solid #e9ecef;
+          border: 2px solid var(--bs-border-color);
         }
         
         .payment-method-card:hover {
-          border-color: #0d6efd;
+          border-color: var(--bs-primary);
           box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         }
         
         .payment-method-card.border-primary {
-          border-color: #0d6efd !important;
-          box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+          border-color: var(--bs-primary) !important;
+          box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--bs-primary) 25%, transparent);
         }
         
         .form-check-input:checked {
-          background-color: #0d6efd;
-          border-color: #0d6efd;
+          background-color: var(--bs-primary);
+          border-color: var(--bs-primary);
         }
       `}</style>
     </div>

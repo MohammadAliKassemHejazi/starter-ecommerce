@@ -22,7 +22,7 @@ router.get("/session/public", authController.getPublicSession); // Public sessio
 
 // Protected routes
 router.get("/isauthenticated", authController.isAuthenticated);
-router.get("/session", authController.getUserSessions); // Alias for frontend compatibility
+router.get("/session", authController.isAuthenticated); // Alias for frontend compatibility
 router.get("/sessions", authController.getUserSessions);
 router.post("/logout", authController.loggedOut);
 

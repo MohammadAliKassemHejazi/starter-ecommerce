@@ -17,6 +17,14 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   
   // update session & set token, and conditionally load favorites
   React.useEffect(() => {
+    // Apply saved theme as early as possible on client
+    try {
+      const savedTheme = localStorage.getItem('selected-theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    } catch {}
+
     store.dispatch(fetchSession());
     // Load favorites after a short delay, but only for authenticated users
     // Guest users will load favorites via useGuestDataSync hook

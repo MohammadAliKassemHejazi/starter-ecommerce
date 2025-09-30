@@ -107,7 +107,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
         disabled={isDisabled}
         title="Add to cart"
         style={{ 
-          color: '#28a745',
+          color: 'var(--bs-success)',
           transition: 'color 0.3s ease',
           cursor: isDisabled ? 'not-allowed' : 'pointer'
         }}
@@ -133,7 +133,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
         onClick={handleAddToCart}
         disabled={isDisabled}
         style={{ 
-          color: '#28a745',
+          color: 'var(--bs-success)',
           transition: 'color 0.3s ease',
           cursor: isDisabled ? 'not-allowed' : 'pointer'
         }}

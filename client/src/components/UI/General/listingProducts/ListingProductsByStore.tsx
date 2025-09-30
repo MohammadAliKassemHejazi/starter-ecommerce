@@ -92,7 +92,7 @@ const ListingProductsByStore: React.FC<ListingProductsByStore> = ({ storeId  }) 
                   <option value="z-a">Z-A</option>
                 </select>
               </div>
-    <div className="container bg-white">
+    <div className="container" style={{ background: 'var(--bs-component-bg)' }}>
       {productStatus === "loading" && products.length === 0 ? (
            <div className="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">
          

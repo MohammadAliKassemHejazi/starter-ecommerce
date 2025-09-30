@@ -6,7 +6,7 @@ import { ICartAttributes } from "../interfaces/types/models/cart.model.types";
 module.exports = (sequelize: any, DataTypes: any) => {
   class Cart extends Model<ICartAttributes> implements ICartAttributes {
     id!: string;
-    tenantId?: string; // RLS tenant isolation
+
 
     static associate(models: any) {
       // Define the relationship with User
@@ -34,12 +34,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       userId: {
         type: DataTypes.UUID,
         allowNull: false,
-      },
-      tenantId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        field: 'tenant_id', // RLS tenant isolation
-      },
+      }
     },
     {
       sequelize,

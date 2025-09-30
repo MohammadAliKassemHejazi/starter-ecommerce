@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter ,Router } from 'next/router';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { getNavigationItems, getAnonymousNavigationItems, getQuickActions, NavigationItem as NavigationItemType } from '@/config/navigation';
@@ -11,7 +10,6 @@ import { fetchCart } from '@/store/slices/cartSlice';
 import { selectCartItemCount, selectCartIsLoading } from '@/store/slices/cartSelectors';
 import { signOut } from '@/store/slices/userSlice';
 import Swal from 'sweetalert2';
-import Router from 'next/router';
 import LanguageSwitcher from '../LanguageSwitcher';
 
 interface NavigationProps {
@@ -42,7 +40,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
 
   // Helper function to check if user can access a specific page
   const canAccessPage = (pageKey: string) => {
-    if (!user.isAuthenticated) return false;
+    if (!user.isAuthenticated) { return false };
     
     // Define page permissions
     const pagePermissions: { [key: string]: string[] } = {
@@ -77,7 +75,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
     };
 
     const requiredPermissions = pagePermissions[pageKey];
-    if (!requiredPermissions) return true; // If no specific permissions defined, allow access
+    if (!requiredPermissions) { return true }; // If no specific permissions defined, allow access
 
     // Check if user has any of the required permissions
     return requiredPermissions.some(permission => hasPermission(permission));
@@ -385,14 +383,14 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
       text: "You'll need to log in again to access your account.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: getComputedStyle(document.documentElement).getPropertyValue('--bs-primary') || '#0d6efd',
+      cancelButtonColor: getComputedStyle(document.documentElement).getPropertyValue('--bs-danger') || '#dc3545',
       confirmButtonText: "Yes, sign out",
     });
     if (result.isConfirmed) {
       const response = await dispatch(signOut());
       if (response.meta.requestStatus === "fulfilled") {
-        Router.push("/auth/signin");
+        router.push("/auth/signin");
         Swal.fire({
           icon: "success",
           title: "Signed out successfully",
@@ -451,7 +449,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
       <div className={`sidebar ${isOpen ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
         {/* Sidebar Header */}
         <div className="sidebar-header">
-          <i className="fas fa-cube" style={{fontSize: '28px', color: '#8b5cf6'}}></i>
+          <i className="fas fa-cube" style={{fontSize: '28px', color: 'var(--bs-primary)'}}></i>
           <div className="logo">NexusAdmin</div>
         </div>
         
@@ -484,7 +482,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
         )}
 
         {/* Language Switcher */}
-        <div className="language-section">
+        <div className="language-section sidebar-menu">
           <div className="section-title">Language</div>
           <div className="language-switcher-wrapper">
             <LanguageSwitcher />
@@ -516,9 +514,9 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
                 <i className="fas fa-shopping-cart"></i>
                 <span>Cart</span>
                 {user.isGuest ? (
-                  <span className="badge" style={{background: 'linear-gradient(135deg, #94a3b8 0%, #64748b 100%)', color: 'white', border: '1px solid #cbd5e1', padding: '2px 6px', fontSize: '10px', marginLeft: '8px'}}>Guest</span>
+                  <span className="badge" style={{background: 'linear-gradient(135deg, var(--bs-gray-500) 0%, var(--bs-gray-600) 100%)', color: 'var(--bs-white)', border: '1px solid var(--bs-gray-300)', padding: '2px 6px', fontSize: '10px', marginLeft: '8px'}}>Guest</span>
                 ) : cartCount > 0 ? (
-                  <span className="badge" style={{background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)', color: 'white', border: '1px solid #cbd5e1', padding: '2px 6px', fontSize: '10px', marginLeft: '8px'}}>{cartCount}</span>
+                  <span className="badge" style={{background: 'linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-secondary) 100%)', color: 'var(--bs-white)', border: '1px solid var(--bs-gray-300)', padding: '2px 6px', fontSize: '10px', marginLeft: '8px'}}>{cartCount}</span>
                 ) : null}
               </a>
             </div>
@@ -755,7 +753,10 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
           {/* Authentication */}
           <div className="menu-section">
             {user.isAuthenticated ? (
-              <a href="/auth/signin" style={{background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.1) 100%)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.3)'}} onClick={handleSignOut}>
+              <a href="#" style={{background: 'linear-gradient(135deg, color-mix(in srgb, var(--bs-danger) 15%, transparent) 0%, color-mix(in srgb, var(--bs-danger) 10%, transparent) 100%)', color: 'var(--bs-danger)', border: '1px solid color-mix(in srgb, var(--bs-danger) 30%, transparent)'}} onClick={(e) => {
+    e.preventDefault(); 
+    handleSignOut();
+  }}>
                 <i className="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
               </a>

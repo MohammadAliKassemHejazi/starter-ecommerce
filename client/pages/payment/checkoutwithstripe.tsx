@@ -92,13 +92,13 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency, onSuccess
               style: {
                 base: {
                   fontSize: '16px',
-                  color: '#424770',
+                  color: 'var(--bs-body-color)',
                   '::placeholder': {
-                    color: '#aab7c4',
+                    color: 'var(--bs-text-muted)',
                   },
                 },
                 invalid: {
-                  color: '#9e2146',
+                  color: 'var(--bs-danger)',
                 },
               },
             }}

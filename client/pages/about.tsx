@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic';
 // Dynamically import FavoritesButton to prevent SSR issues
 const FavoritesButton = dynamic(() => import('@/components/UI/FavoritesButton'), {
   ssr: false,
-  loading: () => <span className="fas fa-heart" style={{ color: '#6c757d' }}></span>
+  loading: () => <span className="fas fa-heart" style={{ color: 'var(--bs-secondary)' }}></span>
 });
 
 type Props = {
@@ -172,10 +172,10 @@ const About = ({ articles }: Props) => {
   );
 
   const ProductsSection = () => (
-    <section className="py-5 bg-light">
+    <section className="py-5" style={{ background: 'var(--bs-body-bg)', color: 'var(--bs-body-color)' }}>
       <div className="container">
         <div className="text-center mb-5">
-          <h2 className="display-5 fw-bold text-dark">Featured Products</h2>
+          <h2 className="display-5 fw-bold text-body">Featured Products</h2>
           <p className="lead text-muted">Discover our most popular items</p>
         </div>
         <div className="row">
@@ -217,7 +217,7 @@ const About = ({ articles }: Props) => {
     <section className="py-5">
       <div className="container">
         <div className="text-center mb-5">
-          <h2 className="display-5 fw-bold text-dark">Latest Articles</h2>
+          <h2 className="display-5 fw-bold text-body">Latest Articles</h2>
           <p className="lead text-muted">Stay updated with our latest news and insights</p>
         </div>
         <div className="row">
@@ -238,7 +238,7 @@ const About = ({ articles }: Props) => {
   );
 
   const AboutSection = () => (
-    <section className="py-5 bg-white">
+    <section className="py-5" style={{ background: 'var(--bs-component-bg)' }}>
       <div className="container">
         <div className="row align-items-center">
           <div className="col-lg-6">
