@@ -16,6 +16,11 @@ export interface PackageResponse extends ApiResponse<{
   updatedAt: string;
 }> {}
 
+export interface ActivatePackageResponse extends ApiResponse<{
+  success: boolean;
+  message: string;
+}> {}
+
 export interface PackagesListResponse extends PaginatedApiResponse<{
   id: string;
   name: string;

@@ -28,7 +28,8 @@ export const signIn = async (user: signProps): Promise<SignIn> => {
 
 // next local api
 export async function signOut(): Promise<LogoutResponse> {
-	const { data: response } = await httpClient.post<LogoutResponse>(`/user/auth/logout`,
+	console.log("Calling signOut API");
+	const { data: response } = await httpClient.post<LogoutResponse>(`/user/auth/logout`,{},
     {
       baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
     });
@@ -53,14 +54,6 @@ export const getSession = async (): Promise<SessionResponse> => {
 	return response;
 };
 
-// next local api
-export const getPublicSession = async (): Promise<SessionResponse> => {
-	const { data: response } = await httpClient.get<SessionResponse>(`/user/auth/session/public`,
-    {
-      baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
-    });
-	return response;
-};
 
 // Get user sessions
 export const getUserSessions = async (): Promise<UserSessionsResponse> => {

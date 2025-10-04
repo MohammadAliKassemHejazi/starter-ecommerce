@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from "@/components/protectedRoute";
 import { useTranslation } from 'react-i18next';
 import { usePermissions } from '@/hooks/usePermissions';
 import { useAppDispatch } from '@/store/store';
-import { getAllPackages } from '@/store/slices/publicSlice';
 import { useSelector } from 'react-redux';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import CheckoutPage from './payment/checkoutwithstripe';
+import { getAllPackages, activatePackage, selectAllPackages, selectPackageLoading, selectPackageError } from '@/store/slices/packageSlice';
 
 interface Package {
   id: string;
@@ -28,32 +28,22 @@ const PlansPage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { isAuthenticated, hasActiveSubscription, user } = usePermissions();
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [showPayment, setShowPayment] = useState(false);
-
-  const fetchPackages = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/packages');
-      if (response.ok) {
-        const data = await response.json();
-        setPackages(data.data || []);
-      } else {
-        throw new Error('Failed to fetch packages');
-      }
-    } catch (error) {
-      console.error('Error fetching packages:', error);
-      showToast.error('Failed to load packages');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  
+  const packages = useSelector(selectAllPackages);
+  const loading = useSelector(selectPackageLoading);
+  const error = useSelector(selectPackageError);
 
   useEffect(() => {
-    fetchPackages();
-  }, [fetchPackages]);
+    dispatch(getAllPackages());
+  }, [dispatch]);
+  
+  useEffect(() => {
+    if (error) {
+      showToast.error(error || 'Failed to load packages');
+    }
+  }, [error]);
 
   const handleSelectPackage = (pkg: Package) => {
     if (pkg.price === 0) {
@@ -68,25 +58,17 @@ const PlansPage = () => {
 
   const handleActivateFreePackage = async (pkg: Package) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/packages/activate', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ packageId: pkg.id }),
-      });
-
-      if (response.ok) {
+      const resultAction = await dispatch(activatePackage(pkg.id));
+      
+      if (activatePackage.fulfilled.match(resultAction)) {
         showToast.success('Package activated successfully!');
         router.push('/dashboard');
-      } else {
-        throw new Error('Failed to activate package');
+      } else if (activatePackage.rejected.match(resultAction)) {
+        throw new Error(resultAction.payload as string || 'Failed to activate package');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error activating package:', error);
-      showToast.error('Failed to activate package');
+      showToast.error(error.message || 'Failed to activate package');
     }
   };
 

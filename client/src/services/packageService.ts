@@ -6,7 +6,9 @@ import {
 	AssignPackageResponse, 
 	CreatePackageResponse, 
 	UpdatePackageResponse, 
-	DeletePackageResponse 
+	DeletePackageResponse,
+	PackageResponse,
+	ActivatePackageResponse
 } from "@/interfaces/api/package.types";
 
 export interface IPackage {
@@ -46,9 +48,27 @@ export interface IPackageLimits {
   userLimit: number;
 }
 
+export interface IPackageProps {
+  name: string;
+  description?: string;
+  storeLimit: number;
+  categoryLimit: number;
+  productLimit: number;
+  userLimit: number;
+  isSuperAdminPackage: boolean;
+  price: number;
+  isActive?: boolean;
+}
+
 // Get all available packages
-export const getAllPackages = async (): Promise<PackagesListResponse> => {
+export const requestAllPackages = async (): Promise<PackagesListResponse> => {
   const { data: response } = await httpClient.get<PackagesListResponse>("/packages");
+  return response;
+};
+
+// Get package by ID
+export const requestPackageById = async (id: string): Promise<PackageResponse> => {
+  const { data: response } = await httpClient.get<PackageResponse>(`/packages/${id}`);
   return response;
 };
 
@@ -74,20 +94,26 @@ export const assignPackageToUser = async (userId: string, packageId: string): Pr
 };
 
 // Create new package (super admin only)
-export const createPackage = async (packageData: Omit<IPackage, 'id'>): Promise<CreatePackageResponse> => {
+export const requestCreatePackage = async (packageData: IPackageProps): Promise<CreatePackageResponse> => {
   const { data: response } = await httpClient.post<CreatePackageResponse>("/packages", packageData);
   return response;
 };
 
 // Update package (super admin only)
-export const updatePackage = async (id: string, packageData: Partial<IPackage>): Promise<UpdatePackageResponse> => {
+export const requestUpdatePackage = async (id: string, packageData: IPackageProps): Promise<UpdatePackageResponse> => {
   const { data: response } = await httpClient.patch<UpdatePackageResponse>(`/packages/${id}`, packageData);
   return response;
 };
 
 // Delete package (super admin only)
-export const deletePackage = async (id: string): Promise<DeletePackageResponse> => {
+export const requestDeletePackage = async (id: string): Promise<DeletePackageResponse> => {
   const { data: response } = await httpClient.delete<DeletePackageResponse>(`/packages/${id}`);
+  return response;
+};
+
+// Activate package for current user
+export const requestActivatePackage = async (packageId: string): Promise<ActivatePackageResponse> => {
+  const { data: response } = await httpClient.post<ActivatePackageResponse>(`/packages/activate`, { packageId });
   return response;
 };
 

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  // reactStrictMode: true,
   swcMinify: true,
   sassOptions: {
     includePaths: ["./styles/scss", "./node_modules"],

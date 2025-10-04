@@ -18,6 +18,7 @@ import rolesReducer from "./slices/roleSlice";
 import subCategories from "./slices/subCategorySlice";
 import favoritesReducer from "./slices/favoritesSlice";
 import publicReducer from "./slices/publicSlice";
+import packageReducer from "./slices/packageSlice";
 
 const reducer = {
 	user: userReducer,
@@ -36,6 +37,7 @@ const reducer = {
 	subCategories:subCategories,
 	favorites: favoritesReducer,
 	public: publicReducer,
+	packages: packageReducer,
 };
 
 export const store = configureStore({

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as publicService from "@/services/publicService";
-import { getAllPackages as getAllPackagesService, IPackage } from "@/services/packageService";
+import { requestAllPackages as getAllPackagesService, IPackage } from "@/services/packageService";
 import { RootState } from "../store";
 import { IStoreResponseModel } from "@/models/store.model";
 import { IProductModel } from "@/models/product.model";

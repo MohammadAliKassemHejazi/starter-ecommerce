@@ -1,4 +1,5 @@
 import db from "../models";
+import { CustomError } from '../utils/customError';
 
 export interface IPackageLimits {
   storeLimit: number;
@@ -14,6 +15,155 @@ export interface IUserPackageInfo {
   isActive: boolean;
   endDate: Date | null;
 }
+
+// Get all packages
+export const getAllPackages = async () => {
+  try {
+    const packages = await db.Package.findAll({
+      where: { isActive: true },
+      order: [['price', 'ASC']]
+    });
+    return packages;
+  } catch (error) {
+    console.error('Error in getAllPackages service:', error);
+    throw new CustomError('Failed to fetch packages', 'NOT_FOUND', 500);
+  }
+};
+
+// Get package by ID
+export const getPackageById = async (id: string) => {
+  try {
+    const packageData = await db.Package.findByPk(id);
+    if (!packageData) {
+      throw new CustomError('Package not found', 'NOT_FOUND', 404);
+    }
+    return packageData;
+  } catch (error) {
+    console.error('Error in getPackageById service:', error);
+    if (error instanceof CustomError) {
+      throw error;
+    }
+    throw new CustomError('Failed to fetch package', 'NOT_FOUND', 500);
+  }
+};
+
+// Create new package
+export const createPackage = async (packageData: any) => {
+  try {
+    const newPackage = await db.Package.create(packageData);
+    return newPackage;
+  } catch (error) {
+    console.error('Error in createPackage service:', error);
+    throw new CustomError('Failed to create package', 'NOT_FOUND', 500);
+  }
+};
+
+// Update package
+export const updatePackage = async (id: string, packageData: any) => {
+  try {
+    const packageToUpdate = await db.Package.findByPk(id);
+    if (!packageToUpdate) {
+      throw new CustomError('Package not found', 'NOT_FOUND', 404);
+    }
+
+    await packageToUpdate.update(packageData);
+    return packageToUpdate;
+  } catch (error) {
+    console.error('Error in updatePackage service:', error);
+    if (error instanceof CustomError) {
+      throw error;
+    }
+    throw new CustomError('Failed to update package', 'NOT_FOUND', 500);
+  }
+};
+
+// Delete package
+export const deletePackage = async (id: string) => {
+  try {
+    const packageToDelete = await db.Package.findByPk(id);
+    if (!packageToDelete) {
+      throw new CustomError('Package not found', 'NOT_FOUND', 404);
+    }
+
+    // Check if package is in use by any users
+    const userPackages = await db.UserPackage.findAll({
+      where: { packageId: id }
+    });
+
+    if (userPackages.length > 0) {
+      throw new CustomError('Cannot delete package as it is currently in use', 'NOT_FOUND', 400);
+    }
+
+    await packageToDelete.destroy();
+    return true;
+  } catch (error) {
+    console.error('Error in deletePackage service:', error);
+    if (error instanceof CustomError) {
+      throw error;
+    }
+    throw new CustomError('Failed to delete package', 'NOT_FOUND', 500);
+  }
+};
+
+// Activate package for user
+export const activatePackage = async (userId: string, packageId: string) => {
+  try {
+    // Start transaction
+    const transaction = await db.sequelize.transaction();
+
+    try {
+      // Get package
+      const packageData = await db.Package.findByPk(packageId, { transaction });
+      if (!packageData) {
+        throw new CustomError('Package not found', 'NOT_FOUND', 404);
+      }
+
+      // Check if user exists
+      const user = await db.User.findByPk(userId, { transaction });
+      if (!user) {
+        throw new CustomError('User not found', 'NOT_FOUND', 404);
+      }
+
+      // Check if user already has an active package
+      const existingUserPackage = await db.UserPackage.findOne({
+        where: { 
+          userId,
+          isActive: true
+        },
+        transaction
+      });
+
+      // If user has an active package, deactivate it
+      if (existingUserPackage) {
+        await existingUserPackage.update({ isActive: false }, { transaction });
+      }
+
+      // Create new user package
+      await db.UserPackage.create({
+        userId,
+        packageId,
+        isActive: true,
+        startDate: new Date(),
+        // Set end date if needed (e.g., for subscription-based packages)
+        // endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+      }, { transaction });
+
+      // Commit transaction
+      await transaction.commit();
+      return true;
+    } catch (error) {
+      // Rollback transaction on error
+      await transaction.rollback();
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error in activatePackage service:', error);
+    if (error instanceof CustomError) {
+      throw error;
+    }
+    throw new CustomError('Failed to activate package', 'NOT_FOUND', 500);
+  }
+};
 
 // Get user's current active package
 export const getUserActivePackage = async (userId: string): Promise<IUserPackageInfo | null> => {
@@ -167,19 +317,19 @@ export const assignPackageToUser = async (
 };
 
 // Get all available packages
-export const getAllPackages = async (): Promise<any[]> => {
-  try {
-    const packages = await db.Package.findAll({
-      where: { isActive: true },
-      order: [['price', 'ASC']]
-    });
+// export const getAllPackages = async (): Promise<any[]> => {
+//   try {
+//     const packages = await db.Package.findAll({
+//       where: { isActive: true },
+//       order: [['price', 'ASC']]
+//     });
 
-    return packages;
-  } catch (error) {
-    console.error('Error getting packages:', error);
-    throw error;
-  }
-};
+//     return packages;
+//   } catch (error) {
+//     console.error('Error getting packages:', error);
+//     throw error;
+//   }
+// };
 
 // Create default packages (free, basic, premium)
 export const createDefaultPackages = async (): Promise<void> => {

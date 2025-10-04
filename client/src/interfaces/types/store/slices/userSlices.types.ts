@@ -6,7 +6,6 @@ export interface UserState {
 	phone: string;
 	isAuthenticated: boolean;
 	isAuthenticating: boolean;
-	isGuest: boolean;
 	accessToken: string;
 	roles?: Array<{ id: string; name: string; }>;
 	permissions?: Array<{ id: string; name: string; }>;

@@ -7,19 +7,17 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Parse action: /api/auth/signin → "signin"
+
   const action = req.query.AUTH?.[1] as string | undefined;
 console.log(`API auth action: ${action}, method: ${req.method}`);
   if (req.method === HTTP_METHOD_POST && action === "login") {
     return handleSignIn(req, res);
   } else if (req.method === HTTP_METHOD_POST && action === "register") {
     return handleSignUp(req, res);
-  } else if (req.method === HTTP_METHOD_GET && action === "logout") {
+  } else if (req.method === HTTP_METHOD_POST && action === "logout") {
     return handleSignOut(req, res);
-  } else if (req.method === HTTP_METHOD_GET && action === "session") {
+  }  else if (req.method === HTTP_METHOD_GET && action === "session") {
     return handleGetSession(req, res);
-  } else if (req.method === HTTP_METHOD_GET && action === "session/public") {
-    return handleGetPublicSession(req, res);
   } else {
     return res.status(405).json({ error: `Method ${req.method} not allowed` });
   }
@@ -81,17 +79,10 @@ const handleGetSession = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const handleGetPublicSession = async (req: NextApiRequest, res: NextApiResponse) => {
-  try {
-    const response = await httpClient.get(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/session/public`);
-    res.status(200).json(response.data);
-  } catch (error: any) {
-    console.error("Public session error:", error);
-    res.status(500).json({ error: "Failed to get public session" });
-  }
-};
+
 
 const handleSignOut = async (_req: NextApiRequest, res: NextApiResponse) => {
   clearCookie(res, ACCESS_TOKEN_KEY);
+  console.log("User signed out, cookie cleared");
   res.status(200).json({ success: true, message: "Signed out" });
 };

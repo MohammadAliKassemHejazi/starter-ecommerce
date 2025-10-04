@@ -18,7 +18,6 @@ protectedRoutes(router, protectedRoutesList);
 // Public routes
 router.post("/login", authController.handleLogin);
 router.post("/register", authController.handleRegister);
-router.get("/session/public", authController.getPublicSession); // Public session endpoint for guest users
 
 // Protected routes
 router.get("/isauthenticated", authController.isAuthenticated);

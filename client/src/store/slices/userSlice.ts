@@ -4,10 +4,7 @@ import { UserState } from "@/interfaces/types/store/slices/userSlices.types";
 import * as authService from "@/services/authService"
 import httpClient from "@/utils/httpClient";
 import  { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
-import { localStorageService } from "@/services/localStorageService";
-import { syncGuestFavorites } from "./favoritesSlice";
-import { loadGuestCart } from "./cartSlice";
-
+import Router from "next/router";
 interface SignAction {
 	email: string
 	password: string
@@ -32,7 +29,6 @@ const initialState: UserState = {
 	isAuthenticating: true,
 	roles: [],
 	permissions: [],
-	isGuest: true,
 };
 
 export const signIn = createAsyncThunk(
@@ -52,20 +48,7 @@ export const signIn = createAsyncThunk(
 			return config;
 		});
 
-		// Sync guest data if any exists
-		if (localStorageService.hasGuestData()) {
-			// Load guest cart into Redux state
-			const guestCart = localStorageService.getGuestCart();
-			if (guestCart.length > 0) {
-				dispatch(loadGuestCart(guestCart));
-			}
-
-			// Sync guest favorites to server
-			const guestFavorites = localStorageService.getGuestFavorites();
-			if (guestFavorites.length > 0) {
-				dispatch(syncGuestFavorites());
-			}
-		}
+		// Authentication successful
 
 		return resp;
 	}
@@ -81,9 +64,7 @@ export const signUp = createAsyncThunk(
 
 export const signOut = createAsyncThunk("user/signout", async () => {
 	await authService.signOut();
-	// Clear all guest data when signing out
-	localStorageService.clearAllGuestData();
-  //	Router.push("/auth/signin");
+  	Router.push("/auth/signin");
 });
 
 // export const fetchSession = createAsyncThunk(
@@ -139,35 +120,9 @@ export const fetchSession = createAsyncThunk("user/fetchSession", async () => {
 	return response;
 });
 
-// Define setGuestMode thunk
-export const setGuestMode = createAsyncThunk(
-	"user/setGuestMode",
-	async () => {
-		// Return guest user state
-		return {
-			id: "guest",
-			email: "",
-			name: "Guest User",
-			address: "",
-			phone: "",
-			accessToken: "",
-			isAuthenticated: false,
-			isGuest: true,
-			roles: [],
-			permissions: [],
-			isAuthenticating: false,
-		};
-	}
-);
+// Guest mode removed
 
-// Define exitGuestMode thunk
-export const exitGuestMode = createAsyncThunk(
-	"user/exitGuestMode",
-	async () => {
-		// Return default user state (could be customized)
-		return {
-			id: "",
-			email: "",
+// Authentication functions
 			name: "",
 			address: "",
 			phone: "",
@@ -268,35 +223,8 @@ export const userSlice = createSlice({
 			state.accessToken = "";
 			state.roles = [];
 			state.permissions = [];
-			state.isGuest = true; // Return to guest mode after sign out
 		});
-		// Guest mode reducers
-		builder.addCase(setGuestMode.fulfilled, (state, action) => {
-			state.id = action.payload.id;
-			state.email = action.payload.email;
-			state.name = action.payload.name;
-			state.address = action.payload.address;
-			state.phone = action.payload.phone;
-			state.accessToken = action.payload.accessToken;
-			state.isAuthenticated = action.payload.isAuthenticated;
-			state.isGuest = action.payload.isGuest;
-			state.roles = action.payload.roles;
-			state.permissions = action.payload.permissions;
-			state.isAuthenticating = false;
-		});
-		builder.addCase(exitGuestMode.fulfilled, (state, action) => {
-			state.id = action.payload.id;
-			state.email = action.payload.email;
-			state.name = action.payload.name;
-			state.address = action.payload.address;
-			state.phone = action.payload.phone;
-			state.accessToken = action.payload.accessToken;
-			state.isAuthenticated = action.payload.isAuthenticated;
-			state.isGuest = action.payload.isGuest;
-			state.roles = action.payload.roles;
-			state.permissions = action.payload.permissions;
-			state.isAuthenticating = false;
-		});
+// Guest mode reducers removed
 	}
 })
 
