@@ -29,13 +29,13 @@ const ClientSubscriptionGate: React.FC<SubscriptionGateProps> = ({
       }
 
       // Super admins always have access
-      if (isSuperAdmin()) {
+      if (isSuperAdmin) {
         setHasActiveSubscription(true);
         return;
       }
       
       // Admins always have access
-      if (isAdmin()) {
+      if (isAdmin) {
         setHasActiveSubscription(true);
         return;
       }

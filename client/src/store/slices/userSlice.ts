@@ -122,19 +122,7 @@ export const fetchSession = createAsyncThunk("user/fetchSession", async () => {
 
 // Guest mode removed
 
-// Authentication functions
-			name: "",
-			address: "",
-			phone: "",
-			accessToken: "",
-			isAuthenticated: false,
-			isGuest: false,
-			roles: [],
-			permissions: [],
-			isAuthenticating: false,
-		};
-	}
-);
+
 
 export const userSlice = createSlice({
 	name: "user",
@@ -184,10 +172,9 @@ export const userSlice = createSlice({
 				state.roles = action.payload.data.roles || [];
 				state.permissions = action.payload.data.permissions || [];
 				state.isAuthenticated = true;
-				state.isGuest = false; // Exit guest mode when session is found
+				
 			} else {
-				// No valid session found, set as guest (default behavior)
-				state.isGuest = true;
+				
 				state.isAuthenticated = false;
 				state.id = "guest";
 				state.name = "Guest User";
@@ -202,7 +189,7 @@ export const userSlice = createSlice({
 		builder.addCase(fetchSession.rejected, (state) => {
 			state.isAuthenticating = false;
 			// If session fetch fails, set as guest (default behavior)
-			state.isGuest = true;
+	
 			state.isAuthenticated = false;
 			state.id = "guest";
 			state.name = "Guest User";
@@ -233,9 +220,6 @@ export const isAuthenticatedSelector = (store: RootState): boolean =>
 	store.user.isAuthenticated;
 export const isAuthenticatingSelector = (store: RootState): boolean =>
 	store.user.isAuthenticating;
-export const isGuestSelector = (store: RootState): boolean =>
-	store.user.isGuest;
-export const isUserOrGuestSelector = (store: RootState): boolean =>
-	store.user.isAuthenticated || store.user.isGuest;
+
 
 export default userSlice.reducer;

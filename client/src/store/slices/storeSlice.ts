@@ -40,7 +40,8 @@ export const fetchAllStores = createAsyncThunk(
   "store/fetch/all",
   async () => {
     const response = await storeService.requestAllStores();
-    return response;
+    console.log(response, " all stores response");
+    return response.data;
   }
 );
 

@@ -183,26 +183,26 @@ const PermissionExample: React.FC = () => {
               <ul className="list-group">
                 <li className="list-group-item d-flex justify-content-between">
                   <span>Is Super Admin:</span>
-                  <span className={isSuperAdmin() ? 'text-success' : 'text-danger'}>
-                    {isSuperAdmin() ? 'Yes' : 'No'}
+                  <span className={isSuperAdmin ? 'text-success' : 'text-danger'}>
+                    {isSuperAdmin ? 'Yes' : 'No'}
                   </span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between">
                   <span>Is Admin:</span>
-                  <span className={isAdmin() ? 'text-success' : 'text-danger'}>
-                    {isAdmin() ? 'Yes' : 'No'}
+                  <span className={isAdmin ? 'text-success' : 'text-danger'}>
+                    {isAdmin ? 'Yes' : 'No'}
                   </span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between">
                   <span>Is Vendor:</span>
-                  <span className={isVendor() ? 'text-success' : 'text-danger'}>
-                    {isVendor() ? 'Yes' : 'No'}
+                  <span className={isVendor ? 'text-success' : 'text-danger'}>
+                    {isVendor ? 'Yes' : 'No'}
                   </span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between">
                   <span>Is Customer:</span>
-                  <span className={isCustomer() ? 'text-success' : 'text-danger'}>
-                    {isCustomer() ? 'Yes' : 'No'}
+                  <span className={isCustomer ? 'text-success' : 'text-danger'}>
+                    {isCustomer ? 'Yes' : 'No'}
                   </span>
                 </li>
               </ul>

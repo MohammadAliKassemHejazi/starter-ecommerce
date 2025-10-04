@@ -6,7 +6,7 @@ import { getNavigationItems, getAnonymousNavigationItems, getQuickActions, Navig
 import { usePermissions } from '../../hooks/usePermissions';
 import NavigationItem from '../NavigationItem';
 import { useAppDispatch } from '@/store/store';
-import { fetchCart } from '@/store/slices/cartSlice';
+// import { fetchCart } from '@/store/slices/cartSlice';
 import { selectCartItemCount, selectCartIsLoading } from '@/store/slices/cartSelectors';
 import { signOut } from '@/store/slices/userSlice';
 import Swal from 'sweetalert2';
@@ -83,21 +83,21 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
 
   // Use anonymous navigation if user is not authenticated
   const userRole = userRoles?.[0]?.name || 'user';
-  const navigationItems = isAnonymous() 
+  const navigationItems = isAnonymous
     ? getAnonymousNavigationItems() 
     : getNavigationItems(userRole, userPermissions || []);
-  const quickActions = isAnonymous() ? [] : getQuickActions(userRole);
+  const quickActions = isAnonymous ? [] : getQuickActions(userRole);
 
 
-  // Fetch cart data using Redux dispatch
-  useEffect(() => {
-    if (user.isAuthenticated && !user.isGuest) {
-      console.log('Navigation: Fetching cart for authenticated user:', user.id);
-      dispatch(fetchCart());
-    } else if (user.isGuest) {
-      console.log('Navigation: User is in guest mode, not fetching cart');
-    }
-  }, [user.isAuthenticated, user.isGuest, user.id, dispatch]);
+  // // Fetch cart data using Redux dispatch
+  // useEffect(() => {
+  //   if (user.isAuthenticated && !user.isGuest) {
+  //     // console.log('Navigation: Fetching cart for authenticated user:', user.id);
+  //     // dispatch(fetchCart());
+  //   } else if (user.isGuest) {
+  //     console.log('Navigation: User is in guest mode, not fetching cart');
+  //   }
+  // }, [user.isAuthenticated, user.isGuest, user.id, dispatch]);
 
   // Close sidebar when clicking outside on mobile and manage body blur
   useEffect(() => {
@@ -130,7 +130,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
 
   // Organize navigation items into logical sections
   const navigationSections = useMemo((): NavigationSection[] => {
-    if (isAnonymous()) {
+    if (isAnonymous) {
       return [
         {
           title: 'Main',
@@ -458,16 +458,16 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
           <div className="user-info">
             <div className="user-name">{user.name || 'Super Admin'}</div>
             <div className="badges">
-              {isSuperAdmin() && (
+              {isSuperAdmin && (
                 <span className="badge badge-super-admin">Super Admin</span>
               )}
-              {isAdmin() && !isSuperAdmin() && (
+              {isAdmin && !isSuperAdmin && (
                 <span className="badge badge-admin">Admin</span>
               )}
-              {hasActiveSubscription() && !isAdmin() && (
+              {hasActiveSubscription && !isAdmin && (
                 <span className="badge badge-subscribed">Subscribed</span>
               )}
-              {!hasActiveSubscription() && !isAdmin() && (
+              {!hasActiveSubscription && !isAdmin && (
                 <span className="badge badge-free">Free User</span>
               )}
             </div>
@@ -724,7 +724,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
           )}
 
           {/* Testing Pages - Admin & Super Admin Only */}
-          {user.isAuthenticated && (isAdmin() || isSuperAdmin()) && (
+          {user.isAuthenticated && (isAdmin || isSuperAdmin) && (
             <div className="menu-section testing-section">
               <div className="section-title">Testing & Demos</div>
               <a href="/test-permissions" className={router.pathname === '/test-permissions' ? 'active' : ''}>

@@ -17,18 +17,18 @@ export const usePageData = (options: UsePageDataOptions = {}) => {
   } = options;
 
   const router = useRouter();
-  const { isAuthenticated, hasActiveSubscription, user } = usePermissions();
+  const { isAuthenticated, hasActiveSubscription, user ,isSuperAdmin } = usePermissions();
   const [userPackage, setUserPackage] = useState<any>(null);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+
   const [loading, setLoading] = useState(true);
 
   const loadUserPackageData = useCallback(async () => {
-    if (!loadUserPackage) return;
+    if (!loadUserPackage) { return };
     
     try {
       const packageData = await getUserActivePackage();
       setUserPackage(packageData);
-      setIsSuperAdmin(packageData?.data?.Package?.isSuperAdminPackage || false);
+
     } catch (error) {
       console.error('Error loading user package:', error);
     }

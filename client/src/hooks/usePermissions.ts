@@ -1,36 +1,80 @@
 import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 import { RootState } from '@/store/store';
 import { PERMISSIONS, ROLES, ROUTE_PERMISSIONS } from '@/constants/permissions';
 
+// Helper: Check if a value is one of the known roles
+const isKnownRole = (value: string): value is keyof typeof ROLES =>
+  Object.values(ROLES).includes(value as any);
+
+// Helper: Check if a value is one of the known permissions
+const isKnownPermission = (value: string): value is keyof typeof PERMISSIONS =>
+  Object.values(PERMISSIONS).includes(value as any);
+
 export const usePermissions = () => {
   const user = useSelector((state: RootState) => state.user);
-  const userRoles = user?.roles || [];
-  const userPermissions = user?.permissions || [];
-  const isAuthenticated = user?.isAuthenticated || false;
 
-  // Check if user is anonymous (not authenticated)
-  const isAnonymous = (): boolean => {
-    return !isAuthenticated;
-  };
+  // Memoize derived user state
+  const {
+    isAuthenticated,
+    userRoles,
+    userPermissions,
+    subscription,
+    id: userId,
+    email: userEmail,
+    name: userName,
+  } = useMemo(() => {
+    return {
+      isAuthenticated: !!user?.isAuthenticated,
+      userRoles: user?.roles || [],
+      userPermissions: user?.permissions || [],
+      subscription: user?.subscription,
+      id: user?.id,
+      email: user?.email,
+      name: user?.name,
+    };
+  }, [user]);
 
-  // Shopping permissions that don't require authentication
-  const canShopAnonymously = (): boolean => {
-    return true; // Anyone can shop anonymously
-  };
+  // Role checks (memoized for efficiency)
+  const isSuperAdmin = useMemo(
+    () => userRoles.some((role) => role.name === ROLES.SUPER_ADMIN),
+    [userRoles]
+  );
 
+  const isAdmin = useMemo(
+    () => userRoles.some((role) => role.name === ROLES.ADMIN),
+    [userRoles]
+  );
+
+  const isVendor = useMemo(
+    () =>
+      userRoles.some(
+        (role) =>
+          role.name === ROLES.VENDOR || role.name === ROLES.STORE_OWNER
+      ),
+    [userRoles]
+  );
+
+  const isCustomer = useMemo(
+    () =>
+      userRoles.some(
+        (role) => role.name === ROLES.CUSTOMER || role.name === ROLES.USER
+      ),
+    [userRoles]
+  );
+
+  const isAnonymous = !isAuthenticated;
+
+  // Permission helpers
   const hasRole = (roleName: string): boolean => {
-    // Anonymous users have no roles
-    if (isAnonymous()) { return false; }
-    // Super admin has access to everything
-    if (isSuperAdmin()) { return true };
-    // Admin has access to their own system
-    if (isAdmin() && roleName !== ROLES.SUPER_ADMIN) { return true };
-    return userRoles.some(role => role.name === roleName);
+    if (isAnonymous) {return false;}
+    if (isSuperAdmin) {return true;}
+    if (isAdmin && roleName !== ROLES.SUPER_ADMIN) {return true;}
+    return userRoles.some((role) => role.name === roleName);
   };
 
   const hasPermission = (permissionName: string): boolean => {
-    // Anonymous users can only access shopping permissions
-    if (isAnonymous()) {
+    if (isAnonymous) {
       const shoppingPermissions = [
         PERMISSIONS.VIEW_PRODUCTS,
         PERMISSIONS.VIEW_CATEGORIES,
@@ -42,172 +86,139 @@ export const usePermissions = () => {
       ];
       return shoppingPermissions.includes(permissionName as any);
     }
-    // Super admin has access to everything
-    if (isSuperAdmin()) { return true };
-    // Admin has access to their own system
-    if (isAdmin()) { return true };
-    return userPermissions.some(permission => permission.name === permissionName);
+
+    if (isSuperAdmin || isAdmin) {return true;}
+    return userPermissions.some((perm) => perm.name === permissionName);
   };
 
+  // Bulk checks
   const hasAnyRole = (roleNames: string[]): boolean => {
-    // Super admin has access to everything
-    if (isSuperAdmin()) { return true };
-    // Admin has access to their own system
-    if (isAdmin()) { return true };
-    return roleNames.some(roleName => hasRole(roleName));
-  };
-
-  const hasAnyPermission = (permissionNames: string[]): boolean => {
-    // Super admin has access to everything
-    if (isSuperAdmin()) { return true };
-    // Admin has access to their own system
-    if (isAdmin()) { return true };
-    return permissionNames.some(permissionName => hasPermission(permissionName));
+    if (isSuperAdmin || isAdmin) {return true;}
+    return roleNames.some(hasRole);
   };
 
   const hasAllRoles = (roleNames: string[]): boolean => {
-    // Super admin has access to everything
-    if (isSuperAdmin()) { return true };
-    // Admin has access to their own system
-    if (isAdmin()) { return true };
-    return roleNames.every(roleName => hasRole(roleName));
+    if (isSuperAdmin || isAdmin) {return true;}
+    return roleNames.every(hasRole);
+  };
+
+  const hasAnyPermission = (permissionNames: string[]): boolean => {
+    if (isSuperAdmin || isAdmin) {return true;}
+    return permissionNames.some(hasPermission);
   };
 
   const hasAllPermissions = (permissionNames: string[]): boolean => {
-    // Super admin has access to everything
-    if (isSuperAdmin()) { return true };
-    // Admin has access to their own system
-    if (isAdmin()) { return true };
-    return permissionNames.every(permissionName => hasPermission(permissionName));
+    if (isSuperAdmin || isAdmin) {return true;}
+    return permissionNames.every(hasPermission);
   };
 
-  const isAdmin = (): boolean => {
-    return userRoles.some(role => role.name === ROLES.ADMIN);
-  };
+  // Subscription & action logic
+  const hasActiveSubscription = useMemo(() => {
+    if (!isAuthenticated) {return false;}
+    if (isSuperAdmin || isAdmin) {return true;}
+    return !!subscription?.isActive;
+  }, [isAuthenticated, isSuperAdmin, isAdmin, subscription]);
 
-  const isSuperAdmin = (): boolean => {
-    return userRoles.some(role => role.name === ROLES.SUPER_ADMIN);
-  };
+  const canPerformActions = useMemo(() => {
+    return isAuthenticated && (isSuperAdmin || isAdmin || hasActiveSubscription);
+  }, [isAuthenticated, isSuperAdmin, isAdmin, hasActiveSubscription]);
 
-  const isVendor = (): boolean => {
-    return userRoles.some(role => role.name === ROLES.VENDOR || role.name === ROLES.STORE_OWNER);
-  };
+  const canOnlyView = isAuthenticated;
 
-  const isCustomer = (): boolean => {
-    return userRoles.some(role => role.name === ROLES.CUSTOMER || role.name === ROLES.USER);
-  };
-
-  // Check if user has an active subscription
-  const hasActiveSubscription = (): boolean => {
-    if (!isAuthenticated) { return false; }
-    if (isSuperAdmin() || isAdmin()) { return true; } // Admins always have access
-    return user?.subscription?.isActive || false;
-  };
-
-  // Check if user can perform actions (create, edit, delete)
-  const canPerformActions = (): boolean => {
-    if (!isAuthenticated) { return false; }
-    if (isSuperAdmin()) {return true;} // Super admin always has access
-    if (isAdmin()) {return true;} // Admins always have access
-    return hasActiveSubscription();
-  };
-
-  // Check if user can only view (no subscription required)
-  const canOnlyView = (): boolean => {
-    return isAuthenticated; // Any authenticated user can view
-  };
-
-  // Check if user can access a specific route
+  // Route access
   const canAccessRoute = (route: string): boolean => {
-    const routePermissions = ROUTE_PERMISSIONS[route as keyof typeof ROUTE_PERMISSIONS];
-    
-    if (!routePermissions) {
-      return true; // Route not in our permission list, allow access
-    }
+    const routePerms = ROUTE_PERMISSIONS[route as keyof typeof ROUTE_PERMISSIONS];
+    if (!routePerms) {return true;} // No restrictions
 
-    // Convert to string array to avoid type issues
-    const permissionsArray = [...routePermissions] as string[];
+    const perms = Array.isArray(routePerms) ? routePerms : [routePerms];
 
-    // If route requires roles
-    const roleValues = Object.values(ROLES);
-    if (permissionsArray.some((role: string) => roleValues.includes(role as any))) {
-      const requiredRoles = permissionsArray.filter((role: string) => roleValues.includes(role as any));
-      return hasAnyRole(requiredRoles);
-    }
+    // Separate roles and permissions
+    const requiredRoles = perms.filter(isKnownRole);
+    const requiredPerms = perms.filter(isKnownPermission);
 
-    // If route requires permissions
-    const permissionValues = Object.values(PERMISSIONS);
-    if (permissionsArray.some((permission: string) => permissionValues.includes(permission as any))) {
-      const requiredPermissions = permissionsArray.filter((permission: string) => permissionValues.includes(permission as any));
-      return hasAnyPermission(requiredPermissions);
-    }
+    if (requiredRoles.length > 0 && !hasAnyRole(requiredRoles)) {return false;}
+    if (requiredPerms.length > 0 && !hasAnyPermission(requiredPerms)) {return false;}
 
-    return true; // No specific requirements
+    return true;
   };
 
-  // Route access control for SaaS
-  const canAccess = (requiredRoles?: string[], requiredPermissions?: string[]): boolean => {
-    // Anonymous users can only access shopping routes
-    if (isAnonymous()) {
-      const shoppingRoutes = [
-        '/',
-        '/about',
-        '/shop',
-        '/cart',
-        '/categories',
-        '/shop/product'
-      ];
-      // Allow access to shopping routes without authentication
-      return true; // We'll handle this in the component level
+  // Flexible access control
+  const canAccess = (
+    requiredRoles?: string[],
+    requiredPermissions?: string[]
+  ): boolean => {
+    if (isAnonymous) {return true;} // Let route-level logic handle public routes
+
+    if (isSuperAdmin) {return true;}
+
+    if (isAdmin) {
+      // Block access to super admin-only routes
+      if (requiredRoles?.includes(ROLES.SUPER_ADMIN)) {return false;}
+      return true;
     }
-    
-    // Super admin can access everything
-    if (isSuperAdmin()) { return true };
-    
-    // Admin can access their own system (except super admin routes)
-    if (isAdmin()) { 
-      // Block super admin routes
-      if (requiredRoles?.includes(ROLES.SUPER_ADMIN)) { return false; }
-      return true; 
-    }
-    
-    if (requiredRoles && requiredRoles.length > 0) {
-      return hasAnyRole(requiredRoles);
-    }
-    
-    if (requiredPermissions && requiredPermissions.length > 0) {
-      return hasAnyPermission(requiredPermissions);
-    }
-    
-    return true; // No specific requirements
+
+    if (requiredRoles?.length && !hasAnyRole(requiredRoles)) {return false;}
+    if (requiredPermissions?.length && !hasAnyPermission(requiredPermissions))
+      {return false;}
+
+    return true;
   };
 
-  // Check if user can access checkout (requires authentication)
-  const canCheckout = (): boolean => {
-    return isAuthenticated;
-  };
+  // Resource-specific checks
+  const canCheckout = isAuthenticated;
 
-  // Check if user can manage a specific resource
   const canManage = (resource: string): boolean => {
-    const managePermissions = {
-      users: [PERMISSIONS.READ_USERS, PERMISSIONS.CREATE_USERS, PERMISSIONS.UPDATE_USERS, PERMISSIONS.DELETE_USERS],
-      roles: [PERMISSIONS.READ_ROLES, PERMISSIONS.CREATE_ROLES, PERMISSIONS.UPDATE_ROLES, PERMISSIONS.DELETE_ROLES],
-      permissions: [PERMISSIONS.READ_PERMISSIONS, PERMISSIONS.CREATE_PERMISSIONS, PERMISSIONS.UPDATE_PERMISSIONS, PERMISSIONS.DELETE_PERMISSIONS],
-      products: [PERMISSIONS.READ_PRODUCTS, PERMISSIONS.CREATE_PRODUCTS, PERMISSIONS.UPDATE_PRODUCTS, PERMISSIONS.DELETE_PRODUCTS],
-      orders: [PERMISSIONS.READ_ORDERS, PERMISSIONS.CREATE_ORDERS, PERMISSIONS.UPDATE_ORDERS, PERMISSIONS.DELETE_ORDERS],
-      categories: [PERMISSIONS.READ_CATEGORIES, PERMISSIONS.CREATE_CATEGORIES, PERMISSIONS.UPDATE_CATEGORIES, PERMISSIONS.DELETE_CATEGORIES],
-      stores: [PERMISSIONS.READ_STORES, PERMISSIONS.CREATE_STORES, PERMISSIONS.UPDATE_STORES, PERMISSIONS.DELETE_STORES],
+    const manageMap: Record<string, string[]> = {
+      users: [
+        PERMISSIONS.READ_USERS,
+        PERMISSIONS.CREATE_USERS,
+        PERMISSIONS.UPDATE_USERS,
+        PERMISSIONS.DELETE_USERS,
+      ],
+      roles: [
+        PERMISSIONS.READ_ROLES,
+        PERMISSIONS.CREATE_ROLES,
+        PERMISSIONS.UPDATE_ROLES,
+        PERMISSIONS.DELETE_ROLES,
+      ],
+      permissions: [
+        PERMISSIONS.READ_PERMISSIONS,
+        PERMISSIONS.CREATE_PERMISSIONS,
+        PERMISSIONS.UPDATE_PERMISSIONS,
+        PERMISSIONS.DELETE_PERMISSIONS,
+      ],
+      products: [
+        PERMISSIONS.READ_PRODUCTS,
+        PERMISSIONS.CREATE_PRODUCTS,
+        PERMISSIONS.UPDATE_PRODUCTS,
+        PERMISSIONS.DELETE_PRODUCTS,
+      ],
+      orders: [
+        PERMISSIONS.READ_ORDERS,
+        PERMISSIONS.CREATE_ORDERS,
+        PERMISSIONS.UPDATE_ORDERS,
+        PERMISSIONS.DELETE_ORDERS,
+      ],
+      categories: [
+        PERMISSIONS.READ_CATEGORIES,
+        PERMISSIONS.CREATE_CATEGORIES,
+        PERMISSIONS.UPDATE_CATEGORIES,
+        PERMISSIONS.DELETE_CATEGORIES,
+      ],
+      stores: [
+        PERMISSIONS.READ_STORES,
+        PERMISSIONS.CREATE_STORES,
+        PERMISSIONS.UPDATE_STORES,
+        PERMISSIONS.DELETE_STORES,
+      ],
     };
 
-    const permissions = managePermissions[resource as keyof typeof managePermissions];
-    if (!permissions) { return false };
-
-    return hasAnyPermission(permissions);
+    const perms = manageMap[resource];
+    return perms ? hasAnyPermission(perms) : false;
   };
 
-  // Check if user can view a specific resource
   const canView = (resource: string): boolean => {
-    const viewPermissions = {
+    const viewMap: Record<string, string> = {
       users: PERMISSIONS.VIEW_USERS,
       roles: PERMISSIONS.VIEW_ROLES,
       permissions: PERMISSIONS.VIEW_PERMISSIONS,
@@ -220,25 +231,29 @@ export const usePermissions = () => {
       audit_logs: PERMISSIONS.VIEW_AUDIT_LOGS,
     };
 
-    const permission = viewPermissions[resource as keyof typeof viewPermissions];
-    if (!permission) { return false };
-
-    return hasPermission(permission);
+    const perm = viewMap[resource];
+    return perm ? hasPermission(perm) : false;
   };
 
+  // Public API
   return {
+    // Role checks
+    isSuperAdmin,
+    isAdmin,
+    isVendor,
+    isCustomer,
+    isAnonymous,
+
+    // Permission checks
     hasRole,
     hasPermission,
     hasAnyRole,
     hasAnyPermission,
     hasAllRoles,
     hasAllPermissions,
-    isAdmin,
-    isSuperAdmin,
-    isVendor,
-    isCustomer,
-    isAnonymous,
-    canShopAnonymously,
+
+    // Business logic
+    canShopAnonymously: () => true, // Consider removing if unused
     canCheckout,
     canAccess,
     canAccessRoute,
@@ -247,13 +262,14 @@ export const usePermissions = () => {
     hasActiveSubscription,
     canPerformActions,
     canOnlyView,
+
+    // User data
+    user,
+    userId,
+    userEmail,
+    userName,
     userRoles,
     userPermissions,
     isAuthenticated,
-    // Helper properties
-    user,
-    userId: user?.id,
-    userEmail: user?.email,
-    userName: user?.name,
   };
 };

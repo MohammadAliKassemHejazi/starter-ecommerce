@@ -17,7 +17,7 @@ import {
   usersRouter, ordersRouter, permissionsRouter, rolesRouter, 
   subcategoriesRouter, dashboardRouter, favoriteRouter, commentRouter, promotionRouter,
   analyticsRouter, auditLogRouter, translationRouter, packageRouter, shippingRouter,
-  sizeRouter, taxRouter, returnRouter
+  sizeRouter, taxRouter, returnRouter, publicRouter
 } from './src/routes';
 
 import paypalRouter from './src/routes/paypal.routes';
@@ -404,7 +404,7 @@ async function createApp(): Promise<Express> {
   app.use('/api/taxes', taxRouter);
   app.use('/api/returns', returnRouter);
   app.use('/api/paypal', paypalRouter);
-  
+  app.use('/api/public', publicRouter);
   // Admin routes (could add admin middleware here)
   app.use('/api/admin/users', usersRouter);
   app.use('/api/admin/orders', ordersRouter);

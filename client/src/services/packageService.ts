@@ -73,6 +73,7 @@ export const requestPackageById = async (id: string): Promise<PackageResponse> =
 };
 
 // Get user's active package
+//TO DO :set user to admin to admin or whatever 
 export const getUserActivePackage = async (): Promise<UserPackageResponse> => {
   const { data: response } = await httpClient.get<UserPackageResponse>("/packages/user/active");
   return response;

@@ -11,7 +11,7 @@ import {
 } from "@/store/slices/shopSlice";
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import { store, useAppDispatch } from "@/store/store";
-import { TablePage, FilterCard } from "@/components/UI/PageComponents";
+import { TablePage, FilterCard, PageLayout } from "@/components/UI/PageComponents";
 
 import { usePermissions } from "@/hooks/usePermissions";
 import { addToCart } from "@/store/slices/cartSlice";
@@ -34,7 +34,7 @@ const Shop = () => {
   const pageSize = useSelector(pageSizeSelector);
   const stores = useSelector(storeSelector) as IStoreResponseModel[];
  
-  const { isAdmin } = usePermissions();
+  const { isAdmin , isSuperAdmin} = usePermissions();
 
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -226,7 +226,7 @@ const Shop = () => {
     </FilterCard>
   );
 
-  if (isAdmin()) {
+  if (isAdmin || isSuperAdmin) {
     return (
       <>
         <ProductFilters />
@@ -285,7 +285,7 @@ const Shop = () => {
   }
 
   return (
-    <>
+     <PageLayout title="Shop Products" subtitle="Browse our collection of amazing products" protected={false}>
       <ProductFilters />
       
       <div className="row">
@@ -321,7 +321,7 @@ const Shop = () => {
           </div>
         </div>
       </div>
-    </>
+   </PageLayout>
   );
 };
 

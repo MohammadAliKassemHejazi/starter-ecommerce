@@ -384,7 +384,7 @@ const Dashboard = () => {
       )}
       
       {/* Super admin only content */}
-      {isSuperAdmin() && (
+      {isSuperAdmin && (
         <div>Super Admin Only Content</div>
       )}
     </div>

@@ -59,6 +59,9 @@ const handleSignUp = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handleGetSession = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    console.log("Handling get session");
+    // Extract token from cookies 
+
     const cookies = cookie.parse(req.headers.cookie || "");
     const accessToken = cookies[ACCESS_TOKEN_KEY];
 

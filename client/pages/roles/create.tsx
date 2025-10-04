@@ -7,6 +7,7 @@ import ProtectedRoute from "@/components/protectedRoute";
 import Link from "next/link";
 import router from "next/router";
 import { getUserActivePackage } from "@/services/packageService";
+import { usePermissions } from "@/hooks/usePermissions";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -23,7 +24,7 @@ const Toast = Swal.mixin({
 const CreateRoleModal = () => {
   const dispatch = useAppDispatch();
   const [name, setName] = useState<string>("");
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+    const {isSuperAdmin } = usePermissions();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,8 +33,8 @@ const CreateRoleModal = () => {
 
   const loadUserPackage = async () => {
     try {
-      const packageData = await getUserActivePackage();
-      setIsSuperAdmin((packageData as any)?.Package?.isSuperAdminPackage || false);
+      await getUserActivePackage();
+   
     } catch (error) {
       console.error('Error loading user package:', error);
     } finally {

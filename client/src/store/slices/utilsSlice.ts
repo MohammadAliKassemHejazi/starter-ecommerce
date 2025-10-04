@@ -26,8 +26,8 @@ export const fetchAllSubCategoriesID = createAsyncThunk(
   "/utile/subcategories",
   async (id: string) => {
     const response = await utileService.requestSubCategoriesId(id);
-
-    return response;
+console.log(response, " subcategories response");
+    return response.data;
   }
 );
 
@@ -35,8 +35,8 @@ export const fetchAllSizes = createAsyncThunk(
   "/utile/getSizes",
   async () => {
     const response = await utileService.requestSizes();
-
-    return response;
+console.log(response)
+    return response.data;
   }
 );
 

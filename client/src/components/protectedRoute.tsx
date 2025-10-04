@@ -33,8 +33,11 @@ const ClientProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // If user can't access the route, redirect or show fallback
   if (!canAccessCurrentRoute || !canAccessWithRequirements) {
 
-console.log('ProtectedRoute: Access denied');
-
+    console.log('ProtectedRoute: Access denied');
+    
+console.log('isAuthenticated:', isAuthenticated);
+console.log('canAccessCurrentRoute:', canAccessCurrentRoute);
+console.log('canAccessWithRequirements:', canAccessWithRequirements);
 
     if (redirectTo && !isAuthenticated) {
       router.push(redirectTo);

@@ -81,7 +81,8 @@ function CreateProduct() {
     setFieldValue("storeId", selectedStoreId);
     // Set the corresponding categoryId
     setFieldValue("categoryId", categoryId);
-
+    console.log("Selected Category ID:", categoryId);
+    console.log("Selected Store ID:", selectedStoreId);
     dispatch(fetchAllSubCategoriesID(categoryId));
   };
 

@@ -66,7 +66,7 @@ const CategoriesGrid = () => {
   };
 
   // Stats cards for admin
-  const statsCards = isAdmin() ? (
+  const statsCards = isAdmin ? (
     <div className="row mb-4">
       <div className="col-md-3">
         <div className="card bg-primary text-white">
@@ -106,8 +106,8 @@ const CategoriesGrid = () => {
       {statsCards}
       
       <TablePage
-        title={isAdmin() ? t('categories.categories') : 'Browse Categories'}
-        subtitle={isAdmin() 
+        title={isAdmin ? t('categories.categories') : 'Browse Categories'}
+        subtitle={isAdmin 
           ? 'Manage your product categories and organize your inventory'
           : 'Explore our product categories to find what you\'re looking for'
         }
@@ -131,7 +131,7 @@ const CategoriesGrid = () => {
             icon: 'bi bi-pencil',
             variant: 'primary',
             onClick: handleEditAction,
-            show: () => isAdmin()
+            show: () => isAdmin
           },
           {
             key: 'delete',
@@ -139,7 +139,7 @@ const CategoriesGrid = () => {
             icon: 'bi bi-trash',
             variant: 'danger',
             onClick: (row) => handleDeleteCategory(row),
-            show: () => isAdmin()
+            show: () => isAdmin
           }
         ]}
         headerActions={
