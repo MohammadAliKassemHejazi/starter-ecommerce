@@ -8,19 +8,21 @@ const httpClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL_API,
 })
 
-// // Request interceptor to add auth token
-// httpClient.interceptors.request.use(
-//   (config) => {
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+// Shared mutable reference to the current token
+let currentAccessToken: string | null = null;
+
+// Set interceptor ONCE
+httpClient.interceptors.request.use((config) => {
+  if (currentAccessToken) {
+    config.headers.Authorization = `Bearer ${currentAccessToken}`;
+  }
+  return config;
+});
+
+// Export a way to update the token
+export const setAccessToken = (token: string | null) => {
+  currentAccessToken = token;
+};
 
 // Response interceptor to handle API responses consistently
 httpClient.interceptors.response.use(

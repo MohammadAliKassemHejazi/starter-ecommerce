@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/store/store"
 import { UserState } from "@/interfaces/types/store/slices/userSlices.types";
 import * as authService from "@/services/authService"
-import httpClient from "@/utils/httpClient";
+import httpClient, { setAccessToken } from "@/utils/httpClient";
 import  { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import Router from "next/router";
 import { SignInResponse } from "@/interfaces/api";
@@ -42,14 +42,8 @@ export const signIn = createAsyncThunk(
 		if (resp.data.accessToken === "") {
 			throw new Error("login failed");
 		}
-		// set access token
-		httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-			if (config && config.headers) {
-				config.headers["Authorization"] = `Bearer ${resp.data.accessToken}`;
-			}
-			return config;
-		});
-
+	
+    setAccessToken(resp.data.accessToken);
 
 	
 		return resp;
@@ -66,6 +60,7 @@ export const signUp = createAsyncThunk(
 
 export const signOut = createAsyncThunk("user/signout", async () => {
 	await authService.signOut();
+	setAccessToken(null);
   	Router.push("/auth/signin");
 });
 
@@ -110,15 +105,11 @@ export const signOut = createAsyncThunk("user/signout", async () => {
 
 export const fetchSession = createAsyncThunk("user/fetchSession", async () => {
 	const response = await authService.getSession();
-	// set access token
-	if (response) {
-		httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-			if (config && config.headers && response.data.email) {
-				config.headers["Authorization"] = `Bearer ${response.data.accessToken}`;
-			}
-			return config;
-		});
-	}
+  if (response?.data?.accessToken) {
+      setAccessToken(response.data.accessToken);
+    } else {
+      setAccessToken(null);
+    }
 	return response;
 });
 
@@ -216,7 +207,7 @@ export const userSlice = createSlice({
 			state.roles = [];
 			state.permissions = [];
 		});
-// Guest mode reducers removed
+
 	}
 })
 
