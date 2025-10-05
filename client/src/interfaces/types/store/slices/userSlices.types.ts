@@ -22,6 +22,7 @@ export interface UserState {
 		endDate: string | null;
 	};
 	error?: string;
+	isGuest: boolean;
 }
 
 export interface SignInAction {

@@ -13,22 +13,26 @@ export const usePageData = (options: UsePageDataOptions = {}) => {
   const {
     requireAuth = true,
     redirectTo = '/auth/signin',
-    loadUserPackage = false
+    loadUserPackage = false,
   } = options;
 
   const router = useRouter();
-  const { isAuthenticated, hasActiveSubscription, user ,isSuperAdmin } = usePermissions();
-  const [userPackage, setUserPackage] = useState<any>(null);
+  const {
+    isAuthenticated,
+    hasActiveSubscription,
+    user,
+    isSuperAdmin,
+    isAuthenticating, // ← add this
+  } = usePermissions();
 
+  const [userPackage, setUserPackage] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const loadUserPackageData = useCallback(async () => {
-    if (!loadUserPackage) { return };
-    
+    if (!loadUserPackage) {return;}
     try {
       const packageData = await getUserActivePackage();
       setUserPackage(packageData);
-
     } catch (error) {
       console.error('Error loading user package:', error);
     }
@@ -36,10 +40,18 @@ export const usePageData = (options: UsePageDataOptions = {}) => {
 
   useEffect(() => {
     const initializePage = async () => {
+      // ⏳ Wait until auth check is complete
+      if (isAuthenticating) {
+        setLoading(true);
+        return; // Don't redirect or proceed yet
+      }
+
       setLoading(true);
-      
+
+      // 🔒 Now it's safe to check auth status
       if (requireAuth && !isAuthenticated) {
         router.push(redirectTo);
+        setLoading(false);
         return;
       }
 
@@ -48,7 +60,26 @@ export const usePageData = (options: UsePageDataOptions = {}) => {
     };
 
     initializePage();
-  }, [isAuthenticated, requireAuth, redirectTo, router, loadUserPackageData]);
+  }, [
+    isAuthenticated,
+    isAuthenticating, // ← include in deps
+    requireAuth,
+    redirectTo,
+    router,
+    loadUserPackageData,
+  ]);
+
+  // Optional: Show loader while authenticating
+  if (isAuthenticating) {
+    return {
+      isAuthenticated: false,
+      hasActiveSubscription: false,
+      user: null,
+      userPackage: null,
+      isSuperAdmin: false,
+      loading: true,
+    };
+  }
 
   return {
     isAuthenticated,
@@ -56,7 +87,7 @@ export const usePageData = (options: UsePageDataOptions = {}) => {
     user,
     userPackage,
     isSuperAdmin,
-    loading
+    loading,
   };
 };
 

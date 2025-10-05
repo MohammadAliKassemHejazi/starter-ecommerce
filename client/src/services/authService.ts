@@ -14,7 +14,7 @@ type signProps = {
 };
 
 // next local api
-export const signIn = async (user: signProps): Promise<SignIn> => {
+export const signIn = async (user: SignInResponse): Promise<SignIn> => {
 	const { data: response } = await httpClient.post<SignIn>(
 		`/user/auth/login`,
 		user,
@@ -22,7 +22,7 @@ export const signIn = async (user: signProps): Promise<SignIn> => {
       baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
     }
 	);
-	
+	console.log("signIn response:", response);
 	return response;
 };
 

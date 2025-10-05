@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
 import { fetchPublicStores, selectPublicStores } from "@/store/slices/publicSlice";
 import { PageLayout } from "@/components/UI/PageComponents";
+import ProtectedRoute from "@/components/protectedRoute";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -33,5 +34,8 @@ const Home = () => {
     </PageLayout>
   );
 };
-
-export default Home;
+export default function ProtectedHome() {
+  return (
+    <ProtectedRoute><Home></Home></ProtectedRoute>
+  )
+}

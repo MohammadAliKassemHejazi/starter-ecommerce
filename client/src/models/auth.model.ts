@@ -1,5 +1,5 @@
 
-export interface SignIn {
+export interface SignIn { data:{
 	id: string
 	email: string
 	name: string
@@ -26,6 +26,7 @@ export interface SignIn {
 		};
 	}>;
 	error?: string;
+	}
 }
 
 export interface SignUp {

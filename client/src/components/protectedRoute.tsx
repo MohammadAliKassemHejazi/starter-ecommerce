@@ -17,10 +17,10 @@ const ClientProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requiredRoles = [],
   requiredPermissions = [],
-  requireAll = false,
   fallback = <div>Access Denied</div>,
   redirectTo = '/auth/signin',
 }) => {
+ 
   const router = useRouter();
   const { isAuthenticated, canAccessRoute, canAccess } = usePermissions();
 
@@ -38,7 +38,7 @@ const ClientProtectedRoute: React.FC<ProtectedRouteProps> = ({
 console.log('isAuthenticated:', isAuthenticated);
 console.log('canAccessCurrentRoute:', canAccessCurrentRoute);
 console.log('canAccessWithRequirements:', canAccessWithRequirements);
-
+    // TODO : Handle redirect loop
     if (redirectTo && !isAuthenticated) {
       router.push(redirectTo);
       return null;

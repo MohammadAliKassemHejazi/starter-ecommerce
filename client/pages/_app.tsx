@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     // Guest users will load favorites via useGuestDataSync hook
     setTimeout(() => {
       const state = store.getState();
-      if (state.user.isAuthenticated && !state.user.isGuest) {
+      if (state.user.isAuthenticated ) {
         store.dispatch(fetchFavorites());
       }
     }, 1000);

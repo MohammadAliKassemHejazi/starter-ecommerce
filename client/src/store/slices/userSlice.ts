@@ -5,6 +5,7 @@ import * as authService from "@/services/authService"
 import httpClient from "@/utils/httpClient";
 import  { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import Router from "next/router";
+import { SignInResponse } from "@/interfaces/api";
 interface SignAction {
 	email: string
 	password: string
@@ -29,27 +30,28 @@ const initialState: UserState = {
 	isAuthenticating: true,
 	roles: [],
 	permissions: [],
+	isGuest: false,
 };
 
 export const signIn = createAsyncThunk(
 	"auth/signin",
-	async (credential: SignAction, { dispatch }) => {
+	async (credential: SignInResponse, { dispatch }) => {
 	
 		const resp = await authService.signIn(credential);
-
-		if (resp.accessToken === "") {
+         
+		if (resp.data.accessToken === "") {
 			throw new Error("login failed");
 		}
 		// set access token
 		httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 			if (config && config.headers) {
-				config.headers["Authorization"] = `Bearer ${resp.accessToken}`;
+				config.headers["Authorization"] = `Bearer ${resp.data.accessToken}`;
 			}
 			return config;
 		});
 
-		// Authentication successful
 
+	
 		return resp;
 	}
 )
@@ -141,16 +143,17 @@ export const userSlice = createSlice({
 		});
 		builder.addCase(signIn.fulfilled, (state, action) => {
 			console.log("sign in", action.payload);
-			state.id = action.payload.id;
-			state.accessToken = action.payload.accessToken;
-			state.email = action.payload.email;
-			state.name = action.payload.name;
-			state.address = action.payload.address;
-			state.phone = action.payload.phone;
-			state.roles = action.payload.roles || [];
-			state.permissions = action.payload.permissions || [];
+			state.id = action.payload.data.id;
+			state.accessToken = action.payload.data.accessToken;
+			state.email = action.payload.data.email;
+			state.name = action.payload.data.name;
+			state.address = action.payload.data.address;
+			state.phone = action.payload.data.phone;
+			state.roles = action.payload.data.roles || [];
+			state.permissions = action.payload.data.permissions || [];
 			state.isAuthenticated = true;
 			state.isAuthenticating = false;
+			console.log("User signed in:", state.isAuthenticated, state.permissions);
 		});
 		builder.addCase(signIn.rejected, (state) => {
 			state.accessToken = "";
@@ -184,6 +187,7 @@ export const userSlice = createSlice({
 				state.accessToken = "";
 				state.roles = [];
 				state.permissions = [];
+				state.isGuest = true;
 			}
 		});
 		builder.addCase(fetchSession.rejected, (state) => {
@@ -199,6 +203,7 @@ export const userSlice = createSlice({
 			state.accessToken = "";
 			state.roles = [];
 			state.permissions = [];
+			state.isGuest = true;
 		});
 		builder.addCase(signOut.fulfilled, (state) => {
 			state.isAuthenticated = false;

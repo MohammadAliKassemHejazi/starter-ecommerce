@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
-import { RootState } from '@/store/store';
 import { PERMISSIONS, ROLES, ROUTE_PERMISSIONS } from '@/constants/permissions';
+import { isAuthenticatingSelector, userSelector } from '@/store/slices/userSlice';
 
 // Helper: Check if a value is one of the known roles
 const isKnownRole = (value: string): value is keyof typeof ROLES =>
@@ -12,8 +12,9 @@ const isKnownPermission = (value: string): value is keyof typeof PERMISSIONS =>
   Object.values(PERMISSIONS).includes(value as any);
 
 export const usePermissions = () => {
-  const user = useSelector((state: RootState) => state.user);
-
+  
+  const user = useSelector(userSelector);
+const isAuthenticatingvalue = useSelector(isAuthenticatingSelector);
   // Memoize derived user state
   const {
     isAuthenticated,
@@ -23,6 +24,7 @@ export const usePermissions = () => {
     id: userId,
     email: userEmail,
     name: userName,
+    isAuthenticating,
   } = useMemo(() => {
     return {
       isAuthenticated: !!user?.isAuthenticated,
@@ -32,8 +34,9 @@ export const usePermissions = () => {
       id: user?.id,
       email: user?.email,
       name: user?.name,
+      isAuthenticating: isAuthenticatingvalue,
     };
-  }, [user]);
+  }, [user,isAuthenticatingvalue]);
 
   // Role checks (memoized for efficiency)
   const isSuperAdmin = useMemo(
@@ -271,5 +274,6 @@ export const usePermissions = () => {
     userRoles,
     userPermissions,
     isAuthenticated,
+    isAuthenticating,
   };
 };
