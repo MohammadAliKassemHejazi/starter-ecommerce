@@ -1,9 +1,10 @@
 import React from 'react';
 
 interface Order {
-  id: string;
-  status: string;
-  date: string;
+  orderId: string;
+  paymentStatus: string;
+  shippingStatus: string;
+  date?: string;
 }
 
 interface OrderFulfillmentStatusProps {
@@ -11,6 +12,20 @@ interface OrderFulfillmentStatusProps {
 }
 
 const OrderFulfillmentStatus: React.FC<OrderFulfillmentStatusProps> = ({ orders }) => {
+
+  const orderList = Array.isArray(orders) ? orders : [];
+
+  if (orderList.length === 0) {
+    return (
+      <div className="card mb-4">
+        <div className="card-header bg-info text-white">Order Fulfillment Status</div>
+        <div className="card-body">
+          <p className="mb-0">No orders found.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="card mb-4">
       <div className="card-header bg-info text-white">Order Fulfillment Status</div>
@@ -23,17 +38,18 @@ const OrderFulfillmentStatus: React.FC<OrderFulfillmentStatusProps> = ({ orders 
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.status}</td>
-              <td>{new Date(order.date).toLocaleDateString()}</td>
-            </tr>
-          ))}
+{orderList.map((order, index) => (
+  <tr key={`${order.orderId}-${index}`}>
+    <td>{order.orderId}</td>
+    <td>{order.paymentStatus} / {order.shippingStatus}</td>
+    <td>{order.date ? new Date(order.date).toLocaleDateString() : '—'}</td>
+  </tr>
+))}
+
+
         </tbody>
       </table>
     </div>
   );
 };
-
 export default OrderFulfillmentStatus;

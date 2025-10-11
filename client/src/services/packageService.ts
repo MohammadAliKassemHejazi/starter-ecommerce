@@ -63,25 +63,25 @@ export interface IPackageProps {
 // Get all available packages
 export const requestAllPackages = async (): Promise<PackagesListResponse> => {
   const { data: response } = await httpClient.get<PackagesListResponse>("/packages");
+  console.log(response , "all packages");
   return response;
 };
 
 // Get package by ID
 export const requestPackageById = async (id: string): Promise<PackageResponse> => {
-  const { data: response } = await httpClient.get<PackageResponse>(`/packages/${id}`);
+  const { data: response } = await httpClient.get<PackageResponse>(`/packages?id=${id}`);
   return response;
 };
 
 // Get user's active package
-//TO DO :set user to admin to admin or whatever 
 export const getUserActivePackage = async (): Promise<UserPackageResponse> => {
-  const { data: response } = await httpClient.get<UserPackageResponse>("/packages/user/active");
+  const { data: response } = await httpClient.get<UserPackageResponse>("/packages/active");
   return response;
 };
 
 // Get user's package limits
 export const getUserPackageLimits = async (): Promise<PackageLimitsResponse> => {
-  const { data: response } = await httpClient.get<PackageLimitsResponse>("/packages/user/limits");
+  const { data: response } = await httpClient.get<PackageLimitsResponse>("/packages/limits");
   return response;
 };
 
@@ -102,7 +102,7 @@ export const requestCreatePackage = async (packageData: IPackageProps): Promise<
 
 // Update package (super admin only)
 export const requestUpdatePackage = async (id: string, packageData: IPackageProps): Promise<UpdatePackageResponse> => {
-  const { data: response } = await httpClient.patch<UpdatePackageResponse>(`/packages/${id}`, packageData);
+  const { data: response } = await httpClient.patch<UpdatePackageResponse>(`/packages/update/` + id, packageData);
   return response;
 };
 

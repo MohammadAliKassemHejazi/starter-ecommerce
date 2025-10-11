@@ -19,6 +19,7 @@ import { PackageManager } from '@/components/Package/PackageManager';
 import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from '@/components/protectedRoute';
 import { usePageData } from '@/hooks/usePageData';
+import { Console } from 'console';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -27,13 +28,20 @@ const Dashboard = () => {
   const orderStatuses = useSelector(selectOrderStatuses);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
-  const { isSuperAdmin } = usePageData({ loadUserPackage: true });
+  const isauthenticatingvalue = useSelector((state:any) => state.user.isAuthenticating);
+// Destructure loading state from usePageData if available
+const { isSuperAdmin, isAuthenticated ,isAuthenticating} = usePageData({ loadUserPackage: true });
 
-  useEffect(() => {
+useEffect(() => {
+  // Only fetch when page data (e.g., user info) is loaded
+ console.log("isAuthenticating",isAuthenticating);
+  if (isAuthenticated && !isauthenticatingvalue) {
     dispatch(fetchSalesData());
     dispatch(fetchInventoryAlerts());
     dispatch(fetchOrderStatuses());
-  }, [dispatch]);
+  }
+}, [isAuthenticating, isAuthenticated, dispatch, isauthenticatingvalue]);
+
 
   if (loading) {
     return (

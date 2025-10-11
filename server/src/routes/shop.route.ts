@@ -2,7 +2,7 @@ import express from "express";
 import { shopController } from "../controllers/index";
 import { protectedRoutes } from "../middlewares";
 // import { checkProductCreationLimit } from "../middlewares/package.middleware";
-import { body, param, query, validationResult } from "express-validator";
+import { body, param, query } from "express-validator";
 
 const router = express.Router();
 

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { TableColumn } from './ModernTable';
 
@@ -25,7 +26,7 @@ export const renderStatus = (value: boolean | string) => {
 };
 
 export const renderDate = (value: string | Date, format: 'short' | 'long' | 'time' = 'short') => {
-  if (!value) return '-';
+  if (!value) {return '-';}
   
   const date = new Date(value);
   const formatOptions = {

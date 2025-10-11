@@ -176,7 +176,7 @@ export const ModernTable = <T extends Record<string, any>>({
   };
 
   const handleSort = (field: string) => {
-    if (!sortable) return;
+    if (!sortable) {return;}
 
     const newDirection = sortFieldValue === field && sortDirectionValue === 'asc' ? 'desc' : 'asc';
     
@@ -203,7 +203,7 @@ export const ModernTable = <T extends Record<string, any>>({
   };
 
   const handleSelectRow = (row: T, checked: boolean) => {
-    if (!selectable || !onSelectionChange) return;
+    if (!selectable || !onSelectionChange) {return;}
 
     const newSelectedRows = checked
       ? [...selectedRowsValue, row]
@@ -217,7 +217,7 @@ export const ModernTable = <T extends Record<string, any>>({
   };
 
   const handleSelectAll = (checked: boolean) => {
-    if (!selectable || !onSelectionChange) return;
+    if (!selectable || !onSelectionChange) {return;}
 
     const newSelectedRows = checked ? [...paginatedData] : [];
     
@@ -262,7 +262,7 @@ export const ModernTable = <T extends Record<string, any>>({
                     className="form-check-input"
                     checked={isAllSelected}
                     ref={(input) => {
-                      if (input) input.indeterminate = isIndeterminate;
+                      if (input) {input.indeterminate = isIndeterminate;}
                     }}
                     onChange={(e) => handleSelectAll(e.target.checked)}
                   />

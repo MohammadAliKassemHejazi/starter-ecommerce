@@ -36,9 +36,13 @@ export interface ProductResponse extends ApiResponse<{
     id: string;
     name: string;
   };
+  page: number;
+  pageSize: number;
+  total: number;
   SizeItems?: Array<{
     id: string;
     size: string;
+    sizeId: string;
     quantity: number;
   }>;
 }> {}
@@ -76,6 +80,15 @@ export interface ProductsListResponse extends PaginatedApiResponse<{
     id: string;
     name: string;
   };
+  page: number;
+  pageSize: number;
+  total: number;
+  SizeItems?: Array<{
+    id: string;
+    size: string;
+    sizeId: string;
+    quantity: number;
+  }>;
 }> {}
 
 export interface CreateProductResponse extends ApiResponse<{

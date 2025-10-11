@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as shopService from "@/services/shopService";
 
 import { RootState } from "../store";
-import { IProductModel, productresponse } from "@/models/product.model";
+import { IProductModel } from "@/models/product.model";
 
 const initialState: ProductsState = {
   product: undefined,
@@ -21,7 +21,8 @@ export const fetchProductsListing = createAsyncThunk(
     if (((page ?? 0) <= 0) || pageSize <= 0) {
       throw new Error("Invalid page or pageSize");
     }
-    const response = await shopService.requestProductsListing( page!, pageSize);
+    const response = await shopService.requestProductsListing(page!, pageSize);
+  
     return response;
   }
 );
@@ -69,7 +70,7 @@ export const fetchAllProducts = createAsyncThunk("shop/getall", async () => {
 export const createProduct = createAsyncThunk(
   "shop/create",
   async (product: FormData) => {
-    const response: productresponse = await shopService.requestCreateProducts(product);
+    const response = await shopService.requestCreateProducts(product);
     return response;
   }
 );
@@ -121,7 +122,7 @@ export const articleSlice = createSlice({
     }},
   extraReducers: (builder) => {
     builder.addCase(fetchProductById.fulfilled, (state, action) => {
-      state.product = action.payload;
+      state.product = action.payload.data;
     });
 
     builder.addCase(fetchProductById.rejected, (state) => {
@@ -129,7 +130,7 @@ export const articleSlice = createSlice({
     });
 
     builder.addCase(createProduct.fulfilled, (state, action) => {
-      state.product = action.payload.product;
+      state.product = action.payload.data;
     });
 
     builder.addCase(createProduct.rejected, (state) => {
@@ -137,11 +138,11 @@ export const articleSlice = createSlice({
     });
 
     builder.addCase(fetchProductsByStore.fulfilled, (state, action) => {
-     
-      state.Storeproducts = action.payload.products;
-      state.total = action.payload.total;
-      state.page = action.payload.page;
-      state.pageSize = action.payload.pageSize;
+     //here we replace the products array with new data
+      state.Storeproducts = action.payload.data.products;
+      state.total = action.payload.data.total;
+      state.page = action.payload.data.page;
+      state.pageSize = action.payload.data.pageSize;
     });
 
     builder.addCase(fetchProductsByStore.rejected, (state) => {
@@ -156,16 +157,21 @@ export const articleSlice = createSlice({
     
 
 builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
-  // Reset products array if it's the first page
-  if (action.payload.page === 1) {
-    state.products = action.payload.products; // Replace the array
+  const { data, meta } = action.payload;
+
+  // Replace or append based on page number
+  if (meta.page === 1) {
+    state.products = data;
   } else {
-    state.products = [...state.products, ...action.payload.products]; // Append new products
+    state.products = [...state.products, ...data];
   }
-  state.total = action.payload.total;
-  state.page = action.payload.page;
-  state.pageSize = action.payload.pageSize;
+
+  state.total = meta.total;
+  state.page = meta.page;
+  state.pageSize = meta.pageSize;
 });
+
+
 
 builder.addCase(fetchProductsListing.rejected, (state) => {
   state.products = [...state.products]; // Keep existing products

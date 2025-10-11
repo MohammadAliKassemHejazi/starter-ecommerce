@@ -28,6 +28,39 @@ export const packageController = {
     }
   },
 
+  // Get active package for the authenticated user
+getActivePackage: async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.UserId!; // Ensure user is authenticated via middleware
+
+    const activePackage = await packageService.getUserActivePackage(userId);
+
+    if (!activePackage) {
+      return res.status(404).json({
+        success: false,
+        message: 'No active package found for this user'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: activePackage
+    });
+  } catch (error) {
+    console.error('Error in getActivePackage controller:', error);
+    if (error instanceof CustomError) {
+      return res.status(error.statusCode || 500).json({
+        success: false,
+        message: error.message
+      });
+    }
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+},
+
   // Get package by ID
   getPackageById: async (req: Request, res: Response) => {
     try {
@@ -150,5 +183,36 @@ export const packageController = {
         message: 'Internal server error'
       });
     }
+  },
+  // Get package limits and usage for the authenticated user
+getPackageLimits: async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.UserId;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'User not authenticated'
+      });
+    }
+
+    const limits = await packageService.getUserPackageLimits(userId);
+
+    return res.status(200).json({
+      success: true,
+      data: limits
+    });
+  } catch (error) {
+    console.error('Error in getPackageLimits controller:', error);
+    if (error instanceof CustomError) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
   }
+}
 };

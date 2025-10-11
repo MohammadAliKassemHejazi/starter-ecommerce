@@ -16,7 +16,7 @@ import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import { GetStaticPaths, GetStaticProps } from "next";
-import styles from "./SingleItem.module.scss";
+
 type Props = {
   product?: IProductModel;
 };
@@ -117,9 +117,9 @@ const SingleItem = ({ product }: Props) => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </Head>
-      <div className={styles.productContainer}>
+      <div className='productContainer'>
         {/* Image Slider */}
-        <div className={styles.productImages}>
+        <div className='productImages'>
           {/* Large Image on Top */}
 
                 <div className="row">
@@ -137,19 +137,19 @@ const SingleItem = ({ product }: Props) => {
       
 
         {/* Product Details */}
-        <div className={styles.productDetails}>
-          <h1 className={styles.productName}>{product?.name}</h1>
-       <div className={styles.productPrice}>
+        <div className='productDetails'>
+          <h1 className='productName'>{product?.name}</h1>
+       <div className='productPrice'>
   {/* Original Price */}
   <span
-    className={`${product?.discount ? styles.discountPrice : styles.originalPrice}`}
+    className={`${product?.discount ? 'discountPrice' : 'originalPrice' } `}
   >
     ${product?.price?.toFixed(2)}
   </span>
 
   {/* Discounted Price */}
   {product?.discount && (
-    <span className={styles.originalPrice}>
+    <span className='originalPrice'>
       $
       {(
         product.price! -
@@ -158,7 +158,7 @@ const SingleItem = ({ product }: Props) => {
     </span>
   )}
 </div>
-          <p className={styles.productDescription}>{product?.description}</p>
+          <p className='productDescription'>{product?.description}</p>
 
           {/* Add to Cart Form */}
 
@@ -194,13 +194,13 @@ const SingleItem = ({ product }: Props) => {
   }}
 >
   {({ errors, touched, values, setFieldValue }) => (
-    <Form className={styles.cartForm}>
+    <Form className='cartForm'>
       {/* Quantity Field */}
-      <div className={styles.formField}>
-        <label className={styles.formLabel}>Quantity</label>
+      <div className='formField'>
+        <label className='formLabel'>Quantity</label>
         <Field
-          className={`${styles.formInput} ${
-            errors.quantity && touched.quantity ? styles.inputError : ""
+          className={`$'formInput' ${
+            errors.quantity && touched.quantity ? "inputError" : ""
           }`}
           type="number"
           name="quantity"
@@ -211,19 +211,19 @@ const SingleItem = ({ product }: Props) => {
           } // Dynamically set max attribute based on stock
         />
         {errors.quantity && touched.quantity && (
-          <div className={styles.errorMsg}>{errors.quantity}</div>
+          <div className='errorMsg'>{errors.quantity}</div>
         )}
       </div>
 
       {/* Size Selection */}
-      <div className={styles.formField}>
-        <label className={styles.formLabel}>Size</label>
-        <div className={styles.sizeOptions}>
+      <div className='formField'>
+        <label className='formLabel'>Size</label>
+        <div className='sizeOptions'>
           {product?.SizeItems?.map((size) => (
             <div key={size.id} className="position-relative">
               <Field
-                className={`${styles.sizeOption} ${
-                  touched.sizeId && errors.sizeId ? styles.error : ""
+                className={`'sizeOption' ${
+                  touched.sizeId && errors.sizeId ? 'error' : ""
                 }`}
                 type="radio"
                 name="sizeId"
@@ -233,14 +233,14 @@ const SingleItem = ({ product }: Props) => {
                   setFieldValue("quantity", 1); // Reset quantity when size changes
                 }}
               />
-              <span className={`${styles.sizeMark}`}>
+              <span className={`$'-sizeMark}`}>
                 {size.Size?.size} 
               </span>
             </div>
           ))}
         </div>
         {errors.sizeId && touched.sizeId && (
-          <div className={styles.errorMsg}>{errors.sizeId}</div>
+          <div className='errorMsg'>{errors.sizeId}</div>
         )}
       </div>
 
@@ -251,7 +251,7 @@ const SingleItem = ({ product }: Props) => {
       <div className="d-flex gap-3">
         <button
           type="submit"
-          className={`${styles.addToCartBtn} flex-grow-1`}
+          className={`$'addToCartBtn' flex-grow-1`}
           name="submit"
           value="addtocart"
         >
@@ -271,15 +271,15 @@ const SingleItem = ({ product }: Props) => {
 
 
           {/* Feedback Section */}
-          <div className={styles.feedbackSection}>
-            <h3 className={styles.feedbackTitle}>Leave Feedback</h3>
-            <div className={styles.ratingContainer}>
+          <div className='feedbackSection'>
+            <h3 className='feedbackTitle'>Leave Feedback</h3>
+            <div className='ratingContainer'>
               {[...Array(5)].map((_, i) => (
                 <span
                   key={i}
                   className={`
-                    ${styles.star}
-                    ${i < feedback.rating ? styles.filled : ""}
+                    $'star'
+                    ${i < feedback.rating ? "filled" : ""}
                   `}
                   onClick={() => setFeedback({ ...feedback, rating: i + 1 })}
                 >
@@ -288,7 +288,7 @@ const SingleItem = ({ product }: Props) => {
               ))}
             </div>
             <textarea
-              className={styles.feedbackInput}
+              className='feedbackInput'
               value={feedback.comment}
               onChange={(e) =>
                 setFeedback({ ...feedback, comment: e.target.value })
@@ -296,7 +296,7 @@ const SingleItem = ({ product }: Props) => {
               placeholder="Your comment..."
             />
             <button
-              className={styles.submitFeedback}
+              className='submitFeedback'
               onClick={() => {
                 // Submit feedback logic
               }}

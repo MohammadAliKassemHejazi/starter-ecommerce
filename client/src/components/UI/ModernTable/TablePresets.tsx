@@ -128,10 +128,12 @@ export const ProductTablePreset = {
       label: 'Image',
       width: '100px',
       align: 'center' as const,
-      render: (value: any, row: any) => {
-        const imageUrl = value?.[0]?.url || '/default-product.png';     
-        return renderImage(imageUrl, row.name || 'Product', 'sm');      
-      }
+      render: (_value: any, row: any) => {
+        debugger;
+        console.log({row}, "row in product table")
+    const imageUrl = row.ProductImages?.[0]?.url || '/default-product.png';
+    return renderImage(imageUrl, row.name || 'Product', 'sm');
+  }
     },
     createNameColumn(),
     {

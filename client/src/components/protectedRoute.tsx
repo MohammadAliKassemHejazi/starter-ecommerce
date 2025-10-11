@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { usePermissions } from '@/hooks/usePermissions';
-import { ROUTE_PERMISSIONS, ROLES } from '../constants/permissions';
+import {  ROLES } from '../constants/permissions';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -33,11 +33,6 @@ const ClientProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // If user can't access the route, redirect or show fallback
   if (!canAccessCurrentRoute || !canAccessWithRequirements) {
 
-    console.log('ProtectedRoute: Access denied');
-    
-console.log('isAuthenticated:', isAuthenticated);
-console.log('canAccessCurrentRoute:', canAccessCurrentRoute);
-console.log('canAccessWithRequirements:', canAccessWithRequirements);
     // TODO : Handle redirect loop
     if (redirectTo && !isAuthenticated) {
       router.push(redirectTo);

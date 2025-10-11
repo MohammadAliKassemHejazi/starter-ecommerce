@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllPackages, IPackage,assignPackageToUser, getUserPackageLimits, IPackageLimits } from '@/services/packageService';
+import { requestAllPackages, IPackage,assignPackageToUser, getUserPackageLimits, IPackageLimits } from '@/services/packageService';
 import { ModernTable, UserTablePreset, TableAction } from '@/components/UI/ModernTable';
 
 interface UserManagerProps {
@@ -40,7 +40,7 @@ export const UserManager: React.FC<UserManagerProps> = ({ isSuperAdmin }) => {
     setLoading(true);
     try {
       const [packagesData, limits] = await Promise.all([
-        getAllPackages(),
+        requestAllPackages(),
         getUserPackageLimits()
       ]);
       setPackages(packagesData.data);

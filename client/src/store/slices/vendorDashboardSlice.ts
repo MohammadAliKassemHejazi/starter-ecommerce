@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as vendorService from '../../services/vendorService';
 import { RootState } from '../store';
+import { Console } from 'console';
 
 interface VendorDashboardState {
   salesData: { date: string; totalSales: number }[];
@@ -23,7 +24,7 @@ export const fetchSalesData = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await vendorService.getSalesData();
-      console.log(response);
+ 
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
@@ -36,6 +37,7 @@ export const fetchInventoryAlerts = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await vendorService.getInventoryAlerts();
+  
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
@@ -48,6 +50,7 @@ export const fetchOrderStatuses = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await vendorService.getOrderStatuses();
+  
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
@@ -66,6 +69,7 @@ const vendorDashboardSlice = createSlice({
       state.error = null;
     });
     builder.addCase(fetchSalesData.fulfilled, (state, action) => {
+ 
       state.salesData = action.payload;
       state.loading = false;
     });
@@ -80,6 +84,7 @@ const vendorDashboardSlice = createSlice({
       state.error = null;
     });
     builder.addCase(fetchInventoryAlerts.fulfilled, (state, action) => {
+      console.log(action.payload , "inventory alerts");
       state.inventoryAlerts = action.payload;
       state.loading = false;
     });
@@ -94,6 +99,7 @@ const vendorDashboardSlice = createSlice({
       state.error = null;
     });
     builder.addCase(fetchOrderStatuses.fulfilled, (state, action) => {
+    
       state.orderStatuses = action.payload;
       state.loading = false;
     });

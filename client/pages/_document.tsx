@@ -1,10 +1,13 @@
 import { Head, Html, Main, NextScript } from "next/document";
 import React from "react";
 import Script from "next/script";
+import { store } from "@/store/store";
+import { fetchSession } from "@/store/slices/userSlice";
 
 type Props = {};
 
-function Document({}: Props) {
+function Document({ }: Props) {
+
   return (
     <Html lang="en">
       <Head>

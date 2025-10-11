@@ -183,7 +183,8 @@ export const getUserActivePackage = async (userId: string): Promise<IUserPackage
       return null;
     }
 
-    const packageData = userPackage.get('Package') as any;
+ const plainUserPackage = userPackage.get({ plain: true });
+    const packageData = plainUserPackage.Package; // now a clean object
     
     return {
       packageId: packageData.id,
@@ -386,5 +387,76 @@ export const createDefaultPackages = async (): Promise<void> => {
   } catch (error) {
     console.error('Error creating default packages:', error);
     throw error;
+  }
+};
+
+// Get full package limits and usage info for the authenticated user
+export const getUserPackageLimits = async (userId: string) => {
+  try {
+    // Get active package info
+    const packageInfo = await getUserActivePackage(userId);
+
+    if (!packageInfo) {
+      // Return default "no package" limits
+      return {
+        canCreateStore: false,
+        canCreateProduct: false,
+        canCreateUser: false,
+        isSuperAdmin: false,
+        currentStoreCount: 0,
+        currentProductCount: 0,
+        currentUserCount: 0,
+        storeLimit: 0,
+        productLimit: 0,
+        userLimit: 0,
+        packageName: 'None',
+        packageId: '',
+        isActive: false,
+        endDate: null
+      };
+    }
+
+
+// Get current usage counts
+const [currentStoreCount, currentProductCount, currentUserCount] = await Promise.all([
+  db.Store.count({ where: {  userId } }),      
+  db.Product.count({ where: {  ownerId : userId } }),   
+  db.User.count({ where: { createdById: userId } })   // sub-users
+]);
+
+    // Compute permissions
+    const canCreateStore = packageInfo.limits.storeLimit === -1 
+      ? true 
+      : currentStoreCount < packageInfo.limits.storeLimit;
+
+    const canCreateProduct = packageInfo.limits.productLimit === -1 
+      ? true 
+      : currentProductCount < packageInfo.limits.productLimit;
+
+    const canCreateUser = packageInfo.limits.isSuperAdmin 
+      ? (packageInfo.limits.userLimit === -1 
+          ? true 
+          : currentUserCount < packageInfo.limits.userLimit)
+      : false;
+
+    return {
+      canCreateStore,
+      canCreateProduct,
+      canCreateUser,
+      isSuperAdmin: packageInfo.limits.isSuperAdmin,
+      currentStoreCount,
+      currentProductCount,
+      currentUserCount,
+      storeLimit: packageInfo.limits.storeLimit,
+      productLimit: packageInfo.limits.productLimit,
+      userLimit: packageInfo.limits.userLimit,
+      packageName: packageInfo.packageName,
+      packageId: packageInfo.packageId,
+      isActive: packageInfo.isActive,
+      endDate: packageInfo.endDate ? packageInfo.endDate.toISOString() : null
+    };
+  } catch (error) {
+    console.error('Error in getUserPackageLimits service:', error);
+    throw new CustomError('Failed to fetch package limits', 'INTERNAL_ERROR', 500);
   }
 };

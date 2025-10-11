@@ -5,10 +5,42 @@ import { protectedRoutes } from "../middlewares";
 const router = express.Router();
 
 // Routes to protect
-const Routes = ['/activate', '/', '/:id'];
+const Routes = ['/activate', '/active', '/', '/:id','/limits','/update/:id'];
 
 
 protectedRoutes(router, Routes); 
+// Add this with your other routes
+router.get('/limits', packageController.getPackageLimits);
+/**
+ * @swagger
+ * /packages/active:
+ *   get:
+ *     summary: Get the currently active package for the authenticated user
+ *     tags: [Packages]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Active package retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/UserActivePackage'
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ *       404:
+ *         description: No active package found for the user
+ *       500:
+ *         description: Internal server error
+ */
+
+router.get('/active', packageController.getActivePackage);
 /**
  * @swagger
  * /packages:
@@ -161,7 +193,7 @@ router.post('/', checkPermission('manage_packages'), packageController.createPac
  *       500:
  *         description: Internal server error
  */
-router.put('/:id', checkPermission('manage_packages'), packageController.updatePackage);
+router.patch('/update/:id', checkPermission('manage_packages'), packageController.updatePackage);
 
 /**
  * @swagger

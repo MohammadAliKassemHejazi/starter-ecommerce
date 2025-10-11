@@ -12,7 +12,7 @@ import "../src/i18n";
 import { ToastProvider } from "../src/contexts/ToastContext";
 import { useGuestDataSync } from "@/hooks/useGuestDataSync";
 import ClientOnlyWrapper from "@/components/ClientOnlyWrapper";
-
+   store.dispatch(fetchSession());
 function MyApp({ Component, pageProps, router }: AppProps) {
   
   // update session & set token, and conditionally load favorites
@@ -25,15 +25,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       }
     } catch {}
 
-    store.dispatch(fetchSession());
-    // Load favorites after a short delay, but only for authenticated users
-    // Guest users will load favorites via useGuestDataSync hook
-    setTimeout(() => {
-      const state = store.getState();
-      if (state.user.isAuthenticated ) {
-        store.dispatch(fetchFavorites());
-      }
-    }, 1000);
+ 
+    
   }, []);
 
   return (

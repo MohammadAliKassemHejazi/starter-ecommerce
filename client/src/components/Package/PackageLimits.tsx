@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getUserPackageLimits, IPackageLimits } from '@/services/packageService';
-import { Card } from 'react-bootstrap';
-import { ProgressBar } from 'react-bootstrap';
+import { ProgressBar,Card } from 'react-bootstrap';
+import { date } from 'yup';
+
 
 export const PackageLimits: React.FC = () => {
   const [limits, setLimits] = useState<IPackageLimits | null>(null);
@@ -14,7 +15,8 @@ export const PackageLimits: React.FC = () => {
   const loadLimits = async () => {
     try {
       const data = await getUserPackageLimits();
-      setLimits(data as any);
+      const cleanData = data.data
+      setLimits(cleanData as any);
     } catch (error) {
       console.error('Error loading package limits:', error);
     } finally {
@@ -46,17 +48,17 @@ export const PackageLimits: React.FC = () => {
   }
 
   const getProgressPercentage = (current: number, limit: number) => {
-    if (limit === -1) return 0; // Unlimited
-    if (limit === 0) return 100; // No limit (0 means no access)
+    if (limit === -1) {return 0;} // Unlimited
+    if (limit === 0) {return 100;} // No limit (0 means no access)
     return Math.min((current / limit) * 100, 100);
   };
 
   const getStatusColor = (current: number, limit: number) => {
-    if (limit === -1) return 'text-green-600'; // Unlimited
-    if (limit === 0) return 'text-red-600'; // No access
+    if (limit === -1) {return 'text-green-600';} // Unlimited
+    if (limit === 0) {return 'text-red-600';} // No access
     const percentage = (current / limit) * 100;
-    if (percentage >= 90) return 'text-red-600';
-    if (percentage >= 70) return 'text-yellow-600';
+    if (percentage >= 90) {return 'text-red-600';}
+    if (percentage >= 70) {return 'text-yellow-600';}
     return 'text-green-600';
   };
 

@@ -10,6 +10,7 @@ const router = Router();
 
 // Define routes to protect
 const protectedRoutesList = ["/sales", "/alerts", "/orders/status"];
+
 protectedRoutes(router, protectedRoutesList);
 
 /**

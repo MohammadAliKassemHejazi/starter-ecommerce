@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  getAllPackages, 
-  createPackage, 
-  updatePackage, 
-  deletePackage,
+  requestAllPackages, 
+  requestCreatePackage,
+requestActivatePackage,
+  requestUpdatePackage,
+  requestDeletePackage,
   assignPackageToUser,
   IPackage,
   IUserPackage 
 } from '@/services/packageService';
+import { Console } from 'console';
 
 interface PackageManagerProps {
   isSuperAdmin: boolean;
@@ -40,8 +42,9 @@ export const PackageManager: React.FC<PackageManagerProps> = ({ isSuperAdmin }) 
   const loadPackages = async () => {
     setLoading(true);
     try {
-      const data = await getAllPackages();
-      setPackages(data as any);
+      const data = await requestAllPackages();
+      console.log(data , "data packages");
+      setPackages(data.data as any);
     } catch (error) {
       console.error('Error loading packages:', error);
     } finally {
@@ -51,7 +54,7 @@ export const PackageManager: React.FC<PackageManagerProps> = ({ isSuperAdmin }) 
 
   const handleCreatePackage = async () => {
     try {
-      await createPackage(formData);
+      await requestCreatePackage(formData);
       setShowCreateModal(false);
       resetForm();
       loadPackages();
@@ -61,10 +64,10 @@ export const PackageManager: React.FC<PackageManagerProps> = ({ isSuperAdmin }) 
   };
 
   const handleUpdatePackage = async () => {
-    if (!editingPackage) return;
+    if (!editingPackage) {return;}
     
     try {
-      await updatePackage(editingPackage.id, formData);
+      await requestUpdatePackage(editingPackage.id, formData);
       setShowEditModal(false);
       setEditingPackage(null);
       resetForm();
@@ -77,7 +80,7 @@ export const PackageManager: React.FC<PackageManagerProps> = ({ isSuperAdmin }) 
   const handleDeletePackage = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this package?')) {
       try {
-        await deletePackage(id);
+        await requestDeletePackage(id);
         loadPackages();
       } catch (error) {
         console.error('Error deleting package:', error);
@@ -119,7 +122,7 @@ export const PackageManager: React.FC<PackageManagerProps> = ({ isSuperAdmin }) 
     return (
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4">Package Management</h2>
-        <p className="text-gray-600">You don't have permission to manage packages.</p>
+        <p className="text-gray-600">You dont have permission to manage packages.</p>
       </div>
     );
   }

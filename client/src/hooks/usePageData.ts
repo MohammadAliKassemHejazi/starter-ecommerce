@@ -7,6 +7,7 @@ interface UsePageDataOptions {
   requireAuth?: boolean;
   redirectTo?: string;
   loadUserPackage?: boolean;
+  isAuthenticating?: boolean;
 }
 
 export const usePageData = (options: UsePageDataOptions = {}) => {
@@ -22,7 +23,7 @@ export const usePageData = (options: UsePageDataOptions = {}) => {
     hasActiveSubscription,
     user,
     isSuperAdmin,
-    isAuthenticating, // ← add this
+    isAuthenticating, 
   } = usePermissions();
 
   const [userPackage, setUserPackage] = useState<any>(null);
@@ -83,6 +84,7 @@ export const usePageData = (options: UsePageDataOptions = {}) => {
 
   return {
     isAuthenticated,
+    isAuthenticating,
     hasActiveSubscription,
     user,
     userPackage,
