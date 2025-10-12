@@ -3,14 +3,12 @@ import { useRouter } from "next/router";
 import { updateCategory } from "@/store/slices/categorySlice";
 import { useAppDispatch } from "@/store/store";
 import { FormPage } from "@/components/UI/PageComponents";
-import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 
 const EditCategory = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = usePageData();
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 

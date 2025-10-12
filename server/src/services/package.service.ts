@@ -126,7 +126,7 @@ export const activatePackage = async (userId: string, packageId: string) => {
 
       // Check if user already has an active package
       const existingUserPackage = await db.UserPackage.findOne({
-        where: { 
+        where: {
           userId,
           isActive: true
         },
@@ -183,9 +183,9 @@ export const getUserActivePackage = async (userId: string): Promise<IUserPackage
       return null;
     }
 
- const plainUserPackage = userPackage.get({ plain: true });
+    const plainUserPackage = userPackage.get({ plain: true });
     const packageData = plainUserPackage.Package; // now a clean object
-    
+
     return {
       packageId: packageData.id,
       packageName: packageData.name,
@@ -208,7 +208,7 @@ export const getUserActivePackage = async (userId: string): Promise<IUserPackage
 export const canCreateStore = async (userId: string): Promise<boolean> => {
   try {
     const packageInfo = await getUserActivePackage(userId);
-    
+
     if (!packageInfo) {
       return false; // No package = no store creation
     }
@@ -229,25 +229,35 @@ export const canCreateStore = async (userId: string): Promise<boolean> => {
 };
 
 // Check if user can create more products
+// File: package.service.ts
+
+// Check if user can create more products
 export const canCreateProduct = async (userId: string): Promise<boolean> => {
   try {
     const packageInfo = await getUserActivePackage(userId);
-    
+
+    // 1. Check for active package
     if (!packageInfo) {
       return false; // No package = no product creation
     }
 
+    // 2. Check for unlimited product limit (-1)
     if (packageInfo.limits.productLimit === -1) {
       return true; // Unlimited products
     }
 
-    const currentProductCount = await db.Shop.count({
+    // 3. CORRECTED: Use db.Product.count instead of db.Shop.count
+    const currentProductCount = await db.Product.count({
       where: { ownerId: userId }
     });
 
+    // 4. Compare current count to package limit
     return currentProductCount < packageInfo.limits.productLimit;
+
   } catch (error) {
+    // Log error for debugging purposes
     console.error('Error checking product creation limit:', error);
+
     return false;
   }
 };
@@ -256,7 +266,7 @@ export const canCreateProduct = async (userId: string): Promise<boolean> => {
 export const canCreateUser = async (userId: string): Promise<boolean> => {
   try {
     const packageInfo = await getUserActivePackage(userId);
-    
+
     if (!packageInfo || !packageInfo.limits.isSuperAdmin) {
       return false; // Not a super admin
     }
@@ -289,8 +299,8 @@ export const isSuperAdmin = async (userId: string): Promise<boolean> => {
 
 // Assign package to user
 export const assignPackageToUser = async (
-  userId: string, 
-  packageId: string, 
+  userId: string,
+  packageId: string,
   assignedById: string,
   endDate?: Date
 ): Promise<any> => {
@@ -417,26 +427,26 @@ export const getUserPackageLimits = async (userId: string) => {
     }
 
 
-// Get current usage counts
-const [currentStoreCount, currentProductCount, currentUserCount] = await Promise.all([
-  db.Store.count({ where: {  userId } }),      
-  db.Product.count({ where: {  ownerId : userId } }),   
-  db.User.count({ where: { createdById: userId } })   // sub-users
-]);
+    // Get current usage counts
+    const [currentStoreCount, currentProductCount, currentUserCount] = await Promise.all([
+      db.Store.count({ where: { userId } }),
+      db.Product.count({ where: { ownerId: userId } }),
+      db.User.count({ where: { createdById: userId } })   // sub-users
+    ]);
 
     // Compute permissions
-    const canCreateStore = packageInfo.limits.storeLimit === -1 
-      ? true 
+    const canCreateStore = packageInfo.limits.storeLimit === -1
+      ? true
       : currentStoreCount < packageInfo.limits.storeLimit;
 
-    const canCreateProduct = packageInfo.limits.productLimit === -1 
-      ? true 
+    const canCreateProduct = packageInfo.limits.productLimit === -1
+      ? true
       : currentProductCount < packageInfo.limits.productLimit;
 
-    const canCreateUser = packageInfo.limits.isSuperAdmin 
-      ? (packageInfo.limits.userLimit === -1 
-          ? true 
-          : currentUserCount < packageInfo.limits.userLimit)
+    const canCreateUser = packageInfo.limits.isSuperAdmin
+      ? (packageInfo.limits.userLimit === -1
+        ? true
+        : currentUserCount < packageInfo.limits.userLimit)
       : false;
 
     return {

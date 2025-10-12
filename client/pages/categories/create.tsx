@@ -12,7 +12,6 @@ import { validateForm, commonRules } from '@/utils/validation';
 const CreateCategory = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = usePageData();
   const [formData, setFormData] = useState({
     name: "",
     description: ""

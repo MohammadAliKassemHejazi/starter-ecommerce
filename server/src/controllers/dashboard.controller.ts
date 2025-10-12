@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import * as dashboardService from "../services/dashboard.service";
+import * as utilService from "../services/utile.service";
 import customError from "../utils/customError";
 import dashboardErrors from "../utils/errors/dashboard.errors";
 import { CustomRequest } from "interfaces/types/middlewares/request.middleware.types";
@@ -14,7 +15,7 @@ export const handleGetSalesData = async (
     if (!userId) {
       return next(customError(dashboardErrors.OrderStatusesFetchFailure));
     }
-    const usersids = await dashboardService.getManagedUserIds(userId);
+    const usersids = await utilService.getManagedUserIds(userId);
     const salesData = await dashboardService.getSalesData(usersids);
     res.json(salesData);
   } catch (error) {
@@ -32,7 +33,7 @@ export const handleGetInventoryAlerts = async (
     if (!userId) {
       return next(customError(dashboardErrors.OrderStatusesFetchFailure));
     }
-    const usersids = await dashboardService.getManagedUserIds(userId);
+    const usersids = await utilService.getManagedUserIds(userId);
     const inventoryAlerts = await dashboardService.getInventoryAlerts(usersids);
     res.json(inventoryAlerts);
   } catch (error) {
@@ -50,7 +51,7 @@ export const handleGetOrderStatuses = async (
     if (!userId) {
       return next(customError(dashboardErrors.OrderStatusesFetchFailure));
     }
-    const usersids = await dashboardService.getManagedUserIds(userId);
+    const usersids = await utilService.getManagedUserIds(userId);
     
     const orderStatuses = await dashboardService.getOrderStatuses(usersids);
     res.json(orderStatuses);

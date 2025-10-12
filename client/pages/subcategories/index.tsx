@@ -17,7 +17,8 @@ const SubCategoriesGrid = () => {
   const { isAuthenticated } = usePageData();
 
   React.useEffect(() => {
-    dispatch(fetchSubCategories());
+    dispatch(fetchSubCategories()).then((result) => {     console.log(result, 'Fetching subcategories...');});
+
   }, [dispatch]);
 
   const handleDeleteSubCategory = async (id: string) => {
@@ -40,11 +41,13 @@ const SubCategoriesGrid = () => {
       render: (value: string) => <span className="fw-semibold">{value}</span>
     },
     {
-      key: 'category',
+      key: 'Category',
       label: 'Category',
-      render: (value: any) => value?.name || "N/A"
+      render: (value: any) => value.name || "N/A"
     }
   ];
+console.log(subCategories, 'Rendering subcategories:');
+
 
   return (
     <TablePage

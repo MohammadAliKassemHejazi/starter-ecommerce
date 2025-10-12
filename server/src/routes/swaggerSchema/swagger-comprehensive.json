@@ -2193,10 +2193,7 @@
                           "type": "string",
                           "format": "uuid"
                         },
-                        "tenantId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
+                      
                         "orderNumber": {
                           "type": "string"
                         },
@@ -2464,10 +2461,7 @@
                             "type": "string",
                             "format": "uuid"
                           },
-                          "tenantId": {
-                            "type": "string",
-                            "format": "uuid"
-                          },
+                         
                           "orderNumber": {
                             "type": "string"
                           },

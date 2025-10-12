@@ -47,7 +47,7 @@ export default function Footer({}: Props) {
               <h4 className="footer-title">Management</h4>
               <ul className="footer-list">
                 <li><Link href="/users">Users</Link></li>
-                <li><Link href="/products">Products</Link></li>
+                <li><Link href="/shop/product">Products</Link></li>
                 <li><Link href="/categories">Categories</Link></li>
                 <li><Link href="/store">Stores</Link></li>
               </ul>

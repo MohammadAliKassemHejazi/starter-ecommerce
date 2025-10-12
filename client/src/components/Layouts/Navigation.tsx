@@ -570,7 +570,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
                 </a>
               )}
               {canAccessPage('products') && (
-                <a href="/products" className={router.pathname === '/products' ? 'active' : ''}>
+                <a href="/shop/product" className={router.pathname === '/products' ? 'active' : ''}>
                   <i className="fas fa-box"></i>
                   <span>Products</span>
                 </a>

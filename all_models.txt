@@ -93,7 +93,7 @@ import { ICartAttributes } from "../interfaces/types/models/cart.model.types";
 module.exports = (sequelize: any, DataTypes: any) => {
   class Cart extends Model<ICartAttributes> implements ICartAttributes {
     id!: string;
-    tenantId?: string; // RLS tenant isolation
+
 
     static associate(models: any) {
       // Define the relationship with User
@@ -121,12 +121,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       userId: {
         type: DataTypes.UUID,
         allowNull: false,
-      },
-      tenantId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        field: 'tenant_id', // RLS tenant isolation
-      },
+      }
     },
     {
       sequelize,
@@ -216,7 +211,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     id!: string;
     name!: string;
     description?: string;
-    tenantId?: string; // RLS tenant isolation
+
 
     static associate(models: any) {
       Category.hasMany(models.SubCategory, {  foreignKey: 'categoryId' });
@@ -237,12 +232,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    tenantId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      field: 'tenant_id', // RLS tenant isolation
-    },
+    }
   }, {
     sequelize,
     modelName: 'Category',
@@ -418,7 +408,9 @@ let config: any;
 try {
   // Try different possible paths for the config file
   const configPaths = [
+    path.join(__dirname, "../config/db.config.js"),
     path.join(__dirname, "../config/db.config"),
+    path.join(__dirname, "../../config/db.config.js"),
     path.join(__dirname, "../../config/db.config")
   ];
   
@@ -714,7 +706,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
   class Order extends Model<IOrderAttributes> implements IOrderAttributes {
     id!: string;
     paymentId!: string; // Link to the Payment table
-    tenantId?: string; // RLS tenant isolation
+
 
     static associate(models: any) {
       Order.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
@@ -737,11 +729,7 @@ Order.hasMany(models.OrderShipping, { foreignKey: "orderId", as: "shippingDetail
   allowNull: false,
   defaultValue: 'USD'
 },
-      tenantId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        field: 'tenant_id', // RLS tenant isolation
-      }
+    
     },
     {
       sequelize,
@@ -1013,7 +1001,7 @@ module.exports = (sequelize: Sequelize) => {
     slug?: string;
     tags?: string;
     discount?: number;
-    tenantId?: string; // RLS tenant isolation
+
 
     static associate(models: any) {
       Product.belongsTo(models.User, { foreignKey: 'ownerId', targetKey: 'id', onDelete: 'CASCADE' });
@@ -1093,11 +1081,7 @@ module.exports = (sequelize: Sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    tenantId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      field: 'tenant_id', // RLS tenant isolation
-    },
+
     
   }, {
     sequelize,
@@ -1545,7 +1529,6 @@ module.exports = (sequelize: any) => {
     public name!: string;
     public description!: string; // Add description property
     public imgUrl!: string; // Add imgUrl property
-    public tenantId?: string; // RLS tenant isolation
 
     static associate(models: any) {
       Store.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
@@ -1579,12 +1562,8 @@ module.exports = (sequelize: any) => {
       categoryId: {
         type: DataTypes.UUID,
         allowNull: false,
-      },
-      tenantId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        field: 'tenant_id', // RLS tenant isolation
-      },
+      }
+  
     },
     {
       sequelize,

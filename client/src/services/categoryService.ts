@@ -18,7 +18,7 @@ export const createCategory = async (data: { name: string; description?: string 
 };
 
 export const updateCategory = async (data: { id: string; name: string; description?: string }): Promise<UpdateCategoryResponse> => {
-  const { data: response } = await httpClient.put<UpdateCategoryResponse>(`/categories/${data.id}`, {
+  const { data: response } = await httpClient.put<UpdateCategoryResponse>(`/categories/update/${data.id}`, {
     name: data.name,
     description: data.description,
   });
@@ -26,6 +26,6 @@ export const updateCategory = async (data: { id: string; name: string; descripti
 };
 
 export const deleteCategory = async (id: string): Promise<DeleteCategoryResponse> => {
-  const { data: response } = await httpClient.delete<DeleteCategoryResponse>(`/categories/${id}`);
+  const { data: response } = await httpClient.delete<DeleteCategoryResponse>(`/categories/delete/${id}`);
   return response;
 };

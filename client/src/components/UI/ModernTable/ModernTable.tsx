@@ -125,10 +125,12 @@ export const ModernTable = <T extends Record<string, any>>({
   const selectedRowsValue = onSelectionChange ? selectedRows : internalSelectedRows;
 
   const filteredData = useMemo(() => {
+
     let filtered = data;
 
     // Search filter
     if (searchTerm) {
+      
       filtered = filtered.filter(row =>
         columns.some(column => {
           const value = row[column.key];
@@ -152,7 +154,7 @@ export const ModernTable = <T extends Record<string, any>>({
         return 0;
       });
     }
-
+debugger;
     return filtered;
   }, [data, searchTerm, sortFieldValue, sortDirectionValue, columns]);
 
@@ -162,6 +164,7 @@ export const ModernTable = <T extends Record<string, any>>({
     }
     
     const startIndex = (page - 1) * pageSize;
+   
     return filteredData.slice(startIndex, startIndex + pageSize);
   }, [filteredData, page, pageSize, pagination]);
 
@@ -329,6 +332,9 @@ export const ModernTable = <T extends Record<string, any>>({
                     </td>
                   )}
                   {columns.map((column) => (
+                    
+                    console.log(row, 'Rendering row data:'),
+                    console.log(column, 'Rendering column key:'),
                     <td 
                       key={column.key}
                       className={`${column.className || ''} ${column.align ? `text-${column.align}` : ''}`}

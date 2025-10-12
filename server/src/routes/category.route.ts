@@ -10,7 +10,7 @@ import { protectedRoutes } from "../middlewares";
 const router = Router();
 
 // Define routes to protect
-const protectedRoutesList = ["/create", "/update/:id", "/delete/:id"];
+const protectedRoutesList = ["/","/create", "/update/:id", "/delete/:id"];
 protectedRoutes(router, protectedRoutesList);
 
 /**
@@ -94,7 +94,7 @@ router.post("/", handleCreateCategory);
  *       404:
  *         description: Category not found
  */
-router.put("/:id", handleUpdateCategory);
+router.put("/update/:id", handleUpdateCategory);
 
 /**
  * @swagger
@@ -119,6 +119,6 @@ router.put("/:id", handleUpdateCategory);
  *       404:
  *         description: Category not found
  */
-router.delete("/:id", handleDeleteCategory);
+router.delete("/delete/:id", handleDeleteCategory);
 
 export default router;

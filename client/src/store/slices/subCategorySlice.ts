@@ -16,7 +16,9 @@ const initialState: SubCategoryState = {
 export const fetchSubCategories = createAsyncThunk(
   "subCategories/fetchSubCategories",
   async () => {
-    return subCategoryService.fetchSubCategories();
+    const { data } = await subCategoryService.fetchSubCategories();
+    console.log(data, 'Fetched subcategories data:');
+    return data;
   }
 );
 

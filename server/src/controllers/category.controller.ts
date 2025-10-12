@@ -2,14 +2,19 @@ import { NextFunction, Request, Response } from "express";
 import * as  categoryService  from "../services/category.service";
 import customError from "../utils/customError";
 import categoryErrors from "../utils/errors/category.errors";
+import { CustomRequest } from "interfaces/types/middlewares/request.middleware.types";
 
 export const handleFetchCategories = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const categories = await categoryService.fetchCategories();
+    const userid = req.UserId;
+    if (!userid) {
+      return next(customError(categoryErrors.CategoryFetchFailure));
+    }
+    const categories = await categoryService.fetchCategories(userid);
     res.json(categories);
   } catch (error) {
     next(customError(categoryErrors.CategoryFetchFailure));
@@ -17,19 +22,22 @@ export const handleFetchCategories = async (
 };
 
 export const handleCreateCategory = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   const { name, description } = req.body;
-
+  const userId = req.UserId;
+  if (!userId) {
+      return next(customError(categoryErrors.CategoryFetchFailure));
+    }
   if (!name) {
     res.status(400).json({ error: "Category name is required" });
     return;
   }
 
   try {
-    const category = await categoryService.createCategory({ name, description });
+    const category = await categoryService.createCategory({ name, description ,userId });
     res.status(201).json(category);
   } catch (error) {
     next(customError(categoryErrors.CategoryCreateFailure));

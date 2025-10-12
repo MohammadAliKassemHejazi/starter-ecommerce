@@ -39,6 +39,18 @@ module.exports = (sequelize: any) => {
         as: "roles"
       });
 
+        // NEW ASSOCIATION: A User can own/create many Categories
+  User.hasMany(models.Category, { 
+    foreignKey: 'userId', 
+    as: 'CreatedCategories' 
+  }); 
+
+  // NEW ASSOCIATION: A User can own/create many SubCategories
+  User.hasMany(models.SubCategory, { 
+    foreignKey: 'userId', 
+    as: 'CreatedSubCategories' 
+  });
+
       // Self-referential relationship for tracking who created the user
       User.belongsTo(models.User, { foreignKey: "createdById", as: "CreatedBy" });
     }

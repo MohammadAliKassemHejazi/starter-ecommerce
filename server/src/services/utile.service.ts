@@ -35,9 +35,34 @@ const getAllSizes = async (): Promise<ISizeAttributes[]  | null> => {
 
   return  Sizes  ;
 };
+export const getManagedUserIds = async (rootUserId: string): Promise<string[]> => {
+  const query = `
+    WITH RECURSIVE user_tree AS (
+      -- Anchor: start with the root user
+      SELECT id
+      FROM "Users"
+      WHERE id = :rootUserId
 
+      UNION ALL
+
+      -- Recursive: find users created by anyone in the current tree
+      SELECT u.id
+      FROM "Users" u
+      INNER JOIN user_tree ut ON u."createdById" = ut.id
+    )
+    SELECT id FROM user_tree;
+  `;
+
+  const results = await db.sequelize.query(query, {
+    replacements: { rootUserId },
+    type: db.sequelize.QueryTypes.SELECT,
+  });
+
+  return results.map((row: any) => row.id);
+};
 
 export default {
+  getManagedUserIds,
   getAllCategories,
   getSubCategories,
   getAllSizes

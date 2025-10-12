@@ -1,0 +1,50 @@
+// Cute and Small Styles
+
+// 1. Limit Circle (Visual representation of the limit type)
+.limit-circle {
+    width: 3rem; // Small size
+    height: 3rem;
+    border-radius: 50%;
+    border: 1px solid #dee2e6; // Light border
+    // Bootstrap bg-light (light background) and text-success/warning/danger 
+    // will be applied dynamically in the component.
+}
+
+// 2. Status Dot (Small indicator at the bottom)
+.status-dot {
+    width: 0.5rem; // Very small dot
+    height: 0.5rem;
+    border-radius: 50%;
+    // Uses Bootstrap bg-success/bg-danger for color
+}
+
+// 3. Custom Loading State (Cute version)
+.loading-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.loading-bar {
+    height: 0.6rem;
+    background-color: #e9ecef; // Lighter grey
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.loading-circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background-color: #e9ecef;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4; // Softer pulse
+    }
+}

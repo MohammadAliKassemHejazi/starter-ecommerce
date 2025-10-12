@@ -16,7 +16,6 @@ const CategoriesGrid = () => {
   const dispatch = useAppDispatch();
   const categories = useSelector(categoriesSelector);
   const { isAdmin } = usePermissions();
-  const { isAuthenticated } = usePageData();
   const [loading, setLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
     show: boolean;
@@ -26,6 +25,7 @@ const CategoriesGrid = () => {
   const fetchCategoriesData = useCallback(async () => {
     setLoading(true);
     try {
+
       await dispatch(fetchCategories());
     } catch (error) {
       console.error('Failed to load categories:', error);
@@ -36,6 +36,8 @@ const CategoriesGrid = () => {
   
   useEffect(() => {
     fetchCategoriesData();
+    debugger;
+    console.log(categories ,'Fetching categories...')
   }, [fetchCategoriesData]);
 
   const handleDeleteCategory = (category: any) => {
@@ -43,7 +45,7 @@ const CategoriesGrid = () => {
   };
 
   const confirmDelete = async () => {
-    if (!deleteModal.category) return;
+    if (!deleteModal.category) {return;}
 
     try {
       await dispatch(deleteCategory(deleteModal.category.id));

@@ -49,7 +49,6 @@ export const createStoreRouteSchema = {
             description: { type: 'string' },
             categoryId: { type: 'string', format: 'uuid' },
             userId: { type: 'string', format: 'uuid' },
-            tenantId: { type: 'string', format: 'uuid' },
             address: { type: 'string' },
             phone: { type: 'string' },
             images: {
@@ -100,7 +99,6 @@ export const getAllStoresRouteSchema = {
               description: { type: 'string' },
               categoryId: { type: 'string', format: 'uuid' },
               userId: { type: 'string', format: 'uuid' },
-              tenantId: { type: 'string', format: 'uuid' },
               address: { type: 'string' },
               phone: { type: 'string' },
               images: {
@@ -152,7 +150,6 @@ export const getStoreByIdRouteSchema = {
             description: { type: 'string' },
             categoryId: { type: 'string', format: 'uuid' },
             userId: { type: 'string', format: 'uuid' },
-            tenantId: { type: 'string', format: 'uuid' },
             address: { type: 'string' },
             phone: { type: 'string' },
             images: {
@@ -213,7 +210,6 @@ export const updateStoreRouteSchema = {
             description: { type: 'string' },
             categoryId: { type: 'string', format: 'uuid' },
             userId: { type: 'string', format: 'uuid' },
-            tenantId: { type: 'string', format: 'uuid' },
             address: { type: 'string' },
             phone: { type: 'string' },
             updatedAt: { type: 'string', format: 'date-time' }

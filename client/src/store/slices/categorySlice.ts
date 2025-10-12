@@ -16,7 +16,8 @@ const initialState: CategoryState = {
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async () => {
-    return categoryService.fetchCategories();
+    const { data  } = await categoryService.fetchCategories();
+    return data;
   }
 );
 
