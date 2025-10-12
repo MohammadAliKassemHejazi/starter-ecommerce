@@ -13,17 +13,23 @@ const EditCategory = () => {
   const [description, setDescription] = useState<string>("");
 
   useEffect(() => {
+    
     if (router.isReady && router.query.category) {
       const category = JSON.parse(router.query.category as string);
       setName(category.name || "");
       setDescription(category.description || "");
     }
   }, [router.isReady, router.query]);
-
+ const handleCancel = () => {
+      router.push("/categories");
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await dispatch(updateCategory({ id: router.query.id as string, name, description }));
+      debugger;
+       const category = JSON.parse(router.query.category as string);
+  
+      await dispatch(updateCategory({ id: category.id as string, name, description }));
       showToast.success("Category updated successfully");
       router.push("/categories");
     } catch (error) {
@@ -57,15 +63,10 @@ const EditCategory = () => {
 
   const formActions = [
     {
-      type: "button" as const,
+      type: "button" as const, 
       variant: "secondary" as const,
       label: "Cancel",
-      href: "/categories"
-    },
-    {
-      type: "submit" as const,
-      variant: "primary" as const,
-      label: "Update"
+      onClick: handleCancel 
     }
   ];
 

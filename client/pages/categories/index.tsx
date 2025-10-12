@@ -15,7 +15,7 @@ const CategoriesGrid = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const categories = useSelector(categoriesSelector);
-  const { isAdmin } = usePermissions();
+  const { isAdmin ,isSuperAdmin } = usePermissions();
   const [loading, setLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
     show: boolean;
@@ -61,6 +61,8 @@ const CategoriesGrid = () => {
   };
 
   const handleEditAction = (category: any) => {
+    debugger;
+    console.log(category, 'Editing category...');
     router.push({
       pathname: "/categories/edit",
       query: { category: JSON.stringify(category) }
@@ -122,8 +124,6 @@ const CategoriesGrid = () => {
           href: '/categories/create',
           label: t('categories.createCategory')
         }}
-        editPath="/categories/edit"
-        deleteAction={handleDeleteAction}
         exportButton={{ onClick: () => console.log('Export categories') }}
         filterButton={{ onClick: () => console.log('Filter categories') }}
         customActions={[
@@ -132,8 +132,8 @@ const CategoriesGrid = () => {
             label: 'Edit',
             icon: 'bi bi-pencil',
             variant: 'primary',
-            onClick: handleEditAction,
-            show: () => isAdmin
+            onClick: (row)=> handleEditAction(row),
+            show: () => isAdmin ||isSuperAdmin
           },
           {
             key: 'delete',
@@ -141,7 +141,7 @@ const CategoriesGrid = () => {
             icon: 'bi bi-trash',
             variant: 'danger',
             onClick: (row) => handleDeleteCategory(row),
-            show: () => isAdmin
+            show: () => isAdmin ||isSuperAdmin
           }
         ]}
         headerActions={

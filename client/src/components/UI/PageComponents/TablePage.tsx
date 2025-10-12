@@ -76,7 +76,7 @@ export const TablePage: React.FC<TablePageProps> = ({
     assignRolePath,
     customActions
   });
-
+debugger;
   const finalActions = actions || tableActions;
 
   const pageActions = [];

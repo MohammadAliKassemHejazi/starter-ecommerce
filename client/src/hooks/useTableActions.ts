@@ -33,7 +33,7 @@ export const useTableActions = (options: UseTableActionsOptions = {}) => {
   };
 
   const handleDelete = async (item: any) => {
-    if (!deleteAction) return;
+    if (!deleteAction) {return;}
 
     const result = await showConfirm({
       title: 'Are you sure?',

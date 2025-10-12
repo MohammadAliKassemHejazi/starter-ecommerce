@@ -59,11 +59,12 @@ export const updateCategory = async (
     throw customError(categoryErrors.CategoryNotFound);
   }
 
-  category.name = name;
-  category.description = description;
-  await category.save();
+  const updatedCategory = await category.update({
+    name: name,
+    description: description,
+  });
 
-  return category;
+  return updatedCategory;
 };
 
 export const deleteCategory = async (id: string): Promise<void> => {
