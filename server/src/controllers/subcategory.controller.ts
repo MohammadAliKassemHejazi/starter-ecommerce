@@ -2,14 +2,19 @@ import { NextFunction, Request, Response } from "express";
 import * as subCategoryService  from "../services/subCategory.service";
 import customError from "../utils/customError";
 import subCategoryErrors from "../utils/errors/subCategory.errors";
+import { CustomRequest } from "interfaces/types/middlewares/request.middleware.types";
 
 export const handleFetchSubCategories = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const subCategories = await subCategoryService.fetchSubCategories();
+    const userId = req.UserId;
+    if (!userId) {
+      return next(customError(subCategoryErrors.SubCategoryFetchFailure));
+    } 
+    const subCategories = await subCategoryService.fetchSubCategories(userId);
     res.json(subCategories);
   } catch (error) {
     next(customError(subCategoryErrors.SubCategoryFetchFailure));
@@ -17,19 +22,22 @@ export const handleFetchSubCategories = async (
 };
 
 export const handleCreateSubCategory = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   const { name, categoryId } = req.body;
-
+  const userId = req.UserId;
+  if (!userId) {
+      return next(customError(subCategoryErrors.SubCategoryFetchFailure));
+    }
   if (!name || !categoryId) {
     res.status(400).json({ error: "Name and Category ID are required" });
     return;
   }
 
   try {
-    const subCategory = await subCategoryService.createSubCategory({ name, categoryId });
+    const subCategory = await subCategoryService.createSubCategory({ name, categoryId,userId });
     res.status(201).json(subCategory);
   } catch (error) {
     next(customError(subCategoryErrors.SubCategoryCreateFailure));

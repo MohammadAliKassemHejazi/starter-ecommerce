@@ -1,26 +1,45 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createSubCategory } from "@/store/slices/subCategorySlice";
 import { useAppDispatch } from "@/store/store";
-import { categoriesSelector } from "@/store/slices/categorySlice";
+import { categoriesSelector, fetchCategories } from "@/store/slices/categorySlice";
 import { FormPage } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import { useSelector } from "react-redux";
 import router from "next/router";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
+import { useTranslation } from "react-i18next";
 
 const CreateSubCategoryModal = () => {
+    const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const categories = useSelector(categoriesSelector);
   const { isAuthenticated } = usePageData();
-
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState<string>("");
   const [categoryId, setCategoryId] = useState<string>("");
 
+  const fetchCategoriesData = useCallback(async () => {
+    setLoading(true);
+    try {
+
+      await dispatch(fetchCategories());
+    } catch (error) {
+      console.error('Failed to load categories:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [dispatch]);
+  
+  useEffect(() => {
+    fetchCategoriesData();
+
+  }, [fetchCategoriesData]);
   const handleCreateSubCategory = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await dispatch(createSubCategory({ name, categoryId })).unwrap();
+      console.log('Subcategory created:', response);
       showToast.success("Subcategory created successfully");
       if (response.id) {
         void router.push(`/subcategories`);
@@ -68,7 +87,16 @@ const CreateSubCategoryModal = () => {
       href: "/subcategories"
     }
   ];
-
+  if (loading) {
+    return (
+      <FormPage
+        title={t('categories.createCategory')}
+        subtitle="Add a new category to organize your products"
+        loading={true}
+        protected={true}
+      />
+    );
+  }
   return (
     <FormPage
       title="Create Subcategory"

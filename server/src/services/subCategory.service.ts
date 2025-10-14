@@ -1,64 +1,80 @@
 import db from "../models";
+import { Op } from 'sequelize'; // Needed for filtering the array of user IDs
 import { ISubCategoryAttributes } from "../interfaces/types/models/subcategory.model.types";
 import customError from "../utils/customError";
 import subCategoryErrors from "../utils/errors/subCategory.errors";
+// Assuming utilService and the models are available in the scope
+ import * as utilService from './utile.service'; 
 
-export const fetchSubCategories = async (): Promise<ISubCategoryAttributes[]> => {
-  // Use 'include' to fetch the associated Category data based on the 'categoryId' foreign key
-  const subCategories = await db.SubCategory.findAll({
-    include: [
-      {
-        model: db.Category, // Include the associated Category
-        // Sequelize usually infers the alias from the model name if not explicitly set in the association
-        // In your SubCategory model: SubCategory.belongsTo(models.Category, { targetKey: 'id', foreignKey: 'categoryId' });
-        // The attribute name for the association in the result will typically be the model name 'Category'
-        attributes: ['id', 'name', 'description'], // Fetch only necessary Category fields, adjust as needed
-      }
-    ],
-    // Optionally, order the results
-    order: [
-      [{ model: db.Category }, 'name'], // Order by Category name first
-      ['name'] // Then by SubCategory name
-    ]
-  });
 
-  // The result will now have the shape:
-  // {
-  //   id: "...",
-  //   name: "...",
-  //   categoryId: "..." (or null if not set in the db record),
-  //   Category: { id: "...", name: "...", description: "..." } (or null if categoryId is null or doesn't match a Category),
-  //   createdAt: "...",
-  //   updatedAt: "..."
-  // }
-console.log(subCategories, 'Fetched subcategories from DB:');
-  return subCategories;
+export const fetchSubCategories = async (rootUserId: string): Promise<ISubCategoryAttributes[]> => {
+  try {
+    // 1. Get all user IDs in the management hierarchy
+    // You need to ensure utilService is imported and accessible
+    const userIds = await utilService.getManagedUserIds(rootUserId); 
+
+    if (userIds.length === 0) {
+      return [];
+    }
+
+    // 2. Fetch SubCategories based on managed user IDs
+    const subCategories = await db.SubCategory.findAll({
+      where: {
+        // Filter the SubCategory table by its owner (userId)
+        userId: {
+          [Op.in]: userIds,
+        },
+      },
+      // Keep the existing include logic to fetch Category details
+      include: [
+        {
+          model: db.Category, 
+          attributes: ['id', 'name', 'description'],
+        }
+      ],
+      // Optionally, order the results
+      order: [
+        [{ model: db.Category }, 'name'], 
+        ['name'] 
+      ]
+    });
+
+    return subCategories;
+
+  } catch (error) {
+    console.error('Error fetching subcategories by managed users:', error);
+    throw new Error('Failed to fetch subcategories.');
+  }
 };
+
+
+
 export const createSubCategory = async (
-  data: { name: string; categoryId: string }
+  data: { name: string; categoryId: string; userId: string } // Added userId here for completeness
 ): Promise<ISubCategoryAttributes> => {
-  const { name, categoryId } = data;
-  const subCategory = await db.SubCategory.create({ name, categoryId });
+  // Assuming the calling context passes the userId of the creator
+  const subCategory = await db.SubCategory.create(data); 
   return subCategory;
 };
 
+
+
 export const updateSubCategory = async (
   id: string,
-  data: { name: string; categoryId: string }
+  data: { name?: string; categoryId?: string } // Optional properties for update
 ): Promise<ISubCategoryAttributes> => {
-  const { name, categoryId } = data;
-
+  
   const subCategory = await db.SubCategory.findByPk(id);
   if (!subCategory) {
     throw customError(subCategoryErrors.SubCategoryNotFound);
   }
 
-  subCategory.name = name;
-  subCategory.categoryId = categoryId;
-  await subCategory.save();
+  // ✅ CRITICAL FIX: Use the update instance method to reliably save changes.
+  const updatedSubCategory = await subCategory.update(data);
 
-  return subCategory;
+  return updatedSubCategory;
 };
+
 
 export const deleteSubCategory = async (id: string): Promise<void> => {
   const subCategory = await db.SubCategory.findByPk(id);

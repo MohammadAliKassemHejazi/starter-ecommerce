@@ -36,8 +36,7 @@ const CategoriesGrid = () => {
   
   useEffect(() => {
     fetchCategoriesData();
-    debugger;
-    console.log(categories ,'Fetching categories...')
+
   }, [fetchCategoriesData]);
 
   const handleDeleteCategory = (category: any) => {
