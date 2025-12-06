@@ -4,8 +4,79 @@ import db from '../models/index';
 import { IStoreAttributes } from 'interfaces/types/models/store.model.types';
 import path from 'node:path';
 import { promises as fsPromises } from 'fs';
-import { raw } from 'body-parser';
+import { Op, OrderItem } from 'sequelize'; // 👈 Added for filtering & sorting
 
+// 🔒 Allowed sort fields for security
+const ALLOWED_SORT_FIELDS = ['name', 'createdAt', 'updatedAt'];
+const ALLOWED_SORT_DIRECTIONS = ['ASC', 'DESC'];
+
+/**
+ * Safely parses orderBy string like "name ASC" into Sequelize order format.
+ */
+const parseOrderBy = (orderBy: string): OrderItem[] => {
+  if (!orderBy || typeof orderBy !== 'string') {
+    return [['createdAt', 'DESC']];
+  }
+
+  const [field, direction] = orderBy.trim().split(/\s+/);
+
+  if (
+    field &&
+    direction &&
+    ALLOWED_SORT_FIELDS.includes(field) &&
+    ALLOWED_SORT_DIRECTIONS.includes(direction.toUpperCase())
+  ) {
+    return [[field, direction.toUpperCase()]];
+  }
+
+  return [['createdAt', 'DESC']]; // fallback
+};
+
+// ─────────────────────────────────────────────────────
+// 🔹 NEW: Filtered, paginated, sorted version for user
+// ─────────────────────────────────────────────────────
+export const getAllStoresForUserWithFilter = async (
+  userId: string,
+  searchQuery: string,
+  orderBy: string,
+  page: number,
+  pageSize: number
+): Promise<{
+  stores: IStoreAttributes[];
+  total: number;
+  page: number;
+  totalPages: number;
+}> => {
+  const offset = (page - 1) * pageSize;
+  const limit = pageSize;
+
+  const where: any = { userId };
+
+  // 🔍 Apply search on store name (case-insensitive)
+  if (searchQuery.trim()) {
+    where.name = {
+      [Op.iLike]: `%${searchQuery.trim()}%`, // PostgreSQL
+      // For MySQL: [Op.like]: `%${searchQuery.trim()}%`
+    };
+  }
+
+  const { count, rows } = await db.Store.findAndCountAll({
+    where,
+    offset,
+    limit,
+    order: parseOrderBy(orderBy),
+    raw: true, // 👈 Match your existing style (you use raw: true elsewhere)
+  });
+
+  const totalPages = Math.ceil(count / pageSize);
+
+  return {
+    stores: rows as IStoreAttributes[],
+    total: count,
+    page,
+    totalPages,
+  };
+};
 
  const createStoreWithImages = async (storeData: IStoreCreateProduct, files: Express.Multer.File[]): Promise<any> => {
      try {
@@ -213,5 +284,6 @@ export default {
   getAllStores,
   deleteStore,
   updateImages,
-  getAllStoresforuser
+  getAllStoresforuser,
+  getAllStoresForUserWithFilter
 };

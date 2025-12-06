@@ -11,11 +11,11 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
-import { utileCategoriesSelector, fetchAllCategories } from "@/store/slices/utilsSlice";
 import ProtectedRoute from "@/components/protectedRoute";
 import useRunOnce from "../../src/hooks/useRunOnce";
 import { getUserPackageLimits } from "@/services/packageService";
 import { PackageLimits } from "@/components/Package/PackageLimits";
+import { categoriesSelector, fetchCategories } from "@/store/slices/categorySlice";
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -31,17 +31,18 @@ const Toast = Swal.mixin({
 const CreateStore = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const categoriesList = useSelector(utileCategoriesSelector);
+  const categoriesList = useSelector(categoriesSelector);
   const [packageLimits, setPackageLimits] = useState<any>(null);
   const [canCreateStore, setCanCreateStore] = useState(false);
 
   useRunOnce(() => {
-    dispatch(fetchAllCategories());
+   dispatch(fetchCategories());
   });
 
   useEffect(() => {
     loadPackageLimits();
-  }, []);
+  
+  }, [dispatch]);
 
   const loadPackageLimits = async () => {
     try {

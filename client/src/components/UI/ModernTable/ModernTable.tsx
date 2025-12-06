@@ -154,7 +154,7 @@ export const ModernTable = <T extends Record<string, any>>({
         return 0;
       });
     }
-debugger;
+
     return filtered;
   }, [data, searchTerm, sortFieldValue, sortDirectionValue, columns]);
 

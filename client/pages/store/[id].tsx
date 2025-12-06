@@ -8,7 +8,7 @@ import { fetchProductsByStore, productByStoreSelector } from "@/store/slices/sho
 import Image from "next/image";
 import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
-import { requestAllStores, requestStoreById } from "@/services/storeService";
+import { requestAllStoresForUser, requestStoreById } from "@/services/storeService";
 
 import ErrorBoundary from "@/components/Error/ErrorBoundary";
 import ProtectedRoute from "@/components/protectedRoute";
@@ -143,7 +143,7 @@ const SingleStore = ({ initialStore, initialProducts }: SingleStoreProps) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const response = await requestAllStores();
+    const response = await requestAllStoresForUser();
     const stores = response?.data;
 
     if (!Array.isArray(stores) || stores.length === 0) {

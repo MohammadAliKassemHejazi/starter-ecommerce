@@ -19,7 +19,7 @@ const nextConfig = {
         protocol: "http",
         hostname: "localhost",
         port: "5300",
-        pathname: "/api/compressed/**",
+        pathname: "/compressed/**",
       },
     ],
   },

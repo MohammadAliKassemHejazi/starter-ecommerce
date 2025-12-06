@@ -11,7 +11,8 @@ const Routes = [
      "/delete/:id",
       "/create",
       "/update",
-     "/getall/user",
+  "/getall/user",
+     "/getall/user/filter"
   ];
 
 // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
@@ -22,6 +23,8 @@ router.post("/create", /* checkStoreCreationLimit, */ storeController.handleCrea
 router.post("/update",storeController.handleUpdate);
 router.get("/get", storeController.handelGetSingleItem);
 router.get("/getall/user", storeController.handelGetAllStoresForUser);
+router.get("/getall/user/filter", storeController.handleGetAllStoresForUserwithFilter);
+
 router.get("/getall", storeController.handelGetAllStores);
 router.patch("/update/image", storeController.handleUpdateImages);
 

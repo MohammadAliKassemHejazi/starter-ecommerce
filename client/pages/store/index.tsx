@@ -22,7 +22,7 @@ const Stores = () => {
   // Memoized debounced fetch function for searching stores
   const fetchStores = useCallback(
     (query: string) => {
-      dispatch(fetchAllStoresWithFilter({ searchQuery: query, page: currentPage, pageSize }));
+      dispatch(fetchAllStoresWithFilter({ searchQuery: query, page: currentPage, pageSize })).unwrap();
     },
     [currentPage, dispatch, pageSize]
   );
@@ -36,6 +36,7 @@ const Stores = () => {
   // Fetch stores on mount or when the search query changes
   useEffect(() => {
     debouncedFetchStores(searchQuery);
+  
   }, [searchQuery, debouncedFetchStores]);
 
   // Cleanup debounce on unmount
@@ -81,7 +82,7 @@ const Stores = () => {
         searchPlaceholder="Search stores..."
         emptyMessage="No stores found. Create your first store to get started!"
         addButton={{
-          href: '/shop/store/create',
+          href: '/store/create',
           label: 'New Store'
         }}
         viewPath="/store"
@@ -94,7 +95,7 @@ const Stores = () => {
         onRowClick={(store) => router.push(`/store/${store.id}`)}
         headerActions={
           <SubscriptionGate requireSubscription={true}>
-            <Link href="/shop/store/create">
+            <Link href="/store/create">
               <span className="btn btn-primary">New Store</span>
             </Link>
           </SubscriptionGate>

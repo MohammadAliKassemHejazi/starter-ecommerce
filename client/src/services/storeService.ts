@@ -18,7 +18,12 @@ export interface IProductProps {
     isActive?: boolean; // Can be boolean or undefined
     photos: ImageListType;
 }
-
+export interface StoresListResponsefiltered {
+  stores: StoresListResponse[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
 export const requestStoreById = async (id: string): Promise<StoreResponse> => {
 	const { data: response } = await httpClient.get<StoreResponse>(
 		`/store/get?id=${id}`
@@ -28,14 +33,32 @@ export const requestStoreById = async (id: string): Promise<StoreResponse> => {
 
 export const requestAllStoresForUser = async (): Promise<StoresListResponse> => {
 	const { data: response } = await httpClient.get<StoresListResponse>("/store/getall/user");
+	console.log(response, "response from store service")
 	return response
 }
 
 export const requestAllStores = async (): Promise<StoresListResponse> => {
 	const { data: response } = await httpClient.get<StoresListResponse>("/store/getall");
+		console.log(response, "response from store service1")
 	return response
 }
+export const requestAllStoresForUserWithFilter = async (
+  page: number,
+  pageSize: number,
+  searchQuery?: string,
+  orderBy?: string
+): Promise<StoresListResponse> => {
+  const params = new URLSearchParams();
+  params.append('page', page.toString());
+  params.append('pageSize', pageSize.toString());
+  if (searchQuery) {params.append('searchQuery', searchQuery);}
+  if (orderBy) {params.append('orderBy', orderBy);}
 
+  const {  data : response } = await httpClient.get<StoresListResponse>(
+    `/store/getall/user/filter?${params.toString()}`
+  );
+  return response;
+};
 export const requestCreateStore = async (Store: FormData): Promise<CreateStoreResponse> => {
 	const { data: response } = await httpClient.post<CreateStoreResponse>("/store/create", Store)
 	return response

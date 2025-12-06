@@ -4,6 +4,7 @@ import * as storeService from "@/services/storeService";
 
 import { RootState } from "../store";
 import { IStoreResponseModel } from "@/models/store.model";
+import { CreateStoreResponse } from "@/interfaces/api/store.types";
 
 const initialState: StoresState = {
   stores: [],
@@ -14,7 +15,7 @@ const initialState: StoresState = {
 export const fetchStoreById = createAsyncThunk(
   "store/by-id",
   async (id: string) => {
-    const { store: response } = await storeService.requestStoreById(id);
+    const { data: response } = await storeService.requestStoreById(id);
     console.log(response, " response from storeSlice");
     return response;
   }
@@ -45,18 +46,37 @@ export const fetchAllStores = createAsyncThunk(
   }
 );
 
+// store/storeThunks.ts or wherever your thunks live
+
+
 export const fetchAllStoresWithFilter = createAsyncThunk(
-  "store/fetch",
-  async ({ searchQuery, page, pageSize }: { searchQuery: string, page: number, pageSize: number })=> {
-    const response = await storeService.requestAllStores();
-    return response;
+  'store/fetch-with-filter',
+  async ({
+    page,
+    pageSize,
+    searchQuery = '',
+    orderBy = '',
+  }: {
+    page: number;
+    pageSize: number;
+    searchQuery?: string;
+    orderBy?: string;
+  }) => {
+    const response = await storeService.requestAllStoresForUserWithFilter(
+      page,
+      pageSize,
+      searchQuery,
+      orderBy
+    );
+
+    return response.data;
   }
 );
 
 export const createStore = createAsyncThunk(
   "store/create",
   async (store: FormData) => {
-    const response: IStoreResponseModel = await storeService.requestCreateStore(store);
+    const response: CreateStoreResponse = await storeService.requestCreateStore(store);
     return response;
   }
 );
@@ -64,7 +84,7 @@ export const createStore = createAsyncThunk(
 export const updateStore = createAsyncThunk(
   "store/Update",
   async (store: FormData) => {
-    const response: IStoreResponseModel = await storeService.requestUpdateStore(store);
+    const response: CreateStoreResponse = await storeService.requestUpdateStore(store);
     return response;
   }
 );
@@ -85,6 +105,14 @@ const storeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchAllStoresWithFilter.fulfilled, (state, action) => {
+        console.log(action.payload, " filtered stores payload");
+    state.stores = action.payload.stores || [];
+})
+.addCase(fetchAllStoresWithFilter.rejected, (state, action) => {
+  state.error = action.error.message || "Failed to fetch filtered stores.";
+  state.stores = [];
+})
       .addCase(fetchStoreById.fulfilled, (state, action) => {
 
         state.store = action.payload;
@@ -95,7 +123,7 @@ const storeSlice = createSlice({
         state.store = undefined;
       })
       .addCase(fetchAllStoresForUser.fulfilled, (state, action) => {
-        state.stores = action.payload.stores;
+        state.stores = action.payload.data;
       })
       .addCase(fetchAllStoresForUser.rejected, (state, action) => {
         state.error = action.error.message || "Failed to fetch stores.";
@@ -109,7 +137,7 @@ const storeSlice = createSlice({
         state.stores = [];
       })
       .addCase(createStore.fulfilled, (state, action) => {
-        state.stores?.push(action.payload);  // Add the new store to the list
+        state.stores?.push(action.payload.data);  // Add the new store to the list
       })
       .addCase(createStore.rejected, (state, action) => {
         state.error = action.error.message || "Failed to create store.";

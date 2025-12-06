@@ -106,7 +106,7 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
 
     // Call the backend API to update the store images
     const response = await dispatch(updateStoreImages(formData)).unwrap();
-debugger
+
     // Extract the updated images from the response
     const updatedImagesFromResponse = Array.isArray(response.data)
       ? response.data.map((uploadedImage: any) => ({

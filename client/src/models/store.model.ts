@@ -20,11 +20,14 @@ export interface IStoreModelErrors {
 }
 
 export interface IStoreResponseModel {
-    createdAt?: string | number | Date  | undefined;
-    id?: string;
-    name: string;
-    description: string;
-    categoryId : string;
-    imgUrl: string;
+ id: string;
+  name: string;
+  description?: string;
+  imgUrl: string;
+  categoryId: string;
+  userId: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
  
 }

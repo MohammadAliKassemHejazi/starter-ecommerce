@@ -58,8 +58,6 @@ console.log(subCategories, 'Rendering subcategories:');
       searchPlaceholder="Search subcategories..."
       emptyMessage="No subcategories found. Create your first subcategory to get started!"
       addButton={{ href: '/subcategories/create', label: 'New Subcategory' }}
-      editPath="/subcategories/edit"
-      deleteAction={handleDeleteSubCategory}
       exportButton={{ onClick: () => console.log('Export subcategories') }}
       filterButton={{ onClick: () => console.log('Filter subcategories') }}
       customActions={[

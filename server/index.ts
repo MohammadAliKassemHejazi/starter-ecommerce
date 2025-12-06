@@ -350,7 +350,7 @@ async function createApp(): Promise<Express> {
     etag: true,
     lastModified: true
   };
-  
+  console.log('Static directories:', { COMPRESSED_DIR, UPLOAD_DIR });
   app.use('/compressed', express.static(COMPRESSED_DIR, staticOptions));
   app.use('/uploads', express.static(UPLOAD_DIR, staticOptions));
   

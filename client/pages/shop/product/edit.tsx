@@ -95,7 +95,7 @@ function EditProduct() {
 
 const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
   console.log("handlePhotoChange triggered with:", croppedImages);
-debugger
+
   // Check if there are any valid cropped images to process
   const hasValidImages = croppedImages.some((image) => image.file instanceof File);
   if (!hasValidImages) {

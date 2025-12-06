@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { TableColumn } from './ModernTable';
-
+import Image from 'next/image';
 // Common column renderers
 export const renderText = (value: any) => (
   <span className="text-truncate" title={String(value)}>
@@ -54,12 +54,15 @@ export const renderImage = (src: string, alt: string, size: 'sm' | 'md' | 'lg' =
   
   return (
     <div className={`d-flex align-items-center ${sizeClasses[size]}`}>
-      <img
+        <Image
         src={src}
         alt={alt}
+        width={60}
+        height={60}
         className="img-thumbnail rounded"
         style={{ maxWidth: '60px', maxHeight: '60px', objectFit: 'cover' }}
         onError={(e) => {
+          // Optional: fallback handled by API, but you can double-fallback to static placeholder
           e.currentTarget.src = '/placeholder-image.png';
         }}
       />

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import router from "next/router";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { useTranslation } from "react-i18next";
+import { on } from "events";
 
 const CreateSubCategoryModal = () => {
     const { t } = useTranslation();
@@ -41,7 +42,7 @@ const CreateSubCategoryModal = () => {
       const response = await dispatch(createSubCategory({ name, categoryId })).unwrap();
       console.log('Subcategory created:', response);
       showToast.success("Subcategory created successfully");
-      if (response.id) {
+      if (response.data.id) {
         void router.push(`/subcategories`);
       }
     } catch (error) {
@@ -84,7 +85,8 @@ const CreateSubCategoryModal = () => {
       type: "button" as const,
       variant: "secondary" as const,
       label: "Cancel",
-      href: "/subcategories"
+      href: "/subcategories",
+      onClick: () => { void router.push("/subcategories"); }
     }
   ];
   if (loading) {

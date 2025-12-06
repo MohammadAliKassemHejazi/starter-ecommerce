@@ -45,6 +45,7 @@ export const handleCreateStore = async (
 
     const StoreData = { 
       ...request.body, 
+      userId : UserId
       
     } as IStoreCreateProduct;
 
@@ -139,7 +140,42 @@ export const handelGetAllStoresForUser = async (
     next(error);
   }
 };
+// controllers/store.controller.ts
+export const handleGetAllStoresForUserwithFilter = async (
+  request: CustomRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const userId = request.UserId;
+    if (!userId) {
+      return next(new Error("User ID is missing"));
+    }
 
+      // Use filtered + paginated version
+      const { page = '1', pageSize = '10', searchQuery = '', orderBy = 'createdAt DESC' } = request.query;
+
+      const pageNum = parseInt(page as string, 10);
+      const size = parseInt(pageSize as string, 10);
+
+      if (isNaN(pageNum) || isNaN(size) || pageNum < 1 || size < 1) {
+        return next(new Error('Invalid pagination parameters'));
+      }
+
+      const result = await storeService.getAllStoresForUserWithFilter(
+        userId,
+        searchQuery as string,
+        orderBy as string,
+        pageNum,
+        size
+      );
+
+      response.json(result);
+   
+  } catch (error) {
+    next(error);
+  }
+};
 export const handelGetAllStores = async (
   request: CustomRequest,
   response: Response,
@@ -220,7 +256,8 @@ export default {
   handelGetAllStores,
   handelGetSingleItem,
   handleUpdateImages,
-  handelGetAllStoresForUser
+  handelGetAllStoresForUser,
+  handleGetAllStoresForUserwithFilter
 };
 
 

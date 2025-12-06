@@ -8,6 +8,7 @@ import router from "next/router";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { useTranslation } from 'react-i18next';
 import { validateForm, commonRules } from '@/utils/validation';
+import { on } from "events";
 
 const CreateCategory = () => {
   const { t } = useTranslation();
@@ -85,14 +86,9 @@ const CreateCategory = () => {
       type: "button" as const,
       variant: "outline-secondary" as const,
       label: "Cancel",
-      href: "/categories"
+      href: "/categories",
+      onClick: () => { void router.push('/categories') }
     },
-    {
-      type: "submit" as const,
-      variant: "primary" as const,
-      label: loading ? "Creating..." : "Create Category",
-      disabled: loading
-    }
   ];
 
   if (loading) {

@@ -129,7 +129,7 @@ export const ProductTablePreset = {
       width: '100px',
       align: 'center' as const,
       render: (_value: any, row: any) => {
-        debugger;
+    
         console.log({row}, "row in product table")
     const imageUrl = row.ProductImages?.[0]?.url || '/default-product.png';
     return renderImage(imageUrl, row.name || 'Product', 'sm');

@@ -26,7 +26,7 @@ const EditCategory = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      debugger;
+     
        const category = JSON.parse(router.query.category as string);
   
       await dispatch(updateCategory({ id: category.id as string, name, description }));

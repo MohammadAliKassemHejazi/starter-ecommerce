@@ -55,12 +55,10 @@ const CategoriesGrid = () => {
     }
   };
 
-  const handleDeleteAction = async (id: string) => {
-    await dispatch(deleteCategory(id));
-  };
+
 
   const handleEditAction = (category: any) => {
-    debugger;
+ 
     console.log(category, 'Editing category...');
     router.push({
       pathname: "/categories/edit",
