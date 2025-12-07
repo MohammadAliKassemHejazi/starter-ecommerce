@@ -401,7 +401,7 @@ export const seedData = async (): Promise<void> => {
     // =========================================================================
     console.log('🛒 6. Creating Sales Data...');
 
-    const customerUser = userMap[ROLES.CUSTOMER];
+    // const customerUser = userMap[ROLES.CUSTOMER]; // REMOVED DUPLICATE
     // const customerUserId = customerUser.dataValues?.id || customerUser.id; // Already defined above
 
     // Cart for Customer
