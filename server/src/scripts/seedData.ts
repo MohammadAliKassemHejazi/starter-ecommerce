@@ -411,8 +411,10 @@ export const seedData = async (): Promise<void> => {
     console.log('✨ 7. Creating Extras...');
 
     // Promotion
+    // Note: Promotion, Analytics, and ReturnRequest use default Integer IDs (auto-increment).
+    // We should NOT pass UUIDs to the 'id' field for these models.
     await db.Promotion.create({
-      id: uuidv4(),
+      // id: uuidv4(), <-- REMOVED: Model uses Integer ID
       code: 'SAVE10',
       type: 'PERCENTAGE',
       value: 10,
@@ -423,7 +425,7 @@ export const seedData = async (): Promise<void> => {
 
     // Analytics (for Dashboard)
     await db.Analytics.create({
-      id: uuidv4(),
+      // id: uuidv4(), <-- REMOVED: Model uses Integer ID
       eventType: 'purchase',
       eventData: { amount: 1229.98 },
       userId: customerUserId
@@ -431,7 +433,7 @@ export const seedData = async (): Promise<void> => {
 
     // Return Request (Test Return)
     await db.ReturnRequest.create({
-      id: uuidv4(),
+      // id: uuidv4(), <-- REMOVED: Model uses Integer ID
       orderId: order.dataValues?.id || order.id,
       userId: customerUserId,
       reason: 'Defective',
