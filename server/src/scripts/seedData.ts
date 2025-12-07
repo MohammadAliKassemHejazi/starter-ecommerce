@@ -15,6 +15,7 @@ import { PERMISSIONS, ROLES } from './permissions';
  * 6. Create Sales Data (Orders, Cart) for testing history.
  * 7. Ensure all relationships (Foreign Keys) are valid.
  * 8. Populate all tables with userId/ownerId relationships.
+ * 9. Idempotency: Use findOrCreate to allow re-running without unique constraint errors.
  */
 
 export const seedData = async (): Promise<void> => {
@@ -224,55 +225,79 @@ export const seedData = async (): Promise<void> => {
     console.log('📂 3. Creating Catalog Structure...');
 
     // Categories
-    const electronicsCat = await db.Category.create({
-      id: uuidv4(),
-      name: 'Electronics',
-      description: 'Gadgets and devices',
-      userId: storeAdminUserId // Owner
-    }, { transaction });
+    const [electronicsCat] = await db.Category.findOrCreate({
+      where: { name: 'Electronics' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Electronics',
+        description: 'Gadgets and devices',
+        userId: storeAdminUserId // Owner
+      },
+      transaction
+    });
 
-    const clothingCat = await db.Category.create({
-      id: uuidv4(),
-      name: 'Clothing',
-      description: 'Apparel for all',
-      userId: storeAdminUserId
-    }, { transaction });
+    const [clothingCat] = await db.Category.findOrCreate({
+      where: { name: 'Clothing' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Clothing',
+        description: 'Apparel for all',
+        userId: storeAdminUserId
+      },
+      transaction
+    });
 
     // SubCategories
     const electronicsCatId = electronicsCat.dataValues?.id || electronicsCat.id;
     const clothingCatId = clothingCat.dataValues?.id || clothingCat.id;
 
-    const phonesSub = await db.SubCategory.create({
-      id: uuidv4(),
-      name: 'Smartphones',
-      categoryId: electronicsCatId
-    }, { transaction });
+    const [phonesSub] = await db.SubCategory.findOrCreate({
+      where: { name: 'Smartphones', categoryId: electronicsCatId },
+      defaults: {
+        id: uuidv4(),
+        name: 'Smartphones',
+        categoryId: electronicsCatId
+      },
+      transaction
+    });
 
-    const laptopsSub = await db.SubCategory.create({
-      id: uuidv4(),
-      name: 'Laptops',
-      categoryId: electronicsCatId
-    }, { transaction });
+    const [laptopsSub] = await db.SubCategory.findOrCreate({
+      where: { name: 'Laptops', categoryId: electronicsCatId },
+      defaults: {
+        id: uuidv4(),
+        name: 'Laptops',
+        categoryId: electronicsCatId
+      },
+      transaction
+    });
 
-    const menSub = await db.SubCategory.create({
-      id: uuidv4(),
-      name: "Men's Clothing",
-      categoryId: clothingCatId
-    }, { transaction });
+    const [menSub] = await db.SubCategory.findOrCreate({
+      where: { name: "Men's Clothing", categoryId: clothingCatId },
+      defaults: {
+        id: uuidv4(),
+        name: "Men's Clothing",
+        categoryId: clothingCatId
+      },
+      transaction
+    });
 
     // =========================================================================
     // 4. STORE
     // =========================================================================
     console.log('🏪 4. Creating Store...');
 
-    const store = await db.Store.create({
-      id: uuidv4(),
-      name: 'Tech & Style Hub',
-      description: 'The best place for tech and fashion.',
-      imgUrl: '/fakeimages/shoes.jpg', // Use a valid placeholder path from public folder
-      userId: storeAdminUserId,
-      categoryId: electronicsCatId
-    }, { transaction });
+    const [store] = await db.Store.findOrCreate({
+      where: { name: 'Tech & Style Hub' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Tech & Style Hub',
+        description: 'The best place for tech and fashion.',
+        imgUrl: '/fakeimages/shoes.jpg', // Use a valid placeholder path from public folder
+        userId: storeAdminUserId,
+        categoryId: electronicsCatId
+      },
+      transaction
+    });
 
     const storeId = store.dataValues?.id || store.id;
 
@@ -282,9 +307,9 @@ export const seedData = async (): Promise<void> => {
     console.log('📦 5. Creating Products & Inventory...');
 
     // Sizes
-    const sizeM = await db.Size.create({ id: uuidv4(), size: 'M' }, { transaction });
-    const sizeL = await db.Size.create({ id: uuidv4(), size: 'L' }, { transaction });
-    const sizeDefault = await db.Size.create({ id: uuidv4(), size: 'Standard' }, { transaction });
+    const [sizeM] = await db.Size.findOrCreate({ where: { size: 'M' }, defaults: { id: uuidv4(), size: 'M' }, transaction });
+    const [sizeL] = await db.Size.findOrCreate({ where: { size: 'L' }, defaults: { id: uuidv4(), size: 'L' }, transaction });
+    const [sizeDefault] = await db.Size.findOrCreate({ where: { size: 'Standard' }, defaults: { id: uuidv4(), size: 'Standard' }, transaction });
 
     const productsData = [
       {
@@ -324,38 +349,50 @@ export const seedData = async (): Promise<void> => {
       const subId = pData.subcategory.dataValues?.id || pData.subcategory.id;
 
       // Create Product
-      const product = await db.Product.create({
-        id: uuidv4(),
-        name: pData.name,
-        description: pData.description,
-        price: pData.price,
-        isActive: true,
-        discount: 0,
-        ownerId: storeAdminUserId,
-        storeId: storeId,
-        categoryId: catId,
-        subcategoryId: subId
-      }, { transaction });
+      const [product] = await db.Product.findOrCreate({
+        where: { name: pData.name, storeId: storeId },
+        defaults: {
+          id: uuidv4(),
+          name: pData.name,
+          description: pData.description,
+          price: pData.price,
+          isActive: true,
+          discount: 0,
+          ownerId: storeAdminUserId,
+          storeId: storeId,
+          categoryId: catId,
+          subcategoryId: subId
+        },
+        transaction
+      });
 
       productMap[pData.name] = product;
       const prodId = product.dataValues?.id || product.id;
 
       // Create Image
-      await db.ProductImage.create({
-        id: uuidv4(),
-        productId: prodId,
-        imageUrl: pData.image
-      }, { transaction });
+      await db.ProductImage.findOrCreate({
+        where: { productId: prodId, imageUrl: pData.image },
+        defaults: {
+          id: uuidv4(),
+          productId: prodId,
+          imageUrl: pData.image
+        },
+        transaction
+      });
 
       // Create SizeItems (Inventory)
       for (const size of pData.sizes) {
         const sizeId = size.dataValues?.id || size.id;
-        await db.SizeItem.create({
-          id: uuidv4(),
-          productId: prodId,
-          sizeId: sizeId,
-          quantity: 100 // Plenty of stock
-        }, { transaction });
+        await db.SizeItem.findOrCreate({
+          where: { productId: prodId, sizeId: sizeId },
+          defaults: {
+            id: uuidv4(),
+            productId: prodId,
+            sizeId: sizeId,
+            quantity: 100 // Plenty of stock
+          },
+          transaction
+        });
       }
     }
 
@@ -364,11 +401,18 @@ export const seedData = async (): Promise<void> => {
     // =========================================================================
     console.log('🛒 6. Creating Sales Data...');
 
+    const customerUser = userMap[ROLES.CUSTOMER];
+    // const customerUserId = customerUser.dataValues?.id || customerUser.id; // Already defined above
+
     // Cart for Customer
-    const cart = await db.Cart.create({
-      id: uuidv4(),
-      userId: customerUserId
-    }, { transaction });
+    const [cart] = await db.Cart.findOrCreate({
+      where: { userId: customerUserId },
+      defaults: {
+        id: uuidv4(),
+        userId: customerUserId
+      },
+      transaction
+    });
 
     // Add item to cart (iPhone)
     const iphone = productMap['iPhone 15 Pro'];
@@ -386,44 +430,65 @@ export const seedData = async (): Promise<void> => {
       const sizeItemId = iphoneSizeItem.dataValues?.id || iphoneSizeItem.id;
       const sizeId = iphoneSizeItem.dataValues?.sizeId || iphoneSizeItem.sizeId;
 
-      await db.CartItem.create({
-        id: uuidv4(),
-        cartId: cart.dataValues?.id || cart.id,
-        productId: iphoneId,
-        sizeItemId: sizeItemId,
-        quantity: 1,
-        sizeId: sizeId // Explicitly set if model supports it
-      }, { transaction });
+      await db.CartItem.findOrCreate({
+        where: { cartId: cart.dataValues?.id || cart.id, productId: iphoneId, sizeItemId: sizeItemId },
+        defaults: {
+          id: uuidv4(),
+          cartId: cart.dataValues?.id || cart.id,
+          productId: iphoneId,
+          sizeItemId: sizeItemId,
+          quantity: 1,
+          sizeId: sizeId // Explicitly set if model supports it
+        },
+        transaction
+      });
     }
 
     // Create a Past Order
-    const payment = await db.Payment.create({
-      id: uuidv4(),
-      paymentIntentId: `pi_${Date.now()}`,
-      amount: 1229.98,
-      currency: 'USD',
-      status: 'succeeded'
-    }, { transaction });
+    // Note: Orders are transactional history, so we typically create new ones.
+    // However, to be idempotent, we can check if a similar order exists or just create if we want history.
+    // For seeding, let's just ensure ONE exists.
+    const paymentIntentId = 'pi_seed_test_12345';
 
-    const order = await db.Order.create({
-      id: uuidv4(),
-      userId: customerUserId,
-      paymentId: payment.dataValues?.id || payment.id,
-      currency: 'USD'
-    }, { transaction });
+    const [payment] = await db.Payment.findOrCreate({
+      where: { paymentIntentId },
+      defaults: {
+        id: uuidv4(),
+        paymentIntentId,
+        amount: 1229.98,
+        currency: 'USD',
+        status: 'succeeded'
+      },
+      transaction
+    });
+
+    const [order] = await db.Order.findOrCreate({
+      where: { paymentId: payment.dataValues?.id || payment.id },
+      defaults: {
+        id: uuidv4(),
+        userId: customerUserId,
+        paymentId: payment.dataValues?.id || payment.id,
+        currency: 'USD'
+      },
+      transaction
+    });
 
     if (iphonePrice === undefined || iphonePrice === null) {
       throw new Error(`Price for iPhone 15 Pro is null/undefined. Value: ${iphonePrice}`);
     }
 
     // Order Items
-    await db.OrderItem.create({
-      id: uuidv4(),
-      orderId: order.dataValues?.id || order.id,
-      productId: iphoneId,
-      quantity: 1,
-      price: iphonePrice // Using safely accessed price
-    }, { transaction });
+    await db.OrderItem.findOrCreate({
+      where: { orderId: order.dataValues?.id || order.id, productId: iphoneId },
+      defaults: {
+        id: uuidv4(),
+        orderId: order.dataValues?.id || order.id,
+        productId: iphoneId,
+        quantity: 1,
+        price: iphonePrice // Using safely accessed price
+      },
+      transaction
+    });
 
     // =========================================================================
     // 7. EXTRAS (Promotions, Returns, Analytics)
@@ -431,88 +496,128 @@ export const seedData = async (): Promise<void> => {
     console.log('✨ 7. Creating Extras...');
 
     // Promotion
-    await db.Promotion.create({
-      code: 'SAVE10',
-      type: 'PERCENTAGE',
-      value: 10,
-      minCartValue: 50,
-      validFrom: new Date(),
-      validTo: new Date(Date.now() + 10000000)
-    }, { transaction });
+    await db.Promotion.findOrCreate({
+      where: { code: 'SAVE10' },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Model uses Integer ID
+        code: 'SAVE10',
+        type: 'PERCENTAGE',
+        value: 10,
+        minCartValue: 50,
+        validFrom: new Date(),
+        validTo: new Date(Date.now() + 10000000)
+      },
+      transaction
+    });
 
     // Analytics (for Dashboard)
-    await db.Analytics.create({
-      eventType: 'purchase',
-      eventData: { amount: 1229.98 },
-      userId: customerUserId
-    }, { transaction });
+    // Idempotency: avoid creating duplicate identical events
+    await db.Analytics.findOrCreate({
+      where: { eventType: 'purchase', userId: customerUserId },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Model uses Integer ID
+        eventType: 'purchase',
+        eventData: { amount: 1229.98 },
+        userId: customerUserId
+      },
+      transaction
+    });
 
     // Return Request (Test Return)
-    await db.ReturnRequest.create({
-      orderId: order.dataValues?.id || order.id,
-      userId: customerUserId,
-      reason: 'Defective',
-      status: 'PENDING',
-      refundAmount: 999.99
-    }, { transaction });
+    await db.ReturnRequest.findOrCreate({
+      where: { orderId: order.dataValues?.id || order.id },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Model uses Integer ID
+        orderId: order.dataValues?.id || order.id,
+        userId: customerUserId,
+        reason: 'Defective',
+        status: 'PENDING',
+        refundAmount: 999.99
+      },
+      transaction
+    });
 
     // Article (Admin Blog Post)
-    await db.Article.create({
-      id: uuidv4(),
-      title: 'Welcome to Our Store',
-      text: 'We are happy to announce our new opening.',
-      type: 'blog',
-      userId: storeAdminUserId
-    }, { transaction });
+    await db.Article.findOrCreate({
+      where: { title: 'Welcome to Our Store' },
+      defaults: {
+        id: uuidv4(),
+        title: 'Welcome to Our Store',
+        text: 'We are happy to announce our new opening.',
+        type: 'blog',
+        userId: storeAdminUserId
+      },
+      transaction
+    });
 
     // Comment (Customer Review on iPhone)
-    await db.Comment.create({
-      id: uuidv4(),
-      userId: customerUserId,
-      productId: iphoneId,
-      text: 'Amazing phone!',
-      rating: 5
-    }, { transaction });
+    await db.Comment.findOrCreate({
+      where: { userId: customerUserId, productId: iphoneId },
+      defaults: {
+        id: uuidv4(),
+        userId: customerUserId,
+        productId: iphoneId,
+        text: 'Amazing phone!',
+        rating: 5
+      },
+      transaction
+    });
 
     // Favorite (Customer Wishlist)
-    const favorite = await db.Favorite.create({
-      id: uuidv4(),
-      userId: customerUserId,
-      productId: iphoneId // NOTE: Favorite model has both userId and productId directly? Or Favorite -> FavoriteItem?
-      // Reading model: Favorite belongsTo User, belongsTo Product. So simple Favorite entry is enough.
-    }, { transaction });
+    await db.Favorite.findOrCreate({
+      where: { userId: customerUserId, productId: iphoneId },
+      defaults: {
+        id: uuidv4(),
+        userId: customerUserId,
+        productId: iphoneId
+      },
+      transaction
+    });
 
     // User Package (Subscription)
     // First create a Package
-    const pkg = await db.Package.create({
-      id: uuidv4(),
-      name: 'Starter Plan',
-      storeLimit: 1,
-      categoryLimit: 5,
-      productLimit: 20,
-      userLimit: 1,
-      price: 0,
-      isActive: true
-    }, { transaction });
+    const [pkg] = await db.Package.findOrCreate({
+      where: { name: 'Starter Plan' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Starter Plan',
+        storeLimit: 1,
+        categoryLimit: 5,
+        productLimit: 20,
+        userLimit: 1,
+        price: 0,
+        isActive: true
+      },
+      transaction
+    });
     const pkgId = pkg.dataValues?.id || pkg.id;
 
-    await db.UserPackage.create({
-      id: uuidv4(),
-      userId: storeAdminUserId,
-      packageId: pkgId,
-      startDate: new Date(),
-      isActive: true,
-      createdById: superAdminUserId
-    }, { transaction });
+    await db.UserPackage.findOrCreate({
+      where: { userId: storeAdminUserId, packageId: pkgId },
+      defaults: {
+        id: uuidv4(),
+        userId: storeAdminUserId,
+        packageId: pkgId,
+        startDate: new Date(),
+        isActive: true,
+        createdById: superAdminUserId
+      },
+      transaction
+    });
 
     // Audit Log (Admin Action)
-    await db.AuditLog.create({
-      action: 'create_product',
-      entity: 'Product',
-      entityId: iphoneId,
-      performedById: storeAdminUserId,
-      snapshot: { name: 'iPhone 15 Pro' }
-    }, { transaction });
+    // Audit logs are history, so typically we append. But for seeding, let's keep it clean.
+    await db.AuditLog.findOrCreate({
+      where: { action: 'create_product', entityId: iphoneId },
+      defaults: {
+        action: 'create_product',
+        entity: 'Product',
+        entityId: iphoneId,
+        performedById: storeAdminUserId,
+        snapshot: { name: 'iPhone 15 Pro' }
+      },
+      transaction
+    });
 
     await transaction.commit();
     console.log('✅✅✅ Data Seeding Completed Successfully! No Errors.');
