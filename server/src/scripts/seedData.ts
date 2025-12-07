@@ -16,6 +16,7 @@ import { PERMISSIONS, ROLES } from './permissions';
  * 7. Ensure all relationships (Foreign Keys) are valid.
  * 8. Populate all tables with userId/ownerId relationships.
  * 9. Idempotency: Use findOrCreate to allow re-running without unique constraint errors.
+ * 10. Exhaustive: Seed Shipping, Taxes, Translations, UserSessions, and join tables.
  */
 
 export const seedData = async (): Promise<void> => {
@@ -256,7 +257,8 @@ export const seedData = async (): Promise<void> => {
       defaults: {
         id: uuidv4(),
         name: 'Smartphones',
-        categoryId: electronicsCatId
+        categoryId: electronicsCatId,
+        userId: storeAdminUserId // Added userId
       },
       transaction
     });
@@ -266,7 +268,8 @@ export const seedData = async (): Promise<void> => {
       defaults: {
         id: uuidv4(),
         name: 'Laptops',
-        categoryId: electronicsCatId
+        categoryId: electronicsCatId,
+        userId: storeAdminUserId // Added userId
       },
       transaction
     });
@@ -276,7 +279,8 @@ export const seedData = async (): Promise<void> => {
       defaults: {
         id: uuidv4(),
         name: "Men's Clothing",
-        categoryId: clothingCatId
+        categoryId: clothingCatId,
+        userId: storeAdminUserId // Added userId
       },
       transaction
     });
@@ -444,10 +448,33 @@ export const seedData = async (): Promise<void> => {
       });
     }
 
+    // Tax Rule
+    const [taxRule] = await db.TaxRule.findOrCreate({
+      where: { region: 'US' },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Integer ID
+        region: 'US',
+        rate: 0.08,
+        taxType: 'SALES_TAX'
+      },
+      transaction
+    });
+    const taxRuleId = taxRule.dataValues?.id || taxRule.id;
+
+    // Shipping Method
+    const [shippingMethod] = await db.ShippingMethod.findOrCreate({
+      where: { name: 'Standard' },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Integer ID
+        name: 'Standard',
+        cost: 10.00,
+        deliveryEstimate: '3-5 Days'
+      },
+      transaction
+    });
+    const shippingMethodId = shippingMethod.dataValues?.id || shippingMethod.id;
+
     // Create a Past Order
-    // Note: Orders are transactional history, so we typically create new ones.
-    // However, to be idempotent, we can check if a similar order exists or just create if we want history.
-    // For seeding, let's just ensure ONE exists.
     const paymentIntentId = 'pi_seed_test_12345';
 
     const [payment] = await db.Payment.findOrCreate({
@@ -468,7 +495,29 @@ export const seedData = async (): Promise<void> => {
         id: uuidv4(),
         userId: customerUserId,
         paymentId: payment.dataValues?.id || payment.id,
-        currency: 'USD'
+        currency: 'USD',
+        TaxRuleId: taxRuleId // Added Link to TaxRule
+      },
+      transaction
+    });
+    const orderId = order.dataValues?.id || order.id;
+
+    // Update payment with orderId if needed (Payment model has orderId foreign key)
+    if (!payment.dataValues?.orderId && !payment.orderId) {
+       await payment.update({ orderId: orderId }, { transaction });
+    }
+
+    // Order Shipping
+    await db.OrderShipping.findOrCreate({
+      where: { OrderId: orderId },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Integer ID
+        OrderId: orderId,
+        orderId: orderId, // Duplicate column often found in Sequelize legacy
+        ShippingMethodId: shippingMethodId,
+        trackingNumber: `TRK-${Date.now()}`,
+        carrier: 'FedEx',
+        status: 'DELIVERED'
       },
       transaction
     });
@@ -479,10 +528,10 @@ export const seedData = async (): Promise<void> => {
 
     // Order Items
     await db.OrderItem.findOrCreate({
-      where: { orderId: order.dataValues?.id || order.id, productId: iphoneId },
+      where: { orderId: orderId, productId: iphoneId },
       defaults: {
         id: uuidv4(),
-        orderId: order.dataValues?.id || order.id,
+        orderId: orderId,
         productId: iphoneId,
         quantity: 1,
         price: iphonePrice // Using safely accessed price
@@ -496,7 +545,7 @@ export const seedData = async (): Promise<void> => {
     console.log('✨ 7. Creating Extras...');
 
     // Promotion
-    await db.Promotion.findOrCreate({
+    const [promotion] = await db.Promotion.findOrCreate({
       where: { code: 'SAVE10' },
       defaults: {
         // id: uuidv4(), <-- REMOVED: Model uses Integer ID
@@ -510,6 +559,18 @@ export const seedData = async (): Promise<void> => {
       transaction
     });
 
+    // Promotion Orders (Join Table) - Only if model exists, otherwise manual insert logic if needed
+    if (db.PromotionOrders) {
+        await db.PromotionOrders.findOrCreate({
+            where: { OrderId: orderId, PromotionId: promotion.dataValues?.id || promotion.id },
+            defaults: {
+                OrderId: orderId,
+                PromotionId: promotion.dataValues?.id || promotion.id
+            },
+            transaction
+        });
+    }
+
     // Analytics (for Dashboard)
     // Idempotency: avoid creating duplicate identical events
     await db.Analytics.findOrCreate({
@@ -518,17 +579,18 @@ export const seedData = async (): Promise<void> => {
         // id: uuidv4(), <-- REMOVED: Model uses Integer ID
         eventType: 'purchase',
         eventData: { amount: 1229.98 },
-        userId: customerUserId
+        userId: customerUserId,
+        UserId: customerUserId // Redundant column often found
       },
       transaction
     });
 
     // Return Request (Test Return)
     await db.ReturnRequest.findOrCreate({
-      where: { orderId: order.dataValues?.id || order.id },
+      where: { orderId: orderId },
       defaults: {
         // id: uuidv4(), <-- REMOVED: Model uses Integer ID
-        orderId: order.dataValues?.id || order.id,
+        orderId: orderId,
         userId: customerUserId,
         reason: 'Defective',
         status: 'PENDING',
@@ -564,7 +626,7 @@ export const seedData = async (): Promise<void> => {
     });
 
     // Favorite (Customer Wishlist)
-    await db.Favorite.findOrCreate({
+    const [favorite] = await db.Favorite.findOrCreate({
       where: { userId: customerUserId, productId: iphoneId },
       defaults: {
         id: uuidv4(),
@@ -572,6 +634,18 @@ export const seedData = async (): Promise<void> => {
         productId: iphoneId
       },
       transaction
+    });
+
+    // FavoriteItem (Explicit Item)
+    const favoriteId = favorite.dataValues?.id || favorite.id;
+    await db.FavoriteItem.findOrCreate({
+        where: { favoriteId: favoriteId, productId: iphoneId },
+        defaults: {
+            id: uuidv4(),
+            favoriteId: favoriteId,
+            productId: iphoneId
+        },
+        transaction
     });
 
     // User Package (Subscription)
@@ -603,6 +677,33 @@ export const seedData = async (): Promise<void> => {
         createdById: superAdminUserId
       },
       transaction
+    });
+
+    // User Session (Mock)
+    await db.UserSession.findOrCreate({
+        where: { userId: customerUserId },
+        defaults: {
+            // id: uuidv4(), <-- REMOVED: Integer ID
+            userId: customerUserId,
+            ipAddress: '127.0.0.1',
+            deviceType: 'Desktop',
+            loginAt: new Date()
+        },
+        transaction
+    });
+
+    // Translation (Mock)
+    await db.Translation.findOrCreate({
+        where: { model: 'Product', recordId: iphoneId, language: 'es' },
+        defaults: {
+            // id: uuidv4(), <-- REMOVED: Integer ID
+            model: 'Product',
+            recordId: iphoneId,
+            language: 'es',
+            field: 'name',
+            translation: 'iPhone 15 Pro (ES)'
+        },
+        transaction
     });
 
     // Audit Log (Admin Action)
