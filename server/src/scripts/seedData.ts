@@ -61,7 +61,9 @@ export const seedData = async (): Promise<void> => {
         transaction
       });
       roleMap[config.name] = role;
-      console.log(`✅ Role checked/created: ${config.name}, ID: ${role.dataValues?.id || role.id}`);
+      // SAFE ACCESS: Use dataValues to avoid shadowing issues
+      const roleId = role.dataValues?.id || role.id;
+      console.log(`✅ Role checked/created: ${config.name}, ID: ${roleId}`);
     }
 
     // Assign Permissions to Roles
@@ -214,22 +216,25 @@ export const seedData = async (): Promise<void> => {
     }, { transaction });
 
     // SubCategories
+    const electronicsCatId = electronicsCat.dataValues?.id || electronicsCat.id;
+    const clothingCatId = clothingCat.dataValues?.id || clothingCat.id;
+
     const phonesSub = await db.SubCategory.create({
       id: uuidv4(),
       name: 'Smartphones',
-      categoryId: electronicsCat.id || electronicsCat.dataValues.id
+      categoryId: electronicsCatId
     }, { transaction });
 
     const laptopsSub = await db.SubCategory.create({
       id: uuidv4(),
       name: 'Laptops',
-      categoryId: electronicsCat.id || electronicsCat.dataValues.id
+      categoryId: electronicsCatId
     }, { transaction });
 
     const menSub = await db.SubCategory.create({
       id: uuidv4(),
       name: "Men's Clothing",
-      categoryId: clothingCat.id || clothingCat.dataValues.id
+      categoryId: clothingCatId
     }, { transaction });
 
     // =========================================================================
@@ -243,10 +248,10 @@ export const seedData = async (): Promise<void> => {
       description: 'The best place for tech and fashion.',
       imgUrl: '/fakeimages/shoes.jpg', // Use a valid placeholder path from public folder
       userId: adminUserId,
-      categoryId: electronicsCat.id || electronicsCat.dataValues.id
+      categoryId: electronicsCatId
     }, { transaction });
 
-    const storeId = store.id || store.dataValues.id;
+    const storeId = store.dataValues?.id || store.id;
 
     // =========================================================================
     // 5. PRODUCTS & INVENTORY
@@ -291,8 +296,9 @@ export const seedData = async (): Promise<void> => {
     const productMap: Record<string, any> = {};
 
     for (const pData of productsData) {
-      const catId = pData.category.id || pData.category.dataValues.id;
-      const subId = pData.subcategory.id || pData.subcategory.dataValues.id;
+      // SAFE ACCESS for category/subcategory IDs
+      const catId = pData.category.dataValues?.id || pData.category.id;
+      const subId = pData.subcategory.dataValues?.id || pData.subcategory.id;
 
       // Create Product
       const product = await db.Product.create({
@@ -309,7 +315,7 @@ export const seedData = async (): Promise<void> => {
       }, { transaction });
 
       productMap[pData.name] = product;
-      const prodId = product.id || product.dataValues.id;
+      const prodId = product.dataValues?.id || product.id;
 
       // Create Image
       await db.ProductImage.create({
@@ -320,7 +326,7 @@ export const seedData = async (): Promise<void> => {
 
       // Create SizeItems (Inventory)
       for (const size of pData.sizes) {
-        const sizeId = size.id || size.dataValues.id;
+        const sizeId = size.dataValues?.id || size.id;
         await db.SizeItem.create({
           id: uuidv4(),
           productId: prodId,
@@ -346,7 +352,10 @@ export const seedData = async (): Promise<void> => {
 
     // Add item to cart (iPhone)
     const iphone = productMap['iPhone 15 Pro'];
-    const iphoneId = iphone.id || iphone.dataValues.id;
+    // SAFE ACCESS for product properties
+    const iphoneId = iphone.dataValues?.id || iphone.id;
+    // CRITICAL FIX: Access price from dataValues because public field shadows it
+    const iphonePrice = iphone.dataValues?.price ?? iphone.price;
 
     const iphoneSizeItem = await db.SizeItem.findOne({
       where: { productId: iphoneId },
@@ -354,12 +363,12 @@ export const seedData = async (): Promise<void> => {
     });
 
     if (iphoneSizeItem) {
-      const sizeItemId = iphoneSizeItem.id || iphoneSizeItem.dataValues.id;
-      const sizeId = iphoneSizeItem.sizeId || iphoneSizeItem.dataValues.sizeId;
+      const sizeItemId = iphoneSizeItem.dataValues?.id || iphoneSizeItem.id;
+      const sizeId = iphoneSizeItem.dataValues?.sizeId || iphoneSizeItem.sizeId;
 
       await db.CartItem.create({
         id: uuidv4(),
-        cartId: cart.id || cart.dataValues.id,
+        cartId: cart.dataValues?.id || cart.id,
         productId: iphoneId,
         sizeItemId: sizeItemId,
         quantity: 1,
@@ -379,17 +388,21 @@ export const seedData = async (): Promise<void> => {
     const order = await db.Order.create({
       id: uuidv4(),
       userId: customerUserId,
-      paymentId: payment.id || payment.dataValues.id,
+      paymentId: payment.dataValues?.id || payment.id,
       currency: 'USD'
     }, { transaction });
+
+    if (iphonePrice === undefined || iphonePrice === null) {
+      throw new Error(`Price for iPhone 15 Pro is null/undefined. Value: ${iphonePrice}`);
+    }
 
     // Order Items
     await db.OrderItem.create({
       id: uuidv4(),
-      orderId: order.id || order.dataValues.id,
+      orderId: order.dataValues?.id || order.id,
       productId: iphoneId,
       quantity: 1,
-      price: iphone.price
+      price: iphonePrice // Using safely accessed price
     }, { transaction });
 
     // =========================================================================
@@ -419,7 +432,7 @@ export const seedData = async (): Promise<void> => {
     // Return Request (Test Return)
     await db.ReturnRequest.create({
       id: uuidv4(),
-      orderId: order.id || order.dataValues.id,
+      orderId: order.dataValues?.id || order.id,
       userId: customerUserId,
       reason: 'Defective',
       status: 'PENDING',
