@@ -41,6 +41,7 @@ export const seedData = async (): Promise<void> => {
         defaults: { id: uuidv4(), name },
         transaction
       });
+      // SAFE ACCESS: Use dataValues or fallback to object
       permissionMap[name] = perm;
     }
 
@@ -60,38 +61,57 @@ export const seedData = async (): Promise<void> => {
         transaction
       });
       roleMap[config.name] = role;
+      console.log(`✅ Role checked/created: ${config.name}, ID: ${role.dataValues?.id || role.id}`);
     }
 
     // Assign Permissions to Roles
     // Super Admin -> ALL
+    const superAdminRole = roleMap[ROLES.SUPER_ADMIN];
+    const superAdminId = superAdminRole.dataValues?.id || superAdminRole.id;
+
+    if (!superAdminId) throw new Error('Super Admin Role ID is undefined');
+
     for (const permName in permissionMap) {
+      const perm = permissionMap[permName];
+      const permId = perm.dataValues?.id || perm.id;
+
       await db.RolePermission.findOrCreate({
-        where: { roleId: roleMap[ROLES.SUPER_ADMIN].id, permissionId: permissionMap[permName].id },
-        defaults: { id: uuidv4(), roleId: roleMap[ROLES.SUPER_ADMIN].id, permissionId: permissionMap[permName].id },
+        where: { roleId: superAdminId, permissionId: permId },
+        defaults: { id: uuidv4(), roleId: superAdminId, permissionId: permId },
         transaction
       });
     }
 
     // Admin -> Everything except system level stuff
+    const adminRole = roleMap[ROLES.ADMIN];
+    const adminId = adminRole.dataValues?.id || adminRole.id;
+    if (!adminId) throw new Error('Admin Role ID is undefined');
+
     const adminExclude: string[] = [
         PERMISSIONS.MANAGE_PACKAGES,
         PERMISSIONS.MANAGE_TRANSLATIONS,
-        // Add explicit string literals if they are not in PERMISSIONS
         'manage_packages',
         'manage_translations'
     ];
 
     for (const permName in permissionMap) {
       if (!adminExclude.includes(permName)) {
+        const perm = permissionMap[permName];
+        const permId = perm.dataValues?.id || perm.id;
+
         await db.RolePermission.findOrCreate({
-          where: { roleId: roleMap[ROLES.ADMIN].id, permissionId: permissionMap[permName].id },
-          defaults: { id: uuidv4(), roleId: roleMap[ROLES.ADMIN].id, permissionId: permissionMap[permName].id },
+          where: { roleId: adminId, permissionId: permId },
+          defaults: { id: uuidv4(), roleId: adminId, permissionId: permId },
           transaction
         });
       }
     }
 
     // Customer -> Read/Create basic stuff
+    const customerRole = roleMap[ROLES.CUSTOMER];
+    const customerId = customerRole.dataValues?.id || customerRole.id;
+    if (!customerId) throw new Error('Customer Role ID is undefined');
+
     const customerPerms = [
       PERMISSIONS.READ_PRODUCTS, PERMISSIONS.READ_CATEGORIES, PERMISSIONS.READ_SUBCATEGORIES,
       PERMISSIONS.CREATE_ORDERS, PERMISSIONS.READ_ORDERS,
@@ -102,9 +122,12 @@ export const seedData = async (): Promise<void> => {
     ];
     for (const permName of customerPerms) {
       if (permissionMap[permName]) {
+        const perm = permissionMap[permName];
+        const permId = perm.dataValues?.id || perm.id;
+
         await db.RolePermission.findOrCreate({
-          where: { roleId: roleMap[ROLES.CUSTOMER].id, permissionId: permissionMap[permName].id },
-          defaults: { id: uuidv4(), roleId: roleMap[ROLES.CUSTOMER].id, permissionId: permissionMap[permName].id },
+          where: { roleId: customerId, permissionId: permId },
+          defaults: { id: uuidv4(), roleId: customerId, permissionId: permId },
           transaction
         });
       }
@@ -156,9 +179,13 @@ export const seedData = async (): Promise<void> => {
       userMap[conf.role] = user;
 
       // Assign Role
+      const role = roleMap[conf.role];
+      const roleId = role.dataValues?.id || role.id;
+      const userId = user.dataValues?.id || user.id;
+
       await db.RoleUser.findOrCreate({
-        where: { userId: user.id, roleId: roleMap[conf.role].id },
-        defaults: { id: uuidv4(), userId: user.id, roleId: roleMap[conf.role].id },
+        where: { userId: userId, roleId: roleId },
+        defaults: { id: uuidv4(), userId: userId, roleId: roleId },
         transaction
       });
     }
@@ -168,38 +195,41 @@ export const seedData = async (): Promise<void> => {
     // =========================================================================
     console.log('📂 3. Creating Catalog Structure...');
 
+    const adminUser = userMap[ROLES.ADMIN];
+    const adminUserId = adminUser.dataValues?.id || adminUser.id;
+
     // Categories
     const electronicsCat = await db.Category.create({
       id: uuidv4(),
       name: 'Electronics',
       description: 'Gadgets and devices',
-      userId: userMap[ROLES.ADMIN].id // Owner
+      userId: adminUserId // Owner
     }, { transaction });
 
     const clothingCat = await db.Category.create({
       id: uuidv4(),
       name: 'Clothing',
       description: 'Apparel for all',
-      userId: userMap[ROLES.ADMIN].id
+      userId: adminUserId
     }, { transaction });
 
     // SubCategories
     const phonesSub = await db.SubCategory.create({
       id: uuidv4(),
       name: 'Smartphones',
-      categoryId: electronicsCat.id
+      categoryId: electronicsCat.id || electronicsCat.dataValues.id
     }, { transaction });
 
     const laptopsSub = await db.SubCategory.create({
       id: uuidv4(),
       name: 'Laptops',
-      categoryId: electronicsCat.id
+      categoryId: electronicsCat.id || electronicsCat.dataValues.id
     }, { transaction });
 
     const menSub = await db.SubCategory.create({
       id: uuidv4(),
       name: "Men's Clothing",
-      categoryId: clothingCat.id
+      categoryId: clothingCat.id || clothingCat.dataValues.id
     }, { transaction });
 
     // =========================================================================
@@ -212,9 +242,11 @@ export const seedData = async (): Promise<void> => {
       name: 'Tech & Style Hub',
       description: 'The best place for tech and fashion.',
       imgUrl: '/fakeimages/shoes.jpg', // Use a valid placeholder path from public folder
-      userId: userMap[ROLES.ADMIN].id,
-      categoryId: electronicsCat.id
+      userId: adminUserId,
+      categoryId: electronicsCat.id || electronicsCat.dataValues.id
     }, { transaction });
+
+    const storeId = store.id || store.dataValues.id;
 
     // =========================================================================
     // 5. PRODUCTS & INVENTORY
@@ -259,6 +291,9 @@ export const seedData = async (): Promise<void> => {
     const productMap: Record<string, any> = {};
 
     for (const pData of productsData) {
+      const catId = pData.category.id || pData.category.dataValues.id;
+      const subId = pData.subcategory.id || pData.subcategory.dataValues.id;
+
       // Create Product
       const product = await db.Product.create({
         id: uuidv4(),
@@ -267,27 +302,29 @@ export const seedData = async (): Promise<void> => {
         price: pData.price,
         isActive: true,
         discount: 0,
-        ownerId: userMap[ROLES.ADMIN].id,
-        storeId: store.id,
-        categoryId: pData.category.id,
-        subcategoryId: pData.subcategory.id
+        ownerId: adminUserId,
+        storeId: storeId,
+        categoryId: catId,
+        subcategoryId: subId
       }, { transaction });
 
       productMap[pData.name] = product;
+      const prodId = product.id || product.dataValues.id;
 
       // Create Image
       await db.ProductImage.create({
         id: uuidv4(),
-        productId: product.id,
+        productId: prodId,
         imageUrl: pData.image
       }, { transaction });
 
       // Create SizeItems (Inventory)
       for (const size of pData.sizes) {
+        const sizeId = size.id || size.dataValues.id;
         await db.SizeItem.create({
           id: uuidv4(),
-          productId: product.id,
-          sizeId: size.id,
+          productId: prodId,
+          sizeId: sizeId,
           quantity: 100 // Plenty of stock
         }, { transaction });
       }
@@ -298,27 +335,35 @@ export const seedData = async (): Promise<void> => {
     // =========================================================================
     console.log('🛒 6. Creating Sales Data...');
 
+    const customerUser = userMap[ROLES.CUSTOMER];
+    const customerUserId = customerUser.dataValues?.id || customerUser.id;
+
     // Cart for Customer
     const cart = await db.Cart.create({
       id: uuidv4(),
-      userId: userMap[ROLES.CUSTOMER].id
+      userId: customerUserId
     }, { transaction });
 
     // Add item to cart (iPhone)
     const iphone = productMap['iPhone 15 Pro'];
+    const iphoneId = iphone.id || iphone.dataValues.id;
+
     const iphoneSizeItem = await db.SizeItem.findOne({
-      where: { productId: iphone.id },
+      where: { productId: iphoneId },
       transaction
     });
 
     if (iphoneSizeItem) {
+      const sizeItemId = iphoneSizeItem.id || iphoneSizeItem.dataValues.id;
+      const sizeId = iphoneSizeItem.sizeId || iphoneSizeItem.dataValues.sizeId;
+
       await db.CartItem.create({
         id: uuidv4(),
-        cartId: cart.id,
-        productId: iphone.id,
-        sizeItemId: iphoneSizeItem.id,
+        cartId: cart.id || cart.dataValues.id,
+        productId: iphoneId,
+        sizeItemId: sizeItemId,
         quantity: 1,
-        sizeId: iphoneSizeItem.sizeId // Explicitly set if model supports it
+        sizeId: sizeId // Explicitly set if model supports it
       }, { transaction });
     }
 
@@ -333,16 +378,16 @@ export const seedData = async (): Promise<void> => {
 
     const order = await db.Order.create({
       id: uuidv4(),
-      userId: userMap[ROLES.CUSTOMER].id,
-      paymentId: payment.id,
+      userId: customerUserId,
+      paymentId: payment.id || payment.dataValues.id,
       currency: 'USD'
     }, { transaction });
 
     // Order Items
     await db.OrderItem.create({
       id: uuidv4(),
-      orderId: order.id,
-      productId: iphone.id,
+      orderId: order.id || order.dataValues.id,
+      productId: iphoneId,
       quantity: 1,
       price: iphone.price
     }, { transaction });
@@ -368,14 +413,14 @@ export const seedData = async (): Promise<void> => {
       id: uuidv4(),
       eventType: 'purchase',
       eventData: { amount: 1229.98 },
-      userId: userMap[ROLES.CUSTOMER].id
+      userId: customerUserId
     }, { transaction });
 
     // Return Request (Test Return)
     await db.ReturnRequest.create({
       id: uuidv4(),
-      orderId: order.id,
-      userId: userMap[ROLES.CUSTOMER].id,
+      orderId: order.id || order.dataValues.id,
+      userId: customerUserId,
       reason: 'Defective',
       status: 'PENDING',
       refundAmount: 999.99
