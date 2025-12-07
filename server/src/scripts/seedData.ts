@@ -242,7 +242,7 @@ export const seedData = async (): Promise<void> => {
         id: uuidv4(),
         name: 'Clothing',
         description: 'Apparel for all',
-        userId: storeAdminUserId
+        userId: storeAdminUserId // Owner - ADDED
       },
       transaction
     });
