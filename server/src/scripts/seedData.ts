@@ -14,6 +14,7 @@ import { PERMISSIONS, ROLES } from './permissions';
  * 5. Create Inventory (Sizes, SizeItems) - CRITICAL for "Add to Cart".
  * 6. Create Sales Data (Orders, Cart) for testing history.
  * 7. Ensure all relationships (Foreign Keys) are valid.
+ * 8. Populate all tables with userId/ownerId relationships.
  */
 
 export const seedData = async (): Promise<void> => {
@@ -142,77 +143,99 @@ export const seedData = async (): Promise<void> => {
 
     const passwordHash = await bcrypt.hash('123456', 10); // Simple password for all
 
-    const usersConfig = [
-      {
+    // 1. Create Super Admin
+    const [superAdminUser] = await db.User.findOrCreate({
+      where: { email: 'admin@admin.com' },
+      defaults: {
+        id: uuidv4(),
         email: 'admin@admin.com',
         name: 'Super Admin',
-        role: ROLES.SUPER_ADMIN,
-        password: passwordHash
+        password: passwordHash,
+        phone: '1234567890',
+        address: 'HQ Address'
       },
-      {
+      transaction
+    });
+    const superAdminUserId = superAdminUser.dataValues?.id || superAdminUser.id;
+
+    // 2. Create Store Admin (created by Super Admin)
+    const [storeAdminUser] = await db.User.findOrCreate({
+      where: { email: 'admin@store.com' },
+      defaults: {
+        id: uuidv4(),
         email: 'admin@store.com',
         name: 'Store Admin',
-        role: ROLES.ADMIN,
-        password: passwordHash
+        password: passwordHash,
+        phone: '1234567890',
+        address: 'Store Address',
+        createdById: superAdminUserId // LINKED
       },
-      {
+      transaction
+    });
+    const storeAdminUserId = storeAdminUser.dataValues?.id || storeAdminUser.id;
+
+    // 3. Create Customer (created by Store Admin)
+    const [customerUser] = await db.User.findOrCreate({
+      where: { email: 'customer@example.com' },
+      defaults: {
+        id: uuidv4(),
         email: 'customer@example.com',
         name: 'John Customer',
-        role: ROLES.CUSTOMER,
-        password: passwordHash
-      }
-    ];
+        password: passwordHash,
+        phone: '1234567890',
+        address: 'Customer Address',
+        createdById: storeAdminUserId // LINKED
+      },
+      transaction
+    });
+    const customerUserId = customerUser.dataValues?.id || customerUser.id;
 
-    const userMap: Record<string, any> = {};
+    // Assign Roles
+    // Super Admin
+    await db.RoleUser.findOrCreate({
+      where: { userId: superAdminUserId, roleId: superAdminId },
+      defaults: { id: uuidv4(), userId: superAdminUserId, roleId: superAdminId },
+      transaction
+    });
 
-    for (const conf of usersConfig) {
-      const [user] = await db.User.findOrCreate({
-        where: { email: conf.email },
-        defaults: {
-          id: uuidv4(),
-          email: conf.email,
-          name: conf.name,
-          password: conf.password,
-          phone: '1234567890',
-          address: '123 Seed Street'
-        },
-        transaction
-      });
-      userMap[conf.role] = user;
+    // Store Admin
+    await db.RoleUser.findOrCreate({
+      where: { userId: storeAdminUserId, roleId: adminId },
+      defaults: { id: uuidv4(), userId: storeAdminUserId, roleId: adminId },
+      transaction
+    });
 
-      // Assign Role
-      const role = roleMap[conf.role];
-      const roleId = role.dataValues?.id || role.id;
-      const userId = user.dataValues?.id || user.id;
+    // Customer
+    await db.RoleUser.findOrCreate({
+      where: { userId: customerUserId, roleId: customerId },
+      defaults: { id: uuidv4(), userId: customerUserId, roleId: customerId },
+      transaction
+    });
 
-      await db.RoleUser.findOrCreate({
-        where: { userId: userId, roleId: roleId },
-        defaults: { id: uuidv4(), userId: userId, roleId: roleId },
-        transaction
-      });
-    }
+    const userMap: any = {
+      [ROLES.SUPER_ADMIN]: superAdminUser,
+      [ROLES.ADMIN]: storeAdminUser,
+      [ROLES.CUSTOMER]: customerUser
+    };
 
     // =========================================================================
     // 3. CATALOG (Categories, SubCategories)
     // =========================================================================
     console.log('📂 3. Creating Catalog Structure...');
 
-    const adminUser = userMap[ROLES.ADMIN];
-    const adminUserId = adminUser.dataValues?.id || adminUser.id;
-
     // Categories
     const electronicsCat = await db.Category.create({
       id: uuidv4(),
       name: 'Electronics',
       description: 'Gadgets and devices',
-      userId: adminUserId // Owner
+      userId: storeAdminUserId // Owner
     }, { transaction });
 
     const clothingCat = await db.Category.create({
       id: uuidv4(),
       name: 'Clothing',
       description: 'Apparel for all',
-      userId: adminUserId
+      userId: storeAdminUserId
     }, { transaction });
 
     // SubCategories
@@ -247,7 +270,7 @@ export const seedData = async (): Promise<void> => {
       name: 'Tech & Style Hub',
       description: 'The best place for tech and fashion.',
       imgUrl: '/fakeimages/shoes.jpg', // Use a valid placeholder path from public folder
-      userId: adminUserId,
+      userId: storeAdminUserId,
       categoryId: electronicsCatId
     }, { transaction });
 
@@ -308,7 +331,7 @@ export const seedData = async (): Promise<void> => {
         price: pData.price,
         isActive: true,
         discount: 0,
-        ownerId: adminUserId,
+        ownerId: storeAdminUserId,
         storeId: storeId,
         categoryId: catId,
         subcategoryId: subId
@@ -340,9 +363,6 @@ export const seedData = async (): Promise<void> => {
     // 6. SALES (Cart, Orders)
     // =========================================================================
     console.log('🛒 6. Creating Sales Data...');
-
-    const customerUser = userMap[ROLES.CUSTOMER];
-    const customerUserId = customerUser.dataValues?.id || customerUser.id;
 
     // Cart for Customer
     const cart = await db.Cart.create({
@@ -411,10 +431,7 @@ export const seedData = async (): Promise<void> => {
     console.log('✨ 7. Creating Extras...');
 
     // Promotion
-    // Note: Promotion, Analytics, and ReturnRequest use default Integer IDs (auto-increment).
-    // We should NOT pass UUIDs to the 'id' field for these models.
     await db.Promotion.create({
-      // id: uuidv4(), <-- REMOVED: Model uses Integer ID
       code: 'SAVE10',
       type: 'PERCENTAGE',
       value: 10,
@@ -425,7 +442,6 @@ export const seedData = async (): Promise<void> => {
 
     // Analytics (for Dashboard)
     await db.Analytics.create({
-      // id: uuidv4(), <-- REMOVED: Model uses Integer ID
       eventType: 'purchase',
       eventData: { amount: 1229.98 },
       userId: customerUserId
@@ -433,12 +449,69 @@ export const seedData = async (): Promise<void> => {
 
     // Return Request (Test Return)
     await db.ReturnRequest.create({
-      // id: uuidv4(), <-- REMOVED: Model uses Integer ID
       orderId: order.dataValues?.id || order.id,
       userId: customerUserId,
       reason: 'Defective',
       status: 'PENDING',
       refundAmount: 999.99
+    }, { transaction });
+
+    // Article (Admin Blog Post)
+    await db.Article.create({
+      id: uuidv4(),
+      title: 'Welcome to Our Store',
+      text: 'We are happy to announce our new opening.',
+      type: 'blog',
+      userId: storeAdminUserId
+    }, { transaction });
+
+    // Comment (Customer Review on iPhone)
+    await db.Comment.create({
+      id: uuidv4(),
+      userId: customerUserId,
+      productId: iphoneId,
+      text: 'Amazing phone!',
+      rating: 5
+    }, { transaction });
+
+    // Favorite (Customer Wishlist)
+    const favorite = await db.Favorite.create({
+      id: uuidv4(),
+      userId: customerUserId,
+      productId: iphoneId // NOTE: Favorite model has both userId and productId directly? Or Favorite -> FavoriteItem?
+      // Reading model: Favorite belongsTo User, belongsTo Product. So simple Favorite entry is enough.
+    }, { transaction });
+
+    // User Package (Subscription)
+    // First create a Package
+    const pkg = await db.Package.create({
+      id: uuidv4(),
+      name: 'Starter Plan',
+      storeLimit: 1,
+      categoryLimit: 5,
+      productLimit: 20,
+      userLimit: 1,
+      price: 0,
+      isActive: true
+    }, { transaction });
+    const pkgId = pkg.dataValues?.id || pkg.id;
+
+    await db.UserPackage.create({
+      id: uuidv4(),
+      userId: storeAdminUserId,
+      packageId: pkgId,
+      startDate: new Date(),
+      isActive: true,
+      createdById: superAdminUserId
+    }, { transaction });
+
+    // Audit Log (Admin Action)
+    await db.AuditLog.create({
+      action: 'create_product',
+      entity: 'Product',
+      entityId: iphoneId,
+      performedById: storeAdminUserId,
+      snapshot: { name: 'iPhone 15 Pro' }
     }, { transaction });
 
     await transaction.commit();
