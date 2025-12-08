@@ -107,7 +107,7 @@ export const deleteProductImage = createAsyncThunk(
   }
 );
 
-export const articleSlice = createSlice({
+export const shopSlice = createSlice({
   name: "products",
   initialState: initialState,
   reducers: {
@@ -183,11 +183,11 @@ builder.addCase(fetchProductsListing.rejected, (state) => {
 
   },
 });
-export const { resetProducts } = articleSlice.actions;
+export const { resetProducts } = shopSlice.actions;
 export const productSelector = (store: RootState): IProductModel[] | undefined => store.products.products;
 export const productByStoreSelector = (store: RootState): IProductModel[] | undefined => store.products.Storeproducts;
 export const totalProductsSelector = (store: RootState): number => store.products.total;
 export const pageSelector = (store: RootState): number => store.products.page;
 export const pageSizeSelector = (store: RootState): number => store.products.pageSize;
 export const productListingforStore = (store: RootState): ProductsState | undefined => store.products;
-export default articleSlice.reducer;
+export default shopSlice.reducer;
