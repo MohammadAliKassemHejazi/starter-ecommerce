@@ -29,6 +29,7 @@ import db from './src/models';
 
 import { storeMiddleWear } from './src/middlewares/store.middleweare';
 import { shopMiddleWare } from './src/middlewares/shop.middleware';
+import { responseStandardizer } from './src/middlewares/responseStandardizer.middleware';
 import runScripts from './src/scripts/runScripts';
 
 // Extend NodeJS global type to include __basedir
@@ -339,6 +340,9 @@ async function createApp(): Promise<Express> {
     stream: { write: (message: string) => logger.info(message.trim()) },
     skip: (req, res) => res.statusCode < 400 && IS_PRODUCTION // Only log errors in production
   }));
+
+  // Standardize API Responses
+  app.use(responseStandardizer);
   
   // Rate limiting
   const { generalLimiter, authLimiter } = createRateLimiters();
