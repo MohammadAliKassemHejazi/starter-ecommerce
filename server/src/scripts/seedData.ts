@@ -1,1034 +1,743 @@
 import db from '../models';
 import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
+import { PERMISSIONS, ROLES } from './permissions';
 
 /**
- * Data Seeding Script
+ * ROBUST DATA SEEDING SCRIPT
  * 
- * This script follows the proper order for seeding data:
- * 1. Create Permissions FIRST (required for role assignments)
- * 2. Create Roles SECOND (required for user assignments)
- * 3. Create Users THIRD (after roles exist)
- * 4. Assign Roles to Users (after both exist)
- * 5. Create Categories and other data (after users exist)
- * 
- * Each step includes verification to ensure data was created successfully
- * before proceeding to the next step.
+ * Objectives:
+ * 1. Create all necessary Permissions for the frontend sidebar/features to work.
+ * 2. Create Roles (Super Admin, Admin, Customer).
+ * 3. Create Users with known credentials.
+ * 4. Create Catalog (Categories, Subcategories, Store, Products).
+ * 5. Create Inventory (Sizes, SizeItems) - CRITICAL for "Add to Cart".
+ * 6. Create Sales Data (Orders, Cart) for testing history.
+ * 7. Ensure all relationships (Foreign Keys) are valid.
+ * 8. Populate all tables with userId/ownerId relationships.
+ * 9. Idempotency: Use findOrCreate to allow re-running without unique constraint errors.
+ * 10. Exhaustive: Seed Shipping, Taxes, Translations, UserSessions, and join tables.
  */
 
 export const seedData = async (): Promise<void> => {
-  try {
-    console.log('🌱 Starting data seeding...');
+  const transaction = await db.sequelize.transaction();
 
-    // ========================
-    // 1. Create Permissions FIRST
-    // ========================
-    const permissions = [
-      // User permissions
-      'read_users', 'create_users', 'update_users', 'delete_users', 'view_users', 'edit_users',
-      // Role permissions
-      'read_roles', 'create_roles', 'update_roles', 'delete_roles', 'view_roles', 'edit_roles',
-      // Permission permissions
-      'read_permissions', 'create_permissions', 'update_permissions', 'delete_permissions', 'view_permissions', 'edit_permissions',
-      // Product permissions
-      'read_products', 'create_products', 'update_products', 'delete_products', 'view_products', 'edit_products',
-      // Order permissions
-      'read_orders', 'create_orders', 'update_orders', 'delete_orders', 'view_orders', 'edit_orders',
-      // Category permissions
-      'read_categories', 'create_categories', 'update_categories', 'delete_categories', 'view_categories', 'edit_categories',
-      // Subcategory permissions
-      'read_subcategories', 'create_subcategories', 'update_subcategories', 'delete_subcategories', 'view_subcategories', 'edit_subcategories',
-      // Store permissions
-      'read_stores', 'create_stores', 'update_stores', 'delete_stores', 'view_stores', 'edit_stores',
-      // Cart permissions
-      'read_carts', 'create_carts', 'update_carts', 'delete_carts', 'view_carts', 'edit_carts',
-      // Promotion permissions
-      'read_promotions', 'create_promotions', 'update_promotions', 'delete_promotions', 'view_promotions', 'edit_promotions',
-      // Analytics permissions
-      'read_analytics', 'view_analytics', 'read_dashboard', 'view_dashboard',
-      // Audit log permissions
-      'read_audit_logs', 'view_audit_logs',
-      // Package permissions
-      'manage_packages', 'read_packages', 'create_packages', 'update_packages', 'delete_packages',
-      // Shipping permissions
-      'manage_shipping', 'read_shipping', 'create_shipping', 'update_shipping', 'delete_shipping',
-      // Size permissions
-      'manage_sizes', 'read_sizes', 'create_sizes', 'update_sizes', 'delete_sizes',
-      // Tax permissions
-      'manage_taxes', 'read_taxes', 'create_taxes', 'update_taxes', 'delete_taxes',
-      // Return permissions
-      'manage_returns', 'read_returns', 'create_returns', 'update_returns', 'delete_returns',
-      // Translation permissions
-      'manage_translations', 'read_translations', 'create_translations', 'update_translations', 'delete_translations',
-      // Article permissions
-      'read_articles', 'create_articles', 'update_articles', 'delete_articles', 'view_articles', 'edit_articles',
-      // Comment permissions
-      'read_comments', 'create_comments', 'update_comments', 'delete_comments', 'view_comments', 'edit_comments',
-      // Favorite permissions
-      'read_favorites', 'create_favorites', 'update_favorites', 'delete_favorites', 'view_favorites', 'edit_favorites',
-      // Payment permissions
-      'read_payments', 'create_payments', 'update_payments', 'delete_payments', 'view_payments', 'edit_payments'
+  try {
+    console.log('🚀 Starting Robust Data Seeding...');
+
+    // =========================================================================
+    // 1. PERMISSIONS & ROLES
+    // =========================================================================
+    console.log('🔐 1. Setting up Permissions & Roles...');
+
+    // Combine all permissions from the constants file
+    const allPermissions = Object.values(PERMISSIONS);
+    const extraPermissions = ['my-store', 'orders-admin', 'analytics']; // Keys used in sidebar but maybe not in PERMISSIONS constant
+
+    const permissionsList = [...new Set([...allPermissions, ...extraPermissions])];
+
+    const permissionMap: Record<string, any> = {};
+
+    for (const name of permissionsList) {
+      const [perm] = await db.Permission.findOrCreate({
+        where: { name },
+        defaults: { id: uuidv4(), name },
+        transaction
+      });
+      // SAFE ACCESS: Use dataValues or fallback to object
+      permissionMap[name] = perm;
+    }
+
+    // Create Roles
+    const rolesConfig = [
+      { name: ROLES.SUPER_ADMIN },
+      { name: ROLES.ADMIN },
+      { name: ROLES.CUSTOMER }
     ];
 
-    console.log(`🔐 Creating ${permissions.length} permissions...`);
-    await Promise.all(
-      permissions.map(permissionName =>
-        db.Permission.findOrCreate({
-          where: { name: permissionName },
-          defaults: {
-            name: permissionName,
-            description: `Permission to ${permissionName.replace('_', ' ')}`
-          }
-        })
-      )
-    );
-    console.log('✅ Permissions created');
+    const roleMap: Record<string, any> = {};
 
-    // Verify permissions were created
-    const allPermissions = await db.Permission.findAll({raw: true});
-    if (allPermissions.length === 0) {
-      throw new Error('Failed to create permissions');
+    for (const config of rolesConfig) {
+      const [role] = await db.Role.findOrCreate({
+        where: { name: config.name },
+        defaults: { id: uuidv4(), name: config.name },
+        transaction
+      });
+      roleMap[config.name] = role;
+      // SAFE ACCESS: Use dataValues to avoid shadowing issues
+      const roleId = role.dataValues?.id || role.id;
+      console.log(`✅ Role checked/created: ${config.name}, ID: ${roleId}`);
     }
-    console.log(`✅ Verified ${allPermissions.length} permissions exist`);
 
-    // ========================
-    // 2. Create Roles SECOND
-    // ========================
-    const [superAdminRole, superAdminRoleCreated] = await db.Role.findOrCreate({
-      where: { name: 'super_admin' },
-      defaults: { name: 'super_admin' }
-    });
-    console.log(`👑 Super Admin Role ${superAdminRoleCreated ? 'created' : 'already exists'}`);
+    // Assign Permissions to Roles
+    // Super Admin -> ALL
+    const superAdminRole = roleMap[ROLES.SUPER_ADMIN];
+    const superAdminId = superAdminRole.dataValues?.id || superAdminRole.id;
 
-    const [adminRole, adminRoleCreated] = await db.Role.findOrCreate({
-      where: { name: 'admin' },
-      defaults: { name: 'admin' }
-    });
-    console.log(`🧑‍💼 Admin Role ${adminRoleCreated ? 'created' : 'already exists'}`);
+    if (!superAdminId) throw new Error('Super Admin Role ID is undefined');
 
-    const [customerRole, customerRoleCreated] = await db.Role.findOrCreate({
-      where: { name: 'customer' },
-      defaults: { name: 'customer' }
-    });
-    console.log(`🧑 Customer Role ${customerRoleCreated ? 'created' : 'already exists'}`);
+    for (const permName in permissionMap) {
+      const perm = permissionMap[permName];
+      const permId = perm.dataValues?.id || perm.id;
 
-    // Verify roles were created
-    const allRoles = await db.Role.findAll();
-    if (allRoles.length === 0) {
-      throw new Error('Failed to create roles');
+      await db.RolePermission.findOrCreate({
+        where: { roleId: superAdminId, permissionId: permId },
+        defaults: { id: uuidv4(), roleId: superAdminId, permissionId: permId },
+        transaction
+      });
     }
-    console.log(`✅ Verified ${allRoles.length} roles exist`);
 
-    // Get fresh role instances from database to ensure they have proper IDs
-    const superAdminRoleFresh = await db.Role.findOne({ where: { name: 'super_admin' } });
-    const adminRoleFresh = await db.Role.findOne({ where: { name: 'admin' } });
-    const customerRoleFresh = await db.Role.findOne({ where: { name: 'customer' } });
+    // Admin -> Everything except system level stuff
+    const adminRole = roleMap[ROLES.ADMIN];
+    const adminId = adminRole.dataValues?.id || adminRole.id;
+    if (!adminId) throw new Error('Admin Role ID is undefined');
 
-    if (!superAdminRoleFresh || !adminRoleFresh || !customerRoleFresh) {
-      throw new Error('Failed to retrieve roles from database');
-    }
-    superAdminRoleFresh.id = superAdminRoleFresh.dataValues.id;
-    adminRoleFresh.id = adminRoleFresh.dataValues.id;
-    customerRoleFresh.id = customerRoleFresh.dataValues.id;
-    console.log(`🔍 Debug - Super Admin Role ID: ${superAdminRoleFresh.dataValues.id}`);
-    console.log(`🔍 Debug - Admin Role ID: ${adminRoleFresh.id}`);
-    console.log(`🔍 Debug - Customer Role ID: ${customerRoleFresh.id}`);
+    const adminExclude: string[] = [
+        PERMISSIONS.MANAGE_PACKAGES,
+        PERMISSIONS.MANAGE_TRANSLATIONS,
+        'manage_packages',
+        'manage_translations'
+    ];
 
-    // ========================
-    // 3. Assign Permissions to Roles
-    // ========================
-    console.log('🔗 Assigning permissions to roles...');
+    for (const permName in permissionMap) {
+      if (!adminExclude.includes(permName)) {
+        const perm = permissionMap[permName];
+        const permId = perm.dataValues?.id || perm.id;
 
-    try {
-      // Super Admin gets ALL permissions
-      for (const permission of allPermissions) {
         await db.RolePermission.findOrCreate({
-          where: { 
-            roleId: superAdminRoleFresh.id, 
-            permissionId: permission.id 
-          },
-          defaults: { 
-            roleId: superAdminRoleFresh.id, 
-            permissionId: permission.id 
-          }
+          where: { roleId: adminId, permissionId: permId },
+          defaults: { id: uuidv4(), roleId: adminId, permissionId: permId },
+          transaction
         });
       }
-      console.log('✅ All permissions assigned to super_admin role');
-
-      // Admin gets most (filter out super-only)
-      const adminPermissions = allPermissions.filter((p : any) =>
-        !p.name.includes('super_admin') &&
-        !p.name.includes('manage_packages') &&
-        !p.name.includes('manage_translations')
-      );
-      
-      for (const permission of adminPermissions) {
-        await db.RolePermission.findOrCreate({
-          where: { 
-            roleId: adminRoleFresh.id, 
-            permissionId: permission.id 
-          },
-          defaults: { 
-            roleId: adminRoleFresh.id, 
-            permissionId: permission.id 
-          }
-        });
-      }
-      console.log('✅ Admin permissions assigned to admin role');
-
-      // Customer gets basic read/view/create/update on products, orders, cart, favorites, comments
-      const customerPermissions = allPermissions.filter((p : any) =>
-        (p.name.includes('read_') || p.name.includes('view_') || p.name.includes('create_') || p.name.includes('update_')) &&
-        (p.name.includes('products') || p.name.includes('orders') || p.name.includes('cart') || p.name.includes('favorites') || p.name.includes('comments'))
-      );
-      
-      for (const permission of customerPermissions) {
-        await db.RolePermission.findOrCreate({
-          where: { 
-            roleId: customerRoleFresh.id, 
-            permissionId: permission.id 
-          },
-          defaults: { 
-            roleId: customerRoleFresh.id, 
-            permissionId: permission.id 
-          }
-        });
-      }
-      console.log('✅ Customer permissions assigned to customer role');
-
-      // Verify role-permission assignments
-      const rolePermissions = await db.RolePermission.findAll();
-      if (rolePermissions.length === 0) {
-        throw new Error('Failed to assign permissions to roles');
-      }
-      console.log(`✅ Verified ${rolePermissions.length} role-permission assignments exist`);
-    } catch (error) {
-      console.error('❌ Error assigning permissions to roles:', error);
-      throw error;
     }
 
-    // ========================
-    // 4. Create Users THIRD
-    // ========================
-    const superAdminPassword = await bcrypt.hash('admin', 10);
-    const [superAdmin, superAdminCreated] = await db.User.findOrCreate({
+    // Customer -> Read/Create basic stuff
+    const customerRole = roleMap[ROLES.CUSTOMER];
+    const customerId = customerRole.dataValues?.id || customerRole.id;
+    if (!customerId) throw new Error('Customer Role ID is undefined');
+
+    const customerPerms = [
+      PERMISSIONS.READ_PRODUCTS, PERMISSIONS.READ_CATEGORIES, PERMISSIONS.READ_SUBCATEGORIES,
+      PERMISSIONS.CREATE_ORDERS, PERMISSIONS.READ_ORDERS,
+      PERMISSIONS.CREATE_CARTS, PERMISSIONS.READ_CARTS, PERMISSIONS.UPDATE_CARTS,
+      PERMISSIONS.CREATE_FAVORITES, PERMISSIONS.READ_FAVORITES, PERMISSIONS.DELETE_FAVORITES,
+      PERMISSIONS.CREATE_COMMENTS, PERMISSIONS.READ_COMMENTS,
+      PERMISSIONS.CREATE_RETURNS, PERMISSIONS.READ_RETURNS
+    ];
+    for (const permName of customerPerms) {
+      if (permissionMap[permName]) {
+        const perm = permissionMap[permName];
+        const permId = perm.dataValues?.id || perm.id;
+
+        await db.RolePermission.findOrCreate({
+          where: { roleId: customerId, permissionId: permId },
+          defaults: { id: uuidv4(), roleId: customerId, permissionId: permId },
+          transaction
+        });
+      }
+    }
+
+    // =========================================================================
+    // 2. USERS
+    // =========================================================================
+    console.log('👤 2. Creating Users...');
+
+    const passwordHash = await bcrypt.hash('123456', 10); // Simple password for all
+
+    // 1. Create Super Admin
+    const [superAdminUser] = await db.User.findOrCreate({
       where: { email: 'admin@admin.com' },
       defaults: {
-        name: 'Super Admin',
+        id: uuidv4(),
         email: 'admin@admin.com',
-        password: superAdminPassword,
-        address: 'Admin Address',
-        phone: '1234567890'
-      }
+        name: 'Super Admin',
+        password: passwordHash,
+        phone: '1234567890',
+        address: 'HQ Address'
+      },
+      transaction
     });
-    console.log(`👤 Super Admin ${superAdminCreated ? 'created' : 'already exists'}`);
+    const superAdminUserId = superAdminUser.dataValues?.id || superAdminUser.id;
 
-    const adminPassword = await bcrypt.hash('admin123', 10);
-    const [sampleAdmin, sampleAdminCreated] = await db.User.findOrCreate({
+    // 2. Create Store Admin (created by Super Admin)
+    const [storeAdminUser] = await db.User.findOrCreate({
       where: { email: 'admin@store.com' },
       defaults: {
-        name: 'Store Admin',
+        id: uuidv4(),
         email: 'admin@store.com',
-        password: adminPassword,
+        name: 'Store Admin',
+        password: passwordHash,
+        phone: '1234567890',
         address: 'Store Address',
-        phone: '0987654321',
-        createdById: superAdmin.id
-      }
+        createdById: superAdminUserId // LINKED
+      },
+      transaction
     });
-    console.log(`🧑‍💼 Sample Admin ${sampleAdminCreated ? 'created' : 'already exists'}`);
+    const storeAdminUserId = storeAdminUser.dataValues?.id || storeAdminUser.id;
 
-    const customerPassword = await bcrypt.hash('customer123', 10);
-    const [sampleCustomer, sampleCustomerCreated] = await db.User.findOrCreate({
+    // 3. Create Customer (created by Store Admin)
+    const [customerUser] = await db.User.findOrCreate({
       where: { email: 'customer@example.com' },
       defaults: {
-        name: 'John Customer',
+        id: uuidv4(),
         email: 'customer@example.com',
-        password: customerPassword,
+        name: 'John Customer',
+        password: passwordHash,
+        phone: '1234567890',
         address: 'Customer Address',
-        phone: '5555555555',
-        createdById: sampleAdmin.id
-      }
+        createdById: storeAdminUserId // LINKED
+      },
+      transaction
     });
-    console.log(`🧑 Sample Customer ${sampleCustomerCreated ? 'created' : 'already exists'}`);
+    const customerUserId = customerUser.dataValues?.id || customerUser.id;
 
-    // Verify users were created
-    const allUsers = await db.User.findAll();
-    if (allUsers.length === 0) {
-      throw new Error('Failed to create users');
-    }
-    console.log(`✅ Verified ${allUsers.length} users exist`);
+    // Assign Roles
+    // Super Admin
+    await db.RoleUser.findOrCreate({
+      where: { userId: superAdminUserId, roleId: superAdminId },
+      defaults: { id: uuidv4(), userId: superAdminUserId, roleId: superAdminId },
+      transaction
+    });
 
-    // Verify specific users exist
-    if (!superAdmin || !sampleAdmin || !sampleCustomer) {
-      throw new Error('Failed to create required users (superAdmin, sampleAdmin, or sampleCustomer)');
-    }
-    console.log('✅ Verified all required users exist');
+    // Store Admin
+    await db.RoleUser.findOrCreate({
+      where: { userId: storeAdminUserId, roleId: adminId },
+      defaults: { id: uuidv4(), userId: storeAdminUserId, roleId: adminId },
+      transaction
+    });
 
-    // ========================
-    // 5. Assign Roles to Users
-    // ========================
-    try {
-      await db.RoleUser.findOrCreate({
-        where: { userId: superAdmin.id, roleId: superAdminRoleFresh.id },
-        defaults: { userId: superAdmin.id, roleId: superAdminRoleFresh.id }
-      });
-      console.log('✅ Assigned super_admin role to Super Admin');
+    // Customer
+    await db.RoleUser.findOrCreate({
+      where: { userId: customerUserId, roleId: customerId },
+      defaults: { id: uuidv4(), userId: customerUserId, roleId: customerId },
+      transaction
+    });
 
-      await db.RoleUser.findOrCreate({
-        where: { userId: sampleAdmin.id, roleId: adminRoleFresh.id },
-        defaults: { userId: sampleAdmin.id, roleId: adminRoleFresh.id }
-      });
-      console.log('✅ Assigned admin role to Sample Admin');
+    const userMap: any = {
+      [ROLES.SUPER_ADMIN]: superAdminUser,
+      [ROLES.ADMIN]: storeAdminUser,
+      [ROLES.CUSTOMER]: customerUser
+    };
 
-      await db.RoleUser.findOrCreate({
-        where: { userId: sampleCustomer.id, roleId: customerRoleFresh.id },
-        defaults: { userId: sampleCustomer.id, roleId: customerRoleFresh.id }
-      });
-      console.log('✅ Assigned customer role to Sample Customer');
+    // =========================================================================
+    // 3. CATALOG (Categories, SubCategories)
+    // =========================================================================
+    console.log('📂 3. Creating Catalog Structure...');
 
-      // Verify role assignments
-      const roleAssignments = await db.RoleUser.findAll();
-      if (roleAssignments.length === 0) {
-        throw new Error('Failed to assign roles to users');
+    // Categories
+    const [electronicsCat] = await db.Category.findOrCreate({
+      where: { name: 'Electronics' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Electronics',
+        description: 'Gadgets and devices',
+        userId: storeAdminUserId // Owner
+      },
+      transaction
+    });
+
+    const [clothingCat] = await db.Category.findOrCreate({
+      where: { name: 'Clothing' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Clothing',
+        description: 'Apparel for all',
+        userId: storeAdminUserId // Owner - ADDED
+      },
+      transaction
+    });
+
+    // SubCategories
+    const electronicsCatId = electronicsCat.dataValues?.id || electronicsCat.id;
+    const clothingCatId = clothingCat.dataValues?.id || clothingCat.id;
+
+    const [phonesSub] = await db.SubCategory.findOrCreate({
+      where: { name: 'Smartphones', categoryId: electronicsCatId },
+      defaults: {
+        id: uuidv4(),
+        name: 'Smartphones',
+        categoryId: electronicsCatId,
+        userId: storeAdminUserId // Added userId
+      },
+      transaction
+    });
+
+    const [laptopsSub] = await db.SubCategory.findOrCreate({
+      where: { name: 'Laptops', categoryId: electronicsCatId },
+      defaults: {
+        id: uuidv4(),
+        name: 'Laptops',
+        categoryId: electronicsCatId,
+        userId: storeAdminUserId // Added userId
+      },
+      transaction
+    });
+
+    const [menSub] = await db.SubCategory.findOrCreate({
+      where: { name: "Men's Clothing", categoryId: clothingCatId },
+      defaults: {
+        id: uuidv4(),
+        name: "Men's Clothing",
+        categoryId: clothingCatId,
+        userId: storeAdminUserId // Added userId
+      },
+      transaction
+    });
+
+    // =========================================================================
+    // 4. STORE
+    // =========================================================================
+    console.log('🏪 4. Creating Store...');
+
+    const [store] = await db.Store.findOrCreate({
+      where: { name: 'Tech & Style Hub' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Tech & Style Hub',
+        description: 'The best place for tech and fashion.',
+        imgUrl: '/fakeimages/shoes.jpg', // Use a valid placeholder path from public folder
+        userId: storeAdminUserId,
+        categoryId: electronicsCatId
+      },
+      transaction
+    });
+
+    const storeId = store.dataValues?.id || store.id;
+
+    // =========================================================================
+    // 5. PRODUCTS & INVENTORY
+    // =========================================================================
+    console.log('📦 5. Creating Products & Inventory...');
+
+    // Sizes
+    const [sizeM] = await db.Size.findOrCreate({ where: { size: 'M' }, defaults: { id: uuidv4(), size: 'M' }, transaction });
+    const [sizeL] = await db.Size.findOrCreate({ where: { size: 'L' }, defaults: { id: uuidv4(), size: 'L' }, transaction });
+    const [sizeDefault] = await db.Size.findOrCreate({ where: { size: 'Standard' }, defaults: { id: uuidv4(), size: 'Standard' }, transaction });
+
+    const productsData = [
+      {
+        name: 'iPhone 15 Pro',
+        description: 'The ultimate iPhone.',
+        price: 999.99,
+        category: electronicsCat,
+        subcategory: phonesSub,
+        sizes: [sizeDefault],
+        image: '/products/f1.png'
+      },
+      {
+        name: 'MacBook Air M2',
+        description: 'Supercharged by M2.',
+        price: 1199.99,
+        category: electronicsCat,
+        subcategory: laptopsSub,
+        sizes: [sizeDefault],
+        image: '/products/f2.png'
+      },
+      {
+        name: 'Classic T-Shirt',
+        description: '100% Cotton, very comfortable.',
+        price: 29.99,
+        category: clothingCat,
+        subcategory: menSub,
+        sizes: [sizeM, sizeL],
+        image: '/products/f3.png'
       }
-      console.log(`✅ Verified ${roleAssignments.length} role assignments exist`);
-    } catch (error) {
-      console.error('❌ Error assigning roles to users:', error);
-      throw error;
-    }
-
-    // ========================
-    // 6. Create Categories
-    // ========================
-    const categories = [
-      { name: 'Electronics', description: 'Electronic devices and gadgets' },
-      { name: 'Clothing', description: 'Fashion and apparel' },
-      { name: 'Books', description: 'Books and literature' },
-      { name: 'Home & Garden', description: 'Home improvement and gardening' }
     ];
 
-    console.log('📂 Creating categories...');
-    const categoryRecords: Record<string, any> = {};
-    try {
-      for (const category of categories) {
-        const [cat, created] = await db.Category.findOrCreate({
-          where: { name: category.name },
-          defaults: {
-            ...category,
-            createdById: sampleAdmin.id
-          }
-        });
-        categoryRecords[category.name] = cat;
-        console.log(`📁 ${category.name} ${created ? 'created' : 'exists'}`);
-      }
+    const productMap: Record<string, any> = {};
 
-      // Verify categories were created
-      const allCategories = await db.Category.findAll({raw: true});
-      if (allCategories.length === 0) {
-        throw new Error('Failed to create categories');
+    for (const pData of productsData) {
+      // SAFE ACCESS for category/subcategory IDs
+      const catId = pData.category.dataValues?.id || pData.category.id;
+      const subId = pData.subcategory.dataValues?.id || pData.subcategory.id;
+
+      // Create Product
+      const [product] = await db.Product.findOrCreate({
+        where: { name: pData.name, storeId: storeId },
+        defaults: {
+          id: uuidv4(),
+          name: pData.name,
+          description: pData.description,
+          price: pData.price,
+          isActive: true,
+          discount: 0,
+          ownerId: storeAdminUserId,
+          storeId: storeId,
+          categoryId: catId,
+          subcategoryId: subId
+        },
+        transaction
+      });
+
+      productMap[pData.name] = product;
+      const prodId = product.dataValues?.id || product.id;
+
+      // Create Image
+      await db.ProductImage.findOrCreate({
+        where: { productId: prodId, imageUrl: pData.image },
+        defaults: {
+          id: uuidv4(),
+          productId: prodId,
+          imageUrl: pData.image
+        },
+        transaction
+      });
+
+      // Create SizeItems (Inventory)
+      for (const size of pData.sizes) {
+        const sizeId = size.dataValues?.id || size.id;
+        await db.SizeItem.findOrCreate({
+          where: { productId: prodId, sizeId: sizeId },
+          defaults: {
+            id: uuidv4(),
+            productId: prodId,
+            sizeId: sizeId,
+            quantity: 100 // Plenty of stock
+          },
+          transaction
+        });
       }
-      console.log(`✅ Verified ${allCategories.length} categories exist`);
-    } catch (error) {
-      console.error('❌ Error creating categories:', error);
-      throw error;
     }
 
-    const electronicsCategory = categoryRecords['Electronics'];
-    const clothingCategory = categoryRecords['Clothing'];
+    // =========================================================================
+    // 6. SALES (Cart, Orders)
+    // =========================================================================
+    console.log('🛒 6. Creating Sales Data...');
 
-    if (!electronicsCategory || !clothingCategory) {
-      console.warn('⚠️ Electronics or Clothing category missing — skipping subcategories and related products');
-    } else {
-      electronicsCategory.id = electronicsCategory.dataValues.id;
-      clothingCategory.id = clothingCategory.dataValues.id;
-      // ========================
-      // 7. Create Subcategories
-      // ========================
-      const subcategories = [
-        { name: 'Smartphones', categoryId: electronicsCategory.id },
-        { name: 'Laptops', categoryId: electronicsCategory.id },
-        { name: "Men's Clothing", categoryId: clothingCategory.id },
-        { name: "Women's Clothing", categoryId: clothingCategory.id }
-      ];
-      console.log(`🗂️ Subcategories: ${subcategories}`);
+    // const customerUser = userMap[ROLES.CUSTOMER]; // REMOVED DUPLICATE
+    // const customerUserId = customerUser.dataValues?.id || customerUser.id; // Already defined above
 
-      console.log('🗂️ Creating subcategories...');
+    // Cart for Customer
+    const [cart] = await db.Cart.findOrCreate({
+      where: { userId: customerUserId },
+      defaults: {
+        id: uuidv4(),
+        userId: customerUserId
+      },
+      transaction
+    });
 
-      const subcategoryRecords: Record<string, any> = {};
-      for (const sub of subcategories) {
-        console.log(`🗂️ Creating subcategory "${sub.name}"...`);
-        const [subcat, created] = await db.SubCategory.findOrCreate({
-          where: { name: sub.name },
-          defaults: {
-            ...sub,
-            createdById: sampleAdmin.id
-          }
-        });
-        subcategoryRecords[sub.name] = subcat;
-        console.log(`🗂️ ${sub.name} ${created ? 'created' : 'exists'}`);
-      }
+    // Add item to cart (iPhone)
+    const iphone = productMap['iPhone 15 Pro'];
+    // SAFE ACCESS for product properties
+    const iphoneId = iphone.dataValues?.id || iphone.id;
+    // CRITICAL FIX: Access price from dataValues because public field shadows it
+    const iphonePrice = iphone.dataValues?.price ?? iphone.price;
 
-      const smartphoneSubcategory = subcategoryRecords['Smartphones'];
-      const laptopSubcategory = subcategoryRecords['Laptops'];
+    const iphoneSizeItem = await db.SizeItem.findOne({
+      where: { productId: iphoneId },
+      transaction
+    });
 
-      // ========================
-      // 8. Create Store
-      // ========================
-      const [store, storeCreated] = await db.Store.findOrCreate({
-        where: { name: 'Sample Store' },
+    if (iphoneSizeItem) {
+      const sizeItemId = iphoneSizeItem.dataValues?.id || iphoneSizeItem.id;
+      const sizeId = iphoneSizeItem.dataValues?.sizeId || iphoneSizeItem.sizeId;
+
+      await db.CartItem.findOrCreate({
+        where: { cartId: cart.dataValues?.id || cart.id, productId: iphoneId, sizeItemId: sizeItemId },
         defaults: {
-          name: 'Sample Store',
-          description: 'A sample e-commerce store',
-          imgUrl: '/images/store-logo.png',
-          userId: sampleAdmin.id,
-          categoryId: electronicsCategory.id
-        }
-      });
-      console.log(`🏪 Store ${storeCreated ? 'created' : 'exists'}`);
-      store.id = store.dataValues.id;
-      // ========================
-      // 9. Create Products
-      // ========================
-      const products = [
-        {
-          name: 'iPhone 15',
-          description: 'Latest iPhone model',
-          price: 999.99,
-          categoryId: electronicsCategory.id,
-          subcategoryId: smartphoneSubcategory.dataValues.id,
-          storeId: store.id,
-          ownerId: sampleAdmin.id
+          id: uuidv4(),
+          cartId: cart.dataValues?.id || cart.id,
+          productId: iphoneId,
+          sizeItemId: sizeItemId,
+          quantity: 1,
+          sizeId: sizeId // Explicitly set if model supports it
         },
-        {
-          name: 'MacBook Pro',
-          description: 'Professional laptop',
-          price: 1999.99,
-          categoryId: electronicsCategory.id,
-          subcategoryId: laptopSubcategory.dataValues.id,
-          storeId: store.id,
-          ownerId: sampleAdmin.id
-        }
-      ];
-
-      console.log('📦 Creating initial products...');
-      for (const product of products) {
-        const [prod, created] = await db.Product.findOrCreate({
-          where: { name: product.name },
-          defaults: product
-        });
-        console.log(`📦 ${product.name} ${created ? 'created' : 'exists'}`);
-      }
-
-      // ========================
-      // 10. Create Cart
-      // ========================
-      const [cart, cartCreated] = await db.Cart.findOrCreate({
-        where: { userId: sampleCustomer.id },
-        defaults: { userId: sampleCustomer.id }
+        transaction
       });
-      console.log(`🛒 Cart ${cartCreated ? 'created' : 'exists'}`);
+    }
 
-      // ========================
-      // 11. Create Payment First
-      // ========================
-      const [payment, paymentCreated] = await db.Payment.findOrCreate({
-        where: {
-          paymentIntentId: 'pi_sample_' + Date.now()
-        },
-        defaults: {
-          paymentIntentId: 'pi_sample_' + Date.now(),
-          amount: 999.99,
-          currency: 'USD',
-          status: 'succeeded'
-        }
-      });
-      console.log(`💳 Payment ${paymentCreated ? 'created' : 'exists'}`);
-      payment.id = payment.dataValues.id;
-      // ========================
-      // 12. Create Order
-      // ========================
-      const [order, orderCreated] = await db.Order.findOrCreate({
-        where: {
-          paymentId: payment.id
-        },
-        defaults: {
-          userId: sampleCustomer.id,
-          paymentId: payment.id,
-          currency: 'USD'
-        }
-      });
-      console.log(`🧾 Order ${orderCreated ? 'created' : 'exists'}`);
-      order.id = order.dataValues.id;
-      // ========================
-      // 13. Create Order Item
-      // ========================
-      const iphone = await db.Product.findOne({ where: { name: 'iPhone 15' } });
-      iphone.id = iphone.dataValues.id;
-      iphone.price = iphone.dataValues.price;
-      if (iphone && order) {
-        await db.OrderItem.findOrCreate({
-          where: {
-            orderId: order.id,
-            productId: iphone.id
-          },
-          defaults: {
-            orderId: order.id,
-            productId: iphone.id,
-            quantity: 1,
-            price: iphone.price
-          }
-        });
-        console.log('🧾 Order Item created for iPhone 15');
-      } else {
-        console.warn('⚠️ iPhone 15 or Order missing — skipping Order Item');
-      }
+    // Tax Rule
+    const [taxRule] = await db.TaxRule.findOrCreate({
+      where: { region: 'US' },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Integer ID
+        region: 'US',
+        rate: 0.08,
+        taxType: 'SALES_TAX'
+      },
+      transaction
+    });
+    const taxRuleId = taxRule.dataValues?.id || taxRule.id;
 
-      // ========================
-      // 13. Create Promotion
-      // ========================
-await db.Promotion.findOrCreate({
-  where: { code: 'SUMMER20' }, // ← Use 'code' (defined in model) instead of 'name'
-  defaults: {
-    code: 'SUMMER20',
-    type: 'PERCENTAGE', // ← Must match ENUM exactly
-    value: 20,          // ← Was 'discountValue'
-    minCartValue: 0,    // ← Required? Add if needed
-    validFrom: new Date(),
-    validTo: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    // Remove: description, isActive, discountType, startDate, endDate — not in model
-    // createdById is also not in model — remove unless you added it later
-  }
-});
-      console.log('🏷️ Promotion created');
+    // Shipping Method
+    const [shippingMethod] = await db.ShippingMethod.findOrCreate({
+      where: { name: 'Standard' },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Integer ID
+        name: 'Standard',
+        cost: 10.00,
+        deliveryEstimate: '3-5 Days'
+      },
+      transaction
+    });
+    const shippingMethodId = shippingMethod.dataValues?.id || shippingMethod.id;
 
-      // ========================
-      // 14. Create Article
-      // ========================
-      await db.Article.findOrCreate({
-        where: { title: 'Welcome to Our Store' },
-        defaults: {
-          title: 'Welcome to Our Store',
-          text: 'This is a sample article about our store.',
-          type: 'blog',
-          userId: sampleAdmin.id
-        }
-      });
-      console.log('📰 Article created');
+    // Create a Past Order
+    const paymentIntentId = 'pi_seed_test_12345';
 
-      // ========================
-      // 15. Create Package
-      // ========================
-      const [pkg, pkgCreated] = await db.Package.findOrCreate({
-        where: { name: 'Basic Package' },
-        defaults: {
-          name: 'Basic Package',
-          description: 'Basic subscription package',
-          storeLimit: 5,
-          categoryLimit: 10
-        }
-      });
-      console.log(`📦 Package ${pkgCreated ? 'created' : 'exists'}`);
+    const [payment] = await db.Payment.findOrCreate({
+      where: { paymentIntentId },
+      defaults: {
+        id: uuidv4(),
+        paymentIntentId,
+        amount: 1229.98,
+        currency: 'USD',
+        status: 'succeeded'
+      },
+      transaction
+    });
 
-      // ========================
-      // 16. Create Shipping Method
-      // ========================
-      const [shippingMethod, shippingCreated] = await db.ShippingMethod.findOrCreate({
-        where: { name: 'Standard Shipping' },
-        defaults: {
-          name: 'Standard Shipping',
-          cost: 9.99,
-          deliveryEstimate: '5-7 business days'
-        }
-      });
-      console.log(`🚚 Shipping Method ${shippingCreated ? 'created' : 'exists'}`);
-      shippingMethod.id = shippingMethod.dataValues.id;
-      console.log(`🔍 Debug - ShippingMethod ID: ${shippingMethod.id}, type: ${typeof shippingMethod.id}`);
+    const [order] = await db.Order.findOrCreate({
+      where: { paymentId: payment.dataValues?.id || payment.id },
+      defaults: {
+        id: uuidv4(),
+        userId: customerUserId,
+        paymentId: payment.dataValues?.id || payment.id,
+        currency: 'USD',
+        TaxRuleId: taxRuleId // Added Link to TaxRule
+      },
+      transaction
+    });
+    const orderId = order.dataValues?.id || order.id;
 
-      // ========================
-      // 17. Create Size
-      // ========================
-      const [size, sizeCreated] = await db.Size.findOrCreate({
-        where: { size: 'Medium' },
-        defaults: {
-          size: 'Medium'
-        }
-      });
-      console.log(`📏 Size ${sizeCreated ? 'created' : 'exists'}`);
-      size.id = size.dataValues.id;
+    // Update payment with orderId if needed (Payment model has orderId foreign key)
+    if (!payment.dataValues?.orderId && !payment.orderId) {
+       await payment.update({ orderId: orderId }, { transaction });
+    }
 
-      // ========================
-      // 18. Create Tax Rule
-      // ========================
-      await db.TaxRule.findOrCreate({
-        where: { region: 'US' },
-        defaults: {
-          region: 'US',
-          rate: 0.20,
-          taxType: 'SALES_TAX'
-        }
-      });
-      console.log('🧾 Tax Rule created');
+    // Order Shipping
+    await db.OrderShipping.findOrCreate({
+      where: { OrderId: orderId },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Integer ID
+        OrderId: orderId,
+        orderId: orderId, // Duplicate column often found in Sequelize legacy
+        ShippingMethodId: shippingMethodId,
+        trackingNumber: `TRK-${Date.now()}`,
+        carrier: 'FedEx',
+        status: 'DELIVERED'
+      },
+      transaction
+    });
 
-      // ========================
-      // 19. Create User Session
-      // ========================
-      await db.UserSession.findOrCreate({
-        where: {
-          userId: sampleCustomer.id,
-          deviceType: 'web'
-        },
-        defaults: {
-          userId: sampleCustomer.id,
-          ipAddress: '127.0.0.1',
-          deviceType: 'web',
-          loginAt: new Date()
-        }
-      });
-      console.log('📱 User Session created');
+    if (iphonePrice === undefined || iphonePrice === null) {
+      throw new Error(`Price for iPhone 15 Pro is null/undefined. Value: ${iphonePrice}`);
+    }
 
-      // ========================
-      // 20. Create Analytics
-      // ========================
-      await db.Analytics.findOrCreate({
-        where: {
-          eventType: 'page_view',
-          userId: sampleCustomer.id
-        },
-        defaults: {
-          eventType: 'page_view',
-          eventData: { page: '/shop' },
-          userId: sampleCustomer.id
-        }
-      });
-      console.log('📊 Analytics event created');
+    // Order Items
+    await db.OrderItem.findOrCreate({
+      where: { orderId: orderId, productId: iphoneId },
+      defaults: {
+        id: uuidv4(),
+        orderId: orderId,
+        productId: iphoneId,
+        quantity: 1,
+        price: iphonePrice // Using safely accessed price
+      },
+      transaction
+    });
 
-      // ========================
-      // 21. Create Translation
-      // ========================
-      await db.Translation.findOrCreate({
-        where: {
-          model: 'Product',
-          recordId: '00000000-0000-0000-0000-000000000000',
-          language: 'en',
-          field: 'name'
-        },
-        defaults: {
-          model: 'Product',
-          recordId: '00000000-0000-0000-0000-000000000000',
-          language: 'en',
-          field: 'name',
-          translation: 'Welcome to our store!'
-        }
-      });
-      console.log('🌐 Translation created');
+    // =========================================================================
+    // 7. EXTRAS (Promotions, Returns, Analytics)
+    // =========================================================================
+    console.log('✨ 7. Creating Extras...');
 
-      // ========================
-      // 22. Create Audit Log
-      // ========================
-      await db.AuditLog.findOrCreate({
-        where: {
-          action: 'user_created',
-          performedById: sampleAdmin.id
-        },
-        defaults: {
-          action: 'user_created',
-          entity: 'User',
-          entityId: sampleCustomer.id,
-          performedById: sampleAdmin.id,
-          snapshot: { name: 'John Customer', email: 'customer@example.com' }
-        }
-      });
-      console.log('📋 Audit Log created');
+    // Promotion
+    const [promotion] = await db.Promotion.findOrCreate({
+      where: { code: 'SAVE10' },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Model uses Integer ID
+        code: 'SAVE10',
+        type: 'PERCENTAGE',
+        value: 10,
+        minCartValue: 50,
+        validFrom: new Date(),
+        validTo: new Date(Date.now() + 10000000)
+      },
+      transaction
+    });
 
-      // ========================
-      // 23. Create Additional Products
-      // ========================
-      const menClothingSub = subcategoryRecords["Men's Clothing"];
-      const additionalProducts = [
-        {
-          name: 'Samsung Galaxy S24',
-          description: 'Latest Samsung smartphone',
-          price: 899.99,
-          stock: 30,
-          categoryId: electronicsCategory.id,
-          subcategoryId: smartphoneSubcategory?.id,
-          storeId: store.id,
-          createdById: sampleAdmin.id
-        },
-        {
-          name: 'Dell XPS 13',
-          description: 'Premium ultrabook',
-          price: 1299.99,
-          stock: 15,
-          categoryId: electronicsCategory.id,
-          subcategoryId: laptopSubcategory?.id,
-          storeId: store.id,
-          createdById: sampleAdmin.id
-        },
-        {
-          name: 'Nike Air Max',
-          description: 'Comfortable running shoes',
-          price: 129.99,
-          stock: 50,
-          categoryId: clothingCategory.id,
-          subcategoryId: menClothingSub?.id,
-          storeId: store.id,
-          createdById: sampleAdmin.id
-        }
-      ];
-
-      console.log('📦 Creating additional products...');
-      for (const product of additionalProducts) {
-        if (product.subcategoryId) {
-          const [prod, created] = await db.Product.findOrCreate({
-            where: { name: product.name },
-            defaults: product
-          });
-          console.log(`📦 ${product.name} ${created ? 'created' : 'exists'}`);
-        } else {
-          console.warn(`⚠️ Skipping product "${product.name}" — missing subcategory`);
-        }
-      }
-
-      // ========================
-      // 24. Create Cart Items
-      // ========================
-      const samsungPhone = await db.Product.findOne({ where: { name: 'Samsung Galaxy S24' } });
-      if (cart && samsungPhone) {
-        await db.CartItem.findOrCreate({
-          where: {
-            cartId: cart.id,
-            productId: samsungPhone.id
-          },
-          defaults: {
-            cartId: cart.id,
-            productId: samsungPhone.id,
-            quantity: 2,
-            price: samsungPhone.price
-          }
-        });
-        console.log('🛒 Cart Item added for Samsung Galaxy S24');
-      } else {
-        console.warn('⚠️ Cart or Samsung Galaxy S24 missing — skipping Cart Item');
-      }
-
-      // ========================
-      // 25. Create Favorites
-      // ========================
-      const [favorite, favoriteCreated] = await db.Favorite.findOrCreate({
-        where: { userId: sampleCustomer.id },
-        defaults: { userId: sampleCustomer.id }
-      });
-      console.log(`⭐ Favorite ${favoriteCreated ? 'created' : 'exists'}`);
-      favorite.id = favorite.dataValues.id;
-      const macbook = await db.Product.findOne({ where: { name: 'MacBook Pro' },raw: true });
-      if (favorite && macbook) {
-        await db.FavoriteItem.findOrCreate({
-          where: {
-            favoriteId: favorite.id,
-            productId: macbook.id
-          },
-          defaults: {
-            favoriteId: favorite.id,
-            productId: macbook.id
-          }
-        });
-        console.log('⭐ Favorite Item added for MacBook Pro');
-      } else {
-        console.warn('⚠️ Favorite or MacBook Pro missing — skipping Favorite Item');
-      }
-
-      // ========================
-      // 26. Create Comments
-      // ========================
-      if (iphone && sampleCustomer) {
-        await db.Comment.findOrCreate({
-          where: {
-            userId: sampleCustomer.id,
-            productId: iphone.id
-          },
-          defaults: {
-            userId: sampleCustomer.id,
-            productId: iphone.id,
-            text: 'Great phone! Love the camera quality.',
-            rating: 5
-          }
-        });
-        console.log('💬 Comment created for iPhone 15');
-      } else {
-        console.warn('⚠️ iPhone 15 or Customer missing — skipping Comment');
-      }
-
-      // ========================
-      // 27. Create Product Images
-      // ========================
-      if (iphone) {
-        const productImages = [
-          {
-            productId: iphone.id,
-            imageUrl: '/uploads/iphone15-1.jpg',
-            altText: 'iPhone 15 front view',
-            isPrimary: true
-          },
-          {
-            productId: iphone.id,
-            imageUrl: '/uploads/iphone15-2.jpg',
-            altText: 'iPhone 15 back view',
-            isPrimary: false
-          }
-        ];
-
-        for (const image of productImages) {
-          await db.ProductImage.findOrCreate({
-            where: {
-              productId: image.productId,
-              imageUrl: image.imageUrl
+    // Promotion Orders (Join Table) - Only if model exists, otherwise manual insert logic if needed
+    if (db.PromotionOrders) {
+        await db.PromotionOrders.findOrCreate({
+            where: { OrderId: orderId, PromotionId: promotion.dataValues?.id || promotion.id },
+            defaults: {
+                OrderId: orderId,
+                PromotionId: promotion.dataValues?.id || promotion.id
             },
-            defaults: image
-          });
-        }
-        console.log('🖼️ Product Images created for iPhone 15');
-      } else {
-        console.warn('⚠️ iPhone 15 missing — skipping Product Images');
-      }
-
-      // ========================
-      // 28. Create Size Items
-      // ========================
-      const nikeShoes = await db.Product.findOne({ where: { name: 'Nike Air Max' } ,raw: true });
-      if (size && nikeShoes) {
-        await db.SizeItem.findOrCreate({
-          where: {
-            productId: nikeShoes.id,
-            sizeId: size.id
-          },
-          defaults: {
-            productId: nikeShoes.id,
-            sizeId: size.id,
-            stock: 25
-          }
+            transaction
         });
-        console.log('📏 Size Item created for Nike Air Max');
-      } else {
-        console.warn('⚠️ Size or Nike Air Max missing — skipping Size Item');
-      }
+    }
 
-      // ========================
-      // 29. Create User Package
-      // ========================
-      pkg.id = pkg.dataValues.id;
-      if (pkg && sampleAdmin) {
-        await db.UserPackage.findOrCreate({
-          where: {
-            userId: sampleAdmin.id,
-            packageId: pkg.id
-          },
-          defaults: {
-            userId: sampleAdmin.id,
-            packageId: pkg.id,
-            purchaseDate: new Date(),
-            expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-          }
-        });
-        console.log('📦 User Package assigned to Admin');
-      } else {
-        console.warn('⚠️ Package or Admin missing — skipping User Package');
-      }
+    // Analytics (for Dashboard)
+    // Idempotency: avoid creating duplicate identical events
+    await db.Analytics.findOrCreate({
+      where: { eventType: 'purchase', userId: customerUserId },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Model uses Integer ID
+        eventType: 'purchase',
+        eventData: { amount: 1229.98 },
+        userId: customerUserId,
+        UserId: customerUserId // Redundant column often found
+      },
+      transaction
+    });
 
-      // ========================
-      // 30. Create Return Request
-      // ========================
-      if (order && sampleCustomer) {
-        await db.ReturnRequest.findOrCreate({
-          where: {
-            orderId: order.id,
-            userId: sampleCustomer.id
-          },
-          defaults: {
-            orderId: order.id,
-            userId: sampleCustomer.id,
-            reason: 'Product not as described',
-            status: 'PENDING',
-            refundAmount: 999.99
-          }
-        });
-        console.log('↩️ Return Request created');
-      } else {
-        console.warn('⚠️ Order or Customer missing — skipping Return Request');
-      }
+    // Return Request (Test Return)
+    await db.ReturnRequest.findOrCreate({
+      where: { orderId: orderId },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Model uses Integer ID
+        orderId: orderId,
+        userId: customerUserId,
+        reason: 'Defective',
+        status: 'PENDING',
+        refundAmount: 999.99
+      },
+      transaction
+    });
 
-      // ========================
-      // 31. Create Order Shipping
-      // ========================
-      order.id = order.dataValues.id;
-      if (shippingMethod && order) {
-        await db.OrderShipping.findOrCreate({
-          where: { OrderId: order.id },
-          defaults: {
-            OrderId: order.id,
-            ShippingMethodId: shippingMethod.id,
-            trackingNumber: 'TRK' + Date.now(),
-            carrier: 'UPS',
-            status: 'SHIPPED'
-          }
-        });
-        console.log('🚚 Order Shipping created');
-      } else {
-        console.warn('⚠️ Shipping Method or Order missing — skipping Order Shipping');
-      }
+    // Article (Admin Blog Post)
+    await db.Article.findOrCreate({
+      where: { title: 'Welcome to Our Store' },
+      defaults: {
+        id: uuidv4(),
+        title: 'Welcome to Our Store',
+        text: 'We are happy to announce our new opening.',
+        type: 'blog',
+        userId: storeAdminUserId
+      },
+      transaction
+    });
 
-      // ========================
-      // 32. Create Additional Analytics
-      // ========================
-      const analyticsEvents = [
-        {
-          eventType: 'product_view',
-          eventData: { productId: iphone?.id, productName: 'iPhone 15' },
-          userId: sampleCustomer.id,
-          sessionId: 'session-123'
+    // Comment (Customer Review on iPhone)
+    await db.Comment.findOrCreate({
+      where: { userId: customerUserId, productId: iphoneId },
+      defaults: {
+        id: uuidv4(),
+        userId: customerUserId,
+        productId: iphoneId,
+        text: 'Amazing phone!',
+        rating: 5
+      },
+      transaction
+    });
+
+    // Favorite (Customer Wishlist)
+    const [favorite] = await db.Favorite.findOrCreate({
+      where: { userId: customerUserId, productId: iphoneId },
+      defaults: {
+        id: uuidv4(),
+        userId: customerUserId,
+        productId: iphoneId
+      },
+      transaction
+    });
+
+    // FavoriteItem (Explicit Item)
+    const favoriteId = favorite.dataValues?.id || favorite.id;
+    await db.FavoriteItem.findOrCreate({
+        where: { favoriteId: favoriteId, productId: iphoneId },
+        defaults: {
+            id: uuidv4(),
+            favoriteId: favoriteId,
+            productId: iphoneId
         },
-        {
-          eventType: 'add_to_cart',
-          eventData: { productId: samsungPhone?.id, productName: 'Samsung Galaxy S24' },
-          userId: sampleCustomer.id,
-          sessionId: 'session-123'
+        transaction
+    });
+
+    // User Package (Subscription)
+    // First create a Package
+    const [pkg] = await db.Package.findOrCreate({
+      where: { name: 'Starter Plan' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Starter Plan',
+        storeLimit: 1,
+        categoryLimit: 5,
+        productLimit: 20,
+        userLimit: 1,
+        price: 0,
+        isActive: true
+      },
+      transaction
+    });
+    const pkgId = pkg.dataValues?.id || pkg.id;
+
+    await db.UserPackage.findOrCreate({
+      where: { userId: storeAdminUserId, packageId: pkgId },
+      defaults: {
+        id: uuidv4(),
+        userId: storeAdminUserId,
+        packageId: pkgId,
+        startDate: new Date(),
+        isActive: true,
+        createdById: superAdminUserId
+      },
+      transaction
+    });
+
+    // User Session (Mock)
+    await db.UserSession.findOrCreate({
+        where: { userId: customerUserId },
+        defaults: {
+            // id: uuidv4(), <-- REMOVED: Integer ID
+            userId: customerUserId,
+            ipAddress: '127.0.0.1',
+            deviceType: 'Desktop',
+            loginAt: new Date()
         },
-        {
-          eventType: 'purchase',
-          eventData: { orderId: order.id, totalAmount: 999.99 },
-          userId: sampleCustomer.id,
-          sessionId: 'session-123'
-        }
-      ];
+        transaction
+    });
 
-      for (const event of analyticsEvents) {
-        if (event.eventData.productId || event.eventData.orderId) {
-          await db.Analytics.findOrCreate({
-            where: {
-              eventType: event.eventType,
-              userId: event.userId,
-            },
-            defaults: event
-          });
-          console.log(`📊 Analytics event "${event.eventType}" created`);
-        } else {
-          console.warn(`⚠️ Skipping analytics event "${event.eventType}" — missing productId/orderId`);
-        }
-      }
-
-      // ========================
-      // 33. Create Additional Translations
-      // ========================
-      const translations = [
-        { model: 'Product', recordId: '00000000-0000-0000-0000-000000000001', language: 'en', field: 'name', translation: 'Welcome to our amazing store!' },
-        { model: 'Product', recordId: '00000000-0000-0000-0000-000000000001', language: 'fr', field: 'name', translation: 'Bienvenue dans notre magasin incroyable!' },
-        { model: 'Product', recordId: '00000000-0000-0000-0000-000000000001', language: 'es', field: 'name', translation: '¡Bienvenido a nuestra tienda increíble!' },
-        { model: 'Product', recordId: '00000000-0000-0000-0000-000000000002', language: 'en', field: 'name', translation: 'Add to Cart' },
-        { model: 'Product', recordId: '00000000-0000-0000-0000-000000000002', language: 'fr', field: 'name', translation: 'Ajouter au panier' },
-        { model: 'Product', recordId: '00000000-0000-0000-0000-000000000002', language: 'es', field: 'name', translation: 'Añadir al carrito' }
-      ];
-
-      for (const t of translations) {
-        await db.Translation.findOrCreate({
-          where: { model: t.model, recordId: t.recordId, language: t.language, field: t.field },
-          defaults: t
-        });
-      }
-      console.log('🌐 Additional Translations created');
-
-      // ========================
-      // 34. Create Additional Audit Logs
-      // ========================
-      const auditLogs = [
-        {
-          action: 'product_created',
-          entity: 'Product',
-          entityId: iphone?.id,
-          performedById: sampleAdmin.id,
-          snapshot: { name: 'iPhone 15', price: 999.99 }
+    // Translation (Mock)
+    await db.Translation.findOrCreate({
+        where: { model: 'Product', recordId: iphoneId, language: 'es' },
+        defaults: {
+            // id: uuidv4(), <-- REMOVED: Integer ID
+            model: 'Product',
+            recordId: iphoneId,
+            language: 'es',
+            field: 'name',
+            translation: 'iPhone 15 Pro (ES)'
         },
-        {
-          action: 'order_created',
-          entity: 'Order',
-          entityId: order.id,
-          performedById: sampleCustomer.id,
-          snapshot: { totalAmount: 999.99, currency: 'USD' }
-        },
-        {
-          action: 'role_assigned',
-          entity: 'User',
-          entityId: sampleAdmin.id,
-          performedById: superAdmin.id,
-          snapshot: { role: 'admin' }
-        }
-      ];
+        transaction
+    });
 
-      for (const log of auditLogs) {
-        if (log.entityId) {
-          await db.AuditLog.findOrCreate({
-            where: {
-              action: log.action,
-              entity: log.entity,
-              entityId: log.entityId,
-              performedById: log.performedById
-            },
-            defaults: log
-          });
-          console.log(`📋 Audit Log "${log.action}" created`);
-        } else {
-          console.warn(`⚠️ Skipping audit log "${log.action}" — missing entityId`);
-        }
-      }
-    } // End of if (electronicsCategory && clothingCategory)
+    // Audit Log (Admin Action)
+    // Audit logs are history, so typically we append. But for seeding, let's keep it clean.
+    await db.AuditLog.findOrCreate({
+      where: { action: 'create_product', entityId: iphoneId },
+      defaults: {
+        action: 'create_product',
+        entity: 'Product',
+        entityId: iphoneId,
+        performedById: storeAdminUserId,
+        snapshot: { name: 'iPhone 15 Pro' }
+      },
+      transaction
+    });
 
-    console.log('✅✅✅ Data seeding completed successfully!');
-    console.log('📊 Created:');
-    console.log('  - 1 Super Admin (admin@admin.com / admin)');
-    console.log('  - 1 Admin (admin@store.com / admin123)');
-    console.log('  - 1 Customer (customer@example.com / customer123)');
-    console.log('  - 3 Roles (super_admin, admin, customer) with proper permissions');
-    console.log('  - 50+ Comprehensive Permissions');
-    console.log('  - 4 Categories');
-    console.log('  - 4 Subcategories');
-    console.log('  - 1 Store');
-    console.log('  - 5 Products (iPhone 15, MacBook Pro, Samsung Galaxy S24, Dell XPS 13, Nike Air Max)');
-    console.log('  - 1 Cart with Cart Items');
-    console.log('  - 1 Order with Order Items');
-    console.log('  - 1 Order Shipping with tracking');
-    console.log('  - 1 Favorites with Favorite Items');
-    console.log('  - 1 Comment with rating');
-    console.log('  - 2 Product Images');
-    console.log('  - 1 Size Item');
-    console.log('  - 1 User Package subscription');
-    console.log('  - 1 Return Request');
-    console.log('  - 1 Promotion');
-    console.log('  - 1 Article');
-    console.log('  - 1 Package');
-    console.log('  - 1 Shipping Method');
-    console.log('  - 1 Size');
-    console.log('  - 1 Tax Rule');
-    console.log('  - 1 User Session');
-    console.log('  - 4 Analytics Events');
-    console.log('  - 6 Translations (EN, FR, ES)');
-    console.log('  - 4 Audit Logs');
-    console.log('  - Complete role-permission assignments');
-    console.log('  - Multi-language support data');
-    console.log('  - Comprehensive e-commerce test data');
+    await transaction.commit();
+    console.log('✅✅✅ Data Seeding Completed Successfully! No Errors.');
+
+    console.log('\n---------------------------------------------------');
+    console.log('Login Credentials:');
+    console.log(`Super Admin: admin@admin.com / 123456`);
+    console.log(`Store Admin: admin@store.com / 123456`);
+    console.log(`Customer:    customer@example.com / 123456`);
+    console.log('---------------------------------------------------\n');
 
   } catch (error) {
-    console.error('❌ Error seeding data:', error);
-    throw error;
+    await transaction.rollback();
+    console.error('❌ Data Seeding Failed:', error);
+    process.exit(1);
   }
 };
 
-// Run if called directly
+// Execute if run directly
 if (require.main === module) {
-  seedData()
-    .then(() => {
-      console.log('🎉 Data seeding completed');
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error('💥 Data seeding failed:', error);
-      process.exit(1);
-    });
+  seedData();
 }
