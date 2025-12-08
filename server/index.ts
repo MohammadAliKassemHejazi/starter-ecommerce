@@ -29,6 +29,7 @@ import db from './src/models';
 
 import { storeMiddleWear } from './src/middlewares/store.middleweare';
 import { shopMiddleWare } from './src/middlewares/shop.middleware';
+import { responseStandardizer } from './src/middlewares/responseStandardizer.middleware';
 import runScripts from './src/scripts/runScripts';
 
 // Extend NodeJS global type to include __basedir
@@ -361,6 +362,9 @@ async function createApp(): Promise<Express> {
   
   // Health check endpoint
   app.get('/health', healthCheck);
+
+  // Apply response standardizer middleware
+  app.use(responseStandardizer);
   
   // Swagger documentation
   try {
