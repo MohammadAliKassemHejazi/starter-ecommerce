@@ -10,7 +10,6 @@ import { fetchSession } from "@/store/slices/userSlice";
 import { fetchFavorites } from "@/store/slices/favoritesSlice";
 import "../src/i18n";
 import { ToastProvider } from "../src/contexts/ToastContext";
-import { useGuestDataSync } from "@/hooks/useGuestDataSync";
 import ClientOnlyWrapper from "@/components/ClientOnlyWrapper";
    store.dispatch(fetchSession());
 function MyApp({ Component, pageProps, router }: AppProps) {
@@ -41,18 +40,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 function AppContent({ Component, pageProps, router }: AppProps) {
   return (
     <ClientOnlyWrapper>
-      {/* <GuestDataSyncWrapper /> */}
       <div className="">
         <Component {...pageProps} router={router} />
       </div>
     </ClientOnlyWrapper>
   );
-}
-
-function GuestDataSyncWrapper() {
-  // Initialize guest data sync only on client side
-  useGuestDataSync();
-  return null;
 }
 
 export default MyApp;
