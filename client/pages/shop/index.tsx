@@ -65,6 +65,7 @@ const Shop = () => {
   useEffect(() => {
     if (selectedStore) {
       debouncedFetchProducts(searchQuery);
+      debugger;
     }
   }, [selectedStore, currentPage, pageSize, searchQuery, debouncedFetchProducts]);
 
@@ -125,13 +126,14 @@ const Shop = () => {
   };
 
   // Transform products for table
+
   const transformedProducts = productList?.map((product: any) => ({
     ...product,
     ProductImages: product.photos?.map((photo: any) => ({
       url: process.env.NEXT_PUBLIC_BASE_URL_Images + photo.imageUrl
     })) || []
   })) || [];
-
+  debugger;
   // Shopping view component
   const ShoppingView = () => (
     <div className="row">
@@ -246,29 +248,7 @@ const Shop = () => {
           filterButton={{ onClick: () => console.log('Filter products') }}
           pagination={true}
           pageSize={pageSize}
-          customActions={[
-            {
-              key: 'view',
-              label: 'View',
-              icon: 'bi bi-eye',
-              variant: 'info',
-              onClick: handleViewProduct
-            },
-            {
-              key: 'edit',
-              label: 'Edit',
-              icon: 'bi bi-pencil',
-              variant: 'primary',
-              onClick: handleEditProduct
-            },
-            {
-              key: 'delete',
-              label: 'Delete',
-              icon: 'bi bi-trash',
-              variant: 'danger',
-              onClick: (product) => handleDeleteProduct(product.id)
-            }
-          ]}
+
           headerActions={
             <div className="d-flex align-items-center gap-3">
               <span className="text-muted">

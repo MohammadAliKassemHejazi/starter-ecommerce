@@ -31,7 +31,7 @@ export const fetchProductById = createAsyncThunk(
   "shop/by-id",
   async (id: string) => {
     const response = await shopService.requestProductById(id);
-    return response;
+    return response.data;
   }
 );
 

@@ -34,12 +34,14 @@ const { isSuperAdmin, isAuthenticated ,isAuthenticating} = usePageData({ loadUse
 
 useEffect(() => {
   // Only fetch when page data (e.g., user info) is loaded
- console.log("isAuthenticating",isAuthenticating);
+  console.log("isAuthenticating", isAuthenticating);
+  
   if (isAuthenticated && !isauthenticatingvalue) {
     dispatch(fetchSalesData());
     dispatch(fetchInventoryAlerts());
     dispatch(fetchOrderStatuses());
   }
+  debugger;
 }, [isAuthenticating, isAuthenticated, dispatch, isauthenticatingvalue]);
 
 

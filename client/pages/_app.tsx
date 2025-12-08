@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 function AppContent({ Component, pageProps, router }: AppProps) {
   return (
     <ClientOnlyWrapper>
-      <GuestDataSyncWrapper />
+      {/* <GuestDataSyncWrapper /> */}
       <div className="">
         <Component {...pageProps} router={router} />
       </div>

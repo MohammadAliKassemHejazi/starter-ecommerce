@@ -37,6 +37,10 @@ const EditStore = () => {
   const categoriesList = useSelector(utileCategoriesSelector);
  const [store, setStore] = useState<IStoreModel | null>(null);
 
+  
+  
+
+  
   // Fetch store data on component mount
 useEffect(() => {
   if (id) {
@@ -44,7 +48,7 @@ useEffect(() => {
       .unwrap()
         .then((REStore: IStoreResponseModel) => {
          
-      
+          debugger;
         const formattedImages: ImageListType = REStore.imgUrl
           ? [{
               id: REStore.id,
@@ -52,11 +56,11 @@ useEffect(() => {
               file: undefined, // Must be `undefined`, NOT `null`
             }]
           : [];
-
+           console.log("Fetched store data:", REStore);
           setStore({
            id: REStore.id,
     name: REStore.name,
-    description: REStore.description,
+    description: REStore.description?? "",
             categoryId: REStore.categoryId,
             croppedImages: formattedImages,
           photos: [], // Initialize photos as empty (for new uploads)
@@ -66,13 +70,15 @@ useEffect(() => {
         Toast.fire({ icon: "error", title: `Failed to fetch store: ${error.message}` });
       });
   }
+  
 }, [id, dispatch]);
 
-  // Fetch categories for the dropdown
-  useEffect(() => {
-    dispatch(fetchAllCategories());
-  }, [dispatch]);
 
+    // Fetch categories for the dropdown
+useEffect(() => {
+  dispatch(fetchAllCategories()).unwrap();
+  
+}, [dispatch]);
 
 
   // Handle image changes (cropping/uploading)
@@ -221,6 +227,7 @@ const handleDeleteImage = async () => {
       <section className="mt-5">
         <div className="container">
           <h2 className="text-center mb-4">Edit Store</h2>
+          {<p>{store.id}</p>}
           <Formik
            initialValues={store || { name: "", description: "", storeId: "", categoryId: "",  ProductImages: [] }} // Initialize with fetched store data
             onSubmit={handleSubmit}

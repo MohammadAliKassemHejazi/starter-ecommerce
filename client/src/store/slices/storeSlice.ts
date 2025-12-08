@@ -17,7 +17,7 @@ export const fetchStoreById = createAsyncThunk(
   async (id: string) => {
     const { data: response } = await storeService.requestStoreById(id);
     console.log(response, " response from storeSlice");
-    return response;
+    return response.store;
   }
 );
 

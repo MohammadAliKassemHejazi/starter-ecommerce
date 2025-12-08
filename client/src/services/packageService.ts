@@ -82,6 +82,7 @@ export const getUserActivePackage = async (): Promise<UserPackageResponse> => {
 // Get user's package limits
 export const getUserPackageLimits = async (): Promise<PackageLimitsResponse> => {
   const { data: response } = await httpClient.get<PackageLimitsResponse>("/packages/limits");
+  console.log(response , " package limits");
   return response;
 };
 
