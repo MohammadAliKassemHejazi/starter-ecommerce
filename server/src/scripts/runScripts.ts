@@ -1,18 +1,21 @@
-import { seedAll } from './scriptseedall';
+import { seedData } from './seedData';
 import db from '../models';
 
 const runScripts = async () => {
   try {
     console.log('Starting database scripts...');
     
+    // Sync database (optional: { force: true } will drop tables)
+    // await db.sequelize.sync({ alter: true });
 
     // Run main seed data script (contains all logic)
-    await seedAll();
+    await seedData();
 
     console.log('All scripts completed successfully!');
+    process.exit(0);
   } catch (error) {
     console.error('Error running scripts:', error);
-    throw error; // Re-throw error instead of exiting
+    process.exit(1);
   }
 };
 
