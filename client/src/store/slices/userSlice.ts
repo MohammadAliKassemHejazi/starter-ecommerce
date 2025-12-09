@@ -30,7 +30,6 @@ const initialState: UserState = {
 	isAuthenticating: true,
 	roles: [],
 	permissions: [],
-	isGuest: false,
 };
 
 export const signIn = createAsyncThunk(
@@ -180,33 +179,28 @@ export const userSlice = createSlice({
 				state.isAuthenticated = true;
 				
 			} else {
-				
 				state.isAuthenticated = false;
-				state.id = "guest";
-				state.name = "Guest User";
+				state.id = "";
+				state.name = "";
 				state.email = "";
 				state.address = "";
 				state.phone = "";
 				state.accessToken = "";
 				state.roles = [];
 				state.permissions = [];
-				state.isGuest = true;
 			}
 		});
 		builder.addCase(fetchSession.rejected, (state) => {
 			state.isAuthenticating = false;
-			// If session fetch fails, set as guest (default behavior)
-	
 			state.isAuthenticated = false;
-			state.id = "guest";
-			state.name = "Guest User";
+			state.id = "";
+			state.name = "";
 			state.email = "";
 			state.address = "";
 			state.phone = "";
 			state.accessToken = "";
 			state.roles = [];
 			state.permissions = [];
-			state.isGuest = true;
 		});
 		builder.addCase(signOut.fulfilled, (state) => {
 			state.isAuthenticated = false;

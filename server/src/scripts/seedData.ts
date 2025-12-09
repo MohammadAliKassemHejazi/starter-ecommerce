@@ -158,6 +158,7 @@ export const seedData = async (): Promise<void> => {
       },
       transaction
     });
+
     const superAdminUserId = superAdminUser.dataValues?.id || superAdminUser.id;
 
     // 2. Create Store Admin (created by Super Admin)
@@ -649,6 +650,37 @@ export const seedData = async (): Promise<void> => {
     });
 
     // User Package (Subscription)
+    // Create Pro Plan for Super Admin
+    const [proPkg] = await db.Package.findOrCreate({
+      where: { name: 'Pro Plan' },
+      defaults: {
+        id: uuidv4(),
+        name: 'Pro Plan',
+        storeLimit: 100,
+        categoryLimit: 500,
+        productLimit: 2000,
+        userLimit: 100,
+        price: 0,
+        isActive: true
+      },
+      transaction
+    });
+    const proPkgId = proPkg.dataValues?.id || proPkg.id;
+
+    // Assign Pro Plan to Super Admin
+    await db.UserPackage.findOrCreate({
+      where: { userId: superAdminUserId, packageId: proPkgId },
+      defaults: {
+        id: uuidv4(),
+        userId: superAdminUserId,
+        packageId: proPkgId,
+        startDate: new Date(),
+        isActive: true,
+        createdById: superAdminUserId
+      },
+      transaction
+    });
+
     // First create a Package
     const [pkg] = await db.Package.findOrCreate({
       where: { name: 'Starter Plan' },

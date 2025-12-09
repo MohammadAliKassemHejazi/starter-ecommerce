@@ -8,11 +8,8 @@ import {
   clearCart as clearCartService,
   loadCart as loadCartService,
 } from "@/services/paymentService";
-import { localStorageService, GuestCartItem } from "@/services/localStorageService";
-
 interface CartState {
   cartItems: CartItem[];
-  guestCartItems: GuestCartItem[];
   cartTotalQuantity: number;
   cartTotalAmount: number;
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -21,7 +18,6 @@ interface CartState {
 
 const initialState: CartState = {
   cartItems: [],
-  guestCartItems: [],
   cartTotalQuantity: 0,
   cartTotalAmount: 0,
   status: "idle",
@@ -45,56 +41,52 @@ export const fetchCart = createAsyncThunk(
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (product: IProductModel, { rejectWithValue, dispatch, getState }) => {
-    const state = getState() as { cart: CartState; user: { isAuthenticated: boolean; isGuest: boolean } };
+    const state = getState() as { cart: CartState; user: { isAuthenticated: boolean } };
     
     // Ensure product has required fields
     if (!product.id || !product.price) {
       return rejectWithValue("Product is missing required fields (id or price)");
     }
 
-    // Determine the quantity
-    const existingItem = state.user.isGuest 
-      ? state.cart.guestCartItems.find((item) => item.id === product.id)
-      : state.cart.cartItems.find((item) => item.id === product.id);
+    // If not authenticated, we shouldn't be here (UI should handle redirect),
+    // but as a safeguard, just return.
+    if (!state.user.isAuthenticated) {
+      return rejectWithValue("User must be authenticated to add to cart");
+    }
+
+    const existingItem = state.cart.cartItems.find((item) => item.id === product.id);
 
     // If product.quantity is provided and greater than 1, use it; otherwise, increment existing quantity or default to 1
     const quantity = product.quantity && product.quantity > 1 ? product.quantity : (existingItem ? existingItem.cartQuantity + 1 : 1);
 
-    if (state.user.isGuest) {
-      // For guests, use local storage
-      localStorageService.addToGuestCart(product, quantity);
-      dispatch(cartSlice.actions.addToGuestCartOptimistic({ product, quantity }));
-      return { product, quantity, isGuest: true };
-    } else {
-      // For authenticated users, use API
-      if (!product.sizeId) {
-        return rejectWithValue("Product is missing required field (sizeId)");
-      }
+    // For authenticated users, use API
+    if (!product.sizeId) {
+      return rejectWithValue("Product is missing required field (sizeId)");
+    }
 
-      // Optimistically update the Redux state
+    // Optimistically update the Redux state
+    dispatch(
+      cartSlice.actions.addToCartOptimistic({
+        product,
+        quantity,
+      })
+    );
+
+    try {
+      // Perform the backend call
+      await addToCartService(product.id, quantity, product.price, product.sizeId);
+      return { product, quantity, isGuest: false };
+    } catch (error: any) {
+      // Revert the Redux state if the backend call fails
       dispatch(
-        cartSlice.actions.addToCartOptimistic({
+        cartSlice.actions.revertAddToCart({
           product,
           quantity,
         })
       );
 
-      try {
-        // Perform the backend call
-        await addToCartService(product.id, quantity, product.price, product.sizeId);
-        return { product, quantity, isGuest: false };
-      } catch (error: any) {
-        // Revert the Redux state if the backend call fails
-        dispatch(
-          cartSlice.actions.revertAddToCart({
-            product,
-            quantity,
-          })
-        );
-
-        // Return the error message from the backend or a generic error
-        return rejectWithValue(error.response?.data || "Failed to add to cart");
-      }
+      // Return the error message from the backend or a generic error
+      return rejectWithValue(error.response?.data || "Failed to add to cart");
     }
   }
 );
@@ -206,20 +198,6 @@ const cartSlice = createSlice({
         state.cartItems.push({ ...product, cartQuantity: quantity });
       }
     },
-    addToGuestCartOptimistic: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
-      const { product, quantity } = action.payload;
-      const existingItem = state.guestCartItems.find((item) => item.id === product.id);
-
-      if (existingItem) {
-        existingItem.cartQuantity += quantity;
-      } else {
-        state.guestCartItems.push({ 
-          ...product, 
-          cartQuantity: quantity,
-          addedAt: new Date().toISOString()
-        });
-      }
-    },
     decreaseCartOptimistic: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
       const { product, quantity } = action.payload;
       const existingItem = state.cartItems.find((item) => item.id === product.id);
@@ -234,13 +212,6 @@ const cartSlice = createSlice({
     clearCartOptimistic: (state) => {
       state.cartItems = [];
     },
-    clearGuestCartOptimistic: (state) => {
-      state.guestCartItems = [];
-    },
-    loadGuestCart: (state, action: PayloadAction<GuestCartItem[]>) => {
-      state.guestCartItems = action.payload;
-    },
-
     // Revert optimistic updates
     revertAddToCart: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
       const { product, quantity } = action.payload;
@@ -291,12 +262,9 @@ const cartSlice = createSlice({
 
 export const {
   addToCartOptimistic,
-  addToGuestCartOptimistic,
   decreaseCartOptimistic,
   removeFromCartOptimistic,
   clearCartOptimistic,
-  clearGuestCartOptimistic,
-  loadGuestCart,
   revertAddToCart,
   revertDecreaseCart,
   revertRemoveFromCart,

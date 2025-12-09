@@ -11,7 +11,7 @@ import {
 } from "@/services/shopService";
 import Head from "next/head";
 import ProtectedRoute from "@/components/protectedRoute";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
 import FavoritesButton from "@/components/UI/FavoritesButton";
@@ -36,6 +36,7 @@ const Toast = Swal.mixin({
 const SingleItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const [feedback, setFeedback] = useState({
     rating: 0,
     comment: "",
@@ -81,6 +82,11 @@ const SingleItem = ({ product }: Props) => {
     sizeId: string,
     quantity: number
   ) => {
+    if (!isAuthenticated) {
+      router.push("/auth/signup");
+      return;
+    }
+
     if (!size || !sizeId) {
       Toast.fire({
         icon: "error",
@@ -201,7 +207,7 @@ const SingleItem = ({ product }: Props) => {
       <div className='formField'>
         <label className='formLabel'>Quantity</label>
         <Field
-          className={`$'formInput' ${
+          className={`formInput ${
             errors.quantity && touched.quantity ? "inputError" : ""
           }`}
           type="number"
@@ -224,7 +230,7 @@ const SingleItem = ({ product }: Props) => {
           {product?.SizeItems?.map((size) => (
             <div key={size.id} className="position-relative">
               <Field
-                className={`'sizeOption' ${
+                className={`sizeOption ${
                   touched.sizeId && errors.sizeId ? 'error' : ""
                 }`}
                 type="radio"
@@ -235,7 +241,7 @@ const SingleItem = ({ product }: Props) => {
                   setFieldValue("quantity", 1); // Reset quantity when size changes
                 }}
               />
-              <span className={`$'-sizeMark}`}>
+              <span className={`sizeMark`}>
                 {size.Size?.size} 
               </span>
             </div>
@@ -253,7 +259,7 @@ const SingleItem = ({ product }: Props) => {
       <div className="d-flex gap-3">
         <button
           type="submit"
-          className={`$'addToCartBtn' flex-grow-1`}
+          className={`addToCartBtn flex-grow-1`}
           name="submit"
           value="addtocart"
         >
@@ -280,7 +286,7 @@ const SingleItem = ({ product }: Props) => {
                 <span
                   key={i}
                   className={`
-                    $'star'
+                    star
                     ${i < feedback.rating ? "filled" : ""}
                   `}
                   onClick={() => setFeedback({ ...feedback, rating: i + 1 })}

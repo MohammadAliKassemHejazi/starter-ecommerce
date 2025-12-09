@@ -15,6 +15,7 @@
   position: relative;
   border-radius: 12px;
   overflow: hidden;
+  @include shadow(md);
 }
 
 .productImage {
@@ -25,31 +26,35 @@
 
 .productDetails {
   padding: 2rem;
+  background-color: var(--bs-card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--bs-border-color);
+  @include shadow(sm);
 }
 
 .productName {
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .productPrice {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #0d6efd;
+  color: var(--bs-primary);
 }
 
 .discountPrice {
   font-size: 1.2rem;
   text-decoration: line-through;
-  color: #6c757d;
+  color: var(--bs-text-muted);
   margin-left: 0.5rem;
 }
 
 .productDescription {
   line-height: 1.6;
-  color: #495057;
+  color: var(--bs-body-color);
   margin-bottom: 2rem;
 }
 
@@ -65,29 +70,31 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .formInput {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  background-color: var(--bs-input-bg);
+  border: 1px solid var(--bs-input-border-color);
+  color: var(--bs-body-color);
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out;
 
   &:focus {
-    border-color: #86b7fe;
+    border-color: var(--bs-input-focus-border-color);
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 114, 255, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary), 0.25);
   }
 }
 
 .inputError {
-  border-color: #dc3545;
+  border-color: var(--bs-danger);
 }
 
 .errorMsg {
-  color: #dc3545;
+  color: var(--bs-danger);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
@@ -102,8 +109,8 @@
   appearance: none;
   width: 4rem;
   height: 2rem;
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
+  background-color: var(--bs-light);
+  border: 1px solid var(--bs-border-color);
   border-radius: 0.25rem;
   cursor: pointer;
   position: relative;
@@ -118,7 +125,7 @@
     background-image: linear-gradient(
       45deg,
       transparent 50%,
-      #0d6efd 50%
+      var(--bs-primary) 50%
     );
     transform: scale(0);
     transition: transform 0.2s ease;
@@ -130,19 +137,19 @@
   }
 
   &.error {
-    border-color: #dc3545;
+    border-color: var(--bs-danger);
   }
 }
 
 .addToCartBtn {
   background-image: linear-gradient(
     45deg,
-    #0d6efd 0%,
-    #20c997 50%,
-    #0d6efd 100%
+    var(--bs-primary) 0%,
+    var(--bs-success) 50%,
+    var(--bs-primary) 100%
   );
   background-size: 200%;
-  color: white;
+  color: var(--bs-btn-primary-color);
   padding: 1rem 2rem;
   border: none;
   border-radius: 0.5rem;
@@ -158,14 +165,14 @@
 
 .feedbackSection {
   margin-top: 3rem;
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid var(--bs-border-color);
   padding-top: 2rem;
 }
 
 .feedbackTitle {
   font-size: 1.75rem;
   margin-bottom: 1.5rem;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .ratingContainer {
@@ -177,11 +184,11 @@
 
 .star {
   font-size: 2rem;
-  color: #dee2e6;
+  color: var(--bs-gray-300);
   transition: color 0.2s ease;
 
   &.filled {
-    color: #ffd700;
+    color: var(--bs-warning);
   }
 }
 
@@ -190,14 +197,21 @@
   padding: 1rem;
   height: 12rem;
   resize: none;
-  border: 1px solid #ced4da;
+  background-color: var(--bs-input-bg);
+  border: 1px solid var(--bs-input-border-color);
+  color: var(--bs-body-color);
   border-radius: 0.25rem;
   margin-bottom: 1rem;
+
+  &:focus {
+    border-color: var(--bs-input-focus-border-color);
+    outline: none;
+  }
 }
 
 .submitFeedback {
-  background-color: #0d6efd;
-  color: white;
+  background-color: var(--bs-primary);
+  color: var(--bs-btn-primary-color);
   padding: 0.8rem 1.5rem;
   border: none;
   border-radius: 0.5rem;
@@ -205,7 +219,7 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #0b5ed7;
+    background-color: var(--bs-btn-primary-hover-bg);
   }
 }
 
@@ -217,6 +231,8 @@
   text-transform: uppercase;
   font-style: italic;
   font-weight: 600;
+  color: var(--bs-body-color);
+  pointer-events: none;
 }
 
 // Responsive Design
@@ -230,4 +246,3 @@
     margin-bottom: 2rem;
   }
 }
-
