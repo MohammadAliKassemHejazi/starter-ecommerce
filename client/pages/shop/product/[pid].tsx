@@ -18,7 +18,7 @@ import FavoritesButton from "@/components/UI/FavoritesButton";
 import { GetStaticPaths, GetStaticProps } from "next";
 
 type Props = {
-  product?: IProductModel;
+  product?: IProductModel | null;
 };
 
 const Toast = Swal.mixin({
@@ -41,10 +41,12 @@ const SingleItem = ({ product }: Props) => {
     comment: "",
   });
 
+  console.log("product", product);
+
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-
+  debugger;
   // JSON-LD Structured Data
   const jsonLd = {
     "@context": "https://schema.org",
@@ -169,7 +171,7 @@ const SingleItem = ({ product }: Props) => {
     quantity: 1, // Set default quantity to 1
   }}
   onSubmit={(values) => {
-    console.log(values);
+    
     handleAddToCart(product!, values.size, values.sizeId, values.quantity);
   }}
   validate={(values) => {
@@ -310,10 +312,10 @@ const SingleItem = ({ product }: Props) => {
   );
 };
 
-export default function ProtectedSingleItem() {
+export default function ProtectedSingleItem({ product }: Props) {
   return (
     <ProtectedRoute>
-      <SingleItem />
+      <SingleItem product={product}/>
     </ProtectedRoute>
   );
 }
@@ -321,18 +323,20 @@ export default function ProtectedSingleItem() {
 // Fetch all product IDs at build time
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
+    debugger;
     const res = await requestAllProductID(); // Fetch all product IDs
-    console.log(res, "response to requestAllProductID");
-    if (!res || !Array.isArray(res.message)) {
+   
+    if (!res || !Array.isArray(res.data.message)) {
+      
       console.error("Invalid response structure:", res);
       return { paths: [], fallback: "blocking" };
     }
 
     // Pre-render only the first 50 products (adjust as needed)
-    const paths = res.message.map((product: any) => ({
+    const paths = res.data.message.map((product: any) => ({
       params: { pid: product.id.toString() },
     }));
-    console.log(paths, "paths res.message");
+   
     return {
       paths, // Pre-rendered pages for first 50 products
       fallback: "blocking", // Other pages will be generated on-demand
@@ -346,11 +350,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 // Fetch product data at build time
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { pid } = params as { pid: string };
-
+debugger;
   console.log("Fetching data for ID:", pid);
 
   try {
-    const product = await requestProductById(pid);
+    const  product  = await requestProductById(pid);
 
     if (!product) {
       return { notFound: true };
@@ -371,10 +375,13 @@ export async function generateMetadata({
   params,
 }: {
   params: { pid: string };
-}) {
+  }) {
+  debugger;
   const { pid } = params;
+
   const product = await requestProductById(pid);
 
+  
   return {
     title: product?.data?.metaTitle ?? product?.data?.name ?? "Product Page",
     description:

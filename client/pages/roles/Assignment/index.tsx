@@ -12,6 +12,7 @@ import Layout from "@/components/Layouts/Layout";
 import Swal from "sweetalert2";
 import { getUserActivePackage } from "@/services/packageService";
 import ProtectedRoute from "@/components/protectedRoute";
+import { usePermissions } from "@/hooks/usePermissions";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -29,9 +30,9 @@ const RolePermissionGrid = () => {
   const dispatch = useAppDispatch();
   const permissions = useSelector(permissionsSelector);
   const roles = useSelector(rolesSelector);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  //const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const {isSuperAdmin } = usePermissions();
   React.useEffect(() => {
     dispatch(fetchPermissions());
     loadUserPackage();
@@ -39,8 +40,8 @@ const RolePermissionGrid = () => {
 
   const loadUserPackage = async () => {
     try {
-      const packageData = await getUserActivePackage();
-      setIsSuperAdmin((packageData as any)?.Package?.isSuperAdminPackage || false);
+      await getUserActivePackage();
+  
     } catch (error) {
       console.error('Error loading user package:', error);
     } finally {
