@@ -330,30 +330,35 @@ export default function ProtectedSingleItem({ product }: Props) {
 // Fetch all product IDs at build time
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
- 
     const res = await requestAllProductID(); // Fetch all product IDs
-   
-    if (!res || !Array.isArray(res.data)) {
-      
+
+    // ✅ Handle object-shaped response (not array)
+    if (!res || !res.data || (typeof res.data !== 'object')) {
       console.error("Invalid response structure:", res);
       return { paths: [], fallback: "blocking" };
     }
 
-    // Pre-render only the first 50 products (adjust as needed)
-    const paths = res.data.map((product: any) => ({
+    // ✅ Convert object like { "0": {...}, "1": {...} } → array of values
+    const productArray = Object.values(res.data);
+
+    // Optional: validate each item has an `id`
+    const validProducts = productArray.filter(
+      (item: any) => item && typeof item.id !== 'undefined'
+    );
+
+    const paths = validProducts.map((product: any) => ({
       params: { pid: product.id.toString() },
     }));
-   
+
     return {
-      paths, // Pre-rendered pages for first 50 products
-      fallback: "blocking", // Other pages will be generated on-demand
+      paths,
+      fallback: "blocking",
     };
   } catch (error) {
     console.error("Error fetching product IDs:", error);
     return { paths: [], fallback: "blocking" };
   }
 };
-
 // Fetch product data at build time
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { pid } = params as { pid: string };
@@ -362,13 +367,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   try {
     const  product  = await requestProductById(pid);
-
+ debugger;
     if (!product) {
       return { notFound: true };
     }
 
     return {
-      props: { product },
+      props: { product : product.data },
       revalidate: 3600, // Revalidate every hour (ISR)
     };
   } catch (error) {
