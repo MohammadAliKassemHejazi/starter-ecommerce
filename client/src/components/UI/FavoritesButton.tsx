@@ -4,11 +4,10 @@ import { RootState, useAppDispatch } from '@/store/store';
 import { 
   addToFavorites, 
   removeFromFavorites, 
-  addToGuestFavorites,
-  removeFromGuestFavorites,
   isProductInFavoritesSelector 
 } from '@/store/slices/favoritesSlice';
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/router';
 
 interface FavoritesButtonProps {
   productId: string;
@@ -46,33 +45,23 @@ const FavoritesButton: React.FC<FavoritesButtonProps> = ({
   const isAdding = useSelector((state: RootState) => state.favorites.isAdding);
   const isRemoving = useSelector((state: RootState) => state.favorites.isRemoving);
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-  const isGuest = useSelector((state: RootState) => state.user.isGuest);
+  const router = useRouter();
 
   const handleToggleFavorite = async () => {
+    if (!isAuthenticated) {
+      router.push('/auth/signup');
+      return;
+    }
+
     try {
       if (isInFavorites) {
-        if (isGuest) {
-          await dispatch(removeFromGuestFavorites(productId)).unwrap();
-        } else {
-          await dispatch(removeFromFavorites(productId)).unwrap();
-        }
+        await dispatch(removeFromFavorites(productId)).unwrap();
         Toast.fire({
           icon: 'success',
           title: `${productName} removed from favorites`,
         });
       } else {
-        if (isGuest) {
-          if (!product) {
-            Toast.fire({
-              icon: 'error',
-              title: 'Product data is required for guest favorites',
-            });
-            return;
-          }
-          await dispatch(addToGuestFavorites(product)).unwrap();
-        } else {
-          await dispatch(addToFavorites(productId)).unwrap();
-        }
+        await dispatch(addToFavorites(productId)).unwrap();
         Toast.fire({
           icon: 'success',
           title: `${productName} added to favorites`,

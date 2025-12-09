@@ -64,33 +64,6 @@ export const isAuthenticated = async (
   }
 };
 
-export const getPublicSession = async (
-  request: CustomRequest,
-  response: Response,
-  next: any
-): Promise<void> => {
-  try {
-    // For guest users, return a default guest session
-    response.status(200).json({
-      message: "Guest session",
-      data: {
-        id: "guest",
-        email: "",
-        name: "Guest User",
-        address: "",
-        phone: "",
-        accessToken: "",
-        isAuthenticated: false,
-        isGuest: true,
-        roles: [],
-        permissions: []
-      }
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const getUserSessions = async (
   request: CustomRequest,
   response: Response,
@@ -167,7 +140,6 @@ export default {
   handleLogin,
   handleRegister,
   isAuthenticated,
-  getPublicSession,
   getUserSessions,
   loggedOut,
 };

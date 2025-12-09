@@ -1,11 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import * as favoritesService from '@/services/favoritesService';
 import { Favorite } from '@/services/favoritesService';
-import { localStorageService, GuestFavorite } from '@/services/localStorageService';
-
 interface FavoritesState {
   favorites: Favorite[];
-  guestFavorites: GuestFavorite[];
   loading: boolean;
   error: string | null;
   isAdding: boolean;
@@ -14,7 +11,6 @@ interface FavoritesState {
 
 const initialState: FavoritesState = {
   favorites: [],
-  guestFavorites: [],
   loading: false,
   error: null,
   isAdding: false,
@@ -37,11 +33,10 @@ export const fetchFavorites = createAsyncThunk(
 export const addToFavorites = createAsyncThunk(
   'favorites/addToFavorites',
   async (productId: string, { rejectWithValue, getState }) => {
-    const state = getState() as { user: { isAuthenticated: boolean; isGuest: boolean } };
+    const state = getState() as { user: { isAuthenticated: boolean } };
     
-    if (state.user.isGuest) {
-      // For guests, we need the product data to store locally
-      return rejectWithValue('Product data required for guest favorites');
+    if (!state.user.isAuthenticated) {
+      return rejectWithValue('User must be authenticated to add to favorites');
     }
     
     try {
@@ -53,27 +48,13 @@ export const addToFavorites = createAsyncThunk(
   }
 );
 
-// New thunk for adding to guest favorites
-export const addToGuestFavorites = createAsyncThunk(
-  'favorites/addToGuestFavorites',
-  async (product: any, { rejectWithValue }) => {
-    try {
-      localStorageService.addToGuestFavorites(product);
-      return product;
-    } catch (error: any) {
-      return rejectWithValue('Failed to add to guest favorites');
-    }
-  }
-);
-
 export const removeFromFavorites = createAsyncThunk(
   'favorites/removeFromFavorites',
   async (productId: string, { rejectWithValue, getState }) => {
-    const state = getState() as { user: { isAuthenticated: boolean; isGuest: boolean } };
+    const state = getState() as { user: { isAuthenticated: boolean } };
     
-    if (state.user.isGuest) {
-      localStorageService.removeFromGuestFavorites(productId);
-      return productId;
+    if (!state.user.isAuthenticated) {
+       return rejectWithValue('User must be authenticated to remove from favorites');
     }
     
     try {
@@ -81,51 +62,6 @@ export const removeFromFavorites = createAsyncThunk(
       return productId;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to remove from favorites');
-    }
-  }
-);
-
-// New thunk for removing from guest favorites
-export const removeFromGuestFavorites = createAsyncThunk(
-  'favorites/removeFromGuestFavorites',
-  async (productId: string, { rejectWithValue }) => {
-    try {
-      localStorageService.removeFromGuestFavorites(productId);
-      return productId;
-    } catch (error: any) {
-      return rejectWithValue('Failed to remove from guest favorites');
-    }
-  }
-);
-
-// New thunk for loading guest favorites
-export const loadGuestFavorites = createAsyncThunk(
-  'favorites/loadGuestFavorites',
-  async (_, { rejectWithValue }) => {
-    try {
-      const guestFavorites = localStorageService.getGuestFavorites();
-      return guestFavorites;
-    } catch (error: any) {
-      return rejectWithValue('Failed to load guest favorites');
-    }
-  }
-);
-
-// New thunk for syncing guest favorites to server
-export const syncGuestFavorites = createAsyncThunk(
-  'favorites/syncGuestFavorites',
-  async (_, { rejectWithValue }) => {
-    try {
-      const guestFavorites = localStorageService.getGuestFavorites();
-      const syncPromises = guestFavorites.map(fav => 
-        favoritesService.addToFavorites(fav.productId)
-      );
-      
-      await Promise.all(syncPromises);
-      localStorageService.clearGuestFavorites();
-      return guestFavorites.length;
-    } catch (error: any) {
-      return rejectWithValue('Failed to sync guest favorites');
     }
   }
 );
@@ -139,12 +75,8 @@ const favoritesSlice = createSlice({
     },
     clearFavorites: (state) => {
       state.favorites = [];
-      state.guestFavorites = [];
       state.loading = false;
       state.error = null;
-    },
-    clearGuestFavorites: (state) => {
-      state.guestFavorites = [];
     },
   },
   extraReducers: (builder) => {
@@ -196,55 +128,33 @@ const favoritesSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    // Guest favorites actions
-    builder
-      .addCase(addToGuestFavorites.fulfilled, (state, action) => {
-        const existingIndex = state.guestFavorites.findIndex(fav => fav.productId === action.payload.id);
-        if (existingIndex === -1) {
-          state.guestFavorites.push({
-            productId: action.payload.id,
-            product: action.payload,
-            addedAt: new Date().toISOString()
-          });
-        }
-      })
-      .addCase(removeFromGuestFavorites.fulfilled, (state, action) => {
-        state.guestFavorites = state.guestFavorites.filter(fav => fav.productId !== action.payload);
-      })
-      .addCase(loadGuestFavorites.fulfilled, (state, action) => {
-        state.guestFavorites = action.payload;
-      })
-      .addCase(syncGuestFavorites.fulfilled, (state) => {
-        state.guestFavorites = [];
-      });
   },
 });
 
-export const { clearError, clearFavorites, clearGuestFavorites } = favoritesSlice.actions;
+export const { clearError, clearFavorites } = favoritesSlice.actions;
 
 // Selectors
 export const favoritesSelector = (state: { favorites: FavoritesState }) => state.favorites.favorites;
-export const guestFavoritesSelector = (state: { favorites: FavoritesState }) => state.favorites.guestFavorites;
 export const favoritesLoadingSelector = (state: { favorites: FavoritesState }) => state.favorites.loading;
 export const favoritesErrorSelector = (state: { favorites: FavoritesState }) => state.favorites.error;
 export const isAddingToFavoritesSelector = (state: { favorites: FavoritesState }) => state.favorites.isAdding;
 export const isRemovingFromFavoritesSelector = (state: { favorites: FavoritesState }) => state.favorites.isRemoving;
 
 // Helper selector to check if a product is in favorites (works for both authenticated and guest)
-export const isProductInFavoritesSelector = (productId: string) => (state: { favorites: FavoritesState; user: { isAuthenticated: boolean; isGuest: boolean } }) => {
-  if (state.user.isAuthenticated && !state.user.isGuest) {
+export const isProductInFavoritesSelector = (productId: string) => (state: { favorites: FavoritesState; user: { isAuthenticated: boolean } }) => {
+  if (state.user.isAuthenticated) {
     return state.favorites.favorites.some(fav => fav.productId === productId);
   } else {
-    return state.favorites.guestFavorites.some(fav => fav.productId === productId);
+    return false;
   }
 };
 
 // Combined favorites selector (returns appropriate favorites based on auth state)
-export const allFavoritesSelector = (state: { favorites: FavoritesState; user: { isAuthenticated: boolean; isGuest: boolean } }) => {
-  if (state.user.isAuthenticated && !state.user.isGuest) {
+export const allFavoritesSelector = (state: { favorites: FavoritesState; user: { isAuthenticated: boolean } }) => {
+  if (state.user.isAuthenticated) {
     return state.favorites.favorites;
   } else {
-    return state.favorites.guestFavorites;
+    return [];
   }
 };
 
