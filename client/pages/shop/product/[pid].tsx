@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Layout from "@/components/Layouts/Layout";
 import MySwiperComponent from "@/components/UI/General/ImagesSlider/MySwiperComponent";
 import { useRouter } from "next/router";
-import Image from "next/image";
+
 import { Formik, Form, Field } from "formik";
 import { IProductModel } from "../../../src/models/product.model"; // Adjust the import path as needed
 import {
@@ -11,7 +11,7 @@ import {
 } from "@/services/shopService";
 import Head from "next/head";
 import ProtectedRoute from "@/components/protectedRoute";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useAppDispatch } from "@/store/store";
 import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
 import FavoritesButton from "@/components/UI/FavoritesButton";
@@ -19,6 +19,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import SuggestedProducts from "@/components/UI/PageComponents/product/SuggestedProducts";
 import CommentsList from "@/components/UI/PageComponents/product/CommentsList";
 import { addComment } from "@/services/commentService";
+import { usePermissions } from "@/hooks/usePermissions";
 
 type Props = {
   product?: IProductModel | null;
@@ -39,7 +40,8 @@ const Toast = Swal.mixin({
 const SingleItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
+  // Using usePermissions hook from main branch which likely handles auth check
+  const { isAuthenticated } = usePermissions();
   const [feedback, setFeedback] = useState({
     rating: 0,
     comment: "",
@@ -51,7 +53,7 @@ const SingleItem = ({ product }: Props) => {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-  debugger;
+
   // JSON-LD Structured Data
   const jsonLd = {
     "@context": "https://schema.org",
@@ -371,45 +373,50 @@ export default function ProtectedSingleItem({ product }: Props) {
 // Fetch all product IDs at build time
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    debugger;
     const res = await requestAllProductID(); // Fetch all product IDs
 
-    if (!res || !Array.isArray(res.data.message)) {
-
+    // ✅ Handle object-shaped response (not array)
+    if (!res || !res.data || (typeof res.data !== 'object')) {
       console.error("Invalid response structure:", res);
       return { paths: [], fallback: "blocking" };
     }
 
-    // Pre-render only the first 50 products (adjust as needed)
-    const paths = res.data.message.map((product: any) => ({
+    // ✅ Convert object like { "0": {...}, "1": {...} } → array of values
+    const productArray = Object.values(res.data);
+
+    // Optional: validate each item has an `id`
+    const validProducts = productArray.filter(
+      (item: any) => item && typeof item.id !== 'undefined'
+    );
+
+    const paths = validProducts.map((product: any) => ({
       params: { pid: product.id.toString() },
     }));
 
     return {
-      paths, // Pre-rendered pages for first 50 products
-      fallback: "blocking", // Other pages will be generated on-demand
+      paths,
+      fallback: "blocking",
     };
   } catch (error) {
     console.error("Error fetching product IDs:", error);
     return { paths: [], fallback: "blocking" };
   }
 };
-
 // Fetch product data at build time
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { pid } = params as { pid: string };
-debugger;
+
   console.log("Fetching data for ID:", pid);
 
   try {
     const  product  = await requestProductById(pid);
-
+ debugger;
     if (!product) {
       return { notFound: true };
     }
 
     return {
-      props: { product },
+      props: { product : product.data }, // Assuming main branch fix requires product.data
       revalidate: 3600, // Revalidate every hour (ISR)
     };
   } catch (error) {
@@ -424,7 +431,7 @@ export async function generateMetadata({
 }: {
   params: { pid: string };
   }) {
-  debugger;
+
   const { pid } = params;
 
   const product = await requestProductById(pid);

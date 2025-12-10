@@ -237,7 +237,7 @@ export const deleteProduct = async (id: string, userId: string): Promise<any | n
     // Delete images from the filesystem using Promise.all
     await Promise.all(
       images.map(async (photo: any) => {
-        const imagePath = path.resolve(__dirname, '..', '/compressed', photo.imageUrl); // Adjust the path as necessary
+        const imagePath = path.resolve(__dirname, '..', '/compressed', photo.dataValues.imageUrl); // Adjust the path as necessary
         try {
           await fsPromises.unlink(imagePath); // Use fs.promises.unlink for async file deletion
         } catch (err) {
