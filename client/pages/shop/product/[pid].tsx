@@ -40,6 +40,7 @@ const Toast = Swal.mixin({
 const SingleItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  // Using usePermissions hook from main branch which likely handles auth check
   const { isAuthenticated } = usePermissions();
   const [feedback, setFeedback] = useState({
     rating: 0,
@@ -415,7 +416,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
 
     return {
-      props: { product : product.data },
+      props: { product : product.data }, // Assuming main branch fix requires product.data
       revalidate: 3600, // Revalidate every hour (ISR)
     };
   } catch (error) {
