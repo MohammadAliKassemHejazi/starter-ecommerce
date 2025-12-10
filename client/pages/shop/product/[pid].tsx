@@ -16,6 +16,9 @@ import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import { GetStaticPaths, GetStaticProps } from "next";
+import SuggestedProducts from "@/components/UI/PageComponents/product/SuggestedProducts";
+import CommentsList from "@/components/UI/PageComponents/product/CommentsList";
+import { addComment } from "@/services/commentService";
 import { usePermissions } from "@/hooks/usePermissions";
 
 type Props = {
@@ -42,6 +45,7 @@ const SingleItem = ({ product }: Props) => {
     rating: 0,
     comment: "",
   });
+  const [refreshComments, setRefreshComments] = useState(0);
 
   console.log("product", product);
 
@@ -306,14 +310,52 @@ const SingleItem = ({ product }: Props) => {
             />
             <button
               className='submitFeedback'
-              onClick={() => {
-                // Submit feedback logic
+              onClick={async () => {
+                if (!isAuthenticated) {
+                  router.push('/auth/signup');
+                  return;
+                }
+                if (feedback.rating === 0) {
+                  Toast.fire({
+                    icon: 'warning',
+                    title: 'Please select a rating'
+                  });
+                  return;
+                }
+                if (!feedback.comment.trim()) {
+                  Toast.fire({
+                    icon: 'warning',
+                    title: 'Please write a comment'
+                  });
+                  return;
+                }
+
+                try {
+                  await addComment(product!.id!, feedback.comment, feedback.rating);
+                  Toast.fire({
+                    icon: 'success',
+                    title: 'Feedback submitted successfully'
+                  });
+                  setFeedback({ rating: 0, comment: '' });
+                  setRefreshComments(prev => prev + 1);
+                } catch (error: any) {
+                  Toast.fire({
+                    icon: 'error',
+                    title: error.response?.data?.message || 'Failed to submit feedback'
+                  });
+                }
               }}
             >
               Submit Feedback
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Suggested Products and Comments outside the flex container */}
+      <div className="container mt-5">
+        <SuggestedProducts currentProduct={product!} />
+        <CommentsList productId={product?.id || ''} refreshTrigger={refreshComments} />
       </div>
     </Layout>
   );
