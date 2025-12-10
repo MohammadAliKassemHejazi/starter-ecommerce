@@ -231,7 +231,7 @@ export const handelgetall = async (
 ): Promise<void> => {
   try {
     const results = await shopService.getTopProductIds();
-    response.status(200).json({ ...results });
+    response.status(200).json({ message: results });
   } catch (error) {
     next(error);
   }

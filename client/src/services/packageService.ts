@@ -10,7 +10,6 @@ import {
 	PackageResponse,
 	ActivatePackageResponse
 } from "@/interfaces/api/package.types";
-import { CreatePaymentResponse } from "@/interfaces/api/payment.types";
 
 export interface IPackage {
   id: string;
@@ -120,13 +119,3 @@ export const requestActivatePackage = async (packageId: string): Promise<Activat
   return response;
 };
 
-// Purchase package
-export const purchasePackage = async (packageId: string, amount: number, currency: string, paymentMethodId: string): Promise<CreatePaymentResponse> => {
-  const { data } = await httpClient.post<CreatePaymentResponse>('/payment/charge/package', {
-    packageId,
-    amount,
-    currency,
-    paymentMethodId,
-  });
-  return data;
-};

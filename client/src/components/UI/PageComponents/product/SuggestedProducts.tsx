@@ -25,9 +25,9 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({ currentProduct })
           response = await requestProductsListing(1, 5);
         }
 
-        if (response && response.data && Array.isArray(response.data.items)) {
+        if (response && response.data && Array.isArray(response.data.products)) {
           // Filter out the current product
-          const filtered = response.data.items.filter((p: any) => p.id !== currentProduct.id);
+          const filtered = response.data.products.filter((p: any) => p.id !== currentProduct.id);
           setProducts(filtered);
         }
       } catch (error) {
@@ -60,9 +60,11 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({ currentProduct })
                 <div className="position-relative" style={{ height: '200px' }}>
                   <Image
                     src={
-                      product.ProductImages && product.ProductImages.length > 0
-                        ? process.env.NEXT_PUBLIC_BASE_URL_Images + product.ProductImages[0].imageUrl
-                        : '/images/placeholder.png' // Fallback image
+                      product.photos && product.photos.length > 0
+                        ? process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0].imageUrl
+                        : (product.ProductImages && product.ProductImages.length > 0
+                            ? process.env.NEXT_PUBLIC_BASE_URL_Images + product.ProductImages[0].imageUrl
+                            : '/images/placeholder.png')
                     }
                     alt={product.name}
                     fill

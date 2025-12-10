@@ -16,6 +16,9 @@ const CommentsList: React.FC<CommentsListProps> = ({ productId, refreshTrigger }
   const [total, setTotal] = useState(0);
 
   const fetchComments = async (pageNum: number, reset = false) => {
+    if (!productId) {
+      return;
+    }
     setLoading(true);
     try {
       const response = await getComments(productId, pageNum, 5); // Limit 5 per load

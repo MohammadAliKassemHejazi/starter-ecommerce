@@ -22,7 +22,7 @@ import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 const Cart = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = usePermissions();
+  const { isAuthenticated, canCheckout } = usePermissions();
 
   useEffect(() => {
     if (typeof window !== "undefined") {

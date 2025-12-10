@@ -10,7 +10,7 @@ import {
   productByStoreSelector,
 } from "@/store/slices/shopSlice";
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
-import { store, useAppDispatch } from "@/store/store";
+import { store, useAppDispatch, useAppSelector } from "@/store/store";
 import { TablePage, FilterCard, PageLayout } from "@/components/UI/PageComponents";
 
 import { usePermissions } from "@/hooks/usePermissions";
@@ -34,7 +34,8 @@ const Shop = () => {
   const pageSize = useSelector(pageSizeSelector);
   const stores = useSelector(storeSelector) as IStoreResponseModel[];
  
-  const { isAdmin , isSuperAdmin , isAuthenticated} = usePermissions();
+  const { isAdmin , isSuperAdmin} = usePermissions();
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
 
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");

@@ -63,7 +63,8 @@ function EditProduct() {
 
     // Fetch subcategories based on categoryId
     dispatch(fetchAllSubCategoriesID(updatedProduct.categoryId ?? ""));
-  }).catch((error) => {
+  })
+        .catch((error) => {
           Toast.fire({
             icon: "error",
             title: `Failed to fetch product: ${error.message}`,
