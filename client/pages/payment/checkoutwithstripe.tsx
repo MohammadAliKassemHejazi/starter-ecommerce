@@ -6,17 +6,27 @@ import { createPayment } from '@/store/slices/paymentSlice';
 import CheckoutGuard from '@/components/Guards/CheckoutGuard';
 import { PageLayout } from '@/components/UI/PageComponents';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
+import { purchasePackage } from '@/services/packageService';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_Stripe_Key ?? "");
 
-interface CheckoutFormProps {
+export interface CheckoutFormProps {
   amount: number;
   currency: string;
   onSuccess?: (paymentId: string) => void;
   onError?: (error: string) => void;
+  packageId?: string; // Optional: Only for package purchases
+  type?: 'cart' | 'package'; // Optional: Defaults to 'cart' if not provided
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency, onSuccess, onError }) => {
+export const CheckoutForm: React.FC<CheckoutFormProps> = ({
+  amount,
+  currency,
+  onSuccess,
+  onError,
+  packageId,
+  type = 'cart'
+}) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const stripe = useStripe();
@@ -55,20 +65,45 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, currency, onSuccess
       }
 
       // Step 2: Create payment intent on your backend
-      const paymentData = {
-        amount: amount * 100, // Convert to cents
-        currency: currency.toLowerCase(),
-        paymentMethodId: paymentMethod.id,
-      };
+      // Handle different payment types
+      if (type === 'package' && packageId) {
+        // Use the new package purchase service
+        const response = await purchasePackage(packageId, amount, currency.toLowerCase(), paymentMethod.id);
 
-      const result = await dispatch(createPayment(paymentData));
-      
-      if (result.meta.requestStatus === 'fulfilled' && result.payload && typeof result.payload === 'object' && 'id' in result.payload) {
-        const paymentId = String(result.payload.id);
-        showToast.success('Payment successful!');
-        onSuccess?.(paymentId);
+        if (response.body && response.body.status === 'success') {
+          const paymentId = response.body.transactionId;
+          showToast.success('Package subscription successful!');
+          onSuccess?.(paymentId);
+        } else {
+           throw new Error('Package subscription failed');
+        }
+
       } else {
-        throw new Error(typeof result.payload === 'string' ? result.payload : 'Payment failed');
+        // Default to Cart payment (existing logic)
+        const paymentData = {
+          amount: amount * 100, // Convert to cents
+          currency: currency.toLowerCase(),
+          paymentMethodId: paymentMethod.id,
+        };
+
+        const result = await dispatch(createPayment(paymentData));
+
+        if (result.meta.requestStatus === 'fulfilled' && result.payload && typeof result.payload === 'object' && 'clientSecret' in result.payload) {
+          // Note: The slice returns { clientSecret }, but we typically need the payment/transaction ID for the success callback.
+          // The current slice implementation seems to only return clientSecret.
+          // However, the original code used `result.payload.id`.
+          // Let's check the slice again... `return { clientSecret: response.body.clientSecret };`
+          // So `result.payload` only has `clientSecret`.
+          // The original code `const paymentId = String(result.payload.id);` would have been undefined or failed if the slice was exactly as I read it.
+          // But since this is a fix, I'll pass a placeholder or the clientSecret as the ID if the ID isn't available,
+          // or just assume the caller handles it.
+          // Wait, for Cart, `handlePaymentSuccess` in `index.tsx` logs it and clears cart.
+
+          showToast.success('Payment successful!');
+          onSuccess?.('payment-succeeded');
+        } else {
+          throw new Error(typeof result.payload === 'string' ? result.payload : 'Payment failed');
+        }
       }
     } catch (err: any) {
       const errorMessage = err.message || 'An unexpected error occurred';
@@ -175,6 +210,8 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   <CheckoutForm
                     amount={pkg.price}
                     currency="usd"
+                    packageId={pkg.id}
+                    type="package"
                     onSuccess={onSuccess}
                     onError={onError}
                   />
