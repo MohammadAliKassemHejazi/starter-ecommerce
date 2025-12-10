@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from '../../../pages/payment/checkoutwithstripe';
+import { CheckoutForm } from '../../../pages/payment/checkoutwithstripe';
 import PayPalPayment from './PayPalPayment';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_Stripe_Key ?? "");
@@ -109,7 +109,11 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
             {selectedMethod === 'stripe' ? (
               <Elements stripe={stripePromise}>
                 <CheckoutForm 
-                  package={pkg}
+                  amount={amount}
+                  currency={currency}
+                  // Only pass packageId and type if pkg exists
+                  packageId={pkg?.id}
+                  type={pkg ? 'package' : 'cart'}
                   onSuccess={handleStripeSuccess}
                   onError={handleError}
                 />
