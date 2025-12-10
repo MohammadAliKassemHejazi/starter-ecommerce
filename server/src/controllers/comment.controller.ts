@@ -5,6 +5,8 @@ import customError from '../utils/customError';
 export const getComments = async (req: Request, res: Response) => {
   try {
     const { productId } = req.query;
+    const page = parseInt(req.query.page as string) || 1;
+    const pageSize = parseInt(req.query.limit as string) || 5;
 
     if (!productId) {
       return res.status(400).json({
@@ -13,7 +15,7 @@ export const getComments = async (req: Request, res: Response) => {
       });
     }
 
-    const comments = await db.Comment.findAll({
+    const { count, rows: comments } = await db.Comment.findAndCountAll({
       where: { productId },
       include: [
         {
@@ -21,12 +23,19 @@ export const getComments = async (req: Request, res: Response) => {
           attributes: ['id', 'name']
         }
       ],
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
     });
 
     res.status(200).json({
       success: true,
-      data: comments
+      data: {
+        items: comments,
+        total: count,
+        page,
+        pageSize
+      }
     });
   } catch (error) {
     console.error('Error getting comments:', error);
