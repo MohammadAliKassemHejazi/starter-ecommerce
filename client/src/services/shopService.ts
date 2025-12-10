@@ -38,7 +38,7 @@ export const requestProductById = async (id: string): Promise<ProductResponse> =
 	const { data: response } = await httpClient.get<ProductResponse>(
 		`/shop/get?id=${id}`
 	)
-	return response.data;
+	return response;
 }
 
 export const requestAllProductID = async (): Promise<ProductsListResponse> => {
