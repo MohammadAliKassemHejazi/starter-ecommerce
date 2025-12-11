@@ -5,6 +5,7 @@ import { protectedRoutes } from "../middlewares";
 const router = express.Router();
 
 const Routes = [
+  "/",
   "/last",
   "/:orderId/items",
   "/date-range",
@@ -12,6 +13,9 @@ const Routes = [
 
 // Protect all order routes
 protectedRoutes(router, Routes);
+
+// Get orders by store (or generic get orders)
+router.get("/", orderController.getOrders);
 
 // Get the last order for the logged-in user
 router.get("/last", orderController.getLastOrder);
