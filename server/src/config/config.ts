@@ -20,12 +20,12 @@ const config = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 5432,
     dialect: 'postgres',
-    dialectOptions: {
+    dialectOptions: process.env.NODE_ENV === 'production' ? {
       ssl: {
         require: true,
         rejectUnauthorized: false
       }
-    },
+    } : {},
     logging: false,
     dbDevelopment: process.env.DB_DATABASE_DEVELOPMENT,
     dbProduction: process.env.DB_DATABASE_PRODUCTION,
