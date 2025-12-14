@@ -15,8 +15,8 @@ try {
   const configPaths = [
     path.join(__dirname, "../config/db.config.js"),
     path.join(__dirname, "../config/db.config"),
-    path.join(__dirname, "../../config/db.config.js"),
-    path.join(__dirname, "../../config/db.config")
+    path.join(__dirname, "../config/db.config.ts"),
+
   ];
   
   let configFound = false;
