@@ -17,9 +17,11 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({ currentProduct })
       setLoading(true);
       try {
         let response;
+        debugger
         if (currentProduct.storeId) {
+          
           // Fetch products from the same store
-          response = await requestProductsByStore(currentProduct.storeId, 1, 5);
+          response = await requestProductsByStore(currentProduct.storeId, 1, 5,'', '');
         } else {
            // Fallback to random listing
           response = await requestProductsListing(1, 5);

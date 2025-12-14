@@ -12,21 +12,21 @@ interface FetchOrdersByStoreResponse {
 }
 
 export const requestLastOrder = async (): Promise<OrderResponse> => {
-  const { data: response } = await httpClient.get<OrderResponse>("/orders/last");
+  const { data: response } = await httpClient.get<OrderResponse>("/admin/orders/last");
   return response;
 };
 
 export const requestOrdersByDate = async (from: string, to: string): Promise<OrdersListResponse> => {
-    const { data: response } = await httpClient.post<OrdersListResponse>("/orders/date-range", { from, to });
+    const { data: response } = await httpClient.post<OrdersListResponse>("/admin/orders/date-range", { from, to });
   return response;
 };
 
 export const requestOrdersByStore = async (storeId: string, page: number, pageSize: number, from?: string, to?: string): Promise<OrdersListResponse> => {
-    const { data: response } = await httpClient.get<OrdersListResponse>(`/api/orders?storeId=${storeId}&page=${page}&pageSize=${pageSize}&from=${from}&to=${to}`);
+    const { data: response } = await httpClient.get<OrdersListResponse>(`/orders?storeId=${storeId}&page=${page}&pageSize=${pageSize}&from=${from}&to=${to}`);
   return response;
 };
 
 export const requestOrderItems = async (orderId: string): Promise<OrderItemsResponse> => {
-  const { data: response } = await httpClient.get<OrderItemsResponse>(`/orders/${orderId}/items`);
+  const { data: response } = await httpClient.get<OrderItemsResponse>(`/admin/orders/${orderId}/items`);
   return response;
 };

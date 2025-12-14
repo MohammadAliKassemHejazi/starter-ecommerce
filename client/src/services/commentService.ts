@@ -32,7 +32,8 @@ export const getComments = async (productId: string, page = 1, limit = 5): Promi
 };
 
 export const addComment = async (productId: string, text: string, rating: number): Promise<any> => {
-  const { data } = await httpClient.post('/comments', {
+
+  const { data } = await httpClient.post('/comments/add', {
     productId,
     text,
     rating,

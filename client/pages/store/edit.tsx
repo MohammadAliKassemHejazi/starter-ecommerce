@@ -48,7 +48,7 @@ useEffect(() => {
       .unwrap()
         .then((REStore: IStoreResponseModel) => {
          
-          debugger;
+  
         const formattedImages: ImageListType = REStore.imgUrl
           ? [{
               id: REStore.id,
