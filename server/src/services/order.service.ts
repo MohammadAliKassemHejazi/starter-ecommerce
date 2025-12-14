@@ -55,8 +55,52 @@ export const getOrdersByDateRange = async (
   return orders;
 };
 
+export const getOrdersByStore = async (
+  storeId: string,
+  page: number = 1,
+  pageSize: number = 10,
+  from?: string,
+  to?: string
+): Promise<{ rows: IOrderAttributes[]; count: number }> => {
+  const offset = (page - 1) * pageSize;
+  const whereClause: any = {};
+
+  if (from && from !== "undefined") {
+    whereClause.createdAt = { ...whereClause.createdAt, [Op.gte]: new Date(from) };
+  }
+
+  if (to && to !== "undefined") {
+    whereClause.createdAt = { ...whereClause.createdAt, [Op.lte]: new Date(to) };
+  }
+
+  const { rows, count } = await db.Order.findAndCountAll({
+    where: whereClause,
+    include: [
+      {
+        model: db.OrderItem,
+        as: "orderItems",
+        required: true,
+        include: [
+          {
+            model: db.Product,
+            where: { storeId },
+            required: true,
+          },
+        ],
+      },
+    ],
+    distinct: true,
+    limit: pageSize,
+    offset: offset,
+    order: [["createdAt", "DESC"]],
+  });
+
+  return { rows, count };
+};
+
 export default {
   getLastOrder,
   getOrderItems,
   getOrdersByDateRange,
+  getOrdersByStore,
 };
