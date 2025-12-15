@@ -9,6 +9,7 @@ interface BubbleAnimationProps {
 }
 
 const BubbleAnimation: React.FC<BubbleAnimationProps> = ({ stores }) => {
+  console.log(stores,"s BubbleAnimation")
   return (
     <div className="container container-hidden">
       <div className={`text-center ${styles["circular-container"]}`}>
