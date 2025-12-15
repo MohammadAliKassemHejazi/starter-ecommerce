@@ -12,6 +12,7 @@
 
 .particle {
   position: absolute;
+  top: -10%; // Start above the container
   border-radius: 50%;
   opacity: 0.8;
   // Fallback if no inline style
@@ -19,27 +20,34 @@
   height: 4px;
   background-color: var(--bs-primary); // Use theme color for particles
   box-shadow: 0 0 4px var(--bs-primary);
-  animation: floatUp linear infinite;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  // Duration is set inline by JS
 }
 
 .star {
   position: absolute;
+  top: -10%; // Start above the container
   border-radius: 50%;
   background-color: #ffffff;
   opacity: 0.8;
   width: 2px;
   height: 2px;
   box-shadow: 0 0 2px #ffffff;
-  animation: twinkle ease-in-out infinite;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  // Duration is set inline by JS
 }
 
 // ===========================================
 // ANIMATIONS
 // ===========================================
 
-@keyframes floatUp {
+@keyframes fall {
   0% {
-    transform: translateY(0) translateX(0);
+    transform: translateY(0);
     opacity: 0;
   }
   10% {
@@ -49,22 +57,7 @@
     opacity: 1;
   }
   100% {
-    transform: translateY(-100px) translateX(20px);
+    transform: translateY(60vh); // Fall past the container height (50vh)
     opacity: 0;
-  }
-}
-
-@keyframes twinkle {
-  0% {
-    transform: scale(1);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scale(1.5);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.3;
   }
 }

@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 
 const ParticleComponent = () => {
-  const [particles, setParticles] = useState<{ top: string; left: string; animationDelay: string }[]>([]);
-  const [stars, setStars] = useState<{ top: string; left: string; animationDelay: string }[]>([]);
+  const [particles, setParticles] = useState<{ left: string; animationDelay: string; duration: string }[]>([]);
+  const [stars, setStars] = useState<{ left: string; animationDelay: string; duration: string }[]>([]);
 
   useEffect(() => {
     // Generate particles
     const newParticles = Array.from({ length: 100 }, () => ({
-      top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 10}s`,
+      animationDelay: `${Math.random() * 5}s`,
+      duration: `${5 + Math.random() * 10}s`, // 5-15s duration
     }));
     setParticles(newParticles);
 
     // Generate stars
     const newStars = Array.from({ length: 100 }, () => ({
-      top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
       animationDelay: `${Math.random() * 5}s`,
+      duration: `${3 + Math.random() * 7}s`, // 3-10s duration
     }));
     setStars(newStars);
   }, []);
@@ -29,7 +29,11 @@ const ParticleComponent = () => {
           <div
             key={`particle-${index}`}
             className="particle"
-            style={{ top: particle.top, left: particle.left, animationDelay: particle.animationDelay }}
+            style={{
+              left: particle.left,
+              animationDelay: particle.animationDelay,
+              animationDuration: particle.duration
+            }}
           />
         ))}
       </div>
@@ -38,7 +42,11 @@ const ParticleComponent = () => {
           <div
             key={`star-${index}`}
             className="star"
-            style={{ top: star.top, left: star.left, animationDelay: star.animationDelay }}
+            style={{
+              left: star.left,
+              animationDelay: star.animationDelay,
+              animationDuration: star.duration
+            }}
           />
         ))}
       </div>
