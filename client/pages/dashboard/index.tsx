@@ -41,7 +41,7 @@ useEffect(() => {
     dispatch(fetchInventoryAlerts());
     dispatch(fetchOrderStatuses());
   }
-  debugger;
+  
 }, [isAuthenticating, isAuthenticated, dispatch, isauthenticatingvalue]);
 
 

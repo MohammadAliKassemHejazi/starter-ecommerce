@@ -332,7 +332,9 @@ const SingleItem = ({ product }: Props) => {
                 }
 
                 try {
-                  await addComment(product!.id!, feedback.comment, feedback.rating);
+               
+                  console.log("Submitting product", product?.id ?? "");
+                  await addComment(product?.id ?? "", feedback.comment, feedback.rating);
                   Toast.fire({
                     icon: 'success',
                     title: 'Feedback submitted successfully'
@@ -410,7 +412,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   try {
     const  product  = await requestProductById(pid);
- debugger;
+
     if (!product) {
       return { notFound: true };
     }

@@ -65,7 +65,7 @@ const Shop = () => {
   useEffect(() => {
     if (selectedStore) {
       debouncedFetchProducts(searchQuery);
-      debugger;
+ 
     }
   }, [selectedStore, currentPage, pageSize, searchQuery, debouncedFetchProducts]);
 
@@ -137,7 +137,7 @@ const Shop = () => {
       url: process.env.NEXT_PUBLIC_BASE_URL_Images + photo.imageUrl
     })) || []
   })) || [];
-  debugger;
+
   // Shopping view component
   const ShoppingView = () => (
     <div className="row">

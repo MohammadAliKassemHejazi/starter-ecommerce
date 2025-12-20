@@ -52,7 +52,7 @@ function EditProduct() {
         .unwrap()
          .then((fetchedProduct: IProductModel | any) => {
            // Create a shallow copy of fetchedProduct
-           debugger;
+       
     const updatedProduct = {
       ...fetchedProduct,
       discount: fetchedProduct.discount ?? 0, // Set default value for discount
@@ -117,7 +117,7 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
 
     // Call the backend API to update the images
     const response = await dispatch(updateProductImages(formData)).unwrap();
-debugger;
+
     // Extract the updated images from the response
     const updatedImagesFromResponse = Array.isArray(response.data)
       ? response.data.map((uploadedImage: any) => ({
