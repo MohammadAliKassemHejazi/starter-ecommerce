@@ -65,10 +65,8 @@ export const fetchPublicStores = createAsyncThunk(
   "public/fetchStores",
   async () => {
     const response = await publicService.getPublicStores();
-   return response.data.map(store => ({
-      ...store,
-      description: store.description ?? "", // ensures string
-    }));
+   console.log(response.data)
+   return response.data
   }
 );
 

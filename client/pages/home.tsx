@@ -17,7 +17,7 @@ const Home = () => {
 
   // Fetch all public stores on component mount
   useEffect(() => {
-    dispatch(fetchPublicStores());
+    dispatch(fetchPublicStores()).unwrap
   }, [dispatch]);
 
   const HeroSection = () => (

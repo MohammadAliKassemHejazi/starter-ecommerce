@@ -5,6 +5,7 @@ import { IStoreAttributes } from 'interfaces/types/models/store.model.types';
 import path from 'node:path';
 import { promises as fsPromises } from 'fs';
 import { Op, OrderItem } from 'sequelize'; // 👈 Added for filtering & sorting
+import { raw } from 'body-parser';
 
 // 🔒 Allowed sort fields for security
 const ALLOWED_SORT_FIELDS = ['name', 'createdAt', 'updatedAt'];
@@ -159,13 +160,14 @@ const getAllStoresforuser = async (UserID: string): Promise<{ stores: IStoreAttr
   return { stores };
 };
 
-const getAllStores = async (): Promise<{ stores: IStoreAttributes[] } | null> => {
+const getAllStores = async (): Promise< IStoreAttributes[]  | null> => {
   try {
-    const stores: IStoreAttributes[] | null = await db.Store.findAll();
+    const limit =8
+    const stores: IStoreAttributes[] | null = await db.Store.findAll({raw:true,limit});
     if (!stores) {
       return null;
     }
-    return { stores };
+    return  stores ;
   } catch (error) {
     return null;
   }
