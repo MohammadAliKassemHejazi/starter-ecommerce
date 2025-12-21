@@ -4,6 +4,7 @@ import {
 	PublicProductsListResponse, 
 	PublicCategoriesListResponse 
 } from "@/interfaces/api/public.types";
+import { ArticlesListResponse } from "@/interfaces/api/article.types";
 
 // Public API endpoints that don't require authentication
 
@@ -46,5 +47,11 @@ export const getPublicProductsByStore = async (
 // Get public store by ID
 export const getPublicStoreById = async (id: string): Promise<PublicStoresListResponse> => {
   const { data: response } = await httpClient.get<PublicStoresListResponse>(`/public/stores/${id}`);
+  return response;
+};
+
+// Get public articles
+export const getPublicArticles = async (): Promise<ArticlesListResponse> => {
+  const { data: response } = await httpClient.get<ArticlesListResponse>("/public/articles");
   return response;
 };

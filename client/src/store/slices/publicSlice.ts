@@ -4,21 +4,25 @@ import { requestAllPackages as getAllPackagesService, IPackage } from "@/service
 import { RootState } from "../store";
 import { IStoreResponseModel } from "@/models/store.model";
 import { IProductModel } from "@/models/product.model";
+import { IArticleModelWithUser } from "@/models/article.model";
 
 interface PublicState {
   stores: IStoreResponseModel[];
   products: IProductModel[];
+  articles: IArticleModelWithUser[];
   categories: any[];
   packages: IPackage[];
   loading: {
     stores: boolean;
     products: boolean;
+    articles: boolean;
     categories: boolean;
     packages: boolean;
   };
   error: {
     stores: string | null;
     products: string | null;
+    articles: string | null;
     categories: string | null;
     packages: string | null;
   };
@@ -35,17 +39,20 @@ interface PublicState {
 const initialState: PublicState = {
   stores: [],
   products: [],
+  articles: [],
   categories: [],
   packages: [],
   loading: {
     stores: false,
     products: false,
+    articles: false,
     categories: false,
     packages: false,
   },
   error: {
     stores: null,
     products: null,
+    articles: null,
     categories: null,
     packages: null,
   },
@@ -85,6 +92,14 @@ export const fetchPublicCategories = createAsyncThunk(
   "public/fetchCategories",
   async () => {
     const response = await publicService.getPublicCategories();
+    return response.data;
+  }
+);
+
+export const fetchPublicArticles = createAsyncThunk(
+  "public/fetchArticles",
+  async () => {
+    const response = await publicService.getPublicArticles();
     return response.data;
   }
 );
@@ -244,6 +259,21 @@ const publicSlice = createSlice({
         state.loading.packages = false;
         state.error.packages = action.error.message || "Failed to fetch packages";
       });
+
+    // Fetch public articles
+    builder
+      .addCase(fetchPublicArticles.pending, (state) => {
+        state.loading.articles = true;
+        state.error.articles = null;
+      })
+      .addCase(fetchPublicArticles.fulfilled, (state, action) => {
+        state.loading.articles = false;
+        state.articles = action.payload || [];
+      })
+      .addCase(fetchPublicArticles.rejected, (state, action) => {
+        state.loading.articles = false;
+        state.error.articles = action.error.message || "Failed to fetch articles";
+      });
   },
 });
 
@@ -252,6 +282,7 @@ export const { resetPublicProducts, clearPublicErrors } = publicSlice.actions;
 // Selectors
 export const selectPublicStores = (state: RootState) => state.public.stores;
 export const selectPublicProducts = (state: RootState) => state.public.products;
+export const selectPublicArticles = (state: RootState) => state.public.articles;
 export const selectPublicCategories = (state: RootState) => state.public.categories;
 export const selectPublicPackages = (state: RootState) => state.public.packages;
 export const selectPublicLoading = (state: RootState) => state.public.loading;
