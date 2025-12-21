@@ -1,5 +1,5 @@
 import express from "express";
-import { shopController, storeController, categoryController } from "../controllers/index";
+import { shopController, storeController, categoryController, articlesController } from "../controllers/index";
 
 const router = express.Router();
 
@@ -60,6 +60,16 @@ router.get("/stores/:storeId/products", async (req, res, next) => {
 router.get("/categories", async (req, res, next) => {
   try {
     const result = await categoryController.handleFetchCategories(req, res, next);
+    return result;
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get public articles (for home page)
+router.get("/articles", async (req, res, next) => {
+  try {
+    const result = await articlesController.handleGetArticles(req, res, next);
     return result;
   } catch (error) {
     next(error);
