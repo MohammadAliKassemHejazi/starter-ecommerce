@@ -13,6 +13,7 @@ const initialState: ProductsState = {
   page: 1,
   pageSize: 10,
   error: "",
+  loading: false,
 };
 
 export const fetchProductsListing = createAsyncThunk(
@@ -122,7 +123,9 @@ export const shopSlice = createSlice({
     }},
   extraReducers: (builder) => {
     builder.addCase(fetchProductById.fulfilled, (state, action) => {
-      state.product = action.payload.data;
+      // Cast payload to any to handle type mismatches
+      const payload = action.payload as any;
+      state.product = payload.data || payload;
     });
 
     builder.addCase(fetchProductById.rejected, (state) => {
@@ -139,10 +142,12 @@ export const shopSlice = createSlice({
 
     builder.addCase(fetchProductsByStore.fulfilled, (state, action) => {
      //here we replace the products array with new data
-      state.Storeproducts = action.payload.data.products;
-      state.total = action.payload.data.total;
-      state.page = action.payload.data.page;
-      state.pageSize = action.payload.data.pageSize;
+      const payload = action.payload as any;
+      const data = payload.data || payload;
+      state.Storeproducts = data.products;
+      state.total = data.total;
+      state.page = data.page;
+      state.pageSize = data.pageSize;
     });
 
     builder.addCase(fetchProductsByStore.rejected, (state) => {
@@ -156,29 +161,34 @@ export const shopSlice = createSlice({
 
     
 
-builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
-  const { data, meta } = action.payload;
-
-  // Replace or append based on page number
-  // if (data.page === 1) {
-    state.products = data;
-  // } else {
-  //   state.products = [...state.products, ...data];
-  // }
-
-  // state.total = data.total;
-  // state.page = data.page;
-  // state.pageSize = data.pageSize;
-
+builder.addCase(fetchProductsListing.pending, (state) => {
+  state.loading = true;
+  state.error = "";
 });
 
+builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
+  state.loading = false;
+  // Unwrap the data from the response (which might be wrapped by httpClient)
+  const payload = action.payload as any;
+  const payloadData = payload.data || payload;
+  const { products, total, page, pageSize } = payloadData;
 
+  // Replace or append based on page number
+  if (page === 1) {
+    state.products = products || [];
+  } else {
+    state.products = [...state.products, ...(products || [])];
+  }
 
-builder.addCase(fetchProductsListing.rejected, (state) => {
-  state.products = [...state.products]; // Keep existing products
-  state.total = 0;
-  state.page = 1;
-  state.pageSize = 10;
+  state.total = total || 0;
+  state.page = page || 1;
+  state.pageSize = pageSize || 10;
+});
+
+builder.addCase(fetchProductsListing.rejected, (state, action) => {
+  state.loading = false;
+  state.error = action.error.message || "Failed to fetch products";
+  // We keep existing products/state in case of error, or could reset if needed
 });
 
 
@@ -190,5 +200,6 @@ export const productByStoreSelector = (store: RootState): IProductModel[] | unde
 export const totalProductsSelector = (store: RootState): number => store.products.total;
 export const pageSelector = (store: RootState): number => store.products.page;
 export const pageSizeSelector = (store: RootState): number => store.products.pageSize;
+export const selectShopLoading = (store: RootState): boolean => store.products.loading;
 export const productListingforStore = (store: RootState): ProductsState | undefined => store.products;
 export default shopSlice.reducer;
