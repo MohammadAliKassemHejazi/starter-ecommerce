@@ -24,6 +24,9 @@ export interface ArticleGetRequest extends CustomRequest {
   query: { id: string };
 }
 
+export interface ArticlesGetRequest extends CustomRequest {
+}
+
 export interface ArticleDeleteRequest extends CustomRequest {
   params: { id: string };
 }

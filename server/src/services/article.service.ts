@@ -66,7 +66,7 @@ export const fetchArticleByAuthor = async (
 export const fetchArticles = async (
 
 ) => {
-  const data = await db.Article.findAll({
+  const response = await db.Article.findAll({
     include: [
       {
         model: db.User,
@@ -77,7 +77,7 @@ export const fetchArticles = async (
     ]
   })
 
-  const response = { data: data }
+
   return response
 }
 

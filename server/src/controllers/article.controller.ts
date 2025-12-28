@@ -3,6 +3,7 @@ import { articleService } from "../services";
 import {
   ArticleCreateBodyRequest,
   ArticleGetRequest,
+  ArticlesGetRequest,
   IArticlesBodyResponse,
 } from "../interfaces/types/controllers/article.controller.types";
 import customError from "../utils/customError";
@@ -31,7 +32,7 @@ export const handleCreate = async (
 };
 
 export const handleGetArticles = async (
-  request: ArticleGetRequest,
+  request: ArticlesGetRequest,
   response: Response,
   next : NextFunction
 ): Promise<void> => {

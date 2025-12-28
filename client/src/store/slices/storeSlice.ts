@@ -129,8 +129,9 @@ const storeSlice = createSlice({
         state.error = action.error.message || "Failed to fetch stores.";
         state.stores = [];
       })
-         .addCase(fetchAllStores.fulfilled, (state, action) => {
-        state.stores = action.payload.stores;
+      .addCase(fetchAllStores.fulfilled, (state, action) => {
+       
+        state.stores = action.payload;
       })
       .addCase(fetchAllStores.rejected, (state, action) => {
         state.error = action.error.message || "Failed to fetch stores.";

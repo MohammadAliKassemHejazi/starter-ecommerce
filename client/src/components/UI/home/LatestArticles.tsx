@@ -7,6 +7,10 @@ const LatestArticles: React.FC = () => {
   const articles = useSelector(selectPublicArticles);
 
   // Take top 3 articles
+debugger
+   if (articles.length === 0) {
+    return null;
+  }
   const latestArticles = articles?.slice(0, 3) || [];
 
   if (latestArticles.length === 0) {

@@ -35,9 +35,9 @@ const FeaturedStores: React.FC = () => {
                   <div className="position-relative mx-auto mb-3" style={{ width: "120px", height: "120px" }}>
                     <Image
                       src={
-                        store.logo
-                          ? `${process.env.NEXT_PUBLIC_BASE_URL_Images}${store.logo}`
-                          : "https://via.placeholder.com/150" // Fallback image
+                        store.imgUrl
+                          ? `${process.env.NEXT_PUBLIC_BASE_URL_Images}${store.imgUrl}`
+                          : `${process.env.NEXT_PUBLIC_BASE_URL_Images}${"placeholder"}` // Fallback image
                       }
                       alt={store.name}
                       fill

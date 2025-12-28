@@ -100,6 +100,7 @@ export const fetchPublicArticles = createAsyncThunk(
   "public/fetchArticles",
   async () => {
     const response = await publicService.getPublicArticles();
+    debugger;
     return response.data;
   }
 );
