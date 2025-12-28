@@ -7,7 +7,7 @@ import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import AddToCartButton from "@/components/UI/AddToCartButton";
-import { fetchProductsListing } from "@/store/slices/shopSlice";
+
 interface ProductListProps {}
 
 const ProductList: React.FC<ProductListProps> = () => {
