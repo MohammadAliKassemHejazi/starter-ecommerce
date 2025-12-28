@@ -110,7 +110,7 @@ export const orderSlice = createSlice({
       .addCase(fetchOrderItems.fulfilled, (state, action) => {
         const order = state.orders.find((o) => o.id === action.payload.orderId);
         if (order) {
-          order.items = action.payload.items;
+          order.orderItems = action.payload.items;
         }
       })
 
