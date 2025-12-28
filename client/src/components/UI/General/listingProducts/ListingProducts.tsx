@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IProductModel } from "@/models/product.model";
-import { fetchPublicProducts, loadMorePublicProducts, selectPublicProducts, selectPublicPagination, selectPublicLoading } from "@/store/slices/publicSlice"; 
+import { fetchProductsListing, productSelector, totalProductsSelector, pageSelector, pageSizeSelector, selectShopLoading } from "@/store/slices/shopSlice";
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
 import FavoritesButton from "@/components/UI/FavoritesButton";
@@ -12,15 +12,17 @@ interface ProductListProps {}
 
 const ProductList: React.FC<ProductListProps> = () => {
   const dispatch = useAppDispatch();
-  const products = useSelector(selectPublicProducts) as IProductModel[]; 
-  const loading = useSelector(selectPublicLoading);
-  const pagination = useSelector(selectPublicPagination);
+  const products = useSelector(productSelector) as IProductModel[];
+  const loading = useSelector(selectShopLoading);
+  const total = useSelector(totalProductsSelector);
+  const page = useSelector(pageSelector);
+  const pageSize = useSelector(pageSizeSelector);
   
   const observer = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    dispatch(fetchPublicProducts({ page: 1, pageSize: 10 }));
+    dispatch(fetchProductsListing({ page: 1, pageSize: 10 }));
   }, [dispatch]);
 
   const getTagAndColor = (product: IProductModel) => {
@@ -41,25 +43,27 @@ const ProductList: React.FC<ProductListProps> = () => {
     return { tag, tagColor };
   };
 
+  const hasMore = (products?.length || 0) < total;
+
   const lastProductRef = useCallback(
     (node: HTMLDivElement | null) => {
-      if (loading.products) { return; }
+      if (loading) { return; }
       if (observer.current) { observer.current.disconnect(); }
       
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && pagination.products.hasMore) {
-          dispatch(loadMorePublicProducts());
+        if (entries[0].isIntersecting && hasMore) {
+          dispatch(fetchProductsListing({ page: page + 1, pageSize }));
         }
       });
 
       if (node) { observer.current.observe(node); }
     },
-    [dispatch, loading.products, pagination.products.hasMore]
+    [dispatch, loading, hasMore, page, pageSize]
   );
 
   return (
     <div className="container" style={{ background: 'var(--bs-component-bg)' }}>
-      {loading.products && products.length === 0 ? (
+      {loading && products?.length === 0 ? (
         <div>Loading...</div>
       ) : (
         <div className="row">
@@ -80,7 +84,7 @@ const ProductList: React.FC<ProductListProps> = () => {
                 <div className="product">
                   {product.photos && (
                     <Image
-                      src={process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0]?.imageUrl}
+                      src={(process.env.NEXT_PUBLIC_BASE_URL_Images || "") + (product.photos[0]?.imageUrl || "")}
                       alt=""
                       width={300}
                       height={350}

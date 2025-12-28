@@ -8,4 +8,5 @@ export interface ProductsState {
   page: number;
   pageSize: number;
   error?: string;
+  loading: boolean;
 }

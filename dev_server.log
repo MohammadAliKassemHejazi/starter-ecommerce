@@ -1,0 +1,238 @@
+
+> nextjs-redux-toolkit-template@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 2.7s
+ ○ Compiling /home ...
+ ✓ Compiled /home in 15.3s (810 modules)
+i18next: languageChanged en-US
+i18next: initialized {
+  debug: true,
+  initImmediate: true,
+  ns: [ 'translation' ],
+  defaultNS: [ 'translation' ],
+  fallbackLng: [ 'en' ],
+  fallbackNS: false,
+  supportedLngs: false,
+  nonExplicitSupportedLngs: false,
+  load: 'all',
+  preload: false,
+  simplifyPluralSuffix: true,
+  keySeparator: '.',
+  nsSeparator: ':',
+  pluralSeparator: '_',
+  contextSeparator: '_',
+  partialBundledLanguages: false,
+  saveMissing: false,
+  updateMissing: false,
+  saveMissingTo: 'fallback',
+  saveMissingPlurals: true,
+  missingKeyHandler: false,
+  missingInterpolationHandler: false,
+  postProcess: false,
+  postProcessPassResolved: false,
+  returnNull: false,
+  returnEmptyString: true,
+  returnObjects: false,
+  joinArrays: false,
+  returnedObjectHandler: false,
+  parseMissingKeyHandler: false,
+  appendNamespaceToMissingKey: false,
+  appendNamespaceToCIMode: false,
+  overloadTranslationOptionHandler: [Function: overloadTranslationOptionHandler],
+  interpolation: {
+    escapeValue: false,
+    format: [Function: bound format],
+    prefix: '{{',
+    suffix: '}}',
+    formatSeparator: ',',
+    unescapePrefix: '-',
+    nestingPrefix: '$t(',
+    nestingSuffix: ')',
+    nestingOptionsSeparator: ',',
+    maxReplaces: 1000,
+    skipOnVariables: true
+  },
+  resources: {
+    en: { translation: [Object] },
+    ar: { translation: [Object] },
+    fr: { translation: [Object] },
+    es: { translation: [Object] }
+  },
+  detection: {
+    order: [ 'localStorage', 'navigator', 'htmlTag' ],
+    caches: [ 'localStorage' ],
+    lookupQuerystring: 'lng',
+    lookupCookie: 'i18next',
+    lookupLocalStorage: 'i18nextLng',
+    lookupSessionStorage: 'i18nextLng',
+    excludeCacheFor: [ 'cimode' ],
+    convertDetectedLanguage: [Function: convertDetectedLanguage]
+  },
+  ignoreJSONStructure: true
+}
+ GET /home 200 in 15833ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 5.6s (812 modules)
+i18next: languageChanged en-US
+i18next: init: i18next is already initialized. You should call init just once!
+i18next: initialized {
+  debug: true,
+  initImmediate: true,
+  ns: [ 'translation' ],
+  defaultNS: [ 'translation' ],
+  fallbackLng: [ 'en' ],
+  fallbackNS: false,
+  supportedLngs: false,
+  nonExplicitSupportedLngs: false,
+  load: 'all',
+  preload: false,
+  simplifyPluralSuffix: true,
+  keySeparator: '.',
+  nsSeparator: ':',
+  pluralSeparator: '_',
+  contextSeparator: '_',
+  partialBundledLanguages: false,
+  saveMissing: false,
+  updateMissing: false,
+  saveMissingTo: 'fallback',
+  saveMissingPlurals: true,
+  missingKeyHandler: false,
+  missingInterpolationHandler: false,
+  postProcess: false,
+  postProcessPassResolved: false,
+  returnNull: false,
+  returnEmptyString: true,
+  returnObjects: false,
+  joinArrays: false,
+  returnedObjectHandler: false,
+  parseMissingKeyHandler: false,
+  appendNamespaceToMissingKey: false,
+  appendNamespaceToCIMode: false,
+  overloadTranslationOptionHandler: [Function: overloadTranslationOptionHandler],
+  interpolation: {
+    escapeValue: false,
+    format: [Function: bound format],
+    prefix: '{{',
+    suffix: '}}',
+    formatSeparator: ',',
+    unescapePrefix: '-',
+    nestingPrefix: '$t(',
+    nestingSuffix: ')',
+    nestingOptionsSeparator: ',',
+    maxReplaces: 1000,
+    skipOnVariables: true
+  },
+  resources: {
+    en: { translation: [Object] },
+    ar: { translation: [Object] },
+    fr: { translation: [Object] },
+    es: { translation: [Object] }
+  },
+  detection: {
+    order: [ 'localStorage', 'navigator', 'htmlTag' ],
+    caches: [ 'localStorage' ],
+    lookupQuerystring: 'lng',
+    lookupCookie: 'i18next',
+    lookupLocalStorage: 'i18nextLng',
+    lookupSessionStorage: 'i18nextLng',
+    excludeCacheFor: [ 'cimode' ],
+    convertDetectedLanguage: [Function: convertDetectedLanguage]
+  },
+  ignoreJSONStructure: true
+}
+ GET /user/auth/session 404 in 5713ms
+ GET /public/stores 404 in 5534ms
+ GET /public/stores 404 in 5528ms
+ GET /public/articles 404 in 5527ms
+ GET /shop/get/productListing?page=1&pageSize=10 404 in 5399ms
+ GET /home 200 in 72ms
+ GET /user/auth/session 404 in 10ms
+ GET /public/stores 404 in 24ms
+ GET /public/stores 404 in 23ms
+ GET /public/articles 404 in 21ms
+ GET /shop/get/productListing?page=1&pageSize=10 404 in 12ms
+ GET /home 200 in 63ms
+ GET /user/auth/session 404 in 15ms
+ GET /public/stores 404 in 49ms
+ GET /public/stores 404 in 42ms
+ GET /public/articles 404 in 39ms
+ ✓ Compiled in 290ms (812 modules)
+i18next: languageChanged en-US
+i18next: init: i18next is already initialized. You should call init just once!
+i18next: initialized {
+  debug: true,
+  initImmediate: true,
+  ns: [ 'translation' ],
+  defaultNS: [ 'translation' ],
+  fallbackLng: [ 'en' ],
+  fallbackNS: false,
+  supportedLngs: false,
+  nonExplicitSupportedLngs: false,
+  load: 'all',
+  preload: false,
+  simplifyPluralSuffix: true,
+  keySeparator: '.',
+  nsSeparator: ':',
+  pluralSeparator: '_',
+  contextSeparator: '_',
+  partialBundledLanguages: false,
+  saveMissing: false,
+  updateMissing: false,
+  saveMissingTo: 'fallback',
+  saveMissingPlurals: true,
+  missingKeyHandler: false,
+  missingInterpolationHandler: false,
+  postProcess: false,
+  postProcessPassResolved: false,
+  returnNull: false,
+  returnEmptyString: true,
+  returnObjects: false,
+  joinArrays: false,
+  returnedObjectHandler: false,
+  parseMissingKeyHandler: false,
+  appendNamespaceToMissingKey: false,
+  appendNamespaceToCIMode: false,
+  overloadTranslationOptionHandler: [Function: overloadTranslationOptionHandler],
+  interpolation: {
+    escapeValue: false,
+    format: [Function: bound format],
+    prefix: '{{',
+    suffix: '}}',
+    formatSeparator: ',',
+    unescapePrefix: '-',
+    nestingPrefix: '$t(',
+    nestingSuffix: ')',
+    nestingOptionsSeparator: ',',
+    maxReplaces: 1000,
+    skipOnVariables: true
+  },
+  resources: {
+    en: { translation: [Object] },
+    ar: { translation: [Object] },
+    fr: { translation: [Object] },
+    es: { translation: [Object] }
+  },
+  detection: {
+    order: [ 'localStorage', 'navigator', 'htmlTag' ],
+    caches: [ 'localStorage' ],
+    lookupQuerystring: 'lng',
+    lookupCookie: 'i18next',
+    lookupLocalStorage: 'i18nextLng',
+    lookupSessionStorage: 'i18nextLng',
+    excludeCacheFor: [ 'cimode' ],
+    convertDetectedLanguage: [Function: convertDetectedLanguage]
+  },
+  ignoreJSONStructure: true
+}
+ GET /home 200 in 121ms
+ GET /user/auth/session 404 in 15ms
+ GET /public/stores 404 in 24ms
+ GET /public/stores 404 in 23ms
+ GET /public/articles 404 in 23ms
+ GET /test.jpg 404 in 5ms
+ ⨯ The requested resource isn't a valid image for /test.jpg received text/html; charset=utf-8
