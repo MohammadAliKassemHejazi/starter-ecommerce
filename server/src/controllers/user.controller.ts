@@ -9,10 +9,10 @@ export const handleFetchUsersByCreator = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const userId = req.query.createdById as string;
-    if (userId !== "me") {
-      res.status(400).json({ error: "Invalid query parameter" });
-      return;
+    const userId = (req as any).UserId;
+    if (!userId) {
+       res.status(401).json({ error: "Unauthorized" });
+       return;
     }
 
     const users = await userService.fetchUsersByCreator(userId);

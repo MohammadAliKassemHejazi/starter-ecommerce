@@ -12,7 +12,7 @@ import { protectedRoutes } from "../middlewares";
 const router = Router();
 
 // Define routes to protect
-const protectedRoutesList = ["/create", "/update/:id", "/delete/:id", "/:userId/roles", "/:userId/roles/:roleId"];
+const protectedRoutesList = ["/", "/create", "/update/:id", "/delete/:id", "/:userId/roles", "/:userId/roles/:roleId"];
 protectedRoutes(router, protectedRoutesList);
 
 /**

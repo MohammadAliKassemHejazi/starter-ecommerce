@@ -137,11 +137,11 @@ export const UserManager: React.FC<UserManagerProps> = ({ isSuperAdmin }) => {
             render: (value) => value?.[0]?.name || 'No Package'
           },
           {
-            key: 'packages',
+            key: 'packageStatus',
             label: 'Package Status',
-            render: (value) => (
-              <span className={`badge ${value?.[0]?.UserPackage?.isActive ? 'bg-success' : 'bg-secondary'}`}>
-                {value?.[0]?.UserPackage?.isActive ? 'Active' : 'Inactive'}
+            render: (_, row) => (
+              <span className={`badge ${row.packages?.[0]?.UserPackage?.isActive ? 'bg-success' : 'bg-secondary'}`}>
+                {row.packages?.[0]?.UserPackage?.isActive ? 'Active' : 'Inactive'}
               </span>
             )
           }
