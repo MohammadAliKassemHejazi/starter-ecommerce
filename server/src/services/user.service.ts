@@ -6,6 +6,18 @@ import userErrors from "../utils/errors/user.errors";
 export const fetchUsersByCreator = async (creatorId: string): Promise<IUserAttributes[]> => {
   const users = await db.User.findAll({
     where: { createdById: creatorId },
+    include: [
+      {
+        model: db.Role,
+        as: "roles",
+        through: { attributes: [] }, // Exclude join table attributes if not needed
+      },
+      {
+        model: db.Package,
+        as: "packages",
+        through: { attributes: ["isActive", "startDate", "endDate"] }, // Include UserPackage attributes if needed
+      },
+    ],
   });
   return users;
 };

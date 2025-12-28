@@ -59,7 +59,7 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchUsersByCreator.fulfilled, (state, action) => {
-      state.users = action.payload;
+      state.users = action.payload.data;
     });
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.users = state.users.filter((user: any) => user.id !== action.meta.arg);
