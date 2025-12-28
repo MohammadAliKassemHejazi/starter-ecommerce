@@ -65,11 +65,11 @@ export const getOrdersByStore = async (
   const offset = (page - 1) * pageSize;
   const whereClause: any = {};
 
-  if (from && from !== "undefined" && from !== "null" && from !== "") {
+  if (from && from !== "undefined") {
     whereClause.createdAt = { ...whereClause.createdAt, [Op.gte]: new Date(from) };
   }
 
-  if (to && to !== "undefined" && to !== "null" && to !== "") {
+  if (to && to !== "undefined") {
     whereClause.createdAt = { ...whereClause.createdAt, [Op.lte]: new Date(to) };
   }
 
@@ -78,7 +78,7 @@ export const getOrdersByStore = async (
     include: [
       {
         model: db.OrderItem,
-        as: "items",
+        as: "orderItems",
         required: true,
         include: [
           {

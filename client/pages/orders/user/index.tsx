@@ -86,7 +86,7 @@ const Orders = () => {
           <div className="col-md-6">
             <h5>Items:</h5>
             <ul className="list-group">
-              {lastOrder?.items?.map((item) => (
+              {lastOrder?.orderItems?.map((item) => (
                 <li key={item.id} className="list-group-item">
                   <strong>Product ID:</strong> {item.productId} | <strong>Quantity:</strong> {item.quantity} | <strong>Price:</strong> ${item.price}
                 </li>
@@ -148,7 +148,7 @@ const Orders = () => {
         <ul className="list-group">
           {orders!
             .find((order) => order.id === selectedOrderId)
-            ?.items?.map((item) => (
+            ?.orderItems?.map((item) => (
               <li key={item.id} className="list-group-item">
                 <strong>Product ID:</strong> {item.productId} | <strong>Quantity:</strong> {item.quantity} | <strong>Price:</strong> ${item.price}
               </li>

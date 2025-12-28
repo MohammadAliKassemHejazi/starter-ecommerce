@@ -3,7 +3,7 @@ export interface IOrder {
 
   createdAt: string;
   updatedAt: string;
-  items: IOrderItem[]; // Include order items
+  orderItems: IOrderItem[]; // Include order items
 }
 
 export interface IOrderItem {
@@ -21,5 +21,5 @@ export interface IOrderModel {
   status: string; // e.g., "Pending", "Completed", "Cancelled"
   createdAt: string; // ISO string for date-time
   updatedAt: string; // ISO string for date-time
-  items?: IOrderItem[]; // Optional: list of items in the order
+  orderItems?: IOrderItem[]; // Optional: list of items in the order
 }
