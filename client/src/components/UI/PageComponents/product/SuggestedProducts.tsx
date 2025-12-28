@@ -17,7 +17,7 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({ currentProduct })
       setLoading(true);
       try {
         let response;
-        debugger
+ 
         if (currentProduct.storeId) {
           
           // Fetch products from the same store
@@ -27,9 +27,9 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({ currentProduct })
           response = await requestProductsListing(1, 5);
         }
 
-        if (response && response.data && Array.isArray(response.data.products)) {
+        if (response && response.data && Array.isArray(response.data)) {
           // Filter out the current product
-          const filtered = response.data.products.filter((p: any) => p.id !== currentProduct.id);
+          const filtered = response.data.filter((p: any) => p.id !== currentProduct.id);
           setProducts(filtered);
         }
       } catch (error) {

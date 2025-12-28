@@ -1,6 +1,6 @@
 import express from "express";
 import { shopController, storeController, categoryController, articlesController } from "../controllers/index";
-
+import { body, param, query } from "express-validator";
 const router = express.Router();
 
 // Public routes that don't require authentication
@@ -75,5 +75,14 @@ router.get("/articles", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get(
+  "/get/productListing",
+  [
+    query("page").optional().isInt({ min: 1 }).toInt(), // Validate page
+    query("pageSize").optional().isInt({ min: 1 }).toInt(), // Validate pageSize
+  ],
+  shopController.getProductsListing
+);
 
 export default router;

@@ -8,6 +8,7 @@ import {
 	UpdateProductResponse, 
 	DeleteProductResponse 
 } from "@/interfaces/api/product.types";
+
 import { CreatePaymentResponse } from "@/interfaces/api/payment.types";
 
 export interface IProductProps {
@@ -52,7 +53,7 @@ export const requestProductsByStore = async ( storeId: string, page: number, pag
 };
 
 export const requestProductsListing = async ( page: number, pageSize: number ): Promise<ProductsListResponse> => {
-  const { data: response } = await httpClient.get<ProductsListResponse>(`/shop/get/productListing/?page=${page}&pageSize=${pageSize}`);
+  const { data: response } = await httpClient.get<ProductsListResponse>(`/public/get/productListing/?page=${page}&pageSize=${pageSize}`);
   return response;
 };
 

@@ -54,15 +54,6 @@ router.get(
 // Get All Products
 router.get("/getall", shopController.handelgetall);
 
-// Get Products Listing (with validation)
-router.get(
-  "/get/productListing",
-  [
-    query("page").optional().isInt({ min: 1 }).toInt(), // Validate page
-    query("pageSize").optional().isInt({ min: 1 }).toInt(), // Validate pageSize
-  ],
-  shopController.getProductsListing
-);
 
 // Get Products by Store (with validation)
 router.get(

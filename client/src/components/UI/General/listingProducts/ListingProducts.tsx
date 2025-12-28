@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IProductModel } from "@/models/product.model";
-import { fetchPublicProducts, loadMorePublicProducts, selectPublicProducts, selectPublicPagination, selectPublicLoading } from "@/store/slices/publicSlice"; 
+import { selectPublicProducts, selectPublicPagination, selectPublicLoading } from "@/store/slices/publicSlice"; 
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import AddToCartButton from "@/components/UI/AddToCartButton";
-
+import { fetchProductsListing } from "@/store/slices/shopSlice";
 interface ProductListProps {}
 
 const ProductList: React.FC<ProductListProps> = () => {
@@ -20,7 +20,8 @@ const ProductList: React.FC<ProductListProps> = () => {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    dispatch(fetchPublicProducts({ page: 1, pageSize: 10 }));
+    dispatch(fetchProductsListing({ page: 1, pageSize: 10 }));
+
   }, [dispatch]);
 
   const getTagAndColor = (product: IProductModel) => {
@@ -48,13 +49,13 @@ const ProductList: React.FC<ProductListProps> = () => {
       
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && pagination.products.hasMore) {
-          dispatch(loadMorePublicProducts());
+        dispatch(fetchProductsListing({ page: pagination.products.page, pageSize: pagination.products.pageSize }));
         }
       });
 
       if (node) { observer.current.observe(node); }
     },
-    [dispatch, loading.products, pagination.products.hasMore]
+    [dispatch, loading.products, pagination.products.hasMore, pagination.products.page, pagination.products.pageSize]
   );
 
   return (

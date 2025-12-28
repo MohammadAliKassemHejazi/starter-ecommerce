@@ -160,15 +160,16 @@ builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
   const { data, meta } = action.payload;
 
   // Replace or append based on page number
-  if (meta.page === 1) {
+  // if (data.page === 1) {
     state.products = data;
-  } else {
-    state.products = [...state.products, ...data];
-  }
+  // } else {
+  //   state.products = [...state.products, ...data];
+  // }
 
-  state.total = meta.total;
-  state.page = meta.page;
-  state.pageSize = meta.pageSize;
+  // state.total = data.total;
+  // state.page = data.page;
+  // state.pageSize = data.pageSize;
+
 });
 
 
