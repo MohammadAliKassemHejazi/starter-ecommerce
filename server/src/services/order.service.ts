@@ -94,8 +94,6 @@ export const getOrdersByStore = async (
       },
     ],
     distinct: true, // Ensure distinct Order IDs
-    limit: pageSize,
-    offset: offset,
     order: [["createdAt", "DESC"]],
   });
 
@@ -104,12 +102,18 @@ export const getOrdersByStore = async (
     return { rows: [], count: 0 };
   }
 
-  const orderIds = idRows.map((row: any) => row.id);
+  const allOrderIds = idRows.map((row: any) => row.id);
+  // Manual Pagination
+  const pagedOrderIds = allOrderIds.slice(offset, offset + pageSize);
+
+  if (pagedOrderIds.length === 0) {
+    return { rows: [], count };
+  }
 
   const rows = await db.Order.findAll({
     where: {
       id: {
-        [Op.in]: orderIds,
+        [Op.in]: pagedOrderIds,
       },
     },
     include: [
