@@ -12,7 +12,7 @@ export interface OrderResponse extends ApiResponse<{
   currency: string;
   createdAt: string;
   updatedAt: string;
-  items: Array<{
+  orderItems: Array<{
     id: string;
     productId: string;
     productName: string;

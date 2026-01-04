@@ -22,7 +22,14 @@ export const requestOrdersByDate = async (from: string, to: string): Promise<Ord
 };
 
 export const requestOrdersByStore = async (storeId: string, page: number, pageSize: number, from?: string, to?: string): Promise<OrdersListResponse> => {
-    const { data: response } = await httpClient.get<OrdersListResponse>(`/orders?storeId=${storeId}&page=${page}&pageSize=${pageSize}&from=${from}&to=${to}`);
+    let query = `/orders?storeId=${storeId}&page=${page}&pageSize=${pageSize}`;
+    if (from && from !== "undefined") {
+      query += `&from=${from}`;
+    }
+    if (to && to !== "undefined") {
+      query += `&to=${to}`;
+    }
+    const { data: response } = await httpClient.get<OrdersListResponse>(query);
   return response;
 };
 
