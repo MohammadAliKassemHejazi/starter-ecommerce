@@ -4,6 +4,7 @@ import db from "../models";
 import customError from "../utils/customError";
 import orderErrors from "../utils/errors/order.errors";
 import { Op } from "sequelize";
+import { raw } from "body-parser";
 
 export const getLastOrder = async (
   userId: string
@@ -63,72 +64,89 @@ export const getOrdersByStore = async (
   to?: string
 ): Promise<{ rows: IOrderAttributes[]; count: number }> => {
   const offset = (page - 1) * pageSize;
-  const whereClause: any = {};
 
-  if (from && from !== "undefined") {
-    whereClause.createdAt = { ...whereClause.createdAt, [Op.gte]: new Date(from) };
+  const replacements: Record<string, any> = { storeId };
+  let whereConditions = 'WHERE "p"."storeId" = :storeId';
+
+  if (from && from !== 'undefined') {
+    const fromDate = new Date(from);
+    replacements.from = fromDate;
+    whereConditions += ' AND "Order"."createdAt" >= :from';
+  }
+  if (to && to !== 'undefined') {
+    const toDate = new Date(to);
+    replacements.to = toDate;
+    whereConditions += ' AND "Order"."createdAt" <= :to';
   }
 
-  if (to && to !== "undefined") {
-    whereClause.createdAt = { ...whereClause.createdAt, [Op.lte]: new Date(to) };
-  }
+  // 🔢 Step 1: Count
+  const countResult = await db.sequelize.query(
+    `
+      SELECT COUNT(DISTINCT "Order"."id") AS count
+      FROM "Orders" AS "Order"
+      INNER JOIN "OrderItems" AS "oi" ON "Order"."id" = "oi"."orderId"
+      INNER JOIN "Products" AS "p" ON "oi"."productId" = "p"."id"
+      ${whereConditions}
+    `,
+    {
+      type: db.sequelize.QueryTypes.SELECT,
+      replacements,
+    }
+  );
+  const count = parseInt(countResult[0].count, 10);
 
-  // Step 1: Get IDs and Count
-  const { rows: idRows, count } = await db.Order.findAndCountAll({
-    attributes: ['id'], // Fetch only IDs
-    where: whereClause,
-    include: [
-      {
-        model: db.OrderItem,
-        as: "orderItems",
-        attributes: [], // Don't fetch columns, just join
-        required: true,
-        include: [
-          {
-            model: db.Product,
-            attributes: [], // Don't fetch columns, just join
-            where: { storeId },
-            required: true,
-          },
-        ],
-      },
-    ],
-    distinct: true, // Ensure distinct Order IDs
-    limit: pageSize,
-    offset: offset,
-    order: [["createdAt", "DESC"]],
-  });
-
-  // Step 2: Fetch Full Data if any IDs found
   if (count === 0) {
     return { rows: [], count: 0 };
   }
 
+  // 📋 Step 2: Get IDs with createdAt (required for ORDER BY + DISTINCT)
+  const idRows = await db.sequelize.query(
+    `
+      SELECT DISTINCT "Order"."id", "Order"."createdAt"
+      FROM "Orders" AS "Order"
+      INNER JOIN "OrderItems" AS "oi" ON "Order"."id" = "oi"."orderId"
+      INNER JOIN "Products" AS "p" ON "oi"."productId" = "p"."id"
+      ${whereConditions}
+      ORDER BY "Order"."createdAt" DESC
+      LIMIT :limit OFFSET :offset
+    `,
+    {
+      type: db.sequelize.QueryTypes.SELECT,
+      replacements: {
+        ...replacements,
+        limit: pageSize,
+        offset,
+      },
+    }
+  );
+
   const orderIds = idRows.map((row: any) => row.id);
 
-  const rows = await db.Order.findAll({
-    where: {
-      id: {
-        [Op.in]: orderIds,
-      },
-    },
-    include: [
-      {
-        model: db.OrderItem,
-        as: "orderItems",
-        include: [
-          {
-            model: db.Product,
-            where: { storeId },
-            required: true,
-          },
-        ],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-  });
+  if (orderIds.length === 0) {
+    return { rows: [], count };
+  }
 
-  return { rows, count };
+  // 🧾 Step 3: Fetch full orders
+// Sequelize v6+ supports `plain: true` in options
+const rows = await db.Order.findAll({
+  where: {
+    id: { [Op.in]: orderIds },
+  },
+  include: [
+    {
+      model: db.OrderItem,
+      as: 'orderItems',
+      include: [{ model: db.Product }],
+    },
+  ],
+  order: [['createdAt', 'DESC']],
+  plain: false, // ← this is default; don't set raw: true
+});
+
+// Then convert to plain objects if needed:
+  const plainRows = rows.map((row: { toJSON: () => any; }) => row.toJSON());
+
+  return { rows: plainRows, count };
 };
 
 export default {

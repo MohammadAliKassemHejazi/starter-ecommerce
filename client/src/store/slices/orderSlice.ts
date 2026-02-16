@@ -99,8 +99,9 @@ export const orderSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchOrdersByStore.fulfilled, (state, action) => {
-        state.orders = action.payload.orders;
-        state.totalOrders = action.payload.total;
+        
+        state.orders = action.payload.data;
+   
         state.loading = false;
       })
       .addCase(fetchOrdersByStore.rejected, (state) => {

@@ -472,8 +472,8 @@ async function initializeDatabase(): Promise<void> {
       await db.sequelize.sync();
       console.log('✅ Database schema has been reset.');
       
-     // await runScripts();
-      console.log('✅ Database seeded successfully.');
+      // await runScripts();
+      // console.log('✅ Database seeded successfully.');
     } else {
       await db.sequelize.authenticate();
       console.log('✅ Database connection established.');
