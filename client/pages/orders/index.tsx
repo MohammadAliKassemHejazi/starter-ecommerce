@@ -7,10 +7,11 @@ import {
   pageSelector,
   pageSizeSelector,
   orderByStoreSelector,
+  loadingSelector,
 } from "@/store/slices/orderSlice";
 import { fetchAllStores, storeSelector } from "@/store/slices/storeSlice";
 import { store, useAppDispatch } from "@/store/store";
-import { TablePage } from "@/components/UI/PageComponents";
+import { TablePage, PageLayout } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import debounce from "lodash.debounce";
@@ -27,7 +28,12 @@ const Orders = () => {
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
   const stores = useSelector(storeSelector) as IStoreResponseModel[];
-  const { isAuthenticated } = usePageData();
+
+  const loading = useSelector(loadingSelector);
+  const error = useSelector((state: any) => state.order.error);
+  const isauthenticatingvalue = useSelector((state: any) => state.user.isAuthenticating);
+
+  const { isSuperAdmin, isAuthenticated, isAuthenticating } = usePageData({ loadUserPackage: true });
 
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [fromDate, setFromDate] = useState<Date | null>(null);
@@ -51,8 +57,10 @@ const Orders = () => {
   );
 
   useEffect(() => {
-    store.dispatch(fetchAllStores());
-  }, [dispatch]);
+    if (isAuthenticated && !isauthenticatingvalue) {
+      store.dispatch(fetchAllStores());
+    }
+  }, [isAuthenticated, isauthenticatingvalue, dispatch]);
 
   useEffect(() => {
     if (selectedStore) {
@@ -185,6 +193,29 @@ const Orders = () => {
       </div>
     </div>
   );
+
+  if (loading) {
+    return (
+      <PageLayout title="My Orders" protected={true}>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <PageLayout title="My Orders" protected={true}>
+        <div className="alert alert-danger">
+          <h5>Error Loading Orders</h5>
+          <p>Error: {error}</p>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
     <>
