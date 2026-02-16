@@ -95,10 +95,39 @@ export const getOrdersByStore = async (
   );
   const count = parseInt(countResult[0].count, 10);
 
+<<<<<<< HEAD
+=======
+  // Step 1: Get IDs and Count
+  const { rows: idRows, count } = await db.Order.findAndCountAll({
+    attributes: ['id'], // Fetch only IDs
+    where: whereClause,
+    include: [
+      {
+        model: db.OrderItem,
+        as: "orderItems",
+        attributes: [], // Don't fetch columns, just join
+        required: true,
+        include: [
+          {
+            model: db.Product,
+            attributes: [], // Don't fetch columns, just join
+            where: { storeId },
+            required: true,
+          },
+        ],
+      },
+    ],
+    distinct: true, // Ensure distinct Order IDs
+    order: [["createdAt", "DESC"]],
+  });
+
+  // Step 2: Fetch Full Data if any IDs found
+>>>>>>> 7d4cc542a7df2ef3cc02253d16b8298f18745fd6
   if (count === 0) {
     return { rows: [], count: 0 };
   }
 
+<<<<<<< HEAD
   // 📋 Step 2: Get IDs with createdAt (required for ORDER BY + DISTINCT)
   const idRows = await db.sequelize.query(
     `
@@ -125,6 +154,37 @@ export const getOrdersByStore = async (
   if (orderIds.length === 0) {
     return { rows: [], count };
   }
+=======
+  const allOrderIds = idRows.map((row: any) => row.id);
+  // Manual Pagination
+  const pagedOrderIds = allOrderIds.slice(offset, offset + pageSize);
+
+  if (pagedOrderIds.length === 0) {
+    return { rows: [], count };
+  }
+
+  const rows = await db.Order.findAll({
+    where: {
+      id: {
+        [Op.in]: pagedOrderIds,
+      },
+    },
+    include: [
+      {
+        model: db.OrderItem,
+        as: "orderItems",
+        include: [
+          {
+            model: db.Product,
+            where: { storeId },
+            required: true,
+          },
+        ],
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+  });
+>>>>>>> 7d4cc542a7df2ef3cc02253d16b8298f18745fd6
 
   // 🧾 Step 3: Fetch full orders
 // Sequelize v6+ supports `plain: true` in options
