@@ -64,7 +64,7 @@ export const getOrders = async (
   next: any
 ): Promise<void> => {
   try {
-    const { storeId, page, pageSize, from, to } = request.query;
+    const { storeId, page, pageSize, from, to ,filter} = request.query;
 
     if (storeId) {
       const pageNum = page ? parseInt(page as string) : 1;

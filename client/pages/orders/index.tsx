@@ -16,7 +16,6 @@ import ProtectedRoute from "@/components/protectedRoute";
 import debounce from "lodash.debounce";
 import Moment from "react-moment";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { IOrderModel } from "@/models/order.model";
 import { IStoreResponseModel } from "@/models/store.model";
 
@@ -31,7 +30,6 @@ const Orders = () => {
   const { isAuthenticated } = usePageData();
 
   const [selectedStore, setSelectedStore] = useState<string>("");
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
 
@@ -169,16 +167,7 @@ const Orders = () => {
               dateFormat="yyyy-MM-dd"
             />
           </div>
-          <div className="col-md-3">
-            <label className="form-label">Search</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search orders..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+   
           <div className="col-md-2 d-flex align-items-end">
             <button
               className="btn btn-outline-secondary w-100"
@@ -186,7 +175,7 @@ const Orders = () => {
                 setSelectedStore("");
                 setFromDate(null);
                 setToDate(null);
-                setSearchQuery("");
+              
               }}
             >
               Clear Filters
@@ -208,7 +197,6 @@ const Orders = () => {
         columns={orderColumns}
         searchPlaceholder="Search orders..."
         emptyMessage="No orders found. Orders will appear here when customers place them."
-        viewPath="/orders"
         exportButton={{ onClick: () => console.log('Export orders') }}
         filterButton={{ onClick: () => console.log('Filter orders') }}
         pagination={true}

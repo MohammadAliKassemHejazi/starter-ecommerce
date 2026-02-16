@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as orderService from "@/services/orderService";
 import { RootState } from "../store";
 import { IOrderModel } from "@/models/order.model";
+import { stat } from "fs";
 
 interface OrderState {
   orders: IOrderModel[];
@@ -100,7 +101,11 @@ export const orderSlice = createSlice({
       })
       .addCase(fetchOrdersByStore.fulfilled, (state, action) => {
         
-        state.orders = action.payload.data;
+        state.orders = action.payload.data.items;
+        state.totalOrders = action.payload.data.meta.totalItems;
+        state.currentPage = action.payload.data.meta.page;
+        state.pageSize = action.payload.data.meta.pageSize;
+        state.error = "";
    
         state.loading = false;
       })

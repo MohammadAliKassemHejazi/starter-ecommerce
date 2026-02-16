@@ -100,7 +100,7 @@ export const getOrdersByStore = async (
     return { rows: [], count: 0 };
   }
 
-  const allOrderIds = idRows.map((row: any) => row.id);
+  const allOrderIds = idRows.map((row: any) => row.dataValues.id);
   // Manual Pagination
   const pagedOrderIds = allOrderIds.slice(offset, offset + pageSize);
 
@@ -141,20 +141,20 @@ export const getOrdersByStore = async (
 
   // Step 3: Map to Frontend Interface
   const mappedRows = rows.map((order: any) => {
-    const plainOrder = order.toJSON();
+    const plainOrder = order.dataValues; // Get plain object from Sequelize instance
 
     // Calculate total price for the items in this store
     const totalPrice = plainOrder.orderItems.reduce((sum: number, item: any) => {
       // Use price from OrderItem (snapshot price)
-      return sum + (Number(item.price) * item.quantity);
+      return sum + (Number(item.dataValues.price) * item.dataValues.quantity);
     }, 0);
 
     return {
       id: plainOrder.id,
       paymentId: plainOrder.paymentId,
-      customerName: plainOrder.User?.name || "Unknown",
+      customerName: plainOrder.User?.dataValues.name || "Un",
       totalPrice: Number(totalPrice.toFixed(2)), // Ensure 2 decimal places
-      status: plainOrder.Payment?.status || "Pending",
+      status: plainOrder.Payment?.dataValues.status || "Pe",
       createdAt: plainOrder.createdAt,
       updatedAt: plainOrder.updatedAt,
       orderItems: plainOrder.orderItems,

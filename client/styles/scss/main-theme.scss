@@ -320,7 +320,16 @@
     letter-spacing: 0.5px;
   }
 }
-
+    .col-md-2 {
+        flex: 0 0 auto;
+        width: 16%;
+    }
+.toggle-btn {
+  opacity: 0.3;
+}
+.toggle-btn:hover {
+  opacity: 1;
+}
 // ===========================================
 // ANIMATIONS
 // ===========================================
