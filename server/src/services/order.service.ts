@@ -4,7 +4,6 @@ import db from "../models";
 import customError from "../utils/customError";
 import orderErrors from "../utils/errors/order.errors";
 import { Op } from "sequelize";
-import { raw } from "body-parser";
 
 export const getLastOrder = async (
   userId: string
@@ -62,41 +61,17 @@ export const getOrdersByStore = async (
   pageSize: number = 10,
   from?: string,
   to?: string
-): Promise<{ rows: IOrderAttributes[]; count: number }> => {
+): Promise<{ rows: any[]; count: number }> => {
   const offset = (page - 1) * pageSize;
 
-  const replacements: Record<string, any> = { storeId };
-  let whereConditions = 'WHERE "p"."storeId" = :storeId';
-
+  const whereClause: any = {};
   if (from && from !== 'undefined') {
-    const fromDate = new Date(from);
-    replacements.from = fromDate;
-    whereConditions += ' AND "Order"."createdAt" >= :from';
+    whereClause.createdAt = { ...whereClause.createdAt, [Op.gte]: new Date(from) };
   }
   if (to && to !== 'undefined') {
-    const toDate = new Date(to);
-    replacements.to = toDate;
-    whereConditions += ' AND "Order"."createdAt" <= :to';
+    whereClause.createdAt = { ...whereClause.createdAt, [Op.lte]: new Date(to) };
   }
 
-  // 🔢 Step 1: Count
-  const countResult = await db.sequelize.query(
-    `
-      SELECT COUNT(DISTINCT "Order"."id") AS count
-      FROM "Orders" AS "Order"
-      INNER JOIN "OrderItems" AS "oi" ON "Order"."id" = "oi"."orderId"
-      INNER JOIN "Products" AS "p" ON "oi"."productId" = "p"."id"
-      ${whereConditions}
-    `,
-    {
-      type: db.sequelize.QueryTypes.SELECT,
-      replacements,
-    }
-  );
-  const count = parseInt(countResult[0].count, 10);
-
-<<<<<<< HEAD
-=======
   // Step 1: Get IDs and Count
   const { rows: idRows, count } = await db.Order.findAndCountAll({
     attributes: ['id'], // Fetch only IDs
@@ -121,40 +96,10 @@ export const getOrdersByStore = async (
     order: [["createdAt", "DESC"]],
   });
 
-  // Step 2: Fetch Full Data if any IDs found
->>>>>>> 7d4cc542a7df2ef3cc02253d16b8298f18745fd6
   if (count === 0) {
     return { rows: [], count: 0 };
   }
 
-<<<<<<< HEAD
-  // 📋 Step 2: Get IDs with createdAt (required for ORDER BY + DISTINCT)
-  const idRows = await db.sequelize.query(
-    `
-      SELECT DISTINCT "Order"."id", "Order"."createdAt"
-      FROM "Orders" AS "Order"
-      INNER JOIN "OrderItems" AS "oi" ON "Order"."id" = "oi"."orderId"
-      INNER JOIN "Products" AS "p" ON "oi"."productId" = "p"."id"
-      ${whereConditions}
-      ORDER BY "Order"."createdAt" DESC
-      LIMIT :limit OFFSET :offset
-    `,
-    {
-      type: db.sequelize.QueryTypes.SELECT,
-      replacements: {
-        ...replacements,
-        limit: pageSize,
-        offset,
-      },
-    }
-  );
-
-  const orderIds = idRows.map((row: any) => row.id);
-
-  if (orderIds.length === 0) {
-    return { rows: [], count };
-  }
-=======
   const allOrderIds = idRows.map((row: any) => row.id);
   // Manual Pagination
   const pagedOrderIds = allOrderIds.slice(offset, offset + pageSize);
@@ -163,6 +108,7 @@ export const getOrdersByStore = async (
     return { rows: [], count };
   }
 
+  // Step 2: Fetch Full Data
   const rows = await db.Order.findAll({
     where: {
       id: {
@@ -170,6 +116,14 @@ export const getOrdersByStore = async (
       },
     },
     include: [
+      {
+        model: db.User, // Alias is usually just 'User' unless specified
+        attributes: ['name'],
+      },
+      {
+        model: db.Payment, // Alias is usually just 'Payment'
+        attributes: ['status'],
+      },
       {
         model: db.OrderItem,
         as: "orderItems",
@@ -184,29 +138,30 @@ export const getOrdersByStore = async (
     ],
     order: [["createdAt", "DESC"]],
   });
->>>>>>> 7d4cc542a7df2ef3cc02253d16b8298f18745fd6
 
-  // 🧾 Step 3: Fetch full orders
-// Sequelize v6+ supports `plain: true` in options
-const rows = await db.Order.findAll({
-  where: {
-    id: { [Op.in]: orderIds },
-  },
-  include: [
-    {
-      model: db.OrderItem,
-      as: 'orderItems',
-      include: [{ model: db.Product }],
-    },
-  ],
-  order: [['createdAt', 'DESC']],
-  plain: false, // ← this is default; don't set raw: true
-});
+  // Step 3: Map to Frontend Interface
+  const mappedRows = rows.map((order: any) => {
+    const plainOrder = order.toJSON();
 
-// Then convert to plain objects if needed:
-  const plainRows = rows.map((row: { toJSON: () => any; }) => row.toJSON());
+    // Calculate total price for the items in this store
+    const totalPrice = plainOrder.orderItems.reduce((sum: number, item: any) => {
+      // Use price from OrderItem (snapshot price)
+      return sum + (Number(item.price) * item.quantity);
+    }, 0);
 
-  return { rows: plainRows, count };
+    return {
+      id: plainOrder.id,
+      paymentId: plainOrder.paymentId,
+      customerName: plainOrder.User?.name || "Unknown",
+      totalPrice: Number(totalPrice.toFixed(2)), // Ensure 2 decimal places
+      status: plainOrder.Payment?.status || "Pending",
+      createdAt: plainOrder.createdAt,
+      updatedAt: plainOrder.updatedAt,
+      orderItems: plainOrder.orderItems,
+    };
+  });
+
+  return { rows: mappedRows, count };
 };
 
 export default {
