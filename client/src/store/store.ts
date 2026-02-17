@@ -19,6 +19,7 @@ import subCategories from "./slices/subCategorySlice";
 import favoritesReducer from "./slices/favoritesSlice";
 import publicReducer from "./slices/publicSlice";
 import packageReducer from "./slices/packageSlice";
+import analyticsReducer from "./slices/analyticsSlice";
 
 const reducer = {
 	user: userReducer,
@@ -38,6 +39,7 @@ const reducer = {
 	favorites: favoritesReducer,
 	public: publicReducer,
 	packages: packageReducer,
+	analytics: analyticsReducer,
 };
 
 export const store = configureStore({

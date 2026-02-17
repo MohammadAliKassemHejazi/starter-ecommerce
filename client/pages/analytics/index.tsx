@@ -1,11 +1,23 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
 import { PageLayout, FilterCard, StatsGrid } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
-import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
+import { ModernTable, TableColumn } from '@/components/UI/ModernTable';
+import {
+  fetchAnalytics,
+  fetchAnalyticsStats,
+  setFilters,
+  setPage,
+  clearFilters,
+  selectAnalyticsEvents,
+  selectAnalyticsStats,
+  selectAnalyticsLoading,
+  selectAnalyticsFilters,
+  selectAnalyticsPagination
+} from '@/store/slices/analyticsSlice';
 
 interface AnalyticsEvent {
   id: string;
@@ -22,98 +34,48 @@ interface AnalyticsEvent {
 
 const AnalyticsPage = () => {
   const { t } = useTranslation();
-  const { isAuthenticated } = usePageData();
-  const [events, setEvents] = useState<AnalyticsEvent[]>([]);
-  const [stats, setStats] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    eventType: '',
-    startDate: '',
-    endDate: ''
-  });
+  const dispatch = useAppDispatch();
+  const { isAuthenticated, isAuthenticating } = usePageData();
 
-  const fetchAnalytics = useCallback(async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const queryParams = new URLSearchParams();
-      
-      if (filters.eventType) {
-        queryParams.append('eventType', filters.eventType);
-      }
-      if (filters.startDate) {
-        queryParams.append('startDate', filters.startDate);
-      }
-      if (filters.endDate) {
-        queryParams.append('endDate', filters.endDate);
-      }
+  const events = useSelector(selectAnalyticsEvents);
+  const stats = useSelector(selectAnalyticsStats);
+  const loading = useSelector(selectAnalyticsLoading);
+  const filters = useSelector(selectAnalyticsFilters);
+  const pagination = useSelector(selectAnalyticsPagination);
 
-      const response = await fetch(`/api/analytics?${queryParams}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setEvents(data.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
-      showToast.error('Failed to load analytics');
-    } finally {
-      setLoading(false);
-    }
-  }, [filters]);
-
-  const fetchStats = useCallback(async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const queryParams = new URLSearchParams();
-      
-      if (filters.startDate) {
-        queryParams.append('startDate', filters.startDate);
-      }
-      if (filters.endDate) {
-        queryParams.append('endDate', filters.endDate);
-      }
-
-      const response = await fetch(`/api/analytics/stats?${queryParams}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  }, [filters]);
-  
+  // Fetch data when filters or page changes
   useEffect(() => {
-    fetchAnalytics();
-    fetchStats();
-  }, [filters, fetchAnalytics, fetchStats]);
+    if (isAuthenticated && !isAuthenticating) {
+      const queryParams = {
+        ...filters,
+        page: pagination.page,
+        limit: pagination.limit
+      };
+      dispatch(fetchAnalytics(queryParams));
+      dispatch(fetchAnalyticsStats({ startDate: filters.startDate, endDate: filters.endDate }));
+    }
+  }, [isAuthenticated, isAuthenticating, filters, pagination.page, pagination.limit, dispatch]);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value
-    });
+    dispatch(setFilters({ [e.target.name]: e.target.value }));
   };
 
-  // Table columns for analytics events
-  const eventColumns = [
+  const handlePageChange = (newPage: number) => {
+    dispatch(setPage(newPage));
+  };
+
+  const handleClearFilters = () => {
+    dispatch(clearFilters());
+  };
+
+  // Table columns
+  const columns: TableColumn<AnalyticsEvent>[] = [
     {
       key: 'eventType',
       label: 'Event Type',
       render: (value: string) => (
         <span className="badge bg-primary text-capitalize">
-          {value.replace('_', ' ')}
+          {value ? value.replace('_', ' ') : 'N/A'}
         </span>
       )
     },
@@ -131,8 +93,8 @@ const AnalyticsPage = () => {
       key: 'eventData',
       label: 'Data',
       render: (value: any) => (
-        <small className="text-muted">
-          {JSON.stringify(value).substring(0, 50)}...
+        <small className="text-muted" title={JSON.stringify(value)}>
+          {value ? JSON.stringify(value).substring(0, 50) + (JSON.stringify(value).length > 50 ? '...' : '') : '-'}
         </small>
       )
     },
@@ -145,8 +107,8 @@ const AnalyticsPage = () => {
   ];
 
   // Statistics cards data
-  const statsCards = stats.map((stat) => ({
-    title: stat.eventType.replace('_', ' '),
+  const statsCards = stats.map((stat: any) => ({
+    title: stat.eventType ? stat.eventType.replace('_', ' ') : 'Unknown',
     value: stat.count,
     icon: 'bi bi-graph-up',
     color: 'primary' as const
@@ -156,7 +118,7 @@ const AnalyticsPage = () => {
   const AnalyticsFilters = () => (
     <FilterCard
       title="Filter Analytics"
-      onClear={() => setFilters({ eventType: '', startDate: '', endDate: '' })}
+      onClear={handleClearFilters}
     >
       <div className="row g-3">
         <div className="col-md-3">
@@ -199,18 +161,6 @@ const AnalyticsPage = () => {
     </FilterCard>
   );
 
-  if (loading) {
-    return (
-      <PageLayout title={t('admin.analytics')} protected={true}>
-        <div className="text-center">
-          <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </PageLayout>
-    );
-  }
-
   return (
     <PageLayout title={t('admin.analytics')} protected={true}>
       <AnalyticsFilters />
@@ -222,51 +172,24 @@ const AnalyticsPage = () => {
 
       {/* Events Table */}
       <div className="card">
-        <div className="card-header">
-          <h5>Recent Events</h5>
+        <div className="card-header bg-white py-3">
+          <h5 className="mb-0">Recent Events</h5>
         </div>
-        <div className="card-body">
-          <div className="table-responsive">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Event Type</th>
-                  <th>User</th>
-                  <th>Data</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {events.map((event) => (
-                  <tr key={event.id}>
-                    <td>
-                      <span className="badge bg-primary text-capitalize">
-                        {event.eventType.replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td>
-                      {event.User ? (
-                        <div>
-                          <div className="fw-bold">{event.User.name}</div>
-                          <small className="text-muted">{event.User.email}</small>
-                        </div>
-                      ) : (
-                        'Anonymous'
-                      )}
-                    </td>
-                    <td>
-                      <small className="text-muted">
-                        {JSON.stringify(event.eventData).substring(0, 50)}...
-                      </small>
-                    </td>
-                    <td>
-                      {new Date(event.createdAt).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="card-body p-0">
+          <ModernTable
+            data={events || []}
+            columns={columns}
+            loading={loading}
+            pagination={true}
+            pageSize={pagination.limit}
+            currentPage={pagination.page}
+            totalItems={pagination.total}
+            onPageChange={handlePageChange}
+            emptyMessage="No analytics events found"
+            searchable={false} // We have external filters
+            className="border-0"
+            tableClassName="mb-0"
+          />
         </div>
       </div>
     </PageLayout>

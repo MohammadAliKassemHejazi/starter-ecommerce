@@ -1,23 +1,13 @@
 import { Request, Response } from 'express';
-import db from '../models';
 import { ResponseFormatter } from '../utils/responseFormatter';
-
+import * as analyticsService from '../services/analytics.service';
 
 export const trackEvent = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).UserId;
     const { eventType, eventData } = req.body;
 
-
-    const analyticsData: any = {
-      eventType,
-      eventData,
-      userId
-    };
-
-
-
-    const analytics = await db.Analytics.create(analyticsData);
+    const analytics = await analyticsService.trackEvent(userId, eventType, eventData);
 
     ResponseFormatter.success(res, analytics, 'Event tracked successfully', 201);
   } catch (error) {
@@ -29,30 +19,13 @@ export const trackEvent = async (req: Request, res: Response) => {
 export const getAnalytics = async (req: Request, res: Response) => {
   try {
     const { eventType, startDate, endDate, page = 1, limit = 10 } = req.query;
-    const offset = (Number(page) - 1) * Number(limit);
 
-
-    const whereClause: any = {};
-    if (eventType) whereClause.eventType = eventType;
-    if (startDate && endDate) {
-      whereClause.createdAt = {
-        [db.Sequelize.Op.between]: [startDate, endDate]
-      };
-    }
-
-
-
-    const { count, rows } = await db.Analytics.findAndCountAll({
-      where: whereClause,
-      include: [
-        {
-          model: db.User,
-          attributes: ['id', 'name', 'email']
-        }
-      ],
-      order: [['createdAt', 'DESC']],
-      limit: Number(limit),
-      offset
+    const { count, rows } = await analyticsService.getAnalytics({
+      eventType,
+      startDate,
+      endDate,
+      page: Number(page),
+      limit: Number(limit)
     });
 
     ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Analytics retrieved successfully');
@@ -66,24 +39,9 @@ export const getEventStats = async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.query;
 
-    
-    const whereClause: any = {};
-    if (startDate && endDate) {
-      whereClause.createdAt = {
-        [db.Sequelize.Op.between]: [startDate, endDate]
-      };
-    }
-
-
-
-    const stats = await db.Analytics.findAll({
-      where: whereClause,
-      attributes: [
-        'eventType',
-        [db.Sequelize.fn('COUNT', db.Sequelize.col('eventType')), 'count']
-      ],
-      group: ['eventType'],
-      raw: true
+    const stats = await analyticsService.getEventStats({
+      startDate,
+      endDate
     });
 
     ResponseFormatter.success(res, stats, 'Event statistics retrieved successfully');
