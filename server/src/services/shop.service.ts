@@ -22,24 +22,28 @@ import { IProductImageAttributes } from 'interfaces/types/models/productimage.mo
     
     // You can also save the image data to your database if needed
     // Replace this with your actual image data saving logic
-    for (const file of files) {
-      await db.ProductImage.create({
+    if (files.length > 0) {
+      const imageRecords = files.map((file) => ({
         productId: productJSON.id,
-        imageUrl: `${file.filename}`
-      });
+        imageUrl: `${file.filename}`,
+      }));
+      await db.ProductImage.bulkCreate(imageRecords);
     }
 
-        // Step 3: Create the size items
-
-    for (const size of productData.sizes ?? []) {
-        if(size.sizeId ?? 0> 0){
-        await db.SizeItem.create({
+    // Step 3: Create the size items
+    if (productData.sizes && productData.sizes.length > 0) {
+      const sizeRecords = productData.sizes
+        .filter((size) => size.sizeId)
+        .map((size) => ({
           productId: productJSON.id,
           sizeId: size.sizeId,
           quantity: size.quantity,
-        });
-          }
+        }));
+
+      if (sizeRecords.length > 0) {
+        await db.SizeItem.bulkCreate(sizeRecords);
       }
+    }
     
 
     // Return response with product and image URLs
@@ -70,12 +74,11 @@ export const updateProductWithImages = async (
 
     // Step 3: Handle new images
     if (files.length > 0) {
-      for (const file of files) {
-        await db.ProductImage.create({
-          productId,
-          imageUrl: `${file.filename}`,
-        });
-      }
+      const imageRecords = files.map((file) => ({
+        productId,
+        imageUrl: `${file.filename}`,
+      }));
+      await db.ProductImage.bulkCreate(imageRecords);
     }
 
     // Step 4: Update size items
@@ -84,14 +87,16 @@ export const updateProductWithImages = async (
       await db.SizeItem.destroy({ where: { productId } });
 
       // Create new size items
-      for (const size of productData.sizes) {
-        if (size.sizeId) {
-          await db.SizeItem.create({
-            productId,
-            sizeId: size.sizeId,
-            quantity: size.quantity,
-          });
-        }
+      const sizeRecords = productData.sizes
+        .filter((size) => size.sizeId)
+        .map((size) => ({
+          productId,
+          sizeId: size.sizeId,
+          quantity: size.quantity,
+        }));
+
+      if (sizeRecords.length > 0) {
+        await db.SizeItem.bulkCreate(sizeRecords);
       }
     }
 
@@ -118,20 +123,17 @@ export const updateImages = async (
     let images;
     // Step 3: Handle new images
     if (files.length > 0) {
-      for (const file of files) {
-       images = await db.ProductImage.create({
-          productId,
-          imageUrl: `${file.filename}`,
-        });
-      }
-    }  else {
-       throw new Error("files not found");
+      const imageRecords = files.map((file) => ({
+        productId,
+        imageUrl: `${file.filename}`,
+      }));
+      images = await db.ProductImage.bulkCreate(imageRecords);
+    } else {
+      throw new Error("files not found");
     }
 
-
-
     // Step 5: Return the updated product
-    return images.toJSON() ;
+    return images.length > 0 ? images[images.length - 1].toJSON() : null;
   } catch (error) {
     throw error;
   }
