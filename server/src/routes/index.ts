@@ -1,4 +1,4 @@
-import userRouter from "./users.route";
+import userRouter from "./user.route";
 import authRouter from "./auth.route";
 import articleRouter from "./article.route";
 import shopRouter from "./shop.route";

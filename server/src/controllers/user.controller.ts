@@ -16,7 +16,18 @@ export const handleFetchUsersByCreator = async (
     }
 
     const users = await userService.fetchUsersByCreator(userId);
-    res.json(users);
+
+    // Transform users to match frontend expectations
+    const transformedUsers = users.map((user: any) => {
+      const userJson = user.toJSON ? user.toJSON() : user;
+      return {
+        ...userJson,
+        role: userJson.roles && userJson.roles.length > 0 ? userJson.roles[0] : null,
+        isActive: true // Default to true as User model has no status field yet
+      };
+    });
+
+    res.json(transformedUsers);
   } catch (error) {
     next(customError(userErrors.UserFetchFailure));
   }
