@@ -11,13 +11,16 @@ module.exports = (sequelize: any) => {
   Analytics.init({
     eventType: DataTypes.STRING,
     eventData: DataTypes.JSON,
-    userId: DataTypes.UUID
+    userId: DataTypes.UUID,
+    sessionId: DataTypes.STRING,
+    pageUrl: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Analytics',
-    indexes: [{
-      fields: ['eventType']
-    }]
+    indexes: [
+      { fields: ['eventType'] },
+      { fields: ['sessionId'] }
+    ]
   });
 
   return Analytics;

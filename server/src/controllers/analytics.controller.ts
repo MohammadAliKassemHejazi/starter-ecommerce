@@ -5,9 +5,9 @@ import * as analyticsService from '../services/analytics.service';
 export const trackEvent = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).UserId;
-    const { eventType, eventData } = req.body;
+    const { eventType, eventData, sessionId, pageUrl } = req.body;
 
-    const analytics = await analyticsService.trackEvent(userId, eventType, eventData);
+    const analytics = await analyticsService.trackEvent(userId, eventType, eventData, sessionId, pageUrl);
 
     ResponseFormatter.success(res, analytics, 'Event tracked successfully', 201);
   } catch (error) {
@@ -47,6 +47,6 @@ export const getEventStats = async (req: Request, res: Response) => {
     ResponseFormatter.success(res, stats, 'Event statistics retrieved successfully');
   } catch (error) {
     console.error('Error getting event stats:', error);
-    ResponseFormatter.error(res, 'Failed to get event statistics', 500);
+    ResponseFormatter.error(res, 'Failed to get event stats', 500);
   }
 };

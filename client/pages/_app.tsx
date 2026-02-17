@@ -11,7 +11,9 @@ import { fetchFavorites } from "@/store/slices/favoritesSlice";
 import "../src/i18n";
 import { ToastProvider } from "../src/contexts/ToastContext";
 import ClientOnlyWrapper from "@/components/ClientOnlyWrapper";
-   store.dispatch(fetchSession());
+import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
+
+store.dispatch(fetchSession());
 function MyApp({ Component, pageProps, router }: AppProps) {
   
   // update session & set token, and conditionally load favorites
@@ -38,6 +40,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 }
 
 function AppContent({ Component, pageProps, router }: AppProps) {
+  useAnalyticsTracker();
+
   return (
     <ClientOnlyWrapper>
       <div className="">

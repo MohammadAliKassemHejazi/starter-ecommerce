@@ -24,6 +24,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { IProductModel } from "@/models/product.model";
 import { IStoreResponseModel } from "@/models/store.model";
+import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
 
 const Shop = () => {
   const dispatch = useAppDispatch();
@@ -35,12 +36,20 @@ const Shop = () => {
   const stores = useSelector(storeSelector) as IStoreResponseModel[];
  
   const { isAdmin , isSuperAdmin , isAuthenticated} = usePermissions();
+  const { trackEvent } = useAnalyticsTracker();
 
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const fetchProducts = useCallback(
     (query: string) => {
+      if (query && query.length > 2) {
+        trackEvent('search', {
+          query,
+          storeId: selectedStore
+        });
+      }
+
       dispatch(
         fetchProductsByStore({
           storeId: selectedStore,
@@ -50,7 +59,7 @@ const Shop = () => {
         })
       );
     },
-    [selectedStore, currentPage, pageSize, dispatch]
+    [selectedStore, currentPage, pageSize, dispatch, trackEvent]
   );
 
   const debouncedFetchProducts = useMemo(
@@ -117,6 +126,15 @@ const Shop = () => {
       router.push("/auth/signup");
       return;
     }
+
+    trackEvent('add_to_cart', {
+      productId: product.id,
+      productName: product.name,
+      price: product.price,
+      storeId: product.storeId,
+      source: 'shop_list'
+    });
+
     dispatch(addToCart(product));
     showToast.success("Product added to cart!");
   };
