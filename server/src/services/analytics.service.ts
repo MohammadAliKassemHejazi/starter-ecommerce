@@ -1,10 +1,12 @@
 import db from '../models';
 
-export const trackEvent = async (userId: string, eventType: string, eventData: any) => {
+export const trackEvent = async (userId: string, eventType: string, eventData: any, sessionId?: string, pageUrl?: string) => {
   return await db.Analytics.create({
     userId,
     eventType,
-    eventData
+    eventData,
+    sessionId,
+    pageUrl
   });
 };
 

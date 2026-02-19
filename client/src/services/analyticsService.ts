@@ -1,5 +1,26 @@
 import httpClient from '../utils/httpClient';
 
+export const trackEvent = async (eventType: string, eventData: any) => {
+  let sessionId = '';
+  let pageUrl = '';
+
+  if (typeof window !== 'undefined') {
+    sessionId = sessionStorage.getItem('analytics_session_id') || '';
+    if (!sessionId) {
+      sessionId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      sessionStorage.setItem('analytics_session_id', sessionId);
+    }
+    pageUrl = window.location.pathname + window.location.search;
+  }
+
+  return httpClient.post('/analytics/track', {
+    eventType,
+    eventData,
+    sessionId,
+    pageUrl
+  });
+};
+
 export const getAnalytics = async (params: any) => {
   const queryParams = new URLSearchParams();
 

@@ -20,6 +20,7 @@ import SuggestedProducts from "@/components/UI/PageComponents/product/SuggestedP
 import CommentsList from "@/components/UI/PageComponents/product/CommentsList";
 import { addComment } from "@/services/commentService";
 import { usePermissions } from "@/hooks/usePermissions";
+import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
 
 type Props = {
   product?: IProductModel | null;
@@ -42,11 +43,25 @@ const SingleItem = ({ product }: Props) => {
   const router = useRouter();
   // Using usePermissions hook from main branch which likely handles auth check
   const { isAuthenticated } = usePermissions();
+  const { trackEvent } = useAnalyticsTracker();
   const [feedback, setFeedback] = useState({
     rating: 0,
     comment: "",
   });
   const [refreshComments, setRefreshComments] = useState(0);
+
+  useEffect(() => {
+    if (product && isAuthenticated) {
+      trackEvent('product_view', {
+        productId: product.id,
+        productName: product.name,
+        price: product.price,
+        storeId: product.storeId,
+        categoryId: product.categoryId
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id, isAuthenticated]);
 
   console.log("product", product);
 
@@ -117,6 +132,16 @@ const SingleItem = ({ product }: Props) => {
     };
 
     dispatch(addToCart(productWithSizeAndQuantity));
+
+    trackEvent('add_to_cart', {
+      productId: product.id,
+      productName: product.name,
+      price: product.price,
+      quantity: quantity,
+      size: size,
+      storeId: product.storeId
+    });
+
     Toast.fire({
       icon: "success",
       title: "Added to cart",

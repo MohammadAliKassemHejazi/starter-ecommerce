@@ -7,6 +7,7 @@ import CheckoutGuard from '@/components/Guards/CheckoutGuard';
 import { PageLayout } from '@/components/UI/PageComponents';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import { purchasePackage } from '@/services/packageService';
+import { useAnalyticsTracker } from '@/hooks/useAnalyticsTracker';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_Stripe_Key ?? "");
 
@@ -32,6 +33,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useAppDispatch();
+  const { trackEvent } = useAnalyticsTracker();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -73,6 +75,15 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
         if (response.body && response.body.status === 'success') {
           const paymentId = response.body.transactionId;
           showToast.success('Package subscription successful!');
+
+          trackEvent('purchase', {
+            type: 'package',
+            packageId,
+            amount,
+            currency,
+            transactionId: paymentId
+          });
+
           onSuccess?.(paymentId);
         } else {
            throw new Error('Package subscription failed');
@@ -89,17 +100,14 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
         const result = await dispatch(createPayment(paymentData));
 
         if (result.meta.requestStatus === 'fulfilled' && result.payload && typeof result.payload === 'object' && 'clientSecret' in result.payload) {
-          // Note: The slice returns { clientSecret }, but we typically need the payment/transaction ID for the success callback.
-          // The current slice implementation seems to only return clientSecret.
-          // However, the original code used `result.payload.id`.
-          // Let's check the slice again... `return { clientSecret: response.body.clientSecret };`
-          // So `result.payload` only has `clientSecret`.
-          // The original code `const paymentId = String(result.payload.id);` would have been undefined or failed if the slice was exactly as I read it.
-          // But since this is a fix, I'll pass a placeholder or the clientSecret as the ID if the ID isn't available,
-          // or just assume the caller handles it.
-          // Wait, for Cart, `handlePaymentSuccess` in `index.tsx` logs it and clears cart.
-
           showToast.success('Payment successful!');
+
+          trackEvent('purchase', {
+            type: 'cart',
+            amount,
+            currency
+          });
+
           onSuccess?.('payment-succeeded');
         } else {
           throw new Error(typeof result.payload === 'string' ? result.payload : 'Payment failed');
