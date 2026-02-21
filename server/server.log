@@ -1,0 +1,712 @@
+
+> nodejs-express-mrcs-starter-template@1.0.0 dev
+> nodemon index.ts
+
+[33m[nodemon] 3.1.9[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node index.ts`[39m
+✅ Config loaded from: /app/server/src/config/db.config.ts
+🔧 Database config: {
+  dialect: 'postgres',
+  host: undefined,
+  port: 5432,
+  database: undefined,
+  use_env_variable: undefined,
+  hasUsername: false,
+  hasPassword: false
+}
+❌ Failed to initialize Sequelize: Error: ❌ Missing required database configuration: database name or username
+    at Object.<anonymous> (/app/server/src/models/index.ts:146:13)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (/app/server/node_modules/ts-node/src/index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (/app/server/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+/app/server/src/models/index.ts:146
+      throw new Error("❌ Missing required database configuration: database name or username");
+            ^
+Error: ❌ Missing required database configuration: database name or username
+    at Object.<anonymous> (/app/server/src/models/index.ts:146:13)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (/app/server/node_modules/ts-node/src/index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (/app/server/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node index.ts`[39m
+✅ Config loaded from: /app/server/src/config/db.config.ts
+🔧 Database config: {
+  dialect: 'postgres',
+  host: undefined,
+  port: 5432,
+  database: undefined,
+  use_env_variable: undefined,
+  hasUsername: false,
+  hasPassword: false
+}
+❌ Failed to initialize Sequelize: Error: ❌ Missing required database configuration: database name or username
+    at Object.<anonymous> (/app/server/src/models/index.ts:146:13)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (/app/server/node_modules/ts-node/src/index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (/app/server/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+/app/server/src/models/index.ts:146
+      throw new Error("❌ Missing required database configuration: database name or username");
+            ^
+Error: ❌ Missing required database configuration: database name or username
+    at Object.<anonymous> (/app/server/src/models/index.ts:146:13)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (/app/server/node_modules/ts-node/src/index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (/app/server/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node index.ts`[39m
+✅ Config loaded from: /app/server/src/config/db.config.ts
+🔧 Database config: {
+  dialect: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  database: 'ecommerce_dev',
+  use_env_variable: undefined,
+  hasUsername: true,
+  hasPassword: true
+}
+🔗 Connecting to database: ecommerce_dev at localhost:5432
+📁 Loading 32 model files: [
+  'Tax.model.ts',
+  'analytics.model.ts',
+  'article.model.ts',
+  'cart.model.ts',
+  'cartitem.model.ts',
+  'category.model.ts',
+  'comments.model.ts',
+  'favorite.model.ts',
+  'favoriteitem.model.ts',
+  'log.model.ts',
+  'multilan.model.ts',
+  'order.model.ts',
+  'orderitem.model.ts',
+  'package.model.ts',
+  'payment.model.ts',
+  'permission.model.ts',
+  'product.model.ts',
+  'productimage.ts',
+  'promotion.model.ts',
+  'return.model.ts',
+  'role.model.ts',
+  'rolepermission .model.ts',
+  'roleuser.model.ts',
+  'shippment.model.ts',
+  'shippmentmethod.model.ts',
+  'size.model.ts',
+  'sizeitem.model.ts',
+  'store.model.ts',
+  'subcategory.model.ts',
+  'userpackage.model.ts',
+  'users.model.ts',
+  'usersession.model.ts'
+]
+✅ Loaded model: TaxRule
+✅ Loaded model: Analytics
+✅ Loaded model: Article
+✅ Loaded model: Cart
+✅ Loaded model: CartItem
+✅ Loaded model: Category
+✅ Loaded model: Comment
+✅ Loaded model: Favorite
+✅ Loaded model: FavoriteItem
+✅ Loaded model: AuditLog
+✅ Loaded model: Translation
+✅ Loaded model: Order
+✅ Loaded model: OrderItem
+✅ Loaded model: Package
+✅ Loaded model: Payment
+✅ Loaded model: Permission
+✅ Loaded model: Product
+✅ Loaded model: ProductImage
+✅ Loaded model: Promotion
+✅ Loaded model: ReturnRequest
+✅ Loaded model: Role
+✅ Loaded model: RolePermission
+✅ Loaded model: RoleUser
+✅ Loaded model: OrderShipping
+✅ Loaded model: ShippingMethod
+✅ Loaded model: Size
+✅ Loaded model: SizeItem
+✅ Loaded model: Store
+✅ Loaded model: SubCategory
+✅ Loaded model: UserPackage
+✅ Loaded model: User
+✅ Loaded model: UserSession
+🔗 Set up associations for: TaxRule
+🔗 Set up associations for: Analytics
+🔗 Set up associations for: Article
+🔗 Set up associations for: Cart
+🔗 Set up associations for: CartItem
+🔗 Set up associations for: Category
+🔗 Set up associations for: Comment
+🔗 Set up associations for: Favorite
+🔗 Set up associations for: FavoriteItem
+🔗 Set up associations for: AuditLog
+🔗 Set up associations for: Translation
+🔗 Set up associations for: Order
+🔗 Set up associations for: OrderItem
+🔗 Set up associations for: Package
+🔗 Set up associations for: Payment
+🔗 Set up associations for: Permission
+🔗 Set up associations for: Product
+🔗 Set up associations for: ProductImage
+🔗 Set up associations for: Promotion
+🔗 Set up associations for: ReturnRequest
+🔗 Set up associations for: Role
+🔗 Set up associations for: RolePermission
+🔗 Set up associations for: RoleUser
+🔗 Set up associations for: OrderShipping
+🔗 Set up associations for: ShippingMethod
+🔗 Set up associations for: Size
+🔗 Set up associations for: SizeItem
+🔗 Set up associations for: Store
+🔗 Set up associations for: SubCategory
+🔗 Set up associations for: UserPackage
+🔗 Set up associations for: User
+🔗 Set up associations for: UserSession
+🎉 Database initialization complete. Models loaded: TaxRule, Analytics, Article, Cart, CartItem, Category, Comment, Favorite, FavoriteItem, AuditLog, Translation, Order, OrderItem, Package, Payment, Permission, Product, ProductImage, Promotion, ReturnRequest, Role, RolePermission, RoleUser, OrderShipping, ShippingMethod, Size, SizeItem, Store, SubCategory, UserPackage, User, UserSession
+Error: Cannot find module 'uuid'
+Require stack:
+- /app/server/src/services/shop.service.ts
+- /app/server/src/services/index.ts
+- /app/server/src/controllers/auth.controller.ts
+- /app/server/src/routes/auth.route.ts
+- /app/server/src/routes/index.ts
+- /app/server/index.ts
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1383:15)
+    at Function.Module._resolveFilename.sharedData.moduleResolveFilenameHook.installedValue [as _resolveFilename] (/app/server/node_modules/@cspotcode/source-map-support/source-map-support.js:811:30)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (/app/server/src/services/shop.service.ts:12:1) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/app/server/src/services/shop.service.ts',
+    '/app/server/src/services/index.ts',
+    '/app/server/src/controllers/auth.controller.ts',
+    '/app/server/src/routes/auth.route.ts',
+    '/app/server/src/routes/index.ts',
+    '/app/server/index.ts'
+  ]
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node index.ts`[39m
+✅ Config loaded from: /app/server/src/config/db.config.ts
+🔧 Database config: {
+  dialect: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  database: 'ecommerce_dev',
+  use_env_variable: undefined,
+  hasUsername: true,
+  hasPassword: true
+}
+🔗 Connecting to database: ecommerce_dev at localhost:5432
+📁 Loading 32 model files: [
+  'Tax.model.ts',
+  'analytics.model.ts',
+  'article.model.ts',
+  'cart.model.ts',
+  'cartitem.model.ts',
+  'category.model.ts',
+  'comments.model.ts',
+  'favorite.model.ts',
+  'favoriteitem.model.ts',
+  'log.model.ts',
+  'multilan.model.ts',
+  'order.model.ts',
+  'orderitem.model.ts',
+  'package.model.ts',
+  'payment.model.ts',
+  'permission.model.ts',
+  'product.model.ts',
+  'productimage.ts',
+  'promotion.model.ts',
+  'return.model.ts',
+  'role.model.ts',
+  'rolepermission .model.ts',
+  'roleuser.model.ts',
+  'shippment.model.ts',
+  'shippmentmethod.model.ts',
+  'size.model.ts',
+  'sizeitem.model.ts',
+  'store.model.ts',
+  'subcategory.model.ts',
+  'userpackage.model.ts',
+  'users.model.ts',
+  'usersession.model.ts'
+]
+✅ Loaded model: TaxRule
+✅ Loaded model: Analytics
+✅ Loaded model: Article
+✅ Loaded model: Cart
+✅ Loaded model: CartItem
+✅ Loaded model: Category
+✅ Loaded model: Comment
+✅ Loaded model: Favorite
+✅ Loaded model: FavoriteItem
+✅ Loaded model: AuditLog
+✅ Loaded model: Translation
+✅ Loaded model: Order
+✅ Loaded model: OrderItem
+✅ Loaded model: Package
+✅ Loaded model: Payment
+✅ Loaded model: Permission
+✅ Loaded model: Product
+✅ Loaded model: ProductImage
+✅ Loaded model: Promotion
+✅ Loaded model: ReturnRequest
+✅ Loaded model: Role
+✅ Loaded model: RolePermission
+✅ Loaded model: RoleUser
+✅ Loaded model: OrderShipping
+✅ Loaded model: ShippingMethod
+✅ Loaded model: Size
+✅ Loaded model: SizeItem
+✅ Loaded model: Store
+✅ Loaded model: SubCategory
+✅ Loaded model: UserPackage
+✅ Loaded model: User
+✅ Loaded model: UserSession
+🔗 Set up associations for: TaxRule
+🔗 Set up associations for: Analytics
+🔗 Set up associations for: Article
+🔗 Set up associations for: Cart
+🔗 Set up associations for: CartItem
+🔗 Set up associations for: Category
+🔗 Set up associations for: Comment
+🔗 Set up associations for: Favorite
+🔗 Set up associations for: FavoriteItem
+🔗 Set up associations for: AuditLog
+🔗 Set up associations for: Translation
+🔗 Set up associations for: Order
+🔗 Set up associations for: OrderItem
+🔗 Set up associations for: Package
+🔗 Set up associations for: Payment
+🔗 Set up associations for: Permission
+🔗 Set up associations for: Product
+🔗 Set up associations for: ProductImage
+🔗 Set up associations for: Promotion
+🔗 Set up associations for: ReturnRequest
+🔗 Set up associations for: Role
+🔗 Set up associations for: RolePermission
+🔗 Set up associations for: RoleUser
+🔗 Set up associations for: OrderShipping
+🔗 Set up associations for: ShippingMethod
+🔗 Set up associations for: Size
+🔗 Set up associations for: SizeItem
+🔗 Set up associations for: Store
+🔗 Set up associations for: SubCategory
+🔗 Set up associations for: UserPackage
+🔗 Set up associations for: User
+🔗 Set up associations for: UserSession
+🎉 Database initialization complete. Models loaded: TaxRule, Analytics, Article, Cart, CartItem, Category, Comment, Favorite, FavoriteItem, AuditLog, Translation, Order, OrderItem, Package, Payment, Permission, Product, ProductImage, Promotion, ReturnRequest, Role, RolePermission, RoleUser, OrderShipping, ShippingMethod, Size, SizeItem, Store, SubCategory, UserPackage, User, UserSession
+❌ Missing required environment variables: NODE_ENV
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node index.ts`[39m
+✅ Config loaded from: /app/server/src/config/db.config.ts
+🔧 Database config: {
+  dialect: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  database: 'ecommerce_dev',
+  use_env_variable: undefined,
+  hasUsername: true,
+  hasPassword: true
+}
+🔗 Connecting to database: ecommerce_dev at localhost:5432
+📁 Loading 32 model files: [
+  'Tax.model.ts',
+  'analytics.model.ts',
+  'article.model.ts',
+  'cart.model.ts',
+  'cartitem.model.ts',
+  'category.model.ts',
+  'comments.model.ts',
+  'favorite.model.ts',
+  'favoriteitem.model.ts',
+  'log.model.ts',
+  'multilan.model.ts',
+  'order.model.ts',
+  'orderitem.model.ts',
+  'package.model.ts',
+  'payment.model.ts',
+  'permission.model.ts',
+  'product.model.ts',
+  'productimage.ts',
+  'promotion.model.ts',
+  'return.model.ts',
+  'role.model.ts',
+  'rolepermission .model.ts',
+  'roleuser.model.ts',
+  'shippment.model.ts',
+  'shippmentmethod.model.ts',
+  'size.model.ts',
+  'sizeitem.model.ts',
+  'store.model.ts',
+  'subcategory.model.ts',
+  'userpackage.model.ts',
+  'users.model.ts',
+  'usersession.model.ts'
+]
+✅ Loaded model: TaxRule
+✅ Loaded model: Analytics
+✅ Loaded model: Article
+✅ Loaded model: Cart
+✅ Loaded model: CartItem
+✅ Loaded model: Category
+✅ Loaded model: Comment
+✅ Loaded model: Favorite
+✅ Loaded model: FavoriteItem
+✅ Loaded model: AuditLog
+✅ Loaded model: Translation
+✅ Loaded model: Order
+✅ Loaded model: OrderItem
+✅ Loaded model: Package
+✅ Loaded model: Payment
+✅ Loaded model: Permission
+✅ Loaded model: Product
+✅ Loaded model: ProductImage
+✅ Loaded model: Promotion
+✅ Loaded model: ReturnRequest
+✅ Loaded model: Role
+✅ Loaded model: RolePermission
+✅ Loaded model: RoleUser
+✅ Loaded model: OrderShipping
+✅ Loaded model: ShippingMethod
+✅ Loaded model: Size
+✅ Loaded model: SizeItem
+✅ Loaded model: Store
+✅ Loaded model: SubCategory
+✅ Loaded model: UserPackage
+✅ Loaded model: User
+✅ Loaded model: UserSession
+🔗 Set up associations for: TaxRule
+🔗 Set up associations for: Analytics
+🔗 Set up associations for: Article
+🔗 Set up associations for: Cart
+🔗 Set up associations for: CartItem
+🔗 Set up associations for: Category
+🔗 Set up associations for: Comment
+🔗 Set up associations for: Favorite
+🔗 Set up associations for: FavoriteItem
+🔗 Set up associations for: AuditLog
+🔗 Set up associations for: Translation
+🔗 Set up associations for: Order
+🔗 Set up associations for: OrderItem
+🔗 Set up associations for: Package
+🔗 Set up associations for: Payment
+🔗 Set up associations for: Permission
+🔗 Set up associations for: Product
+🔗 Set up associations for: ProductImage
+🔗 Set up associations for: Promotion
+🔗 Set up associations for: ReturnRequest
+🔗 Set up associations for: Role
+🔗 Set up associations for: RolePermission
+🔗 Set up associations for: RoleUser
+🔗 Set up associations for: OrderShipping
+🔗 Set up associations for: ShippingMethod
+🔗 Set up associations for: Size
+🔗 Set up associations for: SizeItem
+🔗 Set up associations for: Store
+🔗 Set up associations for: SubCategory
+🔗 Set up associations for: UserPackage
+🔗 Set up associations for: User
+🔗 Set up associations for: UserSession
+🎉 Database initialization complete. Models loaded: TaxRule, Analytics, Article, Cart, CartItem, Category, Comment, Favorite, FavoriteItem, AuditLog, Translation, Order, OrderItem, Package, Payment, Permission, Product, ProductImage, Promotion, ReturnRequest, Role, RolePermission, RoleUser, OrderShipping, ShippingMethod, Size, SizeItem, Store, SubCategory, UserPackage, User, UserSession
+🔄 Performing database reset in development...
+❌ Unable to connect to the database: ConnectionRefusedError [SequelizeConnectionRefusedError]
+    at Client._connectionCallback (/app/server/node_modules/sequelize/src/dialects/postgres/connection-manager.js:184:24)
+    at Client._handleErrorWhileConnecting (/app/server/node_modules/pg/lib/client.js:336:19)
+    at Client._handleErrorEvent (/app/server/node_modules/pg/lib/client.js:346:19)
+    at Connection.emit (node:events:519:28)
+    at Connection.emit (node:domain:489:12)
+    at Socket.reportStreamError (/app/server/node_modules/pg/lib/connection.js:57:12)
+    at Socket.emit (node:events:519:28)
+    at Socket.emit (node:domain:489:12)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) {
+  parent: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  },
+  original: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+❌ Database initialization failed: ConnectionRefusedError [SequelizeConnectionRefusedError]
+    at Client._connectionCallback (/app/server/node_modules/sequelize/src/dialects/postgres/connection-manager.js:184:24)
+    at Client._handleErrorWhileConnecting (/app/server/node_modules/pg/lib/client.js:336:19)
+    at Client._handleErrorEvent (/app/server/node_modules/pg/lib/client.js:346:19)
+    at Connection.emit (node:events:519:28)
+    at Connection.emit (node:domain:489:12)
+    at Socket.reportStreamError (/app/server/node_modules/pg/lib/connection.js:57:12)
+    at Socket.emit (node:events:519:28)
+    at Socket.emit (node:domain:489:12)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) {
+  parent: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  },
+  original: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+❌ Failed to start server: ConnectionRefusedError [SequelizeConnectionRefusedError]
+    at Client._connectionCallback (/app/server/node_modules/sequelize/src/dialects/postgres/connection-manager.js:184:24)
+    at Client._handleErrorWhileConnecting (/app/server/node_modules/pg/lib/client.js:336:19)
+    at Client._handleErrorEvent (/app/server/node_modules/pg/lib/client.js:346:19)
+    at Connection.emit (node:events:519:28)
+    at Connection.emit (node:domain:489:12)
+    at Socket.reportStreamError (/app/server/node_modules/pg/lib/connection.js:57:12)
+    at Socket.emit (node:events:519:28)
+    at Socket.emit (node:domain:489:12)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) {
+  parent: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  },
+  original: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node index.ts`[39m
+✅ Config loaded from: /app/server/src/config/db.config.ts
+🔧 Database config: {
+  dialect: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  database: 'ecommerce_dev',
+  use_env_variable: undefined,
+  hasUsername: true,
+  hasPassword: true
+}
+🔗 Connecting to database: ecommerce_dev at localhost:5432
+📁 Loading 32 model files: [
+  'Tax.model.ts',
+  'analytics.model.ts',
+  'article.model.ts',
+  'cart.model.ts',
+  'cartitem.model.ts',
+  'category.model.ts',
+  'comments.model.ts',
+  'favorite.model.ts',
+  'favoriteitem.model.ts',
+  'log.model.ts',
+  'multilan.model.ts',
+  'order.model.ts',
+  'orderitem.model.ts',
+  'package.model.ts',
+  'payment.model.ts',
+  'permission.model.ts',
+  'product.model.ts',
+  'productimage.ts',
+  'promotion.model.ts',
+  'return.model.ts',
+  'role.model.ts',
+  'rolepermission .model.ts',
+  'roleuser.model.ts',
+  'shippment.model.ts',
+  'shippmentmethod.model.ts',
+  'size.model.ts',
+  'sizeitem.model.ts',
+  'store.model.ts',
+  'subcategory.model.ts',
+  'userpackage.model.ts',
+  'users.model.ts',
+  'usersession.model.ts'
+]
+✅ Loaded model: TaxRule
+✅ Loaded model: Analytics
+✅ Loaded model: Article
+✅ Loaded model: Cart
+✅ Loaded model: CartItem
+✅ Loaded model: Category
+✅ Loaded model: Comment
+✅ Loaded model: Favorite
+✅ Loaded model: FavoriteItem
+✅ Loaded model: AuditLog
+✅ Loaded model: Translation
+✅ Loaded model: Order
+✅ Loaded model: OrderItem
+✅ Loaded model: Package
+✅ Loaded model: Payment
+✅ Loaded model: Permission
+✅ Loaded model: Product
+✅ Loaded model: ProductImage
+✅ Loaded model: Promotion
+✅ Loaded model: ReturnRequest
+✅ Loaded model: Role
+✅ Loaded model: RolePermission
+✅ Loaded model: RoleUser
+✅ Loaded model: OrderShipping
+✅ Loaded model: ShippingMethod
+✅ Loaded model: Size
+✅ Loaded model: SizeItem
+✅ Loaded model: Store
+✅ Loaded model: SubCategory
+✅ Loaded model: UserPackage
+✅ Loaded model: User
+✅ Loaded model: UserSession
+🔗 Set up associations for: TaxRule
+🔗 Set up associations for: Analytics
+🔗 Set up associations for: Article
+🔗 Set up associations for: Cart
+🔗 Set up associations for: CartItem
+🔗 Set up associations for: Category
+🔗 Set up associations for: Comment
+🔗 Set up associations for: Favorite
+🔗 Set up associations for: FavoriteItem
+🔗 Set up associations for: AuditLog
+🔗 Set up associations for: Translation
+🔗 Set up associations for: Order
+🔗 Set up associations for: OrderItem
+🔗 Set up associations for: Package
+🔗 Set up associations for: Payment
+🔗 Set up associations for: Permission
+🔗 Set up associations for: Product
+🔗 Set up associations for: ProductImage
+🔗 Set up associations for: Promotion
+🔗 Set up associations for: ReturnRequest
+🔗 Set up associations for: Role
+🔗 Set up associations for: RolePermission
+🔗 Set up associations for: RoleUser
+🔗 Set up associations for: OrderShipping
+🔗 Set up associations for: ShippingMethod
+🔗 Set up associations for: Size
+🔗 Set up associations for: SizeItem
+🔗 Set up associations for: Store
+🔗 Set up associations for: SubCategory
+🔗 Set up associations for: UserPackage
+🔗 Set up associations for: User
+🔗 Set up associations for: UserSession
+🎉 Database initialization complete. Models loaded: TaxRule, Analytics, Article, Cart, CartItem, Category, Comment, Favorite, FavoriteItem, AuditLog, Translation, Order, OrderItem, Package, Payment, Permission, Product, ProductImage, Promotion, ReturnRequest, Role, RolePermission, RoleUser, OrderShipping, ShippingMethod, Size, SizeItem, Store, SubCategory, UserPackage, User, UserSession
+🔄 Performing database reset in development...
+❌ Unable to connect to the database: ConnectionRefusedError [SequelizeConnectionRefusedError]
+    at Client._connectionCallback (/app/server/node_modules/sequelize/src/dialects/postgres/connection-manager.js:184:24)
+    at Client._handleErrorWhileConnecting (/app/server/node_modules/pg/lib/client.js:336:19)
+    at Client._handleErrorEvent (/app/server/node_modules/pg/lib/client.js:346:19)
+    at Connection.emit (node:events:519:28)
+    at Connection.emit (node:domain:489:12)
+    at Socket.reportStreamError (/app/server/node_modules/pg/lib/connection.js:57:12)
+    at Socket.emit (node:events:519:28)
+    at Socket.emit (node:domain:489:12)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) {
+  parent: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  },
+  original: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+❌ Database initialization failed: ConnectionRefusedError [SequelizeConnectionRefusedError]
+    at Client._connectionCallback (/app/server/node_modules/sequelize/src/dialects/postgres/connection-manager.js:184:24)
+    at Client._handleErrorWhileConnecting (/app/server/node_modules/pg/lib/client.js:336:19)
+    at Client._handleErrorEvent (/app/server/node_modules/pg/lib/client.js:346:19)
+    at Connection.emit (node:events:519:28)
+    at Connection.emit (node:domain:489:12)
+    at Socket.reportStreamError (/app/server/node_modules/pg/lib/connection.js:57:12)
+    at Socket.emit (node:events:519:28)
+    at Socket.emit (node:domain:489:12)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) {
+  parent: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  },
+  original: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+❌ Failed to start server: ConnectionRefusedError [SequelizeConnectionRefusedError]
+    at Client._connectionCallback (/app/server/node_modules/sequelize/src/dialects/postgres/connection-manager.js:184:24)
+    at Client._handleErrorWhileConnecting (/app/server/node_modules/pg/lib/client.js:336:19)
+    at Client._handleErrorEvent (/app/server/node_modules/pg/lib/client.js:346:19)
+    at Connection.emit (node:events:519:28)
+    at Connection.emit (node:domain:489:12)
+    at Socket.reportStreamError (/app/server/node_modules/pg/lib/connection.js:57:12)
+    at Socket.emit (node:events:519:28)
+    at Socket.emit (node:domain:489:12)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3) {
+  parent: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  },
+  original: AggregateError
+      at internalConnectMultiple (node:net:1134:18)
+      at afterConnectMultiple (node:net:1715:7) {
+    code: 'ECONNREFUSED',
+    [errors]: [ [Error], [Error] ]
+  }
+}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m

@@ -45,6 +45,7 @@
     "spdy": "^4.0.2",
     "stripe": "^16.12.0",
     "swagger-ui-express": "^5.0.0",
+    "uuid": "^13.0.0",
     "winston": "^3.12.0"
   },
   "devDependencies": {
