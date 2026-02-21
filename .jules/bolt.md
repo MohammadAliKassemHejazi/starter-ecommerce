@@ -1,0 +1,3 @@
+## 2026-02-17 - N+1 Loop Optimization in Shop Service
+**Learning:** When replacing iterative database insertions with `bulkCreate`, pay close attention to the original filtering logic. In this case, the original code had a bug (`size.sizeId ?? 0 > 0`) which failed for UUIDs. Fixing the N+1 issue also required fixing (or carefully preserving) the logic. `bulkCreate` is much more efficient but requires mapping data beforehand. Also, ensure return types are preserved (e.g., returning the last created item if the original code did so).
+**Action:** Always check the data types (UUID vs Integer) when interpreting legacy conditions like `> 0`. When optimizing, verify if the "optimization" also inadvertently fixes a bug or changes behavior, and document it.
