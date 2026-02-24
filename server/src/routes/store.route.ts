@@ -8,12 +8,13 @@ import { protectedRoutes } from "../middlewares";
 const router = express.Router();
 
 const Routes = [
-     "/delete/:id",
-      "/create",
-      "/update",
+  "/delete/:id",
+  "/create",
+  "/update",
   "/getall/user",
-     "/getall/user/filter"
-  ];
+  "/getall/user/filter",
+  "/update/image"
+];
 
 // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
 
