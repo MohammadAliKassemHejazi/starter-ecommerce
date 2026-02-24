@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/store/store"
 import { UserState } from "@/interfaces/types/store/slices/userSlices.types";
 import * as authService from "@/services/authService"
+import * as userService from "@/services/myUsersService";
 import httpClient from "@/utils/httpClient";
 import  { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import Router from "next/router";
@@ -25,6 +26,7 @@ const initialState: UserState = {
 	name: "",
 	address: "",
 	phone: "",
+	bio: "",
 	accessToken: "",
 	isAuthenticated: false,
 	isAuthenticating: true,
@@ -67,6 +69,14 @@ export const signOut = createAsyncThunk("user/signout", async () => {
 	await authService.signOut();
   	Router.push("/auth/signin");
 });
+
+export const updateProfile = createAsyncThunk(
+	"user/updateProfile",
+	async (data: { id: string; name?: string; email?: string; phone?: string; address?: string; bio?: string }) => {
+		const response = await userService.updateUser(data);
+		return response;
+	}
+);
 
 // export const fetchSession = createAsyncThunk(
 //   "user/fetchSession",
@@ -148,6 +158,7 @@ export const userSlice = createSlice({
 			state.name = action.payload.data.name;
 			state.address = action.payload.data.address;
 			state.phone = action.payload.data.phone;
+			state.bio = action.payload.data.bio || "";
 			state.roles = action.payload.data.roles || [];
 			state.permissions = action.payload.data.permissions || [];
 			state.isAuthenticated = true;
@@ -174,6 +185,8 @@ export const userSlice = createSlice({
 				state.email = action.payload.data.email;
 				state.name = action.payload.data.name;
 				state.address = action.payload.data.address;
+				state.phone = action.payload.data.phone || "";
+				state.bio = action.payload.data.bio || "";
 				state.roles = action.payload.data.roles || [];
 				state.permissions = action.payload.data.permissions || [];
 				state.isAuthenticated = true;
@@ -209,9 +222,20 @@ export const userSlice = createSlice({
 			state.email = "";
 			state.name = "";
 			state.address = "";
+			state.phone = "";
+			state.bio = "";
 			state.accessToken = "";
 			state.roles = [];
 			state.permissions = [];
+		});
+		builder.addCase(updateProfile.fulfilled, (state, action) => {
+			if (action.payload.data) {
+				state.name = action.payload.data.name;
+				state.email = action.payload.data.email;
+				state.address = action.payload.data.address;
+				state.phone = action.payload.data.phone;
+				state.bio = action.payload.data.bio || "";
+			}
 		});
 
 	}
