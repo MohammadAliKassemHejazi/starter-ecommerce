@@ -8,26 +8,22 @@ export type Role = typeof ROLES[keyof typeof ROLES];
 export const permissionUtils = {
   // Check if a permission is a user management permission
   isUserManagementPermission: (permission: string): boolean => {
-    return Object.values(PERMISSIONS).some(perm => 
-      perm.startsWith('read_users') || 
-      perm.startsWith('create_users') || 
-      perm.startsWith('update_users') || 
-      perm.startsWith('delete_users') || 
-      perm.startsWith('view_users') || 
-      perm.startsWith('edit_users')
-    );
+    return permission.startsWith('read_users') ||
+           permission.startsWith('create_users') ||
+           permission.startsWith('update_users') ||
+           permission.startsWith('delete_users') ||
+           permission.startsWith('view_users') ||
+           permission.startsWith('edit_users');
   },
 
   // Check if a permission is a product management permission
   isProductManagementPermission: (permission: string): boolean => {
-    return Object.values(PERMISSIONS).some(perm => 
-      perm.startsWith('read_products') || 
-      perm.startsWith('create_products') || 
-      perm.startsWith('update_products') || 
-      perm.startsWith('delete_products') || 
-      perm.startsWith('view_products') || 
-      perm.startsWith('edit_products')
-    );
+    return permission.startsWith('read_products') ||
+           permission.startsWith('create_products') ||
+           permission.startsWith('update_products') ||
+           permission.startsWith('delete_products') ||
+           permission.startsWith('view_products') ||
+           permission.startsWith('edit_products');
   },
 
   // Check if a permission is a read-only permission
