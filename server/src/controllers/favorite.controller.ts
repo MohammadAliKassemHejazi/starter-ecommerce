@@ -5,7 +5,7 @@ import customError from '../utils/customError';
 export const getFavorites = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).UserId;
-    
+
     const favorites = await db.Favorite.findAll({
       where: { userId },
       include: [
@@ -14,22 +14,22 @@ export const getFavorites = async (req: Request, res: Response) => {
           include: [
             {
               model: db.ProductImage,
-              attributes: ['imageUrl']
-            }
-          ]
-        }
-      ]
+              attributes: ['imageUrl'],
+            },
+          ],
+        },
+      ],
     });
 
     res.status(200).json({
       success: true,
-      data: favorites
+      data: favorites,
     });
   } catch (error) {
     console.error('Error getting favorites:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to get favorites'
+      message: 'Failed to get favorites',
     });
   }
 };
@@ -44,37 +44,37 @@ export const addToFavorites = async (req: Request, res: Response) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found'
+        message: 'Product not found',
       });
     }
 
     // Check if already in favorites
     const existingFavorite = await db.Favorite.findOne({
-      where: { userId, productId }
+      where: { userId, productId },
     });
 
     if (existingFavorite) {
       return res.status(400).json({
         success: false,
-        message: 'Product already in favorites'
+        message: 'Product already in favorites',
       });
     }
 
     const favorite = await db.Favorite.create({
       userId,
-      productId
+      productId,
     });
 
     res.status(201).json({
       success: true,
       data: favorite,
-      message: 'Product added to favorites'
+      message: 'Product added to favorites',
     });
   } catch (error) {
     console.error('Error adding to favorites:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to add to favorites'
+      message: 'Failed to add to favorites',
     });
   }
 };
@@ -85,13 +85,13 @@ export const removeFromFavorites = async (req: Request, res: Response) => {
     const { productId } = req.params;
 
     const favorite = await db.Favorite.findOne({
-      where: { userId, productId }
+      where: { userId, productId },
     });
 
     if (!favorite) {
       return res.status(404).json({
         success: false,
-        message: 'Favorite not found'
+        message: 'Favorite not found',
       });
     }
 
@@ -99,13 +99,13 @@ export const removeFromFavorites = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'Product removed from favorites'
+      message: 'Product removed from favorites',
     });
   } catch (error) {
     console.error('Error removing from favorites:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to remove from favorites'
+      message: 'Failed to remove from favorites',
     });
   }
 };

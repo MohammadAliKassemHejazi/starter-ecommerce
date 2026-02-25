@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import { Model, DataTypes } from "sequelize";
-import { IRolePermissionAttributes } from "../interfaces/types/models/rolepermission.model.types";
+import { Model, DataTypes } from 'sequelize';
+import { IRolePermissionAttributes } from '../interfaces/types/models/rolepermission.model.types';
 
 module.exports = (sequelize: any) => {
   class RolePermission extends Model<IRolePermissionAttributes> implements IRolePermissionAttributes {
@@ -33,8 +33,8 @@ module.exports = (sequelize: any) => {
     },
     {
       sequelize,
-      modelName: "RolePermission",
-    }
+      modelName: 'RolePermission',
+    },
   );
 
   return RolePermission;

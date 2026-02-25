@@ -11,55 +11,55 @@ export const packageController = {
       const packages = await packageService.getAllPackages();
       return res.status(200).json({
         success: true,
-        data: packages
+        data: packages,
       });
     } catch (error) {
       console.error('Error in getAllPackages controller:', error);
       if (error instanceof CustomError) {
         return res.status(error.statusCode || 500).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
       return res.status(500).json({
         success: false,
-        message: 'Internal server error'
+        message: 'Internal server error',
       });
     }
   },
 
   // Get active package for the authenticated user
-getActivePackage: async (req: CustomRequest, res: Response) => {
-  try {
-    const userId = req.UserId!; // Ensure user is authenticated via middleware
+  getActivePackage: async (req: CustomRequest, res: Response) => {
+    try {
+      const userId = req.UserId!; // Ensure user is authenticated via middleware
 
-    const activePackage = await packageService.getUserActivePackage(userId);
+      const activePackage = await packageService.getUserActivePackage(userId);
 
-    if (!activePackage) {
-      return res.status(404).json({
+      if (!activePackage) {
+        return res.status(404).json({
+          success: false,
+          message: 'No active package found for this user',
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: activePackage,
+      });
+    } catch (error) {
+      console.error('Error in getActivePackage controller:', error);
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode || 500).json({
+          success: false,
+          message: error.message,
+        });
+      }
+      return res.status(500).json({
         success: false,
-        message: 'No active package found for this user'
+        message: 'Internal server error',
       });
     }
-
-    return res.status(200).json({
-      success: true,
-      data: activePackage
-    });
-  } catch (error) {
-    console.error('Error in getActivePackage controller:', error);
-    if (error instanceof CustomError) {
-      return res.status(error.statusCode || 500).json({
-        success: false,
-        message: error.message
-      });
-    }
-    return res.status(500).json({
-      success: false,
-      message: 'Internal server error'
-    });
-  }
-},
+  },
 
   // Get package by ID
   getPackageById: async (req: Request, res: Response) => {
@@ -68,19 +68,19 @@ getActivePackage: async (req: CustomRequest, res: Response) => {
       const packageData = await packageService.getPackageById(id);
       return res.status(200).json({
         success: true,
-        data: packageData
+        data: packageData,
       });
     } catch (error) {
       console.error('Error in getPackageById controller:', error);
       if (error instanceof CustomError) {
         return res.status(500).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
       return res.status(500).json({
         success: false,
-        message: 'Internal server error'
+        message: 'Internal server error',
       });
     }
   },
@@ -92,19 +92,19 @@ getActivePackage: async (req: CustomRequest, res: Response) => {
       return res.status(201).json({
         success: true,
         data: packageData,
-        message: 'Package created successfully'
+        message: 'Package created successfully',
       });
     } catch (error) {
       console.error('Error in createPackage controller:', error);
       if (error instanceof CustomError) {
         return res.status(500).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
       return res.status(500).json({
         success: false,
-        message: 'Internal server error'
+        message: 'Internal server error',
       });
     }
   },
@@ -117,19 +117,19 @@ getActivePackage: async (req: CustomRequest, res: Response) => {
       return res.status(200).json({
         success: true,
         data: packageData,
-        message: 'Package updated successfully'
+        message: 'Package updated successfully',
       });
-    } catch (error : unknown ) {
+    } catch (error: unknown) {
       console.error('Error in updatePackage controller:', error);
       if (error instanceof CustomError) {
         return res.status(500).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
       return res.status(500).json({
         success: false,
-        message: 'Internal server error'
+        message: 'Internal server error',
       });
     }
   },
@@ -141,19 +141,19 @@ getActivePackage: async (req: CustomRequest, res: Response) => {
       await packageService.deletePackage(id);
       return res.status(200).json({
         success: true,
-        message: 'Package deleted successfully'
+        message: 'Package deleted successfully',
       });
     } catch (error) {
       console.error('Error in deletePackage controller:', error);
       if (error instanceof CustomError) {
         return res.status(500).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
       return res.status(500).json({
         success: false,
-        message: 'Internal server error'
+        message: 'Internal server error',
       });
     }
   },
@@ -163,56 +163,56 @@ getActivePackage: async (req: CustomRequest, res: Response) => {
     try {
       const { packageId } = req.body;
       const userId = req.UserId!; // Assuming user is attached to request by auth middleware
-      
+
       await packageService.activatePackage(userId, packageId);
-      
+
       return res.status(200).json({
         success: true,
-        message: 'Package activated successfully'
+        message: 'Package activated successfully',
       });
     } catch (error) {
       console.error('Error in activatePackage controller:', error);
       if (error instanceof CustomError) {
         return res.status(500).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
       return res.status(500).json({
         success: false,
-        message: 'Internal server error'
+        message: 'Internal server error',
       });
     }
   },
   // Get package limits and usage for the authenticated user
-getPackageLimits: async (req: CustomRequest, res: Response) => {
-  try {
-    const userId = req.UserId;
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: 'User not authenticated'
+  getPackageLimits: async (req: CustomRequest, res: Response) => {
+    try {
+      const userId = req.UserId;
+      if (!userId) {
+        return res.status(401).json({
+          success: false,
+          message: 'User not authenticated',
+        });
+      }
+
+      const limits = await packageService.getUserPackageLimits(userId);
+
+      return res.status(200).json({
+        success: true,
+        data: limits,
       });
-    }
-
-    const limits = await packageService.getUserPackageLimits(userId);
-
-    return res.status(200).json({
-      success: true,
-      data: limits
-    });
-  } catch (error) {
-    console.error('Error in getPackageLimits controller:', error);
-    if (error instanceof CustomError) {
+    } catch (error) {
+      console.error('Error in getPackageLimits controller:', error);
+      if (error instanceof CustomError) {
+        return res.status(500).json({
+          success: false,
+          message: error.message,
+        });
+      }
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: 'Internal server error',
       });
     }
-    return res.status(500).json({
-      success: false,
-      message: 'Internal server error'
-    });
-  }
-}
+  },
 };

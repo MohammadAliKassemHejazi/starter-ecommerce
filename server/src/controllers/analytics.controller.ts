@@ -25,7 +25,7 @@ export const getAnalytics = async (req: Request, res: Response) => {
       startDate,
       endDate,
       page: Number(page),
-      limit: Number(limit)
+      limit: Number(limit),
     });
 
     ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Analytics retrieved successfully');
@@ -41,7 +41,7 @@ export const getEventStats = async (req: Request, res: Response) => {
 
     const stats = await analyticsService.getEventStats({
       startDate,
-      endDate
+      endDate,
     });
 
     ResponseFormatter.success(res, stats, 'Event statistics retrieved successfully');

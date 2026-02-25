@@ -18,7 +18,7 @@ export const createUser = async (data: { name: string; email: string; password: 
   return response;
 };
 
-export const updateUser = async (data: { id: string; name?: string; email?: string }): Promise<UpdateUserResponse> => {
+export const updateUser = async (data: { id: string; name?: string; email?: string; phone?: string; address?: string; bio?: string }): Promise<UpdateUserResponse> => {
   const { data: response } = await httpClient.put<UpdateUserResponse>(`/users/${data.id}`, data);
   return response;
 };

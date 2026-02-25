@@ -1,16 +1,13 @@
 import express from 'express';
 import { getFavorites, addToFavorites, removeFromFavorites } from '../controllers/favorite.controller';
 
-import { protectedRoutes } from "../middlewares";
+import { protectedRoutes } from '../middlewares';
 
 const router = express.Router();
 
-const protectedRoutesList = [
-    "/",
-    "/:id",
-  ];
-  
-  // Apply protection to specified routes
+const protectedRoutesList = ['/', '/:id'];
+
+// Apply protection to specified routes
 protectedRoutes(router, protectedRoutesList);
 // All routes require authentication
 

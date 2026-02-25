@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import { Model, DataTypes } from "sequelize";
-import { IRoleUserAttributes } from "../interfaces/types/models/roleuser.model.types";
+import { Model, DataTypes } from 'sequelize';
+import { IRoleUserAttributes } from '../interfaces/types/models/roleuser.model.types';
 
 module.exports = (sequelize: any) => {
   class RoleUser extends Model<IRoleUserAttributes> implements IRoleUserAttributes {
@@ -33,8 +33,8 @@ module.exports = (sequelize: any) => {
     },
     {
       sequelize,
-      modelName: "RoleUser",
-    }
+      modelName: 'RoleUser',
+    },
   );
 
   return RoleUser;

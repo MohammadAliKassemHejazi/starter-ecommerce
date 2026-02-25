@@ -1,9 +1,9 @@
-import { response } from "express";
-import db from "../models";
+import { response } from 'express';
+import db from '../models';
 
 export const getSalesData = async (userIds: string[]): Promise<any> => {
-  const totalSales = await db.Payment.sum("amount", {
-    where: { status: "succeeded" },
+  const totalSales = await db.Payment.sum('amount', {
+    where: { status: 'succeeded' },
     include: [
       {
         model: db.Order,
@@ -16,10 +16,10 @@ export const getSalesData = async (userIds: string[]): Promise<any> => {
 
   const monthlySales = await db.Payment.findAll({
     attributes: [
-      [db.sequelize.fn("to_char", db.sequelize.col("Payment.createdAt"), "YYYY-MM"), "month"],
-      [db.sequelize.fn("SUM", db.sequelize.col("amount")), "totalAmount"],
+      [db.sequelize.fn('to_char', db.sequelize.col('Payment.createdAt'), 'YYYY-MM'), 'month'],
+      [db.sequelize.fn('SUM', db.sequelize.col('amount')), 'totalAmount'],
     ],
-    where: { status: "succeeded" },
+    where: { status: 'succeeded' },
     include: [
       {
         model: db.Order,
@@ -28,8 +28,8 @@ export const getSalesData = async (userIds: string[]): Promise<any> => {
         attributes: [],
       },
     ],
-    group: [db.sequelize.fn("to_char", db.sequelize.col("Payment.createdAt"), "YYYY-MM")],
-    order: [[db.sequelize.col("month"), "DESC"]],
+    group: [db.sequelize.fn('to_char', db.sequelize.col('Payment.createdAt'), 'YYYY-MM')],
+    order: [[db.sequelize.col('month'), 'DESC']],
     raw: true,
   });
 
@@ -57,7 +57,7 @@ export const getInventoryAlerts = async (userIds: string[]): Promise<any[]> => {
             required: true,
             where: { userId: { [db.Sequelize.Op.in]: userIds } },
             attributes: [],
-          }
+          },
         ],
         attributes: ['id', 'name'],
       },
@@ -68,29 +68,28 @@ export const getInventoryAlerts = async (userIds: string[]): Promise<any[]> => {
   });
 
   return alerts.map((alert: any) => ({
-    productId: alert["Product.id"],
-    productName: alert["Product.name"],
-    size: alert["Size.size"],
+    productId: alert['Product.id'],
+    productName: alert['Product.name'],
+    size: alert['Size.size'],
     quantity: alert.quantity,
     threshold: THRESHOLD,
   }));
 };
 
-
 export const getOrderStatuses = async (userIds: string[]): Promise<any[]> => {
   const orderStatuses = await db.Order.findAll({
     where: { userId: { [db.Sequelize.Op.in]: userIds } },
-    attributes: ["id"],
+    attributes: ['id'],
     include: [
       {
         model: db.Payment,
-        attributes: ["status"],
+        attributes: ['status'],
         required: true,
       },
       {
         model: db.OrderShipping,
         as: 'shippingDetails',
-        attributes: ["status"],
+        attributes: ['status'],
         required: false,
       },
     ],
@@ -99,10 +98,7 @@ export const getOrderStatuses = async (userIds: string[]): Promise<any[]> => {
 
   return orderStatuses.map((order: any) => ({
     orderId: order.id,
-    paymentStatus: order["Payment.status"],
-    shippingStatus: order["OrderShippings.status"] || "Not Shipped",
+    paymentStatus: order['Payment.status'],
+    shippingStatus: order['OrderShippings.status'] || 'Not Shipped',
   }));
 };
-
-
-

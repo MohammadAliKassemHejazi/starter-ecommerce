@@ -11,7 +11,7 @@ export const getComments = async (req: Request, res: Response) => {
     if (!productId) {
       return res.status(400).json({
         success: false,
-        message: 'Product ID is required'
+        message: 'Product ID is required',
       });
     }
 
@@ -20,8 +20,8 @@ export const getComments = async (req: Request, res: Response) => {
       include: [
         {
           model: db.User,
-          attributes: ['id', 'name']
-        }
+          attributes: ['id', 'name'],
+        },
       ],
       order: [['createdAt', 'DESC']],
       limit: pageSize,
@@ -34,14 +34,14 @@ export const getComments = async (req: Request, res: Response) => {
         items: comments,
         total: count,
         page,
-        pageSize
-      }
+        pageSize,
+      },
     });
   } catch (error) {
     console.error('Error getting comments:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to get comments'
+      message: 'Failed to get comments',
     });
   }
 };
@@ -55,7 +55,7 @@ export const addComment = async (req: Request, res: Response) => {
     if (rating < 1 || rating > 5) {
       return res.status(400).json({
         success: false,
-        message: 'Rating must be between 1 and 5'
+        message: 'Rating must be between 1 and 5',
       });
     }
 
@@ -64,7 +64,7 @@ export const addComment = async (req: Request, res: Response) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found'
+        message: 'Product not found',
       });
     }
 
@@ -72,7 +72,7 @@ export const addComment = async (req: Request, res: Response) => {
       userId,
       productId,
       text,
-      rating
+      rating,
     });
 
     // Fetch the comment with user details
@@ -80,21 +80,21 @@ export const addComment = async (req: Request, res: Response) => {
       include: [
         {
           model: db.User,
-          attributes: ['id', 'name']
-        }
-      ]
+          attributes: ['id', 'name'],
+        },
+      ],
     });
 
     res.status(201).json({
       success: true,
       data: commentWithUser,
-      message: 'Comment added successfully'
+      message: 'Comment added successfully',
     });
   } catch (error) {
     console.error('Error adding comment:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to add comment'
+      message: 'Failed to add comment',
     });
   }
 };
@@ -106,20 +106,20 @@ export const updateComment = async (req: Request, res: Response) => {
     const { text, rating } = req.body;
 
     const comment = await db.Comment.findOne({
-      where: { id, userId }
+      where: { id, userId },
     });
 
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found or you do not have permission to edit it'
+        message: 'Comment not found or you do not have permission to edit it',
       });
     }
 
     if (rating && (rating < 1 || rating > 5)) {
       return res.status(400).json({
         success: false,
-        message: 'Rating must be between 1 and 5'
+        message: 'Rating must be between 1 and 5',
       });
     }
 
@@ -127,13 +127,13 @@ export const updateComment = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'Comment updated successfully'
+      message: 'Comment updated successfully',
     });
   } catch (error) {
     console.error('Error updating comment:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update comment'
+      message: 'Failed to update comment',
     });
   }
 };
@@ -144,13 +144,13 @@ export const deleteComment = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const comment = await db.Comment.findOne({
-      where: { id, userId }
+      where: { id, userId },
     });
 
     if (!comment) {
       return res.status(404).json({
         success: false,
-        message: 'Comment not found or you do not have permission to delete it'
+        message: 'Comment not found or you do not have permission to delete it',
       });
     }
 
@@ -158,13 +158,13 @@ export const deleteComment = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'Comment deleted successfully'
+      message: 'Comment deleted successfully',
     });
   } catch (error) {
     console.error('Error deleting comment:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to delete comment'
+      message: 'Failed to delete comment',
     });
   }
 };
