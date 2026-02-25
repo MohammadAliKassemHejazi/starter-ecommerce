@@ -6,14 +6,9 @@ import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.t
 // Initiate a cart payment
 export const initiateCartPayment = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const userId = req.UserId ?? "";
+    const userId = req.UserId ?? '';
     const { amount, currency, paymentMethodId } = req.body;
-    const paymentResponse: IPaymentResponse = await PaymentService.processCartPayment(
-      amount,
-      currency,
-      paymentMethodId,
-      userId
-    );
+    const paymentResponse: IPaymentResponse = await PaymentService.processCartPayment(amount, currency, paymentMethodId, userId);
     res.status(200).json(paymentResponse); // Return clientSecret to frontend
   } catch (error) {
     next(error);
@@ -23,15 +18,9 @@ export const initiateCartPayment = async (req: CustomRequest, res: Response, nex
 // Initiate a package payment
 export const initiatePackagePayment = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const userId = req.UserId ?? "";
+    const userId = req.UserId ?? '';
     const { amount, currency, paymentMethodId, packageId } = req.body;
-    const paymentResponse: IPaymentResponse = await PaymentService.processPackagePayment(
-      amount,
-      currency,
-      paymentMethodId,
-      userId,
-      packageId
-    );
+    const paymentResponse: IPaymentResponse = await PaymentService.processPackagePayment(amount, currency, paymentMethodId, userId, packageId);
     res.status(200).json(paymentResponse); // Return clientSecret to frontend
   } catch (error) {
     next(error);
@@ -42,8 +31,7 @@ export const initiatePackagePayment = async (req: CustomRequest, res: Response, 
 export const handleWebhook = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     const signature = req.headers['stripe-signature'] as string;
-    
-  
+
     const rawBody = req.rawBody as Buffer;
 
     const event = PaymentService.verifyWebhook(rawBody, signature);

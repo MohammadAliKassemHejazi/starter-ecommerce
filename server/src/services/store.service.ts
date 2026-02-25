@@ -21,12 +21,7 @@ const parseOrderBy = (orderBy: string): OrderItem[] => {
 
   const [field, direction] = orderBy.trim().split(/\s+/);
 
-  if (
-    field &&
-    direction &&
-    ALLOWED_SORT_FIELDS.includes(field) &&
-    ALLOWED_SORT_DIRECTIONS.includes(direction.toUpperCase())
-  ) {
+  if (field && direction && ALLOWED_SORT_FIELDS.includes(field) && ALLOWED_SORT_DIRECTIONS.includes(direction.toUpperCase())) {
     return [[field, direction.toUpperCase()]];
   }
 
@@ -41,7 +36,7 @@ export const getAllStoresForUserWithFilter = async (
   searchQuery: string,
   orderBy: string,
   page: number,
-  pageSize: number
+  pageSize: number,
 ): Promise<{
   stores: IStoreAttributes[];
   total: number;
@@ -79,21 +74,18 @@ export const getAllStoresForUserWithFilter = async (
   };
 };
 
- const createStoreWithImages = async (storeData: IStoreCreateProduct, files: Express.Multer.File[]): Promise<any> => {
-     try {
-          var Store =  storeData
-         if (files.length > 0) {
-              Store = await db.Store.create({ ...storeData , imgUrl :`${files[0].filename}`});
-         }
-         else {
-             throw Error
-         }
+const createStoreWithImages = async (storeData: IStoreCreateProduct, files: Express.Multer.File[]): Promise<any> => {
+  try {
+    var Store = storeData;
+    if (files.length > 0) {
+      Store = await db.Store.create({ ...storeData, imgUrl: `${files[0].filename}` });
+    } else {
+      throw Error;
+    }
 
-    return  Store  ;
+    return Store;
   } catch (error) {
-
     throw error;
-    
   }
 };
 
@@ -102,7 +94,7 @@ export const deleteStore = async (id: string, userId: string): Promise<any | nul
     // Fetch store and related images
     const store = await db.Store.findOne({
       where: { id, userId },
-      raw:true
+      raw: true,
     });
 
     // Check if the store exists
@@ -111,24 +103,24 @@ export const deleteStore = async (id: string, userId: string): Promise<any | nul
     }
 
     // Extract related images
-    const images = [store.imgUrl || ""]; // Fallback to empty array if no images exist
+    const images = [store.imgUrl || '']; // Fallback to empty array if no images exist
 
     // Delete images from the filesystem using Promise.all
     await Promise.all(
       images.map(async (photo: any) => {
-                const outputPath = path.join(__dirname,"..","..", 'compressed', photo); // Specify output path for compressed file
+        const outputPath = path.join(__dirname, '..', '..', 'compressed', photo); // Specify output path for compressed file
 
-        const imagePath = path.join(__dirname,  '..', '..', 'compressed', photo); // Adjust the path as necessary
+        const imagePath = path.join(__dirname, '..', '..', 'compressed', photo); // Adjust the path as necessary
         try {
           await fsPromises.unlink(imagePath); // Use fs.promises.unlink for async file deletion
         } catch (err) {
           console.error(`Failed to delete image: ${imagePath}`, err);
         }
-      })
+      }),
     );
 
     // Delete the store and its related records (cascading will handle ProductImages)
-    await db.Store.destroy({ where: { id,  userId } });
+    await db.Store.destroy({ where: { id, userId } });
 
     return { message: 'store and associated images deleted successfully' };
   } catch (error) {
@@ -136,15 +128,13 @@ export const deleteStore = async (id: string, userId: string): Promise<any | nul
     throw error;
   }
 };
- const getStoreById = async (
-  StoretId: string
-): Promise<{ store: IStoreAttributes } | null> => {
-  const store: IStoreAttributes  = await db.Store.findOne({
+const getStoreById = async (StoretId: string): Promise<{ store: IStoreAttributes } | null> => {
+  const store: IStoreAttributes = await db.Store.findOne({
     where: { id: StoretId },
     raw: true,
   });
- 
-  return  { store };
+
+  return { store };
 };
 
 const getAllStoresforuser = async (UserID: string): Promise<{ stores: IStoreAttributes[] } | null> => {
@@ -155,39 +145,33 @@ const getAllStoresforuser = async (UserID: string): Promise<{ stores: IStoreAttr
     return null;
   }
 
-
-
   return { stores };
 };
 
-const getAllStores = async (): Promise< IStoreAttributes[]  | null> => {
+const getAllStores = async (): Promise<IStoreAttributes[] | null> => {
   try {
-    const limit =8
-    const stores: IStoreAttributes[] | null = await db.Store.findAll({raw:true,limit});
+    const limit = 8;
+    const stores: IStoreAttributes[] | null = await db.Store.findAll({ raw: true, limit });
     if (!stores) {
       return null;
     }
-    return  stores ;
+    return stores;
   } catch (error) {
     return null;
   }
 };
 
-
-export const updateImages = async (
-  storeId: string,
-  files: Express.Multer.File[]
-): Promise<any> => {
+export const updateImages = async (storeId: string, files: Express.Multer.File[]): Promise<any> => {
   try {
     // Step 1: Find the Store by ID
     const store = await db.Store.findByPk(storeId);
     if (!store) {
-      throw new Error("Store not found");
+      throw new Error('Store not found');
     }
 
     // Step 2: Validate uploaded files
     if (files.length === 0) {
-      throw new Error("No files provided");
+      throw new Error('No files provided');
     }
 
     // Step 3: Resolve the old image path and delete the old image file (if it exists)
@@ -219,11 +203,10 @@ export const updateImages = async (
       updatedImageUrl: newImageUrl,
     };
   } catch (error) {
-    console.error("Error updating store image:", error);
+    console.error('Error updating store image:', error);
     throw error;
   }
 };
-
 
 export const deleteStoreImage = async (storeId: string, userId: string): Promise<any | null> => {
   try {
@@ -266,7 +249,7 @@ export const deleteStoreImage = async (storeId: string, userId: string): Promise
     // Step 6: Update the store's imgUrl field to null
     await db.Store.update(
       { imgUrl: null }, // Set imgUrl to null
-      { where: { id: storeId } } // Update the specific store
+      { where: { id: storeId } }, // Update the specific store
     );
 
     // Step 7: Return success response
@@ -287,5 +270,5 @@ export default {
   deleteStore,
   updateImages,
   getAllStoresforuser,
-  getAllStoresForUserWithFilter
+  getAllStoresForUserWithFilter,
 };

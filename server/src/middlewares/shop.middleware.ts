@@ -63,7 +63,7 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
             throw new Error(`Failed to process non-image file ${fileName}: ${nonImageError}`);
           }
         }
-      })
+      }),
     );
 
     // Attach processed files to the request object. 

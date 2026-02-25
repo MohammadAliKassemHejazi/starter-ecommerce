@@ -1,7 +1,7 @@
-import db from "../models";
-import { IUserAttributes } from "../interfaces/types/models/user.model.types";
-import customError from "../utils/customError";
-import userErrors from "../utils/errors/user.errors";
+import db from '../models';
+import { IUserAttributes } from '../interfaces/types/models/user.model.types';
+import customError from '../utils/customError';
+import userErrors from '../utils/errors/user.errors';
 
 export const fetchUsersByCreator = async (creatorId: string): Promise<IUserAttributes[]> => {
   const users = await db.User.findAll({
@@ -9,13 +9,13 @@ export const fetchUsersByCreator = async (creatorId: string): Promise<IUserAttri
     include: [
       {
         model: db.Role,
-        as: "roles",
+        as: 'roles',
         through: { attributes: [] }, // Exclude join table attributes if not needed
       },
       {
         model: db.Package,
-        as: "packages",
-        through: { attributes: ["isActive", "startDate", "endDate"] }, // Include UserPackage attributes if needed
+        as: 'packages',
+        through: { attributes: ['isActive', 'startDate', 'endDate'] }, // Include UserPackage attributes if needed
       },
     ],
   });

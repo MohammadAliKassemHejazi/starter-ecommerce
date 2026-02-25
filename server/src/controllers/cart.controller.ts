@@ -15,11 +15,10 @@ export const getCart = async (req: CustomRequest, res: Response, next: NextFunct
     if (!req.UserId) {
       return res.status(200).json({ message: '' });
     }
-    const userId = req.UserId ?? "";
+    const userId = req.UserId ?? '';
     const cart = await getCartService(userId);
-    
+
     const responseData: any = cart;
-    
 
     res.status(200).json(responseData);
   } catch (error) {
@@ -30,24 +29,23 @@ export const getCart = async (req: CustomRequest, res: Response, next: NextFunct
 // Add/update item in the cart
 
 export const addToCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
-    try {
-        const userId = req.UserId ?? "";
-        const { productId, quantity ,sizeId} = req.body;
-// Add item to cart
-        const cartItem = await addToCartService(userId, productId, quantity,sizeId);
-        res.status(200).json(cartItem);
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const userId = req.UserId ?? '';
+    const { productId, quantity, sizeId } = req.body;
+    // Add item to cart
+    const cartItem = await addToCartService(userId, productId, quantity, sizeId);
+    res.status(200).json(cartItem);
+  } catch (error) {
+    next(error);
+  }
 };
-
 
 // Decrease item quantity in the cart
 export const decreaseCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
-    try {
-    const userId = req.UserId ?? "";
-    const {  productId, quantity,sizeId } = req.body;
-    const cartItem = await decreaseCartService(userId, productId, quantity,sizeId);
+  try {
+    const userId = req.UserId ?? '';
+    const { productId, quantity, sizeId } = req.body;
+    const cartItem = await decreaseCartService(userId, productId, quantity, sizeId);
     res.status(200).json(cartItem);
   } catch (error) {
     next(error);
@@ -56,10 +54,10 @@ export const decreaseCart = async (req: CustomRequest, res: Response, next: Next
 
 // Remove item from the cart
 export const removeFromCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
-    try {
-      const userId = req.UserId ?? "";
-    const {  productId ,sizeId } = req.params;
-    await removeFromCartService(userId, productId,sizeId);
+  try {
+    const userId = req.UserId ?? '';
+    const { productId, sizeId } = req.params;
+    await removeFromCartService(userId, productId, sizeId);
     res.status(204).send();
   } catch (error) {
     next(error);
@@ -69,7 +67,7 @@ export const removeFromCart = async (req: CustomRequest, res: Response, next: Ne
 // Clear the cart
 export const clearCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const userId = req.UserId ?? "";
+    const userId = req.UserId ?? '';
     await clearCartService(userId);
     res.status(204).send();
   } catch (error) {

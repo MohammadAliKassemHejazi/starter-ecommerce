@@ -6,7 +6,7 @@ import { ResponseFormatter } from '../utils/responseFormatter';
 export const getShippingMethods = async (req: Request, res: Response) => {
   try {
     const shippingMethods = await db.ShippingMethod.findAll({
-      order: [['name', 'ASC']]
+      order: [['name', 'ASC']],
     });
 
     ResponseFormatter.success(res, shippingMethods, 'Shipping methods retrieved successfully');
@@ -23,7 +23,7 @@ export const createShippingMethod = async (req: Request, res: Response) => {
     const shippingMethod = await db.ShippingMethod.create({
       name,
       cost,
-      deliveryEstimate
+      deliveryEstimate,
     });
 
     ResponseFormatter.success(res, shippingMethod, 'Shipping method created successfully', 201);
@@ -84,16 +84,16 @@ export const getOrderShippings = async (req: Request, res: Response) => {
       include: [
         {
           model: db.Order,
-          attributes: ['id', 'orderNumber', 'totalPrice']
+          attributes: ['id', 'orderNumber', 'totalPrice'],
         },
         {
           model: db.ShippingMethod,
-          attributes: ['id', 'name', 'cost']
-        }
+          attributes: ['id', 'name', 'cost'],
+        },
       ],
       order: [['createdAt', 'DESC']],
       limit: Number(limit),
-      offset
+      offset,
     });
 
     ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Order shippings retrieved successfully');
@@ -112,7 +112,7 @@ export const createOrderShipping = async (req: Request, res: Response) => {
       shippingMethodId,
       trackingNumber,
       carrier,
-      status: 'PENDING'
+      status: 'PENDING',
     });
 
     ResponseFormatter.success(res, orderShipping, 'Order shipping created successfully', 201);

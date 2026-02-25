@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import db from "../models";
+import db from '../models';
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 import { raw } from 'body-parser';
 
@@ -23,12 +23,11 @@ export const checkPermission = (requiredPermission: string) => {
               {
                 model: db.Permission,
                 as: 'permissions', // ✅ Must match the alias in Role.belongsToMany
-                attributes: ['name']
-              }
-            ]
-            
-          }
-        ]
+                attributes: ['name'],
+              },
+            ],
+          },
+        ],
       });
       const user = uservalue.get({ plain: true });
       if (!user) {
@@ -36,9 +35,7 @@ export const checkPermission = (requiredPermission: string) => {
       }
 
       // Check if the user's role has the required permission
-      const hasPermission = user.roles?.some((role: any) =>
-        role.permissions?.some((permission: any) => permission.name === requiredPermission)
-      );
+      const hasPermission = user.roles?.some((role: any) => role.permissions?.some((permission: any) => permission.name === requiredPermission));
 
       if (!hasPermission) {
         return res.status(403).json({ message: 'Forbidden: You do not have the required permission' });

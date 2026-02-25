@@ -24,13 +24,13 @@ export const cacheMiddleware = (ttl: number = 300) => {
 
     // Store original res.json
     const originalJson = res.json.bind(res);
-    
+
     // Override res.json to cache the response
     res.json = (body: any) => {
       cache.set(key, {
         data: body,
         timestamp: Date.now(),
-        ttl
+        ttl,
       });
       return originalJson(body);
     };

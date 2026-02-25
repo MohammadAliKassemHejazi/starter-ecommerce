@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes } from 'sequelize';
 
 module.exports = (sequelize: any) => {
   class UserPackage extends Model {
@@ -31,16 +31,16 @@ module.exports = (sequelize: any) => {
         allowNull: false,
         references: {
           model: 'Users',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       packageId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: 'Packages',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       startDate: {
         type: DataTypes.DATE,
@@ -62,14 +62,14 @@ module.exports = (sequelize: any) => {
         allowNull: true,
         references: {
           model: 'Users',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
     },
     {
       sequelize,
-      modelName: "UserPackage",
-    }
+      modelName: 'UserPackage',
+    },
   );
 
   return UserPackage;

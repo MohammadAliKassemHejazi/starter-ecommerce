@@ -1,22 +1,18 @@
-import { IArticleAttributes } from "../interfaces/types/models/article.model.types";
-import db from "../models";
-import { IArticlesBodyResponse } from "../interfaces/types/controllers/article.controller.types";
-import customError from "../utils/customError";
-import articleErrors from "../utils/errors/article.errors"
+import { IArticleAttributes } from '../interfaces/types/models/article.model.types';
+import db from '../models';
+import { IArticlesBodyResponse } from '../interfaces/types/controllers/article.controller.types';
+import customError from '../utils/customError';
+import articleErrors from '../utils/errors/article.errors';
 
-export const createArticle = async (
-  data: IArticleAttributes
-): Promise<IArticleAttributes> => {
+export const createArticle = async (data: IArticleAttributes): Promise<IArticleAttributes> => {
   const response: IArticleAttributes = await db.Article.create(data);
   return response;
 };
 
-export const fetchArticleById = async (
-  id: string
-): Promise<IArticleAttributes> => {
-
+export const fetchArticleById = async (id: string): Promise<IArticleAttributes> => {
   const article: IArticleAttributes = await db.Article.findOne({
-    where: { id }, raw: true
+    where: { id },
+    raw: true,
   });
 
   if (article == null) {
@@ -25,21 +21,12 @@ export const fetchArticleById = async (
   return article;
 };
 
-export const updateArticle = async (
-  id: string,
-  title: string,
-  text: string,
-  type: string,
-  userId: string
-): Promise<Number[]> => {
+export const updateArticle = async (id: string, title: string, text: string, type: string, userId: string): Promise<Number[]> => {
   const isValid = await db.Article.findOne({ where: { id }, raw: true });
   if (isValid == null) {
     customError(articleErrors.ArticleInvalid);
   }
-  const response: Number[] = await db.Article.update(
-    { id, title, text, type, userId },
-    { where: { id } }
-  ).catch((error: Error) => {
+  const response: Number[] = await db.Article.update({ id, title, text, type, userId }, { where: { id } }).catch((error: Error) => {
     customError(articleErrors.ArticleUpdateFailure);
   });
   // delete cache
@@ -47,39 +34,28 @@ export const updateArticle = async (
   return response;
 };
 
-export const deleteArticle = async (
-  id: string,
-  userId: string
-): Promise<number> => {
+export const deleteArticle = async (id: string, userId: string): Promise<number> => {
   const response: number = await db.Article.destroy({ where: { id, userId } });
   return response;
 };
 
-
-export const fetchArticleByAuthor = async (
-  userId: string
-): Promise<IArticlesBodyResponse> => {
+export const fetchArticleByAuthor = async (userId: string): Promise<IArticlesBodyResponse> => {
   const response: IArticlesBodyResponse = await db.Article.findAll({ where: { userId }, raw: true });
-  return response
-}
+  return response;
+};
 
-export const fetchArticles = async (
-
-) => {
+export const fetchArticles = async () => {
   const response = await db.Article.findAll({
     include: [
       {
         model: db.User,
-        attributes: [
-          'id', 'name', 'address'
-        ]
-      }
-    ]
-  })
+        attributes: ['id', 'name', 'address'],
+      },
+    ],
+  });
 
-
-  return response
-}
+  return response;
+};
 
 export default {
   createArticle,
@@ -87,5 +63,5 @@ export default {
   updateArticle,
   deleteArticle,
   fetchArticleByAuthor,
-  fetchArticles
+  fetchArticles,
 };

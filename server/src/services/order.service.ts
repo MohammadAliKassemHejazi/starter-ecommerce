@@ -1,17 +1,15 @@
-import { IOrderItemAttributes } from "interfaces/types/models/orderitem.model.types";
-import { IOrderAttributes } from "../interfaces/types/models/order.model.types";
-import db from "../models";
-import customError from "../utils/customError";
-import orderErrors from "../utils/errors/order.errors";
-import { Op } from "sequelize";
+import { IOrderItemAttributes } from 'interfaces/types/models/orderitem.model.types';
+import { IOrderAttributes } from '../interfaces/types/models/order.model.types';
+import db from '../models';
+import customError from '../utils/customError';
+import orderErrors from '../utils/errors/order.errors';
+import { Op } from 'sequelize';
 
-export const getLastOrder = async (
-  userId: string
-): Promise<IOrderAttributes> => {
+export const getLastOrder = async (userId: string): Promise<IOrderAttributes> => {
   const lastOrder = await db.Order.findOne({
     where: { userId },
-    order: [["createdAt", "DESC"]], // Get the most recent order
-    include: [{ model: db.OrderItem, as: "orderItems" }],
+    order: [['createdAt', 'DESC']], // Get the most recent order
+    include: [{ model: db.OrderItem, as: 'orderItems' }],
   });
 
   if (!lastOrder) {
@@ -21,13 +19,10 @@ export const getLastOrder = async (
   return lastOrder;
 };
 
-export const getOrderItems = async (
-  orderId: string,
-  userId: string
-): Promise<IOrderItemAttributes[]> => {
+export const getOrderItems = async (orderId: string, userId: string): Promise<IOrderItemAttributes[]> => {
   const order = await db.Order.findOne({
     where: { id: orderId, userId },
-    include: [{ model: db.OrderItem, as: "orderItems" }],
+    include: [{ model: db.OrderItem, as: 'orderItems' }],
   });
 
   if (!order) {
@@ -37,11 +32,7 @@ export const getOrderItems = async (
   return order.orderItems;
 };
 
-export const getOrdersByDateRange = async (
-  userId: string,
-  from: string,
-  to: string
-): Promise<IOrderAttributes[]> => {
+export const getOrdersByDateRange = async (userId: string, from: string, to: string): Promise<IOrderAttributes[]> => {
   const orders = await db.Order.findAll({
     where: {
       userId,
@@ -49,7 +40,7 @@ export const getOrdersByDateRange = async (
         [Op.between]: [new Date(from), new Date(to)],
       },
     },
-    include: [{ model: db.OrderItem, as: "orderItems" }],
+    include: [{ model: db.OrderItem, as: 'orderItems' }],
   });
 
   return orders;
@@ -60,7 +51,7 @@ export const getOrdersByStore = async (
   page: number = 1,
   pageSize: number = 10,
   from?: string,
-  to?: string
+  to?: string,
 ): Promise<{ rows: any[]; count: number }> => {
   const offset = (page - 1) * pageSize;
 
@@ -79,7 +70,7 @@ export const getOrdersByStore = async (
     include: [
       {
         model: db.OrderItem,
-        as: "orderItems",
+        as: 'orderItems',
         attributes: [], // Don't fetch columns, just join
         required: true,
         include: [
@@ -93,7 +84,7 @@ export const getOrdersByStore = async (
       },
     ],
     distinct: true, // Ensure distinct Order IDs
-    order: [["createdAt", "DESC"]],
+    order: [['createdAt', 'DESC']],
   });
 
   if (count === 0) {
@@ -126,7 +117,7 @@ export const getOrdersByStore = async (
       },
       {
         model: db.OrderItem,
-        as: "orderItems",
+        as: 'orderItems',
         include: [
           {
             model: db.Product,
@@ -136,7 +127,7 @@ export const getOrdersByStore = async (
         ],
       },
     ],
-    order: [["createdAt", "DESC"]],
+    order: [['createdAt', 'DESC']],
   });
 
   // Step 3: Map to Frontend Interface
@@ -146,15 +137,15 @@ export const getOrdersByStore = async (
     // Calculate total price for the items in this store
     const totalPrice = plainOrder.orderItems.reduce((sum: number, item: any) => {
       // Use price from OrderItem (snapshot price)
-      return sum + (Number(item.dataValues.price) * item.dataValues.quantity);
+      return sum + Number(item.dataValues.price) * item.dataValues.quantity;
     }, 0);
 
     return {
       id: plainOrder.id,
       paymentId: plainOrder.paymentId,
-      customerName: plainOrder.User?.dataValues.name || "Un",
+      customerName: plainOrder.User?.dataValues.name || 'Un',
       totalPrice: Number(totalPrice.toFixed(2)), // Ensure 2 decimal places
-      status: plainOrder.Payment?.dataValues.status || "Pe",
+      status: plainOrder.Payment?.dataValues.status || 'Pe',
       createdAt: plainOrder.createdAt,
       updatedAt: plainOrder.updatedAt,
       orderItems: plainOrder.orderItems,
