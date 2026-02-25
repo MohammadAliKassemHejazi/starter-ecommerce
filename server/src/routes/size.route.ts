@@ -1,7 +1,13 @@
 import express from 'express';
-import { 
-  getSizes, createSize, updateSize, deleteSize,
-  getSizeItems, createSizeItem, updateSizeItem, deleteSizeItem
+import {
+  getSizes,
+  createSize,
+  updateSize,
+  deleteSize,
+  getSizeItems,
+  createSizeItem,
+  updateSizeItem,
+  deleteSizeItem,
 } from '../controllers/size.controller';
 import { verifyToken } from '../middlewares/auth.middleware';
 import { checkPermission } from '../middlewares/permission.middleware';

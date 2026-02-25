@@ -12,7 +12,7 @@ export const createSubCategory = async (data: { name: string; categoryId: string
 };
 
 export const updateSubCategory = async (data: { id: string; name: string; categoryId: string }) => {
-  const response = await httpClient.put(`/admin/subcategories/${data.id}`, {
+  const response = await httpClient.put(`/admin/subcategories/update/${data.id}`, {
     name: data.name,
     categoryId: data.categoryId,
   });
@@ -20,5 +20,5 @@ export const updateSubCategory = async (data: { id: string; name: string; catego
 };
 
 export const deleteSubCategory = async (id: string) => {
-  await httpClient.delete(`/admin/subcategories/${id}`);
+  await httpClient.delete(`/admin/subcategories/delete/${id}`);
 };

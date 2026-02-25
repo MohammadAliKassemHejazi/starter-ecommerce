@@ -1,5 +1,11 @@
 import express from 'express';
-import { getTranslations, createTranslation, updateTranslation, deleteTranslation, getTranslationsByRecord } from '../controllers/translation.controller';
+import {
+  getTranslations,
+  createTranslation,
+  updateTranslation,
+  deleteTranslation,
+  getTranslationsByRecord,
+} from '../controllers/translation.controller';
 import { verifyToken } from '../middlewares/auth.middleware';
 import { checkPermission } from '../middlewares/permission.middleware';
 

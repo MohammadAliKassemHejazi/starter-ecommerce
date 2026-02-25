@@ -1,14 +1,13 @@
 import express from 'express';
 import { packageController } from '../controllers/package.controller';
 import { checkPermission } from '../middlewares/permission.middleware';
-import { protectedRoutes } from "../middlewares";
+import { protectedRoutes } from '../middlewares';
 const router = express.Router();
 
 // Routes to protect
-const Routes = ['/activate', '/active', '/', '/:id','/limits','/update/:id'];
+const Routes = ['/activate', '/active', '/', '/:id', '/limits', '/update/:id'];
 
-
-protectedRoutes(router, Routes); 
+protectedRoutes(router, Routes);
 // Add this with your other routes
 router.get('/limits', packageController.getPackageLimits);
 /**

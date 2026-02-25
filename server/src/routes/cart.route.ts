@@ -1,27 +1,12 @@
 import express from 'express';
 
-
-import { protectedRoutes } from "../middlewares";
+import { protectedRoutes } from '../middlewares';
 const router = express.Router();
-  const Routes = [
-      "/get",
-      "/update",
-      "/decrease",
-      "/delete/:productId/:sizeId",
-      "/delete"
-  ];
+const Routes = ['/get', '/update', '/decrease', '/delete/:productId/:sizeId', '/delete'];
 
-  // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
-protectedRoutes(router, Routes); 
-import {
-  getCart,
-  addToCart,
-  decreaseCart,
-  removeFromCart,
-  clearCart,
-} from '../controllers/cart.controller';
-
-
+// function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
+protectedRoutes(router, Routes);
+import { getCart, addToCart, decreaseCart, removeFromCart, clearCart } from '../controllers/cart.controller';
 
 // Get the user's cart
 router.get('/get', getCart);

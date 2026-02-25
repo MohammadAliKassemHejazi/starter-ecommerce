@@ -1,5 +1,4 @@
-import config from "./config"; // this is important!
-
+import config from './config'; // this is important!
 
 module.exports = {
   development: {

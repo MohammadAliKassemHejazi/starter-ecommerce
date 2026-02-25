@@ -5,37 +5,32 @@ import db from '../models';
  * This service creates new schemas for stores and manages the mapping
  */
 export class TenantService {
-  
   /**
    * Create a new store with its own schema
    */
-  async createStoreWithSchema(storeData: {
-    slug: string;
-    storeName: string;
-    ownerId: string;
-  }) {
+  async createStoreWithSchema(storeData: { slug: string; storeName: string; ownerId: string }) {
     try {
       // Generate unique schema name
       const schemaName = `store_${storeData.slug}_${Date.now()}`;
-      
+
       // Create the schema
       await this.createSchema(schemaName);
-      
+
       // Create tables in the new schema
       await this.createTablesInSchema(schemaName);
-      
+
       // Create store mapping record
       const storeMapping = await db.StoreMapping.create({
         slug: storeData.slug,
         schemaName: schemaName,
         storeName: storeData.storeName,
         ownerId: storeData.ownerId,
-        isActive: true
+        isActive: true,
       });
 
       // Copy owner to the new schema
       await this.copyUserToSchema(schemaName, storeData.ownerId);
-      
+
       // Set up default data
       await this.setupDefaultStoreData(schemaName);
 
@@ -59,13 +54,16 @@ export class TenantService {
    */
   private async createTablesInSchema(schemaName: string) {
     // Get all table names from public schema
-    const tables = await db.sequelize.query(`
+    const tables = await db.sequelize.query(
+      `
       SELECT table_name 
       FROM information_schema.tables 
       WHERE table_schema = 'public' 
       AND table_name NOT LIKE 'pg_%'
       AND table_name != 'store_mappings'
-    `, { type: db.Sequelize.QueryTypes.SELECT });
+    `,
+      { type: db.Sequelize.QueryTypes.SELECT },
+    );
 
     // Create each table in the new schema
     for (const table of tables) {
@@ -76,11 +74,14 @@ export class TenantService {
     }
 
     // Create sequences for the new tables
-    const sequences = await db.sequelize.query(`
+    const sequences = await db.sequelize.query(
+      `
       SELECT sequence_name 
       FROM information_schema.sequences 
       WHERE sequence_schema = 'public'
-    `, { type: db.Sequelize.QueryTypes.SELECT });
+    `,
+      { type: db.Sequelize.QueryTypes.SELECT },
+    );
 
     for (const seq of sequences) {
       await db.sequelize.query(`
@@ -145,7 +146,7 @@ export class TenantService {
   async getStoreBySlug(slug: string) {
     return await db.StoreMapping.findOne({
       where: { slug, isActive: true },
-      include: [{ model: db.User, as: 'Owner' }]
+      include: [{ model: db.User, as: 'Owner' }],
     });
   }
 
@@ -169,7 +170,7 @@ export class TenantService {
   async getUserStores(userId: string) {
     return await db.StoreMapping.findAll({
       where: { ownerId: userId, isActive: true },
-      include: [{ model: db.User, as: 'Owner' }]
+      include: [{ model: db.User, as: 'Owner' }],
     });
   }
 

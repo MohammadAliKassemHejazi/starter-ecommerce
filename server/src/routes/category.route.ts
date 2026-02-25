@@ -1,16 +1,11 @@
-import { Router } from "express";
-import {
-  handleFetchCategories,
-  handleCreateCategory,
-  handleUpdateCategory,
-  handleDeleteCategory,
-} from "../controllers/category.controller";
-import { protectedRoutes } from "../middlewares";
+import { Router } from 'express';
+import { handleFetchCategories, handleCreateCategory, handleUpdateCategory, handleDeleteCategory } from '../controllers/category.controller';
+import { protectedRoutes } from '../middlewares';
 
 const router = Router();
 
 // Define routes to protect
-const protectedRoutesList = ["/","/create", "/update/:id", "/delete/:id"];
+const protectedRoutesList = ['/', '/create', '/update/:id', '/delete/:id'];
 protectedRoutes(router, protectedRoutesList);
 
 /**
@@ -29,7 +24,7 @@ protectedRoutes(router, protectedRoutesList);
  *               items:
  *                 $ref: '#/components/schemas/Category'
  */
-router.get("/", handleFetchCategories);
+router.get('/', handleFetchCategories);
 
 /**
  * @swagger
@@ -57,7 +52,7 @@ router.get("/", handleFetchCategories);
  *       401:
  *         description: Unauthorized (missing or invalid token)
  */
-router.post("/", handleCreateCategory);
+router.post('/', handleCreateCategory);
 
 /**
  * @swagger
@@ -94,7 +89,7 @@ router.post("/", handleCreateCategory);
  *       404:
  *         description: Category not found
  */
-router.put("/update/:id", handleUpdateCategory);
+router.put('/update/:id', handleUpdateCategory);
 
 /**
  * @swagger
@@ -119,6 +114,6 @@ router.put("/update/:id", handleUpdateCategory);
  *       404:
  *         description: Category not found
  */
-router.delete("/delete/:id", handleDeleteCategory);
+router.delete('/delete/:id', handleDeleteCategory);
 
 export default router;

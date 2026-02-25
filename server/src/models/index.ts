@@ -1,24 +1,23 @@
 // src/models/index.ts
-"use strict";
+'use strict';
 
-import fs from "fs";
-import path from "path";
-import { Sequelize, DataTypes } from "sequelize";
+import fs from 'fs';
+import path from 'path';
+import { Sequelize, DataTypes } from 'sequelize';
 
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || "development";
+const env = process.env.NODE_ENV || 'development';
 
 // Add error handling for config loading
 let config: any;
 try {
   // Try different possible paths for the config file
   const configPaths = [
-    path.join(__dirname, "../config/db.config.js"),
-    path.join(__dirname, "../config/db.config"),
-    path.join(__dirname, "../config/db.config.ts"),
-
+    path.join(__dirname, '../config/db.config.js'),
+    path.join(__dirname, '../config/db.config'),
+    path.join(__dirname, '../config/db.config.ts'),
   ];
-  
+
   let configFound = false;
   for (const configPath of configPaths) {
     try {
@@ -37,45 +36,48 @@ try {
       continue;
     }
   }
-  
+
   if (!configFound) {
-    throw new Error("Config file not found in any expected location");
+    throw new Error('Config file not found in any expected location');
   }
-  
 } catch (error) {
-  console.error("Failed to load database config file:", error);
-  console.log("🔄 Falling back to environment variables...");
-  
+  console.error('Failed to load database config file:', error);
+  console.log('🔄 Falling back to environment variables...');
+
   // Fallback to environment variables
 
-config = {
-  username: process.env.DB_USERNAME || process.env.DB_USER || process.env.DATABASE_USER,
-  password: process.env.DB_PASSWORD || process.env.DATABASE_PASSWORD,
-  database: env === 'production' 
-    ? (process.env.DB_DATABASE_PRODUCTION || process.env.DB_NAME_PROD || process.env.DATABASE_NAME || 'ecommerce_prod')
-    : env === 'test'
-    ? (process.env.DB_DATABASE_TEST || process.env.DB_NAME_TEST || 'ecommerce_test')
-    : (process.env.DB_DATABASE_DEVELOPMENT || process.env.DB_NAME_DEV || process.env.DATABASE_NAME || 'ecommerce_dev'),
-  host: process.env.DB_HOST || process.env.DATABASE_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || process.env.DATABASE_PORT || '5432'),
-  dialect: process.env.DB_DIALECT || 'postgres',
-  dialectOptions: env === 'production' ? {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  } : {
-    ssl: false
-  },
-  logging: env === 'development' ? console.log : false,
-  pool: {
-    max: env === 'production' ? 10 : 5,
-    min: env === 'production' ? 2 : 0,
-    acquire: 30000,
-    idle: 10000
-  }
-};
-  
+  config = {
+    username: process.env.DB_USERNAME || process.env.DB_USER || process.env.DATABASE_USER,
+    password: process.env.DB_PASSWORD || process.env.DATABASE_PASSWORD,
+    database:
+      env === 'production'
+        ? process.env.DB_DATABASE_PRODUCTION || process.env.DB_NAME_PROD || process.env.DATABASE_NAME || 'ecommerce_prod'
+        : env === 'test'
+          ? process.env.DB_DATABASE_TEST || process.env.DB_NAME_TEST || 'ecommerce_test'
+          : process.env.DB_DATABASE_DEVELOPMENT || process.env.DB_NAME_DEV || process.env.DATABASE_NAME || 'ecommerce_dev',
+    host: process.env.DB_HOST || process.env.DATABASE_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || process.env.DATABASE_PORT || '5432'),
+    dialect: process.env.DB_DIALECT || 'postgres',
+    dialectOptions:
+      env === 'production'
+        ? {
+            ssl: {
+              require: true,
+              rejectUnauthorized: false,
+            },
+          }
+        : {
+            ssl: false,
+          },
+    logging: env === 'development' ? console.log : false,
+    pool: {
+      max: env === 'production' ? 10 : 5,
+      min: env === 'production' ? 2 : 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+  };
+
   // If DATABASE_URL is available (common in production), use it
   if (process.env.DATABASE_URL && env === 'production') {
     config = {
@@ -84,16 +86,16 @@ config = {
       dialectOptions: {
         ssl: {
           require: true,
-          rejectUnauthorized: false
-        }
+          rejectUnauthorized: false,
+        },
       },
       logging: false,
       pool: {
         max: 10,
         min: 2,
         acquire: 30000,
-        idle: 10000
-      }
+        idle: 10000,
+      },
     };
   } else if (process.env.DATABASE_URL && env !== 'production') {
     // For development, use DATABASE_URL but disable SSL
@@ -101,32 +103,32 @@ config = {
       use_env_variable: 'DATABASE_URL',
       dialect: 'postgres',
       dialectOptions: {
-        ssl: false
+        ssl: false,
       },
       logging: env === 'development' ? console.log : false,
       pool: {
         max: env === 'production' ? 10 : 5,
         min: env === 'production' ? 2 : 0,
         acquire: 30000,
-        idle: 10000
-      }
+        idle: 10000,
+      },
     };
   }
 }
 
 // Validate configuration
 if (!config) {
-  throw new Error("❌ Database configuration is completely missing!");
+  throw new Error('❌ Database configuration is completely missing!');
 }
 
-console.log("🔧 Database config:", {
+console.log('🔧 Database config:', {
   dialect: config.dialect,
   host: config.host,
   port: config.port,
   database: config.database,
   use_env_variable: config.use_env_variable,
   hasUsername: !!config.username,
-  hasPassword: !!config.password
+  hasPassword: !!config.password,
 });
 
 const db: any = {};
@@ -143,7 +145,7 @@ try {
     sequelize = new Sequelize(envVar, config);
   } else {
     if (!config.database || !config.username) {
-      throw new Error("❌ Missing required database configuration: database name or username");
+      throw new Error('❌ Missing required database configuration: database name or username');
     }
     console.log(`🔗 Connecting to database: ${config.database} at ${config.host}:${config.port}`);
     sequelize = new Sequelize(
@@ -156,44 +158,41 @@ try {
         dialect: config.dialect, // Database dialect (e.g., 'postgres')
         dialectOptions: config.dialectOptions, // SSL/TLS options
         logging: config.logging, // Enable/disable logging
-        pool: config.pool // Connection pool settings
-      }
+        pool: config.pool, // Connection pool settings
+      },
     );
   }
 } catch (error) {
-  console.error("❌ Failed to initialize Sequelize:", error);
+  console.error('❌ Failed to initialize Sequelize:', error);
   throw error;
 }
 
 // Test the connection
-sequelize.authenticate()
+sequelize
+  .authenticate()
   .then(() => {
-    console.log("✅ Database connection established successfully.");
+    console.log('✅ Database connection established successfully.');
   })
   .catch((err: any) => {
-    console.error("❌ Unable to connect to the database:", err);
+    console.error('❌ Unable to connect to the database:', err);
   });
 
 // Load models
-const modelFiles = fs.readdirSync(__dirname)
-  .filter((file: string) => {
-    return (
-      file.indexOf(".") !== 0 && 
-      file !== basename && 
-      (file.slice(-3) === ".ts" || file.slice(-3) === ".js") &&
-      file !== "index.ts" &&
-      file !== "index.js"
-    );
-  });
+const modelFiles = fs.readdirSync(__dirname).filter((file: string) => {
+  return (
+    file.indexOf('.') !== 0 &&
+    file !== basename &&
+    (file.slice(-3) === '.ts' || file.slice(-3) === '.js') &&
+    file !== 'index.ts' &&
+    file !== 'index.js'
+  );
+});
 
 console.log(`📁 Loading ${modelFiles.length} model files:`, modelFiles);
 
 modelFiles.forEach((file: string) => {
   try {
-    const model = require(path.join(__dirname, file))(
-      sequelize,
-      DataTypes
-    );
+    const model = require(path.join(__dirname, file))(sequelize, DataTypes);
     db[model.name] = model;
     console.log(`✅ Loaded model: ${model.name}`);
   } catch (error) {
@@ -216,6 +215,10 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-console.log(`🎉 Database initialization complete. Models loaded: ${Object.keys(db).filter(key => key !== 'sequelize' && key !== 'Sequelize').join(', ')}`);
+console.log(
+  `🎉 Database initialization complete. Models loaded: ${Object.keys(db)
+    .filter((key) => key !== 'sequelize' && key !== 'Sequelize')
+    .join(', ')}`,
+);
 
 export default db;

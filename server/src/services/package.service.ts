@@ -1,4 +1,4 @@
-import db from "../models";
+import db from '../models';
 import { CustomError } from '../utils/customError';
 
 export interface IPackageLimits {
@@ -21,7 +21,7 @@ export const getAllPackages = async () => {
   try {
     const packages = await db.Package.findAll({
       where: { isActive: true },
-      order: [['price', 'ASC']]
+      order: [['price', 'ASC']],
     });
     return packages;
   } catch (error) {
@@ -87,7 +87,7 @@ export const deletePackage = async (id: string) => {
 
     // Check if package is in use by any users
     const userPackages = await db.UserPackage.findAll({
-      where: { packageId: id }
+      where: { packageId: id },
     });
 
     if (userPackages.length > 0) {
@@ -128,9 +128,9 @@ export const activatePackage = async (userId: string, packageId: string) => {
       const existingUserPackage = await db.UserPackage.findOne({
         where: {
           userId,
-          isActive: true
+          isActive: true,
         },
-        transaction
+        transaction,
       });
 
       // If user has an active package, deactivate it
@@ -139,14 +139,17 @@ export const activatePackage = async (userId: string, packageId: string) => {
       }
 
       // Create new user package
-      await db.UserPackage.create({
-        userId,
-        packageId,
-        isActive: true,
-        startDate: new Date(),
-        // Set end date if needed (e.g., for subscription-based packages)
-        // endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-      }, { transaction });
+      await db.UserPackage.create(
+        {
+          userId,
+          packageId,
+          isActive: true,
+          startDate: new Date(),
+          // Set end date if needed (e.g., for subscription-based packages)
+          // endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+        },
+        { transaction },
+      );
 
       // Commit transaction
       await transaction.commit();
@@ -171,12 +174,14 @@ export const getUserActivePackage = async (userId: string): Promise<IUserPackage
     const userPackage = await db.UserPackage.findOne({
       where: {
         userId,
-        isActive: true
+        isActive: true,
       },
-      include: [{
-        model: db.Package,
-        where: { isActive: true }
-      }]
+      include: [
+        {
+          model: db.Package,
+          where: { isActive: true },
+        },
+      ],
     });
 
     if (!userPackage) {
@@ -193,10 +198,10 @@ export const getUserActivePackage = async (userId: string): Promise<IUserPackage
         storeLimit: packageData.storeLimit,
         productLimit: packageData.productLimit,
         userLimit: packageData.userLimit,
-        isSuperAdmin: packageData.isSuperAdminPackage
+        isSuperAdmin: packageData.isSuperAdminPackage,
       },
       isActive: userPackage.isActive,
-      endDate: userPackage.endDate
+      endDate: userPackage.endDate,
     };
   } catch (error) {
     console.error('Error getting user active package:', error);
@@ -218,7 +223,7 @@ export const canCreateStore = async (userId: string): Promise<boolean> => {
     }
 
     const currentStoreCount = await db.Store.count({
-      where: { userId }
+      where: { userId },
     });
 
     return currentStoreCount < packageInfo.limits.storeLimit;
@@ -248,12 +253,11 @@ export const canCreateProduct = async (userId: string): Promise<boolean> => {
 
     // 3. CORRECTED: Use db.Product.count instead of db.Shop.count
     const currentProductCount = await db.Product.count({
-      where: { ownerId: userId }
+      where: { ownerId: userId },
     });
 
     // 4. Compare current count to package limit
     return currentProductCount < packageInfo.limits.productLimit;
-
   } catch (error) {
     // Log error for debugging purposes
     console.error('Error checking product creation limit:', error);
@@ -276,7 +280,7 @@ export const canCreateUser = async (userId: string): Promise<boolean> => {
     }
 
     const currentUserCount = await db.User.count({
-      where: { createdById: userId }
+      where: { createdById: userId },
     });
 
     return currentUserCount < packageInfo.limits.userLimit;
@@ -298,18 +302,10 @@ export const isSuperAdmin = async (userId: string): Promise<boolean> => {
 };
 
 // Assign package to user
-export const assignPackageToUser = async (
-  userId: string,
-  packageId: string,
-  assignedById: string,
-  endDate?: Date
-): Promise<any> => {
+export const assignPackageToUser = async (userId: string, packageId: string, assignedById: string, endDate?: Date): Promise<any> => {
   try {
     // Deactivate current package if exists
-    await db.UserPackage.update(
-      { isActive: false },
-      { where: { userId, isActive: true } }
-    );
+    await db.UserPackage.update({ isActive: false }, { where: { userId, isActive: true } });
 
     // Create new package assignment
     const userPackage = await db.UserPackage.create({
@@ -317,7 +313,7 @@ export const assignPackageToUser = async (
       packageId,
       startDate: new Date(),
       createdById: assignedById,
-      endDate
+      endDate,
     });
 
     return userPackage;
@@ -354,7 +350,7 @@ export const createDefaultPackages = async (): Promise<void> => {
         productLimit: 0,
         userLimit: 0,
         isSuperAdminPackage: false,
-        price: 0.00
+        price: 0.0,
       },
       {
         name: 'Basic',
@@ -364,7 +360,7 @@ export const createDefaultPackages = async (): Promise<void> => {
         productLimit: 50,
         userLimit: 0,
         isSuperAdminPackage: false,
-        price: 9.99
+        price: 9.99,
       },
       {
         name: 'Premium',
@@ -374,7 +370,7 @@ export const createDefaultPackages = async (): Promise<void> => {
         productLimit: 500,
         userLimit: 10,
         isSuperAdminPackage: true,
-        price: 29.99
+        price: 29.99,
       },
       {
         name: 'Enterprise',
@@ -384,14 +380,14 @@ export const createDefaultPackages = async (): Promise<void> => {
         productLimit: -1,
         userLimit: -1,
         isSuperAdminPackage: true,
-        price: 99.99
-      }
+        price: 99.99,
+      },
     ];
 
     for (const packageData of defaultPackages) {
       await db.Package.findOrCreate({
         where: { name: packageData.name },
-        defaults: packageData
+        defaults: packageData,
       });
     }
   } catch (error) {
@@ -422,31 +418,26 @@ export const getUserPackageLimits = async (userId: string) => {
         packageName: 'None',
         packageId: '',
         isActive: false,
-        endDate: null
+        endDate: null,
       };
     }
-
 
     // Get current usage counts
     const [currentStoreCount, currentProductCount, currentUserCount] = await Promise.all([
       db.Store.count({ where: { userId } }),
       db.Product.count({ where: { ownerId: userId } }),
-      db.User.count({ where: { createdById: userId } })   // sub-users
+      db.User.count({ where: { createdById: userId } }), // sub-users
     ]);
 
     // Compute permissions
-    const canCreateStore = packageInfo.limits.storeLimit === -1
-      ? true
-      : currentStoreCount < packageInfo.limits.storeLimit;
+    const canCreateStore = packageInfo.limits.storeLimit === -1 ? true : currentStoreCount < packageInfo.limits.storeLimit;
 
-    const canCreateProduct = packageInfo.limits.productLimit === -1
-      ? true
-      : currentProductCount < packageInfo.limits.productLimit;
+    const canCreateProduct = packageInfo.limits.productLimit === -1 ? true : currentProductCount < packageInfo.limits.productLimit;
 
     const canCreateUser = packageInfo.limits.isSuperAdmin
-      ? (packageInfo.limits.userLimit === -1
+      ? packageInfo.limits.userLimit === -1
         ? true
-        : currentUserCount < packageInfo.limits.userLimit)
+        : currentUserCount < packageInfo.limits.userLimit
       : false;
 
     return {
@@ -463,7 +454,7 @@ export const getUserPackageLimits = async (userId: string) => {
       packageName: packageInfo.packageName,
       packageId: packageInfo.packageId,
       isActive: packageInfo.isActive,
-      endDate: packageInfo.endDate ? packageInfo.endDate.toISOString() : null
+      endDate: packageInfo.endDate ? packageInfo.endDate.toISOString() : null,
     };
   } catch (error) {
     console.error('Error in getUserPackageLimits service:', error);

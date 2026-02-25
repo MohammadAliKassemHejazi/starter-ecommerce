@@ -1,6 +1,6 @@
 // ShippingMethod.model.ts
-"use strict";
-import { Model, DataTypes } from "sequelize";
+'use strict';
+import { Model, DataTypes } from 'sequelize';
 
 module.exports = (sequelize: any) => {
   class ShippingMethod extends Model {
@@ -9,14 +9,17 @@ module.exports = (sequelize: any) => {
     }
   }
 
-  ShippingMethod.init({
-    name: DataTypes.STRING,
-    cost: DataTypes.FLOAT,
-    deliveryEstimate: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'ShippingMethod'
-  });
+  ShippingMethod.init(
+    {
+      name: DataTypes.STRING,
+      cost: DataTypes.FLOAT,
+      deliveryEstimate: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'ShippingMethod',
+    },
+  );
 
   return ShippingMethod;
 };

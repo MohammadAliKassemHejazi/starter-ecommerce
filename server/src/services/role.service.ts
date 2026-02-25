@@ -1,7 +1,7 @@
-import db from "../models";
-import { IRoleAttributes } from "../interfaces/types/models/role.model.types";
-import customError from "../utils/customError";
-import roleErrors from "../utils/errors/role.errors";
+import db from '../models';
+import { IRoleAttributes } from '../interfaces/types/models/role.model.types';
+import customError from '../utils/customError';
+import roleErrors from '../utils/errors/role.errors';
 
 export const fetchRoles = async (): Promise<IRoleAttributes[]> => {
   const roles = await db.Role.findAll();
