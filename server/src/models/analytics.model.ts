@@ -4,7 +4,7 @@ import { Model, DataTypes } from "sequelize";
 module.exports = (sequelize: any) => {
   class Analytics extends Model {
     static associate(models: any) {
-      Analytics.belongsTo(models.User);
+      Analytics.belongsTo(models.User, { foreignKey: 'userId' });
     }
   }
 

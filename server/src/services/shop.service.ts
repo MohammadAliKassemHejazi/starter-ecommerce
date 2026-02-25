@@ -40,6 +40,7 @@ import { IProductImageAttributes } from 'interfaces/types/models/productimage.mo
           quantity: size.quantity,
         }));
 
+      // Optimized: Use bulkCreate instead of loop for performance
       if (sizeRecords.length > 0) {
         await db.SizeItem.bulkCreate(sizeRecords);
       }
@@ -95,6 +96,7 @@ export const updateProductWithImages = async (
           quantity: size.quantity,
         }));
 
+      // Optimized: Use bulkCreate instead of loop for performance
       if (sizeRecords.length > 0) {
         await db.SizeItem.bulkCreate(sizeRecords);
       }
