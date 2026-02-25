@@ -99,6 +99,14 @@ export const deleteStore = createAsyncThunk(
   }
 );
 
+export const deleteStoreImage = createAsyncThunk(
+  "store/delete/image",
+  async (id: string) => {
+    const response = await storeService.requestDeleteStoreImage(id);
+    return response;
+  }
+);
+
 const storeSlice = createSlice({
   name: "store",
   initialState: initialState,
@@ -145,6 +153,14 @@ const storeSlice = createSlice({
       })
       .addCase(deleteStore.rejected, (state, action) => {
         state.error = action.error.message || "Failed to delete store.";
+      })
+      .addCase(deleteStoreImage.fulfilled, (state, action) => {
+        if (state.store && state.store.id === action.meta.arg) {
+          state.store.imgUrl = "";
+        }
+      })
+      .addCase(deleteStoreImage.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to delete store image.";
       });
   },
 });

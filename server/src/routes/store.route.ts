@@ -11,7 +11,8 @@ const Routes = [
   '/update',
   '/getall/user',
   '/getall/user/filter',
-  '/update/image'
+  '/update/image',
+  '/delete/image/:id' // Added from fix branch
 ];
 
 // Apply protection middleware to the specific routes listed above
@@ -19,21 +20,24 @@ protectedRoutes(router, Routes);
 
 // --- Store Management Routes ---
 
-// Create a new store (includes image processing via middleware upstream)
+// Create a new store
 router.post('/create', storeController.handleCreateStore);
 
 // Update store metadata
 router.post('/update', storeController.handleUpdate);
 
-// Update store images specifically
+// Update store images (Bulk addition/replacement)
 router.patch('/update/image', storeController.handleUpdateImages);
+
+// Delete a specific store image
+router.delete('/delete/image/:id', storeController.handleDeleteStoreImage);
 
 // Delete a store by ID
 router.delete('/delete/:id', storeController.handleDelete);
 
 // --- Data Fetching Routes ---
 
-// Get a single store by ID (Public or Protected depending on implementation)
+// Get a single store by ID
 router.get('/get', storeController.handelGetSingleItem);
 
 // Get all stores globally
