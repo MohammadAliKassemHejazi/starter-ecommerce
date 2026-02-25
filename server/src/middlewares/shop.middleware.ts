@@ -66,7 +66,7 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
           try {
             // Read file buffer from file path
             console.log(`📖 Reading file buffer for ${fileName}...`);
-            const fileBuffer = fs.readFileSync(filePath);
+            const fileBuffer = await fs.promises.readFile(filePath);
             console.log(`✅ File buffer read successfully, size: ${fileBuffer.length} bytes`);
 
             // Resize and compress image using sharp
@@ -80,12 +80,12 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
 
             // Write the compressed image buffer to the output path
             console.log(`💾 Writing compressed image to: ${outputPath}`);
-            fs.writeFileSync(outputPath, compressedImageBuffer);
+            await fs.promises.writeFile(outputPath, compressedImageBuffer);
             console.log(`✅ Compressed image written successfully`);
 
             // Delete the original uploaded file
             console.log(`🗑️ Deleting original file: ${filePath}`);
-            fs.unlinkSync(filePath);
+            await fs.promises.unlink(filePath);
             console.log(`✅ Original file deleted successfully`);
 
             return {
@@ -103,12 +103,12 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
           try {
             // For non-image files, return the original file buffer without compression
             console.log(`📖 Reading non-image file buffer for ${fileName}...`);
-            const fileBuffer = fs.readFileSync(filePath);
+            const fileBuffer = await fs.promises.readFile(filePath);
             console.log(`✅ Non-image file buffer read successfully, size: ${fileBuffer.length} bytes`);
 
             // Delete the original uploaded file
             console.log(`🗑️ Deleting original non-image file: ${filePath}`);
-            fs.unlinkSync(filePath);
+            await fs.promises.unlink(filePath);
             console.log(`✅ Original non-image file deleted successfully`);
 
             return {
