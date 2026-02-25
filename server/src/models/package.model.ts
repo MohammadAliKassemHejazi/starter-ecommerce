@@ -1,5 +1,5 @@
 import { Model } from 'sequelize';
-import { IPackageAttributes } from "../interfaces/types/models/package.model.types";
+import { IPackageAttributes } from '../interfaces/types/models/package.model.types';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Package extends Model<IPackageAttributes> implements IPackageAttributes {
@@ -19,68 +19,65 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Package.belongsToMany(models.User, {
         through: models.UserPackage,
         foreignKey: 'packageId',
-        otherKey: 'userId'
+        otherKey: 'userId',
       });
     }
-
   }
-      Package.init(
-        {
-          id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true,
-          },
-          name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-          },
-          description: {
-            type: DataTypes.TEXT,
-            allowNull: true,
-          },
-          storeLimit: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-          },
-          categoryLimit: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0,
-          },
-          productLimit: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0,
-          },
-          userLimit: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0,
-          },
-          isSuperAdminPackage: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-          },
-          price: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false,
-            defaultValue: 0.00,
-          },
-          isActive: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: true,
-          },
-        },
-        {
-          sequelize,
-          modelName: 'Package',
-        }
-      );
-    
-  
+  Package.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      storeLimit: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      categoryLimit: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      productLimit: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      userLimit: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      isSuperAdminPackage: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      price: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+        defaultValue: 0.0,
+      },
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Package',
+    },
+  );
 
   return Package;
-}
+};

@@ -5,7 +5,7 @@ import { ResponseFormatter } from '../utils/responseFormatter';
 export const getSizes = async (req: Request, res: Response) => {
   try {
     const sizes = await db.Size.findAll({
-      order: [['size', 'ASC']]
+      order: [['size', 'ASC']],
     });
 
     ResponseFormatter.success(res, sizes, 'Sizes retrieved successfully');
@@ -79,16 +79,16 @@ export const getSizeItems = async (req: Request, res: Response) => {
       include: [
         {
           model: db.Product,
-          attributes: ['id', 'name']
+          attributes: ['id', 'name'],
         },
         {
           model: db.Size,
-          attributes: ['id', 'size']
-        }
+          attributes: ['id', 'size'],
+        },
       ],
       order: [['createdAt', 'DESC']],
       limit: Number(limit),
-      offset
+      offset,
     });
 
     ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Size items retrieved successfully');
@@ -105,7 +105,7 @@ export const createSizeItem = async (req: Request, res: Response) => {
     const sizeItem = await db.SizeItem.create({
       productId,
       sizeId,
-      quantity
+      quantity,
     });
 
     ResponseFormatter.success(res, sizeItem, 'Size item created successfully', 201);

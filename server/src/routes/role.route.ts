@@ -1,16 +1,11 @@
-import { Router } from "express";
-import {
-  handleFetchRoles,
-  handleCreateRole,
-  handleDeleteRole,
-  handleUpdateRole,
-} from "../controllers/role.controller";
-import { protectedRoutes } from "../middlewares";
+import { Router } from 'express';
+import { handleFetchRoles, handleCreateRole, handleDeleteRole, handleUpdateRole } from '../controllers/role.controller';
+import { protectedRoutes } from '../middlewares';
 
 const router = Router();
 
 // Define routes to protect
-const protectedRoutesList = ["/create", "/update/:id", "/delete/:id"];
+const protectedRoutesList = ['/create', '/update/:id', '/delete/:id'];
 protectedRoutes(router, protectedRoutesList);
 
 /**
@@ -31,7 +26,7 @@ protectedRoutes(router, protectedRoutesList);
  *               items:
  *                 $ref: '#/components/schemas/Role'
  */
-router.get("/", handleFetchRoles);
+router.get('/', handleFetchRoles);
 
 /**
  * @swagger
@@ -57,7 +52,7 @@ router.get("/", handleFetchRoles);
  *       400:
  *         description: Invalid input (missing or invalid fields)
  */
-router.post("/", handleCreateRole);
+router.post('/', handleCreateRole);
 
 /**
  * @swagger
@@ -80,7 +75,7 @@ router.post("/", handleCreateRole);
  *       404:
  *         description: Role not found
  */
-router.delete("/:id", handleDeleteRole);
+router.delete('/:id', handleDeleteRole);
 
 /**
  * @swagger
@@ -115,6 +110,6 @@ router.delete("/:id", handleDeleteRole);
  *       404:
  *         description: Role not found
  */
-router.put("/:id", handleUpdateRole);
+router.put('/:id', handleUpdateRole);
 
 export default router;

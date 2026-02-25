@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import { Model, DataTypes } from "sequelize";
-import { IPermissionAttributes } from "../interfaces/types/models/permission.model.types";
+import { Model, DataTypes } from 'sequelize';
+import { IPermissionAttributes } from '../interfaces/types/models/permission.model.types';
 
 module.exports = (sequelize: any) => {
   class Permission extends Model<IPermissionAttributes> implements IPermissionAttributes {
@@ -27,8 +27,8 @@ module.exports = (sequelize: any) => {
     },
     {
       sequelize,
-      modelName: "Permission",
-    }
+      modelName: 'Permission',
+    },
   );
 
   return Permission;

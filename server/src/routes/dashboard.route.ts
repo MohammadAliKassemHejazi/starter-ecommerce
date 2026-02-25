@@ -1,15 +1,11 @@
-import { Router } from "express";
-import {
-  handleGetSalesData,
-  handleGetInventoryAlerts,
-  handleGetOrderStatuses,
-} from "../controllers/dashboard.controller";
-import { protectedRoutes } from "../middlewares";
+import { Router } from 'express';
+import { handleGetSalesData, handleGetInventoryAlerts, handleGetOrderStatuses } from '../controllers/dashboard.controller';
+import { protectedRoutes } from '../middlewares';
 
 const router = Router();
 
 // Define routes to protect
-const protectedRoutesList = ["/sales", "/alerts", "/orders/status"];
+const protectedRoutesList = ['/sales', '/alerts', '/orders/status'];
 
 protectedRoutes(router, protectedRoutesList);
 
@@ -41,7 +37,7 @@ protectedRoutes(router, protectedRoutesList);
  *                       amount:
  *                         type: number
  */
-router.get("/sales", handleGetSalesData);
+router.get('/sales', handleGetSalesData);
 
 /**
  * @swagger
@@ -70,7 +66,7 @@ router.get("/sales", handleGetSalesData);
  *                   threshold:
  *                     type: integer
  */
-router.get("/alerts", handleGetInventoryAlerts);
+router.get('/alerts', handleGetInventoryAlerts);
 
 /**
  * @swagger
@@ -95,6 +91,6 @@ router.get("/alerts", handleGetInventoryAlerts);
  *                   count:
  *                     type: integer
  */
-router.get("/orders/status", handleGetOrderStatuses);
+router.get('/orders/status', handleGetOrderStatuses);
 
 export default router;

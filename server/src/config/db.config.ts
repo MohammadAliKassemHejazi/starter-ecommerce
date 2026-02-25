@@ -1,8 +1,11 @@
+
 // src/config/db.config.ts
 import dotenv from 'dotenv';
 dotenv.config();
 
 export default {
+
+
   development: {
     username: process.env.DB_USERNAME || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
@@ -29,6 +32,7 @@ export default {
     port: process.env.DB_PORT,
     dialect: 'postgres',
     logging: false,
+
     dialectOptions: {
       ssl: {
         require: true,
@@ -36,4 +40,5 @@ export default {
       }
     }
   }
+
 };
