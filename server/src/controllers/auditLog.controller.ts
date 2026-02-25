@@ -18,13 +18,13 @@ export const getAuditLogs = async (req: Request, res: Response) => {
         {
           model: db.User,
           as: 'PerformedBy',
-          attributes: ['id', 'name', 'email']
-        }
+          attributes: ['id', 'name', 'email'],
+        },
       ],
       order: [['createdAt', 'DESC']],
       limit: Number(limit),
       offset,
-      paranoid: false // Include soft deleted records
+      paranoid: false, // Include soft deleted records
     });
 
     ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Audit logs retrieved successfully');
@@ -43,10 +43,10 @@ export const getAuditLogById = async (req: Request, res: Response) => {
         {
           model: db.User,
           as: 'PerformedBy',
-          attributes: ['id', 'name', 'email']
-        }
+          attributes: ['id', 'name', 'email'],
+        },
       ],
-      paranoid: false
+      paranoid: false,
     });
 
     if (!auditLog) {
@@ -63,22 +63,19 @@ export const getAuditLogById = async (req: Request, res: Response) => {
 export const getAuditStats = async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.query;
-    
+
     const whereClause: any = {};
     if (startDate && endDate) {
       whereClause.createdAt = {
-        [db.Sequelize.Op.between]: [startDate, endDate]
+        [db.Sequelize.Op.between]: [startDate, endDate],
       };
     }
 
     const stats = await db.AuditLog.findAll({
       where: whereClause,
-      attributes: [
-        'action',
-        [db.Sequelize.fn('COUNT', db.Sequelize.col('action')), 'count']
-      ],
+      attributes: ['action', [db.Sequelize.fn('COUNT', db.Sequelize.col('action')), 'count']],
       group: ['action'],
-      raw: true
+      raw: true,
     });
 
     ResponseFormatter.success(res, stats, 'Audit statistics retrieved successfully');

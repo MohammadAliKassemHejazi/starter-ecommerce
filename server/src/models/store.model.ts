@@ -2,7 +2,7 @@
 
 import { Model } from 'sequelize';
 import { DataTypes } from 'sequelize';
-import { IStoreAttributes } from "../interfaces/types/models/store.model.types"
+import { IStoreAttributes } from '../interfaces/types/models/store.model.types';
 
 module.exports = (sequelize: any) => {
   class Store extends Model<IStoreAttributes> implements IStoreAttributes {
@@ -43,14 +43,13 @@ module.exports = (sequelize: any) => {
       categoryId: {
         type: DataTypes.UUID,
         allowNull: false,
-      }
-  
+      },
     },
     {
       sequelize,
       modelName: 'Store',
-    }
+    },
   );
 
   return Store;
-}
+};

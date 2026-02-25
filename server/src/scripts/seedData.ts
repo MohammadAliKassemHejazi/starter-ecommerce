@@ -5,7 +5,7 @@ import { PERMISSIONS, ROLES } from './permissions';
 
 /**
  * ROBUST DATA SEEDING SCRIPT
- * 
+ *
  * Objectives:
  * 1. Create all necessary Permissions for the frontend sidebar/features to work.
  * 2. Create Roles (Super Admin, Admin, Customer).
@@ -42,18 +42,14 @@ export const seedData = async (): Promise<void> => {
       const [perm] = await db.Permission.findOrCreate({
         where: { name },
         defaults: { id: uuidv4(), name },
-        transaction
+        transaction,
       });
       // SAFE ACCESS: Use dataValues or fallback to object
       permissionMap[name] = perm;
     }
 
     // Create Roles
-    const rolesConfig = [
-      { name: ROLES.SUPER_ADMIN },
-      { name: ROLES.ADMIN },
-      { name: ROLES.CUSTOMER }
-    ];
+    const rolesConfig = [{ name: ROLES.SUPER_ADMIN }, { name: ROLES.ADMIN }, { name: ROLES.CUSTOMER }];
 
     const roleMap: Record<string, any> = {};
 
@@ -61,7 +57,7 @@ export const seedData = async (): Promise<void> => {
       const [role] = await db.Role.findOrCreate({
         where: { name: config.name },
         defaults: { id: uuidv4(), name: config.name },
-        transaction
+        transaction,
       });
       roleMap[config.name] = role;
       // SAFE ACCESS: Use dataValues to avoid shadowing issues
@@ -83,7 +79,7 @@ export const seedData = async (): Promise<void> => {
       await db.RolePermission.findOrCreate({
         where: { roleId: superAdminId, permissionId: permId },
         defaults: { id: uuidv4(), roleId: superAdminId, permissionId: permId },
-        transaction
+        transaction,
       });
     }
 
@@ -92,12 +88,7 @@ export const seedData = async (): Promise<void> => {
     const adminId = adminRole.dataValues?.id || adminRole.id;
     if (!adminId) throw new Error('Admin Role ID is undefined');
 
-    const adminExclude: string[] = [
-        PERMISSIONS.MANAGE_PACKAGES,
-        PERMISSIONS.MANAGE_TRANSLATIONS,
-        'manage_packages',
-        'manage_translations'
-    ];
+    const adminExclude: string[] = [PERMISSIONS.MANAGE_PACKAGES, PERMISSIONS.MANAGE_TRANSLATIONS, 'manage_packages', 'manage_translations'];
 
     for (const permName in permissionMap) {
       if (!adminExclude.includes(permName)) {
@@ -107,7 +98,7 @@ export const seedData = async (): Promise<void> => {
         await db.RolePermission.findOrCreate({
           where: { roleId: adminId, permissionId: permId },
           defaults: { id: uuidv4(), roleId: adminId, permissionId: permId },
-          transaction
+          transaction,
         });
       }
     }
@@ -118,12 +109,21 @@ export const seedData = async (): Promise<void> => {
     if (!customerId) throw new Error('Customer Role ID is undefined');
 
     const customerPerms = [
-      PERMISSIONS.READ_PRODUCTS, PERMISSIONS.READ_CATEGORIES, PERMISSIONS.READ_SUBCATEGORIES,
-      PERMISSIONS.CREATE_ORDERS, PERMISSIONS.READ_ORDERS,
-      PERMISSIONS.CREATE_CARTS, PERMISSIONS.READ_CARTS, PERMISSIONS.UPDATE_CARTS,
-      PERMISSIONS.CREATE_FAVORITES, PERMISSIONS.READ_FAVORITES, PERMISSIONS.DELETE_FAVORITES,
-      PERMISSIONS.CREATE_COMMENTS, PERMISSIONS.READ_COMMENTS,
-      PERMISSIONS.CREATE_RETURNS, PERMISSIONS.READ_RETURNS
+      PERMISSIONS.READ_PRODUCTS,
+      PERMISSIONS.READ_CATEGORIES,
+      PERMISSIONS.READ_SUBCATEGORIES,
+      PERMISSIONS.CREATE_ORDERS,
+      PERMISSIONS.READ_ORDERS,
+      PERMISSIONS.CREATE_CARTS,
+      PERMISSIONS.READ_CARTS,
+      PERMISSIONS.UPDATE_CARTS,
+      PERMISSIONS.CREATE_FAVORITES,
+      PERMISSIONS.READ_FAVORITES,
+      PERMISSIONS.DELETE_FAVORITES,
+      PERMISSIONS.CREATE_COMMENTS,
+      PERMISSIONS.READ_COMMENTS,
+      PERMISSIONS.CREATE_RETURNS,
+      PERMISSIONS.READ_RETURNS,
     ];
     for (const permName of customerPerms) {
       if (permissionMap[permName]) {
@@ -133,7 +133,7 @@ export const seedData = async (): Promise<void> => {
         await db.RolePermission.findOrCreate({
           where: { roleId: customerId, permissionId: permId },
           defaults: { id: uuidv4(), roleId: customerId, permissionId: permId },
-          transaction
+          transaction,
         });
       }
     }
@@ -154,9 +154,9 @@ export const seedData = async (): Promise<void> => {
         name: 'Super Admin',
         password: passwordHash,
         phone: '1234567890',
-        address: 'HQ Address'
+        address: 'HQ Address',
       },
-      transaction
+      transaction,
     });
 
     const superAdminUserId = superAdminUser.dataValues?.id || superAdminUser.id;
@@ -171,9 +171,9 @@ export const seedData = async (): Promise<void> => {
         password: passwordHash,
         phone: '1234567890',
         address: 'Store Address',
-        createdById: superAdminUserId // LINKED
+        createdById: superAdminUserId, // LINKED
       },
-      transaction
+      transaction,
     });
     const storeAdminUserId = storeAdminUser.dataValues?.id || storeAdminUser.id;
 
@@ -187,9 +187,9 @@ export const seedData = async (): Promise<void> => {
         password: passwordHash,
         phone: '1234567890',
         address: 'Customer Address',
-        createdById: storeAdminUserId // LINKED
+        createdById: storeAdminUserId, // LINKED
       },
-      transaction
+      transaction,
     });
     const customerUserId = customerUser.dataValues?.id || customerUser.id;
 
@@ -198,27 +198,27 @@ export const seedData = async (): Promise<void> => {
     await db.RoleUser.findOrCreate({
       where: { userId: superAdminUserId, roleId: superAdminId },
       defaults: { id: uuidv4(), userId: superAdminUserId, roleId: superAdminId },
-      transaction
+      transaction,
     });
 
     // Store Admin
     await db.RoleUser.findOrCreate({
       where: { userId: storeAdminUserId, roleId: adminId },
       defaults: { id: uuidv4(), userId: storeAdminUserId, roleId: adminId },
-      transaction
+      transaction,
     });
 
     // Customer
     await db.RoleUser.findOrCreate({
       where: { userId: customerUserId, roleId: customerId },
       defaults: { id: uuidv4(), userId: customerUserId, roleId: customerId },
-      transaction
+      transaction,
     });
 
     const userMap: any = {
       [ROLES.SUPER_ADMIN]: superAdminUser,
       [ROLES.ADMIN]: storeAdminUser,
-      [ROLES.CUSTOMER]: customerUser
+      [ROLES.CUSTOMER]: customerUser,
     };
 
     // =========================================================================
@@ -233,9 +233,9 @@ export const seedData = async (): Promise<void> => {
         id: uuidv4(),
         name: 'Electronics',
         description: 'Gadgets and devices',
-        userId: storeAdminUserId // Owner
+        userId: storeAdminUserId, // Owner
       },
-      transaction
+      transaction,
     });
 
     const [clothingCat] = await db.Category.findOrCreate({
@@ -244,9 +244,9 @@ export const seedData = async (): Promise<void> => {
         id: uuidv4(),
         name: 'Clothing',
         description: 'Apparel for all',
-        userId: storeAdminUserId // Owner - ADDED
+        userId: storeAdminUserId, // Owner - ADDED
       },
-      transaction
+      transaction,
     });
 
     // SubCategories
@@ -259,9 +259,9 @@ export const seedData = async (): Promise<void> => {
         id: uuidv4(),
         name: 'Smartphones',
         categoryId: electronicsCatId,
-        userId: storeAdminUserId // Added userId
+        userId: storeAdminUserId, // Added userId
       },
-      transaction
+      transaction,
     });
 
     const [laptopsSub] = await db.SubCategory.findOrCreate({
@@ -270,9 +270,9 @@ export const seedData = async (): Promise<void> => {
         id: uuidv4(),
         name: 'Laptops',
         categoryId: electronicsCatId,
-        userId: storeAdminUserId // Added userId
+        userId: storeAdminUserId, // Added userId
       },
-      transaction
+      transaction,
     });
 
     const [menSub] = await db.SubCategory.findOrCreate({
@@ -281,9 +281,9 @@ export const seedData = async (): Promise<void> => {
         id: uuidv4(),
         name: "Men's Clothing",
         categoryId: clothingCatId,
-        userId: storeAdminUserId // Added userId
+        userId: storeAdminUserId, // Added userId
       },
-      transaction
+      transaction,
     });
 
     // =========================================================================
@@ -299,9 +299,9 @@ export const seedData = async (): Promise<void> => {
         description: 'The best place for tech and fashion.',
         imgUrl: '/fakeimages/shoes.jpg', // Use a valid placeholder path from public folder
         userId: storeAdminUserId,
-        categoryId: electronicsCatId
+        categoryId: electronicsCatId,
       },
-      transaction
+      transaction,
     });
 
     const storeId = store.dataValues?.id || store.id;
@@ -324,7 +324,7 @@ export const seedData = async (): Promise<void> => {
         category: electronicsCat,
         subcategory: phonesSub,
         sizes: [sizeDefault],
-        image: '/products/f1.png'
+        image: '/products/f1.png',
       },
       {
         name: 'MacBook Air M2',
@@ -333,7 +333,7 @@ export const seedData = async (): Promise<void> => {
         category: electronicsCat,
         subcategory: laptopsSub,
         sizes: [sizeDefault],
-        image: '/products/f2.png'
+        image: '/products/f2.png',
       },
       {
         name: 'Classic T-Shirt',
@@ -342,8 +342,8 @@ export const seedData = async (): Promise<void> => {
         category: clothingCat,
         subcategory: menSub,
         sizes: [sizeM, sizeL],
-        image: '/products/f3.png'
-      }
+        image: '/products/f3.png',
+      },
     ];
 
     const productMap: Record<string, any> = {};
@@ -366,9 +366,9 @@ export const seedData = async (): Promise<void> => {
           ownerId: storeAdminUserId,
           storeId: storeId,
           categoryId: catId,
-          subcategoryId: subId
+          subcategoryId: subId,
         },
-        transaction
+        transaction,
       });
 
       productMap[pData.name] = product;
@@ -380,9 +380,9 @@ export const seedData = async (): Promise<void> => {
         defaults: {
           id: uuidv4(),
           productId: prodId,
-          imageUrl: pData.image
+          imageUrl: pData.image,
         },
-        transaction
+        transaction,
       });
 
       // Create SizeItems (Inventory)
@@ -394,9 +394,9 @@ export const seedData = async (): Promise<void> => {
             id: uuidv4(),
             productId: prodId,
             sizeId: sizeId,
-            quantity: 100 // Plenty of stock
+            quantity: 100, // Plenty of stock
           },
-          transaction
+          transaction,
         });
       }
     }
@@ -414,9 +414,9 @@ export const seedData = async (): Promise<void> => {
       where: { userId: customerUserId },
       defaults: {
         id: uuidv4(),
-        userId: customerUserId
+        userId: customerUserId,
       },
-      transaction
+      transaction,
     });
 
     // Add item to cart (iPhone)
@@ -428,7 +428,7 @@ export const seedData = async (): Promise<void> => {
 
     const iphoneSizeItem = await db.SizeItem.findOne({
       where: { productId: iphoneId },
-      transaction
+      transaction,
     });
 
     if (iphoneSizeItem) {
@@ -443,9 +443,9 @@ export const seedData = async (): Promise<void> => {
           productId: iphoneId,
           sizeItemId: sizeItemId,
           quantity: 1,
-          sizeId: sizeId // Explicitly set if model supports it
+          sizeId: sizeId, // Explicitly set if model supports it
         },
-        transaction
+        transaction,
       });
     }
 
@@ -456,9 +456,9 @@ export const seedData = async (): Promise<void> => {
         // id: uuidv4(), <-- REMOVED: Integer ID
         region: 'US',
         rate: 0.08,
-        taxType: 'SALES_TAX'
+        taxType: 'SALES_TAX',
       },
-      transaction
+      transaction,
     });
     const taxRuleId = taxRule.dataValues?.id || taxRule.id;
 
@@ -468,10 +468,10 @@ export const seedData = async (): Promise<void> => {
       defaults: {
         // id: uuidv4(), <-- REMOVED: Integer ID
         name: 'Standard',
-        cost: 10.00,
-        deliveryEstimate: '3-5 Days'
+        cost: 10.0,
+        deliveryEstimate: '3-5 Days',
       },
-      transaction
+      transaction,
     });
     const shippingMethodId = shippingMethod.dataValues?.id || shippingMethod.id;
 
@@ -485,9 +485,9 @@ export const seedData = async (): Promise<void> => {
         paymentIntentId,
         amount: 1229.98,
         currency: 'USD',
-        status: 'succeeded'
+        status: 'succeeded',
       },
-      transaction
+      transaction,
     });
 
     const [order] = await db.Order.findOrCreate({
@@ -497,15 +497,15 @@ export const seedData = async (): Promise<void> => {
         userId: customerUserId,
         paymentId: payment.dataValues?.id || payment.id,
         currency: 'USD',
-        TaxRuleId: taxRuleId // Added Link to TaxRule
+        TaxRuleId: taxRuleId, // Added Link to TaxRule
       },
-      transaction
+      transaction,
     });
     const orderId = order.dataValues?.id || order.id;
 
     // Update payment with orderId if needed (Payment model has orderId foreign key)
     if (!payment.dataValues?.orderId && !payment.orderId) {
-       await payment.update({ orderId: orderId }, { transaction });
+      await payment.update({ orderId: orderId }, { transaction });
     }
 
     // Order Shipping
@@ -518,9 +518,9 @@ export const seedData = async (): Promise<void> => {
         ShippingMethodId: shippingMethodId,
         trackingNumber: `TRK-${Date.now()}`,
         carrier: 'FedEx',
-        status: 'DELIVERED'
+        status: 'DELIVERED',
       },
-      transaction
+      transaction,
     });
 
     if (iphonePrice === undefined || iphonePrice === null) {
@@ -535,9 +535,9 @@ export const seedData = async (): Promise<void> => {
         orderId: orderId,
         productId: iphoneId,
         quantity: 1,
-        price: iphonePrice // Using safely accessed price
+        price: iphonePrice, // Using safely accessed price
       },
-      transaction
+      transaction,
     });
 
     // =========================================================================
@@ -555,21 +555,21 @@ export const seedData = async (): Promise<void> => {
         value: 10,
         minCartValue: 50,
         validFrom: new Date(),
-        validTo: new Date(Date.now() + 10000000)
+        validTo: new Date(Date.now() + 10000000),
       },
-      transaction
+      transaction,
     });
 
     // Promotion Orders (Join Table) - Only if model exists, otherwise manual insert logic if needed
     if (db.PromotionOrders) {
-        await db.PromotionOrders.findOrCreate({
-            where: { OrderId: orderId, PromotionId: promotion.dataValues?.id || promotion.id },
-            defaults: {
-                OrderId: orderId,
-                PromotionId: promotion.dataValues?.id || promotion.id
-            },
-            transaction
-        });
+      await db.PromotionOrders.findOrCreate({
+        where: { OrderId: orderId, PromotionId: promotion.dataValues?.id || promotion.id },
+        defaults: {
+          OrderId: orderId,
+          PromotionId: promotion.dataValues?.id || promotion.id,
+        },
+        transaction,
+      });
     }
 
     // Analytics (for Dashboard)
@@ -581,9 +581,9 @@ export const seedData = async (): Promise<void> => {
         eventType: 'purchase',
         eventData: { amount: 1229.98 },
         userId: customerUserId,
-        UserId: customerUserId // Redundant column often found
+        UserId: customerUserId, // Redundant column often found
       },
-      transaction
+      transaction,
     });
 
     // Return Request (Test Return)
@@ -595,9 +595,9 @@ export const seedData = async (): Promise<void> => {
         userId: customerUserId,
         reason: 'Defective',
         status: 'PENDING',
-        refundAmount: 999.99
+        refundAmount: 999.99,
       },
-      transaction
+      transaction,
     });
 
     // Article (Admin Blog Post)
@@ -608,9 +608,9 @@ export const seedData = async (): Promise<void> => {
         title: 'Welcome to Our Store',
         text: 'We are happy to announce our new opening.',
         type: 'blog',
-        userId: storeAdminUserId
+        userId: storeAdminUserId,
       },
-      transaction
+      transaction,
     });
 
     // Comment (Customer Review on iPhone)
@@ -621,9 +621,9 @@ export const seedData = async (): Promise<void> => {
         userId: customerUserId,
         productId: iphoneId,
         text: 'Amazing phone!',
-        rating: 5
+        rating: 5,
       },
-      transaction
+      transaction,
     });
 
     // Favorite (Customer Wishlist)
@@ -632,21 +632,21 @@ export const seedData = async (): Promise<void> => {
       defaults: {
         id: uuidv4(),
         userId: customerUserId,
-        productId: iphoneId
+        productId: iphoneId,
       },
-      transaction
+      transaction,
     });
 
     // FavoriteItem (Explicit Item)
     const favoriteId = favorite.dataValues?.id || favorite.id;
     await db.FavoriteItem.findOrCreate({
-        where: { favoriteId: favoriteId, productId: iphoneId },
-        defaults: {
-            id: uuidv4(),
-            favoriteId: favoriteId,
-            productId: iphoneId
-        },
-        transaction
+      where: { favoriteId: favoriteId, productId: iphoneId },
+      defaults: {
+        id: uuidv4(),
+        favoriteId: favoriteId,
+        productId: iphoneId,
+      },
+      transaction,
     });
 
     // User Package (Subscription)
@@ -661,9 +661,9 @@ export const seedData = async (): Promise<void> => {
         productLimit: 2000,
         userLimit: 100,
         price: 0,
-        isActive: true
+        isActive: true,
       },
-      transaction
+      transaction,
     });
     const proPkgId = proPkg.dataValues?.id || proPkg.id;
 
@@ -676,9 +676,9 @@ export const seedData = async (): Promise<void> => {
         packageId: proPkgId,
         startDate: new Date(),
         isActive: true,
-        createdById: superAdminUserId
+        createdById: superAdminUserId,
       },
-      transaction
+      transaction,
     });
 
     // First create a Package
@@ -692,9 +692,9 @@ export const seedData = async (): Promise<void> => {
         productLimit: 20,
         userLimit: 1,
         price: 0,
-        isActive: true
+        isActive: true,
       },
-      transaction
+      transaction,
     });
     const pkgId = pkg.dataValues?.id || pkg.id;
 
@@ -706,36 +706,36 @@ export const seedData = async (): Promise<void> => {
         packageId: pkgId,
         startDate: new Date(),
         isActive: true,
-        createdById: superAdminUserId
+        createdById: superAdminUserId,
       },
-      transaction
+      transaction,
     });
 
     // User Session (Mock)
     await db.UserSession.findOrCreate({
-        where: { userId: customerUserId },
-        defaults: {
-            // id: uuidv4(), <-- REMOVED: Integer ID
-            userId: customerUserId,
-            ipAddress: '127.0.0.1',
-            deviceType: 'Desktop',
-            loginAt: new Date()
-        },
-        transaction
+      where: { userId: customerUserId },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Integer ID
+        userId: customerUserId,
+        ipAddress: '127.0.0.1',
+        deviceType: 'Desktop',
+        loginAt: new Date(),
+      },
+      transaction,
     });
 
     // Translation (Mock)
     await db.Translation.findOrCreate({
-        where: { model: 'Product', recordId: iphoneId, language: 'es' },
-        defaults: {
-            // id: uuidv4(), <-- REMOVED: Integer ID
-            model: 'Product',
-            recordId: iphoneId,
-            language: 'es',
-            field: 'name',
-            translation: 'iPhone 15 Pro (ES)'
-        },
-        transaction
+      where: { model: 'Product', recordId: iphoneId, language: 'es' },
+      defaults: {
+        // id: uuidv4(), <-- REMOVED: Integer ID
+        model: 'Product',
+        recordId: iphoneId,
+        language: 'es',
+        field: 'name',
+        translation: 'iPhone 15 Pro (ES)',
+      },
+      transaction,
     });
 
     // Audit Log (Admin Action)
@@ -747,9 +747,9 @@ export const seedData = async (): Promise<void> => {
         entity: 'Product',
         entityId: iphoneId,
         performedById: storeAdminUserId,
-        snapshot: { name: 'iPhone 15 Pro' }
+        snapshot: { name: 'iPhone 15 Pro' },
       },
-      transaction
+      transaction,
     });
 
     await transaction.commit();
@@ -761,7 +761,6 @@ export const seedData = async (): Promise<void> => {
     console.log(`Store Admin: admin@store.com / 123456`);
     console.log(`Customer:    customer@example.com / 123456`);
     console.log('---------------------------------------------------\n');
-
   } catch (error) {
     await transaction.rollback();
     console.error('❌ Data Seeding Failed:', error);

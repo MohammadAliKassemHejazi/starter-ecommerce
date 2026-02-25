@@ -1,4 +1,11 @@
-import { Client, Environment, OrdersController, CheckoutPaymentIntent, OrderApplicationContextUserAction, OrderApplicationContextLandingPage } from '@paypal/paypal-server-sdk';
+import {
+  Client,
+  Environment,
+  OrdersController,
+  CheckoutPaymentIntent,
+  OrderApplicationContextUserAction,
+  OrderApplicationContextLandingPage,
+} from '@paypal/paypal-server-sdk';
 import config from '../config/config';
 
 class PayPalService {
@@ -7,7 +14,7 @@ class PayPalService {
 
   constructor() {
     this.client = new Client({
-      environment: config.paypal?.environment === 'live' ? Environment.Production : Environment.Sandbox
+      environment: config.paypal?.environment === 'live' ? Environment.Production : Environment.Sandbox,
     });
     this.ordersController = new OrdersController(this.client);
   }
@@ -21,25 +28,25 @@ class PayPalService {
             {
               amount: {
                 currencyCode: currency,
-                value: amount.toFixed(2)
-              }
-            }
+                value: amount.toFixed(2),
+              },
+            },
           ],
           applicationContext: {
             brandName: 'E-commerce Store',
             landingPage: OrderApplicationContextLandingPage.NoPreference,
             userAction: OrderApplicationContextUserAction.PayNow,
             returnUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/payment-success`,
-            cancelUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/cart`
-          }
-        }
+            cancelUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/cart`,
+          },
+        },
       });
-      
+
       if (response.statusCode === 201) {
         return {
           success: true,
           orderId: response.result.id,
-          approvalUrl: response.result.links?.find((link: any) => link.rel === 'approve')?.href
+          approvalUrl: response.result.links?.find((link: any) => link.rel === 'approve')?.href,
         };
       } else {
         throw new Error(`PayPal order creation failed with status: ${response.statusCode}`);
@@ -54,9 +61,9 @@ class PayPalService {
     try {
       const response = await this.ordersController.captureOrder({
         id: orderId,
-        body: {}
+        body: {},
       });
-      
+
       if (response.statusCode === 201) {
         const order = response.result;
         return {
@@ -65,7 +72,7 @@ class PayPalService {
           status: order.status,
           paymentId: order.purchaseUnits?.[0]?.payments?.captures?.[0]?.id,
           amount: order.purchaseUnits?.[0]?.payments?.captures?.[0]?.amount?.value,
-          currency: order.purchaseUnits?.[0]?.payments?.captures?.[0]?.amount?.currencyCode
+          currency: order.purchaseUnits?.[0]?.payments?.captures?.[0]?.amount?.currencyCode,
         };
       } else {
         throw new Error(`PayPal order capture failed with status: ${response.statusCode}`);
@@ -79,13 +86,13 @@ class PayPalService {
   async getOrderDetails(orderId: string) {
     try {
       const response = await this.ordersController.getOrder({
-        id: orderId
+        id: orderId,
       });
-      
+
       if (response.statusCode === 200) {
         return {
           success: true,
-          order: response.result
+          order: response.result,
         };
       } else {
         throw new Error(`PayPal get order failed with status: ${response.statusCode}`);

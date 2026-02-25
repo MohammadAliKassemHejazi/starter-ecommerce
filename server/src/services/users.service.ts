@@ -1,11 +1,11 @@
-import bcrypt from "bcrypt";
-import { sign } from "jsonwebtoken";
-import { IUserAttributes } from "../interfaces/types/models/user.model.types";
-import customError from "../utils/customError";
-import authErrors from "../utils/errors/auth.errors";
-import config from "../config/config";
-import { IAuthLoginBodyResponse } from "../interfaces/types/controllers/auth.controller.types";
-import db from "../models";
+import bcrypt from 'bcrypt';
+import { sign } from 'jsonwebtoken';
+import { IUserAttributes } from '../interfaces/types/models/user.model.types';
+import customError from '../utils/customError';
+import authErrors from '../utils/errors/auth.errors';
+import config from '../config/config';
+import { IAuthLoginBodyResponse } from '../interfaces/types/controllers/auth.controller.types';
+import db from '../models';
 
 const passwordHashing = (password: string): string => {
   const salt = bcrypt.genSaltSync(10);
@@ -29,96 +29,91 @@ const createToken = (UserId: string): string => {
   return token;
 };
 
-const mapUserResponseObject = async (
-  userId: string,
-  user: IUserAttributes,
-  accessToken?: string
-): Promise<IAuthLoginBodyResponse> => {
+const mapUserResponseObject = async (userId: string, user: IUserAttributes, accessToken?: string): Promise<IAuthLoginBodyResponse> => {
   // Fetch user with roles and permissions
   const userWithRoles = await db.User.findByPk(userId, {
-  include: [
-    {
-      model: db.Role,
-      as: 'roles',
-      through: { attributes: [] },
-      include: [
-        {
-          model: db.Permission,
-          as: 'permissions',
-          through: { attributes: [] }
-        }
-      ]
-    }
-  ]
-});
+    include: [
+      {
+        model: db.Role,
+        as: 'roles',
+        through: { attributes: [] },
+        include: [
+          {
+            model: db.Permission,
+            as: 'permissions',
+            through: { attributes: [] },
+          },
+        ],
+      },
+    ],
+  });
 
-// 👇 Convert to plain object — this recursively unwraps all .dataValues
-const plainUser = userWithRoles?.get({ plain: true });
+  // 👇 Convert to plain object — this recursively unwraps all .dataValues
+  const plainUser = userWithRoles?.get({ plain: true });
 
-// Now safely extract roles and permissions
-const roles = plainUser?.roles?.map((role: any) => ({
-  id: role.id,
-  name: role.name
-})) || [];
+  // Now safely extract roles and permissions
+  const roles =
+    plainUser?.roles?.map((role: any) => ({
+      id: role.id,
+      name: role.name,
+    })) || [];
 
-const permissions = plainUser?.roles?.flatMap((role: any) => 
-  role.permissions?.map((permission: any) => ({
-    id: permission.id,
-    name: permission.name
-  })) || []
-) || [];
+  const permissions =
+    plainUser?.roles?.flatMap(
+      (role: any) =>
+        role.permissions?.map((permission: any) => ({
+          id: permission.id,
+          name: permission.name,
+        })) || [],
+    ) || [];
   const response: IAuthLoginBodyResponse = {
     id: userId,
     email: user.email,
-    name: user.name || "",
-    address: user.address || "",
-    phone: user.phone || "",
+    name: user.name || '',
+    address: user.address || '',
+    phone: user.phone || '',
     accessToken,
     roles,
-    permissions
+    permissions,
   };
   return response;
 };
 
-export const createUser = async (
-  data: IUserAttributes
-): Promise<IUserAttributes> => {
+export const createUser = async (data: IUserAttributes): Promise<IUserAttributes> => {
   data.password = passwordHashing(data.password);
-  
+
   // Find admin user to set as createdByUser
   const adminUser = await db.User.findOne({
-    where: { email: 'admin@admin.com' } // Assuming admin email
+    where: { email: 'admin@admin.com' }, // Assuming admin email
   });
-  
+
   if (adminUser) {
     data.createdById = adminUser.id;
   }
-  
+
   const user: IUserAttributes = await db.User.create(data);
-  
+
   // Assign default free package to new user
   const freePackage = await db.Package.findOne({
-    where: { name: 'Free' }
+    where: { name: 'Free' },
   });
-  
+
   if (freePackage) {
     await db.UserPackage.create({
       userId: user.id,
       packageId: freePackage.id,
       startDate: new Date(),
-      createdById: adminUser?.id || null
+      createdById: adminUser?.id || null,
     });
   }
-  
+
   return user;
 };
 
-export const userLogin = async (
-  email: string,
-  password: string
-): Promise<IAuthLoginBodyResponse> => {
+export const userLogin = async (email: string, password: string): Promise<IAuthLoginBodyResponse> => {
   const user = await db.User.findOne({
-    where: { email }, raw: true
+    where: { email },
+    raw: true,
   });
   if (user == null) {
     customError({
@@ -132,19 +127,14 @@ export const userLogin = async (
   comparePassword(password, user.password);
   const UserId: string = user.id;
   const accessToken = createToken(UserId);
-  const response: IAuthLoginBodyResponse = await mapUserResponseObject(
-    UserId,
-    user,
-    accessToken
-  );
+  const response: IAuthLoginBodyResponse = await mapUserResponseObject(UserId, user, accessToken);
   return response;
 };
 
-export const userSession = async (
-  id: string,
-): Promise<IAuthLoginBodyResponse> => {
+export const userSession = async (id: string): Promise<IAuthLoginBodyResponse> => {
   const user = await db.User.findOne({
-    where: { id }, raw: true
+    where: { id },
+    raw: true,
   });
   if (user == null) {
     customError({
@@ -156,20 +146,14 @@ export const userSession = async (
   }
   const UserId: string = id;
   const accessToken = createToken(UserId);
-  const response: IAuthLoginBodyResponse = await mapUserResponseObject(
-    UserId,
-    user,
-    accessToken
-  );
+  const response: IAuthLoginBodyResponse = await mapUserResponseObject(UserId, user, accessToken);
   return response;
 };
 
-export const getUserById = async (
-  UserId: string
-): Promise<IAuthLoginBodyResponse> => {
+export const getUserById = async (UserId: string): Promise<IAuthLoginBodyResponse> => {
   const user = await db.User.findOne({ where: { id: UserId }, raw: true });
   if (user == null) {
-     customError(authErrors.AuthJWTError);
+    customError(authErrors.AuthJWTError);
   }
   const response: IAuthLoginBodyResponse = await mapUserResponseObject(UserId, user);
   return response;
@@ -180,5 +164,5 @@ export default {
   userLogin,
   getUserById,
   createToken,
-  userSession
+  userSession,
 };

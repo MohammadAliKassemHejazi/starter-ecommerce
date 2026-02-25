@@ -1,11 +1,11 @@
-import db from "../models"; // Import Sequelize models
-import { IAuditLogAttributes } from "../interfaces/types/models/auditlog.model.types";
-import customError from "../utils/customError";
-import auditLogErrors from "../utils/errors/auditLog.errors";
+import db from '../models'; // Import Sequelize models
+import { IAuditLogAttributes } from '../interfaces/types/models/auditlog.model.types';
+import customError from '../utils/customError';
+import auditLogErrors from '../utils/errors/auditLog.errors';
 
 /**
  * Creates an audit log entry for a specific action.
- * 
+ *
  * @param action - The type of action performed (e.g., "CREATE", "UPDATE", "DELETE").
  * @param entity - The entity being acted upon (e.g., "Product", "User", "Order").
  * @param entityId - The ID of the entity being acted upon.
@@ -18,7 +18,7 @@ export const createAuditLog = async (
   entity: string,
   entityId: string,
   performedById: string,
-  snapshot?: object
+  snapshot?: object,
 ): Promise<IAuditLogAttributes> => {
   try {
     if (!action || !entity || !entityId || !performedById) {

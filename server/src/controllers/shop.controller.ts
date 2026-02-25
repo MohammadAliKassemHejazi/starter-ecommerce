@@ -1,3 +1,4 @@
+
 import { Response, NextFunction } from "express";
 import { shopService, userService } from "../services";
 import { CustomRequest } from "../interfaces/types/middlewares/request.middleware.types";
@@ -5,12 +6,14 @@ import { canCreateProduct, isSuperAdmin } from "../services/package.service";
 import path from "node:path";
 import fs from "fs";
 import { validationResult } from "express-validator";
+import customError from "../utils/customError";
 
 export const handleCreateProduct = async (
   request: CustomRequest,
   response: Response,
   next: NextFunction
 ) => {
+
   const files = request.files as Express.Multer.File[];
 
   // Validate request
@@ -22,38 +25,35 @@ export const handleCreateProduct = async (
   try {
     if (files.length > 0) {
       const UserId = request.UserId;
-      
+
       // Check if user can create products based on their package
       const canCreate = await canCreateProduct(UserId!);
       if (!canCreate) {
-        return response.status(403).json({ 
+        return response.status(403).json({
           success: false,
-          message: 'Product creation limit reached. Please upgrade your package.' 
+          message: 'Product creation limit reached. Please upgrade your package.',
         });
       }
 
       const sizes = JSON.parse(request.body.sizes);
-      const productData = { 
-        ...request.body, 
-        ownerId: UserId, 
+      const productData = {
+        ...request.body,
+        ownerId: UserId,
         sizes: sizes,
-     
       } as any;
 
       // Process product creation with data and files
       const results = await shopService.createProductWithImages(productData, files);
-      
+
       const responseData: any = {
         success: true,
         product: results,
-        message: 'Product created successfully'
+        message: 'Product created successfully',
       };
-
-
 
       response.status(200).json(responseData);
     } else {
-      throw new Error("Images are missing while creating a product");
+      throw new Error('Images are missing while creating a product');
     }
   } catch (error) {
     try {
@@ -61,27 +61,23 @@ export const handleCreateProduct = async (
       await Promise.all(
         files.map(async (file) => {
           const fileName = file.filename;
-          const outputPath = path.join("compressed", fileName);
+          const outputPath = path.join('compressed', fileName);
           fs.unlink(outputPath, (err) => {
             if (err) throw err;
           });
-        })
+        }),
       );
     } catch (deleteError) {
-      console.error("Failed to delete files:", deleteError);
+      console.error('Failed to delete files:', deleteError);
     }
     next(error); // Pass error to Express error handling middleware
   }
 };
 
-export const handleDelete = async (
-  request: CustomRequest,
-  response: Response,
-  next: NextFunction
-): Promise<void> => {
+export const handleDelete = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   const id = request.params.id;
   const userId = request.UserId;
-  
+
   try {
     // Check if user is super admin or owns the product
     const isAdmin = await isSuperAdmin(userId!);
@@ -91,7 +87,7 @@ export const handleDelete = async (
       if (!product || product.ownerId !== userId) {
         response.status(403).json({
           success: false,
-          message: 'You can only delete products that you created'
+          message: 'You can only delete products that you created',
         });
         return;
       }
@@ -101,18 +97,14 @@ export const handleDelete = async (
     response.json({
       success: true,
       message: 'Product deleted successfully',
-      result
+      result,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const handleDeleteImage = async (
-  request: CustomRequest,
-  response: Response,
-  next: NextFunction
-): Promise<void> => {
+export const handleDeleteImage = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
     response.status(400).json({ errors: errors.array() });
@@ -129,12 +121,7 @@ export const handleDeleteImage = async (
   }
 };
 
-
-export const handleUpdate = async (
-  request: CustomRequest,
-  response: Response,
-  next: NextFunction
-): Promise<void> => {
+export const handleUpdate = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   // Step 1: Validate the request
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
@@ -147,11 +134,9 @@ export const handleUpdate = async (
     const productId = request.body.productID; // Assuming the product ID is passed as a route parameter
 
     // Extract files and body data
-    const files = request.files as Express.Multer.File[] || [];
-    const sizes = JSON.parse(request.body.sizes || "[]"); // Parse sizes array
+    const files = (request.files as Express.Multer.File[]) || [];
+    const sizes = JSON.parse(request.body.sizes || '[]'); // Parse sizes array
     const productData = { ...request.body, ownerId: userId, sizes } as any;
-
-  
 
     // Step 2: Update the product
     const updatedProduct = await shopService.updateProductWithImages(productId, productData, files);
@@ -165,15 +150,15 @@ export const handleUpdate = async (
         await Promise.all(
           request.files.map(async (file: Express.Multer.File) => {
             const fileName = file.filename;
-            const outputPath = path.join("compressed", fileName);
+            const outputPath = path.join('compressed', fileName);
             fs.unlink(outputPath, (err) => {
               if (err) console.error(`Failed to delete file: ${outputPath}`, err);
             });
-          })
+          }),
         );
       }
     } catch (deleteError) {
-      console.error("Failed to clean up files:", deleteError);
+      console.error('Failed to clean up files:', deleteError);
     }
 
     // Pass the error to the error-handling middleware
@@ -181,19 +166,27 @@ export const handleUpdate = async (
   }
 };
 
-export const handleUpdateImages = async (
-  request: CustomRequest,
-  response: Response,
-  next: NextFunction
-): Promise<void> => {
-
-
+export const handleUpdateImages = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   try {
-
     const productId = request.body.productID; // Assuming the product ID is passed as a route parameter
+    const userId = request.UserId;
+
+    if (!productId) {
+      throw customError({ message: "Product ID is required", statusCode: 400 });
+    }
+
+    const product = await shopService.getProductById(productId);
+    if (!product) {
+      throw customError({ message: "Product not found", statusCode: 404 });
+    }
+
+    const isAdmin = await isSuperAdmin(userId!);
+    if (product.ownerId !== userId && !isAdmin) {
+      throw customError({ message: "You do not have permission to update this product", statusCode: 403 });
+    }
 
     // Extract files and body data
-    const files = request.files as Express.Multer.File[] || [];
+    const files = (request.files as Express.Multer.File[]) || [];
 
     // Step 2: Update the product
     const updatedProduct = await shopService.updateImages(productId, files);
@@ -207,15 +200,15 @@ export const handleUpdateImages = async (
         await Promise.all(
           request.files.map(async (file: Express.Multer.File) => {
             const fileName = file.filename;
-            const outputPath = path.join("compressed", fileName);
+            const outputPath = path.join('compressed', fileName);
             fs.unlink(outputPath, (err) => {
               if (err) console.error(`Failed to delete file: ${outputPath}`, err);
             });
-          })
+          }),
         );
       }
     } catch (deleteError) {
-      console.error("Failed to clean up files:", deleteError);
+      console.error('Failed to clean up files:', deleteError);
     }
 
     // Pass the error to the error-handling middleware
@@ -223,12 +216,7 @@ export const handleUpdateImages = async (
   }
 };
 
-
-export const handelgetall = async (
-  request: CustomRequest,
-  response: Response,
-  next: NextFunction
-): Promise<void> => {
+export const handelgetall = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   try {
     const results = await shopService.getTopProductIds();
     response.status(200).json({ ...results });
@@ -237,11 +225,7 @@ export const handelgetall = async (
   }
 };
 
-export const handleGetSingleItem = async (
-  request: CustomRequest,
-  response: Response,
-  next: NextFunction
-): Promise<void> => {
+export const handleGetSingleItem = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
     response.status(400).json({ errors: errors.array() });
@@ -252,7 +236,7 @@ export const handleGetSingleItem = async (
   try {
     const product = await shopService.getProductById(id);
     if (!product) {
-      response.status(404).json({ error: "Product not found" });
+      response.status(404).json({ error: 'Product not found' });
       return;
     }
     response.status(200).json(product);
@@ -261,20 +245,15 @@ export const handleGetSingleItem = async (
   }
 };
 
-export const getProductsByStore = async (
-  request: CustomRequest,
-  response: Response,
-  next: NextFunction
-): Promise<void> => {
+export const getProductsByStore = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
     response.status(400).json({ errors: errors.array() });
     return;
   }
 
-
   const { storeId } = request.params;
-  const { page = 1, pageSize = 10, searchQuery ,orderBy} = request.query;
+  const { page = 1, pageSize = 10, searchQuery, orderBy } = request.query;
 
   try {
     const result = await shopService.fetchProductsByStore({
@@ -284,21 +263,16 @@ export const getProductsByStore = async (
       searchQuery: String(searchQuery),
       orderBy: String(orderBy),
     });
- 
+
     response.json({
       ...result,
-    
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getProductsListing = async (
-  request: CustomRequest,
-  response: Response,
-  next: NextFunction
-): Promise<void> => {
+export const getProductsListing = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
     response.status(400).json({ errors: errors.array() });
@@ -308,13 +282,13 @@ export const getProductsListing = async (
   const { page = 1, pageSize = 10 } = request.query;
   try {
     const result = await shopService.fetchProductsListing({
-      storeId: "",
+      storeId: '',
       page: Number(page),
       pageSize: Number(pageSize),
     });
 
     response.json({
-      ...result
+      ...result,
     });
   } catch (error) {
     next(error);
@@ -330,5 +304,5 @@ export default {
   handleDelete,
   handleDeleteImage,
   getProductsListing,
-  handleUpdateImages
+  handleUpdateImages,
 };

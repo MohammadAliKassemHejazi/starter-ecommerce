@@ -1,17 +1,13 @@
-import { NextFunction, Request, Response } from "express";
-import * as dashboardService from "../services/dashboard.service";
-import * as utilService from "../services/utile.service";
-import customError from "../utils/customError";
-import dashboardErrors from "../utils/errors/dashboard.errors";
-import { CustomRequest } from "interfaces/types/middlewares/request.middleware.types";
+import { NextFunction, Request, Response } from 'express';
+import * as dashboardService from '../services/dashboard.service';
+import * as utilService from '../services/utile.service';
+import customError from '../utils/customError';
+import dashboardErrors from '../utils/errors/dashboard.errors';
+import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.types';
 
-export const handleGetSalesData = async (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const handleGetSalesData = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-           const userId = req.UserId;
+    const userId = req.UserId;
     if (!userId) {
       return next(customError(dashboardErrors.OrderStatusesFetchFailure));
     }
@@ -23,13 +19,9 @@ export const handleGetSalesData = async (
   }
 };
 
-export const handleGetInventoryAlerts = async (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const handleGetInventoryAlerts = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-        const userId = req.UserId;
+    const userId = req.UserId;
     if (!userId) {
       return next(customError(dashboardErrors.OrderStatusesFetchFailure));
     }
@@ -41,18 +33,14 @@ export const handleGetInventoryAlerts = async (
   }
 };
 
-export const handleGetOrderStatuses = async (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const handleGetOrderStatuses = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userId = req.UserId;
     if (!userId) {
       return next(customError(dashboardErrors.OrderStatusesFetchFailure));
     }
     const usersids = await utilService.getManagedUserIds(userId);
-    
+
     const orderStatuses = await dashboardService.getOrderStatuses(usersids);
     res.json(orderStatuses);
   } catch (error) {
