@@ -61,7 +61,7 @@ router.post("/", handleCreateSubCategory);
 
 /**
  * @swagger
- * /subcategories/{id}:
+ * /subcategories/update/{id}:
  *   put:
  *     summary: Update a subcategory by ID
  *     tags: [SubCategories]
@@ -94,11 +94,11 @@ router.post("/", handleCreateSubCategory);
  *       404:
  *         description: Subcategory not found
  */
-router.put("/:id", handleUpdateSubCategory);
+router.put("/update/:id", handleUpdateSubCategory);
 
 /**
  * @swagger
- * /subcategories/{id}:
+ * /subcategories/delete/{id}:
  *   delete:
  *     summary: Delete a subcategory by ID
  *     tags: [SubCategories]
@@ -119,6 +119,6 @@ router.put("/:id", handleUpdateSubCategory);
  *       404:
  *         description: Subcategory not found
  */
-router.delete("/:id", handleDeleteSubCategory);
+router.delete("/delete/:id", handleDeleteSubCategory);
 
 export default router;
