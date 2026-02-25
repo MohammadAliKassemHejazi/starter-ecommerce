@@ -15,7 +15,7 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
     const uploadsDir = path.join(global.__basedir, 'uploads');
     const compressedDir = path.join(global.__basedir, 'compressed');
 
-    // Ensure compressed directory exists
+    // Ensure compressed directory exists - recursive: true is safe even if it exists
     await fs.mkdir(compressedDir, { recursive: true });
 
     // Process each uploaded file
@@ -32,11 +32,11 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
 
             // Resize and compress image using sharp
             const compressedImageBuffer = await sharp(fileBuffer)
-              .resize({ width: 800 })
+              .resize({ width: 800 }) // Standardize width for frontend consistency
               .jpeg({ quality: 80 })
               .toBuffer();
 
-            // Write the compressed image and delete the original
+            // Write the compressed image and delete the original to save space
             await fs.writeFile(outputPath, compressedImageBuffer);
             await fs.unlink(filePath);
 
@@ -66,8 +66,8 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
       })
     );
 
-    // Attach processed files to the request object for the next controller/service
-    // This maintains the "shape" consistency you mentioned earlier
+    // Attach processed files to the request object. 
+    // This ensures the next controller receives the data in the exact shape expected.
     req.body.processedFiles = processedFiles;
 
     next();
