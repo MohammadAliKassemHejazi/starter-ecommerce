@@ -6,6 +6,7 @@ import path from 'node:path';
 import { promises as fsPromises } from 'fs';
 import { Op, OrderItem } from 'sequelize'; // 👈 Added for filtering & sorting
 import { raw } from 'body-parser';
+import { logger } from '../config/logger';
 
 // 🔒 Allowed sort fields for security
 const ALLOWED_SORT_FIELDS = ['name', 'createdAt', 'updatedAt'];
@@ -114,7 +115,7 @@ export const deleteStore = async (id: string, userId: string): Promise<any | nul
         try {
           await fsPromises.unlink(imagePath); // Use fs.promises.unlink for async file deletion
         } catch (err) {
-          console.error(`Failed to delete image: ${imagePath}`, err);
+          logger.error(`Failed to delete image`, { imagePath, error: err });
         }
       }),
     );
@@ -124,7 +125,7 @@ export const deleteStore = async (id: string, userId: string): Promise<any | nul
 
     return { message: 'store and associated images deleted successfully' };
   } catch (error) {
-    console.error('Error deleting product:', error);
+    logger.error('Error deleting product', { error });
     throw error;
   }
 };
@@ -183,13 +184,13 @@ export const updateImages = async (storeId: string, files: Express.Multer.File[]
       // Check if the old image file exists and delete it
       try {
         await fsPromises.unlink(oldImagePath);
-        console.log(`Deleted old image: ${oldImagePath}`);
+        logger.info(`Deleted old image`, { oldImagePath });
       } catch (err: any) {
         if (err.code !== 'ENOENT') {
-          console.error(`Failed to delete old image: ${oldImagePath}`, err);
+          logger.error(`Failed to delete old image`, { oldImagePath, error: err });
           throw new Error('Failed to delete old store image');
         }
-        console.warn(`Old image not found, skipping deletion: ${oldImagePath}`);
+        logger.warn(`Old image not found, skipping deletion`, { oldImagePath });
       }
     }
 
@@ -203,7 +204,9 @@ export const updateImages = async (storeId: string, files: Express.Multer.File[]
       updatedImageUrl: newImageUrl,
     };
   } catch (error) {
-    console.error('Error updating store image:', error);
+
+    logger.error('Error updating store image', { error });
+
     throw error;
   }
 };
@@ -237,13 +240,13 @@ export const deleteStoreImage = async (storeId: string, userId: string): Promise
     // Step 5: Delete the file from the filesystem (if it exists)
     try {
       await fsPromises.unlink(filePath);
-      console.log(`Deleted file: ${filePath}`);
+      logger.info(`Deleted file`, { filePath });
     } catch (err: any) {
       if (err.code !== 'ENOENT') {
-        console.error(`Failed to delete file: ${filePath}`, err);
+        logger.error(`Failed to delete file`, { filePath, error: err });
         throw new Error('Failed to delete store image file');
       }
-      console.warn(`File not found, skipping deletion: ${filePath}`);
+      logger.warn(`File not found, skipping deletion`, { filePath });
     }
 
     // Step 6: Update the store's imgUrl field to null
@@ -256,7 +259,7 @@ export const deleteStoreImage = async (storeId: string, userId: string): Promise
     return { data: 'Store image deleted successfully' };
   } catch (error) {
     // Step 8: Handle errors gracefully
-    console.error('Error deleting store image:', error);
+    logger.error('Error deleting store image', { error });
 
     // Rethrow the error to propagate it up the call stack
     throw error;
