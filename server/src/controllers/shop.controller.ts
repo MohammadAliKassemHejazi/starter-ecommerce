@@ -1,12 +1,19 @@
-import { Response, NextFunction } from 'express';
-import { shopService, userService } from '../services';
-import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
-import { canCreateProduct, isSuperAdmin } from '../services/package.service';
-import path from 'node:path';
-import fs from 'fs';
-import { validationResult } from 'express-validator';
 
-export const handleCreateProduct = async (request: CustomRequest, response: Response, next: NextFunction) => {
+import { Response, NextFunction } from "express";
+import { shopService, userService } from "../services";
+import { CustomRequest } from "../interfaces/types/middlewares/request.middleware.types";
+import { canCreateProduct, isSuperAdmin } from "../services/package.service";
+import path from "node:path";
+import fs from "fs";
+import { validationResult } from "express-validator";
+import customError from "../utils/customError";
+
+export const handleCreateProduct = async (
+  request: CustomRequest,
+  response: Response,
+  next: NextFunction
+) => {
+
   const files = request.files as Express.Multer.File[];
 
   // Validate request
@@ -162,6 +169,21 @@ export const handleUpdate = async (request: CustomRequest, response: Response, n
 export const handleUpdateImages = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   try {
     const productId = request.body.productID; // Assuming the product ID is passed as a route parameter
+    const userId = request.UserId;
+
+    if (!productId) {
+      throw customError({ message: "Product ID is required", statusCode: 400 });
+    }
+
+    const product = await shopService.getProductById(productId);
+    if (!product) {
+      throw customError({ message: "Product not found", statusCode: 404 });
+    }
+
+    const isAdmin = await isSuperAdmin(userId!);
+    if (product.ownerId !== userId && !isAdmin) {
+      throw customError({ message: "You do not have permission to update this product", statusCode: 403 });
+    }
 
     // Extract files and body data
     const files = (request.files as Express.Multer.File[]) || [];

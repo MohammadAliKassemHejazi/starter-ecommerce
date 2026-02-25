@@ -6,7 +6,18 @@ import { body, param, query } from 'express-validator';
 
 const router = express.Router();
 
-const Routes = ['/create', '/update', '/delete/image/:id', '/delete/:id'];
+
+const Routes = [
+  "/create",
+  "/update",
+  "/update/images",
+
+  "/delete/image/:id",
+  "/delete/:id",
+
+];
+
+
 
 // Apply protectedRoutes middleware
 protectedRoutes(router, Routes);
