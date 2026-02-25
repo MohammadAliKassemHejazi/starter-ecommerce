@@ -6,7 +6,8 @@ import { useAppDispatch } from "@/store/store";
 import { 
   fetchStoreById, 
   updateStore, 
-  updateStoreImages
+  updateStoreImages,
+  deleteStoreImage
 } from "@/store/slices/storeSlice";
 import ImageUploadComponent from "@/components/UI/General/ImageUploadComponent/ImageUploadComponent";
 import ImageViewer from "../../src/components/UI/General/imageViewer/imageViewer";
@@ -159,27 +160,27 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
 }, [id, dispatch]);
 
   // Handle image deletion (similar to EditProduct)
-const handleDeleteImage = async () => {
-  // if (!store?.croppedImages) {return;}
+const handleDeleteImage = async (index: number) => {
+  if (!store?.croppedImages) {return;}
 
-  // const imageToDelete = store.croppedImages[index];
-  // const isOnline = !!imageToDelete.id; // Check if image is already uploaded
+  const imageToDelete = store.croppedImages[index];
+  const isOnline = !!imageToDelete.id; // Check if image is already uploaded
 
-  // try {
-  //   if (isOnline) {
-  //     await dispatch(deleteStoreImage(imageToDelete.id!)).unwrap();
-  //   }
+  try {
+    if (isOnline) {
+      await dispatch(deleteStoreImage(imageToDelete.id!)).unwrap();
+    }
 
-  //   // Remove the image from croppedImages (maintain type safety)
-  //   setStore((prevStore) => ({
-  //     ...prevStore!,
-  //     croppedImages: prevStore!.croppedImages.filter((_, i) => i !== index),
-  //   }));
+    // Remove the image from croppedImages (maintain type safety)
+    setStore((prevStore) => ({
+      ...prevStore!,
+      croppedImages: prevStore!.croppedImages.filter((_, i) => i !== index),
+    }));
 
-  //   Toast.fire({ icon: "success", title: "Image deleted successfully" });
-  // } catch (error: any) {
-    Toast.fire({ icon: "error", title: `update image by uploading new one` });
-  // }
+    Toast.fire({ icon: "success", title: "Image deleted successfully" });
+  } catch (error: any) {
+    Toast.fire({ icon: "error", title: `Failed to delete image: ${error.message}` });
+  }
 };
 
   // Handle form submission

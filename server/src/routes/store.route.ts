@@ -12,7 +12,8 @@ const Routes = [
       "/create",
       "/update",
   "/getall/user",
-     "/getall/user/filter"
+     "/getall/user/filter",
+     "/delete/image/:id"
   ];
 
 // function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
@@ -27,6 +28,7 @@ router.get("/getall/user/filter", storeController.handleGetAllStoresForUserwithF
 
 router.get("/getall", storeController.handelGetAllStores);
 router.patch("/update/image", storeController.handleUpdateImages);
+router.delete("/delete/image/:id", storeController.handleDeleteStoreImage);
 
 // Delete Product (with validation)
 router.delete(

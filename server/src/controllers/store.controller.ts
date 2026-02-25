@@ -249,6 +249,29 @@ export const handleUpdateImages = async (
   }
 };
 
+export const handleDeleteStoreImage = async (
+  request: CustomRequest,
+  response: Response,
+  next: NextFunction
+): Promise<void> => {
+  const storeId = request.params.id; // Get store ID from route parameter
+  const userId = request.UserId; // Get user ID from authenticated request
+
+  try {
+    // Call the service to delete the store image
+    const result = await storeService.deleteStoreImage(storeId, userId!);
+
+    // Respond with success
+    response.status(200).json({
+      success: true,
+      message: result.data || 'Store image deleted successfully',
+    });
+  } catch (error) {
+    // Pass error to the global error handler
+    next(error);
+  }
+};
+
 export default {
   handleDelete,
   handleCreateStore,
@@ -257,7 +280,8 @@ export default {
   handelGetSingleItem,
   handleUpdateImages,
   handelGetAllStoresForUser,
-  handleGetAllStoresForUserwithFilter
+  handleGetAllStoresForUserwithFilter,
+  handleDeleteStoreImage
 };
 
 

@@ -79,5 +79,9 @@ export const requestDeleteStore = async (id: string): Promise<DeleteStoreRespons
 	return response
 }
 
+export const requestDeleteStoreImage = async (id: string): Promise<DeleteStoreResponse> => {
+	const { data: response } = await httpClient.delete<DeleteStoreResponse>("/store/delete/image/" + id)
+	return response
+}
 
 
