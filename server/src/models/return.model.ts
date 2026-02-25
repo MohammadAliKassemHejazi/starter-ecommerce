@@ -4,8 +4,8 @@ import { Model, DataTypes } from 'sequelize';
 module.exports = (sequelize: any) => {
   class ReturnRequest extends Model {
     static associate(models: any) {
-      ReturnRequest.belongsTo(models.Order);
-      ReturnRequest.belongsTo(models.User);
+      ReturnRequest.belongsTo(models.Order, { foreignKey: 'orderId' });
+      ReturnRequest.belongsTo(models.User, { foreignKey: 'userId' });
     }
   }
 
