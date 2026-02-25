@@ -16,6 +16,7 @@
     "create-admin": "ts-node src/scripts/createAdminUser.ts",
     "assign-admin-role": "ts-node src/scripts/assignAdminRole.ts",
     "seed-data": "ts-node src/scripts/runScripts.ts",
+    "test": "bun test",
     "prettier": "prettier src/**/*.ts",
     "prettier:fix": "prettier --write src/**/*.ts",
     "eslint:fix": "eslint --fix"
