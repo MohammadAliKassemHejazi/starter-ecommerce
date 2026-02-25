@@ -1,7 +1,12 @@
 import express from 'express';
-import { 
-  getShippingMethods, createShippingMethod, updateShippingMethod, deleteShippingMethod,
-  getOrderShippings, createOrderShipping, updateOrderShippingStatus
+import {
+  getShippingMethods,
+  createShippingMethod,
+  updateShippingMethod,
+  deleteShippingMethod,
+  getOrderShippings,
+  createOrderShipping,
+  updateOrderShippingStatus,
 } from '../controllers/shipping.controller';
 import { verifyToken } from '../middlewares/auth.middleware';
 import { checkPermission } from '../middlewares/permission.middleware';

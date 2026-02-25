@@ -1,25 +1,23 @@
-
 import { FetchProductsByStoreParams, IShopCreateProduct } from 'interfaces/types/controllers/shop.controller.types';
-import { IProductAttributes, } from 'interfaces/types/models/product.model.types';
+import { IProductAttributes } from 'interfaces/types/models/product.model.types';
 // import { ISizeAttributes, } from 'interfaces/types/models/size.model.types';
 // import { ICommentAttributes } from 'interfaces/types/models/comment.model.types';
 // import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 import db from '../models/index';
 import path from 'path';
-import { Op, or } from "sequelize"; // Import Op
+import { Op, or } from 'sequelize'; // Import Op
 import { promises as fsPromises } from 'fs';
 
-import { validate as uuidValidate } from "uuid";
+import { validate as uuidValidate } from 'uuid';
 import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 
-
- export const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductAttributes> => {
+export const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductAttributes> => {
   try {
     const product = await db.Product.create(productData);
     const productJSON = product.toJSON() as IProductAttributes;
 
     // const imageUrls = files.map(file => `/uploads/${file.filename}`);
-    
+
     // You can also save the image data to your database if needed
     // Replace this with your actual image data saving logic
     if (files.length > 0) {
@@ -27,6 +25,7 @@ import { IProductImageAttributes } from 'interfaces/types/models/productimage.mo
         productId: productJSON.id,
         imageUrl: `${file.filename}`,
       }));
+      // Optimization: Use bulkCreate instead of loop for better performance
       await db.ProductImage.bulkCreate(imageRecords);
     }
 
@@ -40,33 +39,30 @@ import { IProductImageAttributes } from 'interfaces/types/models/productimage.mo
           quantity: size.quantity,
         }));
 
+      // Optimized: Use bulkCreate instead of loop for performance
       if (sizeRecords.length > 0) {
         await db.SizeItem.bulkCreate(sizeRecords);
       }
     }
-    
 
     // Return response with product and image URLs
     return productJSON;
-    
   } catch (error) {
     // Handle errors appropriately
     throw error;
-    
   }
 };
-
 
 export const updateProductWithImages = async (
   productId: string,
   productData: IShopCreateProduct,
-  files: Express.Multer.File[]
+  files: Express.Multer.File[],
 ): Promise<IProductAttributes> => {
   try {
     // Step 1: Find the product by ID
     const product = await db.Product.findByPk(productId);
     if (!product) {
-      throw new Error("Product not found");
+      throw new Error('Product not found');
     }
 
     // Step 2: Update the product data
@@ -78,6 +74,7 @@ export const updateProductWithImages = async (
         productId,
         imageUrl: `${file.filename}`,
       }));
+      // Optimization: Use bulkCreate instead of loop for better performance
       await db.ProductImage.bulkCreate(imageRecords);
     }
 
@@ -95,6 +92,7 @@ export const updateProductWithImages = async (
           quantity: size.quantity,
         }));
 
+      // Optimized: Use bulkCreate instead of loop for performance
       if (sizeRecords.length > 0) {
         await db.SizeItem.bulkCreate(sizeRecords);
       }
@@ -107,18 +105,13 @@ export const updateProductWithImages = async (
   }
 };
 
-export const updateImages = async (
-  productId: string,
-  files: Express.Multer.File[]
-): Promise<any> => {
+export const updateImages = async (productId: string, files: Express.Multer.File[]): Promise<any> => {
   try {
     // Step 1: Find the product by ID
     const product = await db.Product.findByPk(productId);
     if (!product) {
-      throw new Error("Product not found");
+      throw new Error('Product not found');
     }
-  
-
 
     let images;
     // Step 3: Handle new images
@@ -127,9 +120,10 @@ export const updateImages = async (
         productId,
         imageUrl: `${file.filename}`,
       }));
+      // Optimization: Use bulkCreate instead of loop for better performance
       images = await db.ProductImage.bulkCreate(imageRecords);
     } else {
-      throw new Error("files not found");
+      throw new Error('files not found');
     }
 
     // Step 5: Return the updated product
@@ -139,11 +133,9 @@ export const updateImages = async (
   }
 };
 
-export const getProductById = async (
-  productId: string
-): Promise< IProductAttributes | null> => {
+export const getProductById = async (productId: string): Promise<IProductAttributes | null> => {
   try {
-const product = await db.Product.findOne({
+    const product = await db.Product.findOne({
       where: { id: productId },
       include: [
         {
@@ -174,9 +166,7 @@ const product = await db.Product.findOne({
 
     // Fetch the average rating separately
     const ratingResult = await db.Comment.findAll({
-      attributes: [
-        [db.sequelize.fn('AVG', db.sequelize.col('rating')), 'averageRating']
-      ],
+      attributes: [[db.sequelize.fn('AVG', db.sequelize.col('rating')), 'averageRating']],
       where: { productId },
       raw: true,
     });
@@ -188,22 +178,15 @@ const product = await db.Product.findOne({
     //   ...product, // Convert Sequelize instance to plain object
 
     // };
-    const productJson = product.toJSON() as IProductAttributes
-    return  productJson ;
+    const productJson = product.toJSON() as IProductAttributes;
+    return productJson;
   } catch (error) {
     console.error('Error fetching product:', error);
     throw error;
   }
 };
 
-
-
-
-export const getTopProductIds = async (
-  limit: number = 200
-): Promise<any> => {
-
-
+export const getTopProductIds = async (limit: number = 200): Promise<any> => {
   const products = await db.Product.findAll({
     attributes: ['id'],
     limit: limit,
@@ -211,14 +194,8 @@ export const getTopProductIds = async (
     raw: true,
   });
 
-
   return products;
 };
-
-
-
-
-
 
 export const deleteProduct = async (id: string, userId: string): Promise<any | null> => {
   try {
@@ -245,7 +222,7 @@ export const deleteProduct = async (id: string, userId: string): Promise<any | n
         } catch (err) {
           console.error(`Failed to delete image: ${imagePath}`, err);
         }
-      })
+      }),
     );
 
     // Delete the product and its related records (cascading will handle ProductImages)
@@ -258,15 +235,13 @@ export const deleteProduct = async (id: string, userId: string): Promise<any | n
   }
 };
 
-
-
 export const deleteProductImage = async (id: string, userId: string): Promise<any | null> => {
   try {
     // Step 1: Fetch the product image and associated product
     const productImage = await db.ProductImage.findOne({
       where: { id }, // Find the image by its ID
       include: [{ model: db.Product }],
-      raw:true// Include the associated Product to check ownership
+      raw: true, // Include the associated Product to check ownership
     });
 
     // Step 2: Check if the product image exists
@@ -279,14 +254,14 @@ export const deleteProductImage = async (id: string, userId: string): Promise<an
       throw new Error('You do not have permission to delete this product image');
     }
 
-// Step 3: Resolve the file path
+    // Step 3: Resolve the file path
     const filePath = path.join(__dirname, '..', '..', 'compressed', productImage.imageUrl);
 
     // Step 4: Delete the file from the filesystem (if it exists)
     try {
       await fsPromises.unlink(filePath);
       console.log(`Deleted file: ${filePath}`);
-    } catch (err :any) {
+    } catch (err: any) {
       if (err.code !== 'ENOENT') {
         console.error(`Failed to delete file: ${filePath}`, err);
         throw new Error('Failed to delete product image file');
@@ -308,21 +283,12 @@ export const deleteProductImage = async (id: string, userId: string): Promise<an
   }
 };
 
-
-
 interface SearchCondition {
   name?: { [Op.like]: string };
   id?: { [Op.eq]: string };
 }
 
-
-export const fetchProductsByStore = async ({
-  storeId,
-  page,
-  pageSize,
-  searchQuery,
-  orderBy,
-}: FetchProductsByStoreParams) => {
+export const fetchProductsByStore = async ({ storeId, page, pageSize, searchQuery, orderBy }: FetchProductsByStoreParams) => {
   // Build the "where" clause dynamically
   const whereClause: any = { storeId };
 
@@ -343,24 +309,24 @@ export const fetchProductsByStore = async ({
   let orderClause: [string, string][] = [];
 
   switch (orderBy) {
-    case "rating":
-      orderClause = [["ratings", "DESC"]]; // Sort by highest rating first
+    case 'rating':
+      orderClause = [['ratings', 'DESC']]; // Sort by highest rating first
       break;
 
-    case "price-low-high":
-      orderClause = [["price", "ASC"]]; // Sort by price in ascending order
+    case 'price-low-high':
+      orderClause = [['price', 'ASC']]; // Sort by price in ascending order
       break;
 
-    case "price-high-low":
-      orderClause = [["price", "DESC"]]; // Sort by price in descending order
+    case 'price-high-low':
+      orderClause = [['price', 'DESC']]; // Sort by price in descending order
       break;
 
-    case "a-z":
-      orderClause = [["name", "ASC"]]; // Sort alphabetically A-Z
+    case 'a-z':
+      orderClause = [['name', 'ASC']]; // Sort alphabetically A-Z
       break;
 
-    case "z-a":
-      orderClause = [["name", "DESC"]]; // Sort alphabetically Z-A
+    case 'z-a':
+      orderClause = [['name', 'DESC']]; // Sort alphabetically Z-A
       break;
     default:
       orderClause = []; // No specific sorting if no filter is applied
@@ -381,15 +347,13 @@ export const fetchProductsByStore = async ({
   const productIds = products.map((product: IProductAttributes) => product.id);
   const images = await db.ProductImage.findAll({
     where: { productId: productIds },
-    order: [["createdAt", "DESC"]],
+    order: [['createdAt', 'DESC']],
     raw: true,
   });
 
   // Combine products and images
   const productsWithImages = products.map((product: IProductAttributes) => {
-    const productImages = images.filter(
-      (image: IProductImageAttributes) => image.productId === product.id
-    );
+    const productImages = images.filter((image: IProductImageAttributes) => image.productId === product.id);
     return {
       ...product,
       photos: productImages,
@@ -399,37 +363,33 @@ export const fetchProductsByStore = async ({
   return { products: productsWithImages, total, page, pageSize };
 };
 
-
-
 export const fetchProductsListing = async ({ page, pageSize }: FetchProductsByStoreParams) => {
-const { rows: products, count: total } = await db.Product.findAndCountAll({
-  offset: (page - 1) * pageSize,
-  limit: pageSize,
-  raw: true,
-  nest: true,
-});
+  const { rows: products, count: total } = await db.Product.findAndCountAll({
+    offset: (page - 1) * pageSize,
+    limit: pageSize,
+    raw: true,
+    nest: true,
+  });
 
-// Fetch associated images
-const productIds = products.map((product:IProductAttributes) => product.id);
-const images = await db.ProductImage.findAll({
-  where: { productId: productIds },
-  order: [["createdAt", "DESC"]],
-  raw: true,
-});
+  // Fetch associated images
+  const productIds = products.map((product: IProductAttributes) => product.id);
+  const images = await db.ProductImage.findAll({
+    where: { productId: productIds },
+    order: [['createdAt', 'DESC']],
+    raw: true,
+  });
 
-// Combine products and images
-const productsWithImages = products.map((product:IProductAttributes) => {
-  const productImages = images.filter((image:IProductImageAttributes) => image.productId === product.id);
-  return {
-    ...product,
-    photos: productImages,
-  };
-});
+  // Combine products and images
+  const productsWithImages = products.map((product: IProductAttributes) => {
+    const productImages = images.filter((image: IProductImageAttributes) => image.productId === product.id);
+    return {
+      ...product,
+      photos: productImages,
+    };
+  });
 
-return { products: productsWithImages, total, page, pageSize };
+  return { products: productsWithImages, total, page, pageSize };
 };
-
-
 
 export default {
   updateProductWithImages,
@@ -440,5 +400,5 @@ export default {
   fetchProductsByStore,
   deleteProductImage,
   fetchProductsListing,
-  updateImages
+  updateImages,
 };

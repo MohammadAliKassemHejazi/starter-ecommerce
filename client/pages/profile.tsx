@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useSelector } from 'react-redux';
 import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from '@/components/protectedRoute';
+import { useAppDispatch } from '@/store/store';
+import { updateProfile } from '@/store/slices/userSlice';
+import { useToast } from '@/contexts/ToastContext';
 
 const ProfilePage: NextPage = () => {
   const user = useSelector((state: any) => state.user);
+  const dispatch = useAppDispatch();
+  const { showSuccess, showError } = useToast();
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
     bio: user?.bio || '',
   });
+
+  useEffect(() => {
+    if (user && !isEditing) {
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        bio: user.bio || '',
+      });
+    }
+  }, [user, isEditing]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -22,10 +39,26 @@ const ProfilePage: NextPage = () => {
     }));
   };
 
-  const handleSave = () => {
-    // TODO: Implement save functionality
-    console.log('Saving profile:', formData);
-    setIsEditing(false);
+  const handleSave = async () => {
+    if (!user?.id) {
+      showError('Error', 'User ID not found');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await dispatch(updateProfile({
+        id: user.id,
+        ...formData
+      })).unwrap();
+
+      showSuccess('Success', 'Profile updated successfully');
+      setIsEditing(false);
+    } catch (error: any) {
+      showError('Error', error.message || 'Failed to update profile');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancel = () => {
@@ -191,9 +224,19 @@ const ProfilePage: NextPage = () => {
                     <button 
                       className="modern-btn modern-btn-primary"
                       onClick={handleSave}
+                      disabled={isSaving}
                     >
-                      <i className="bi bi-check"></i>
-                      Save Changes
+                      {isSaving ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <i className="bi bi-check"></i>
+                          Save Changes
+                        </>
+                      )}
                     </button>
                   </div>
                 )}

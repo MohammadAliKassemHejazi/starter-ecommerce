@@ -7,6 +7,7 @@ export interface UserResponse extends ApiResponse<{
   email: string;
   address: string;
   phone: string;
+  bio?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -46,6 +47,7 @@ export interface UsersListResponse extends PaginatedApiResponse<{
   email: string;
   address: string;
   phone: string;
+  bio?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -74,6 +76,7 @@ export interface CreateUserResponse extends ApiResponse<{
   email: string;
   address: string;
   phone: string;
+  bio?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -86,6 +89,7 @@ export interface UpdateUserResponse extends ApiResponse<{
   email: string;
   address: string;
   phone: string;
+  bio?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

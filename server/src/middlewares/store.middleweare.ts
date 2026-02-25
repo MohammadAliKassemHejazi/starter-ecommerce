@@ -5,7 +5,7 @@ import sharp from 'sharp';
 
 export const storeMiddleWear = async (req: Request, res: Response, next: NextFunction) => {
   console.log('🚀 Starting storeMiddleWear processing...');
-  
+
   try {
     const files = req.files as Express.Multer.File[];
 
@@ -18,11 +18,11 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
           filename: file.filename,
           mimetype: file.mimetype,
           size: file.size,
-          path: file.path
+          path: file.path,
         });
       });
     }
-    
+
     if (!files || files === undefined || files.length === 0) {
       console.log('⚠️ No files to process, skipping...');
       next();
@@ -53,7 +53,7 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
     // Check if compressed directory exists
     console.log('🗂️ Compressed directory path:', compressedDir);
     console.log('🗂️ Compressed directory exists:', fs.existsSync(compressedDir));
-    
+
     // Create compressed directory if it doesn't exist
     if (!fs.existsSync(compressedDir)) {
       console.log('📁 Creating compressed directory...');
@@ -71,12 +71,12 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
     const processedFiles = await Promise.all(
       files.map(async (file, index) => {
         console.log(`\n🔄 Processing file ${index + 1}/${files.length}: ${file.originalname}`);
-        
+
         try {
           const filePath = file.path;
           const fileName = file.filename;
           const outputPath = path.join(compressedDir, fileName);
-          
+
           console.log(`📍 File paths for ${fileName}:`);
           console.log('  Input path:', filePath);
           console.log('  Output path:', outputPath);
@@ -92,12 +92,12 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
           console.log(`📊 File stats for ${fileName}:`, {
             size: fileStats.size,
             isFile: fileStats.isFile(),
-            birthtime: fileStats.birthtime
+            birthtime: fileStats.birthtime,
           });
 
           if (file.mimetype.startsWith('image/')) {
             console.log(`🖼️ Processing image: ${fileName}`);
-            
+
             try {
               // Read file buffer from file path
               console.log(`📖 Reading file buffer for ${fileName}...`);
@@ -106,11 +106,8 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
 
               // Resize and compress image using sharp
               console.log(`🔄 Compressing image: ${fileName}...`);
-              const compressedImageBuffer = await sharp(fileBuffer)
-                .resize({ width: 800 })
-                .jpeg({ quality: 80 })
-                .toBuffer();
-              
+              const compressedImageBuffer = await sharp(fileBuffer).resize({ width: 800 }).jpeg({ quality: 80 }).toBuffer();
+
               console.log(`✅ Image compressed successfully, new size: ${compressedImageBuffer.length} bytes`);
 
               // Write the compressed image buffer to the output path
@@ -126,45 +123,41 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
               return {
                 originalname: fileName,
                 mimetype: 'image/jpeg',
-                buffer: compressedImageBuffer
+                buffer: compressedImageBuffer,
               };
-              
             } catch (imageError) {
               console.error(`❌ Error processing image ${fileName}:`, imageError);
               throw new Error(`Failed to process image ${fileName}: ${imageError}`);
             }
-            
           } else {
             console.log(`📄 Processing non-image file: ${fileName}`);
-            
+
             try {
               // For non-image files, return the original file buffer without compression
               console.log(`📖 Reading non-image file buffer for ${fileName}...`);
-              const fileBuffer = fs.readFileSync(filePath);
+              const fileBuffer = await fs.promises.readFile(filePath);
               console.log(`✅ Non-image file buffer read successfully, size: ${fileBuffer.length} bytes`);
 
               // Delete the original uploaded file
               console.log(`🗑️ Deleting original non-image file: ${filePath}`);
-              fs.unlinkSync(filePath);
+              await fs.promises.unlink(filePath);
               console.log(`✅ Original non-image file deleted successfully`);
 
               return {
                 originalname: fileName,
                 mimetype: file.mimetype,
-                buffer: fileBuffer
+                buffer: fileBuffer,
               };
-              
             } catch (nonImageError) {
               console.error(`❌ Error processing non-image file ${fileName}:`, nonImageError);
               throw new Error(`Failed to process non-image file ${fileName}: ${nonImageError}`);
             }
           }
-          
         } catch (fileError) {
           console.error(`❌ Error processing individual file ${file.originalname}:`, fileError);
           throw fileError;
         }
-      })
+      }),
     );
 
     // Debug: Log contents of uploads directory after processing
@@ -203,16 +196,15 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
 
     console.log('✅ All files processed successfully');
     console.log(`📊 Processed ${processedFiles.length} files`);
-    
+
     // Store processed files in request object for next middleware
     (req as any).processedFiles = processedFiles;
-    
+
     next();
-    
   } catch (error) {
     console.error('❌ Fatal error in storeMiddleWear:', error);
     console.error('Error stack:', error);
-    
+
     // Create a detailed error object
     let errorMessage = 'Unknown error';
     let errorStack = undefined;
@@ -229,16 +221,18 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
       stack: errorStack,
       timestamp: new Date().toISOString(),
       middleware: 'storeMiddleWear',
-      files: req.files ? (req.files as Express.Multer.File[]).map(f => ({
-        originalname: f.originalname,
-        filename: f.filename,
-        path: f.path,
-        size: f.size
-      })) : null
+      files: req.files
+        ? (req.files as Express.Multer.File[]).map((f) => ({
+            originalname: f.originalname,
+            filename: f.filename,
+            path: f.path,
+            size: f.size,
+          }))
+        : null,
     };
-    
+
     console.error('🔍 Detailed error info:', JSON.stringify(detailedError, null, 2));
-    
+
     next(error);
   }
 };

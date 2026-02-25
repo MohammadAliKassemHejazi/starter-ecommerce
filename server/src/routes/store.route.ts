@@ -1,36 +1,48 @@
 import express from 'express';
-
-import { storeController } from "../controllers/index";
-
-import { protectedRoutes } from "../middlewares";
-// import { checkStoreCreationLimit } from "../middlewares/package.middleware";
+import { storeController } from '../controllers/index';
+import { protectedRoutes } from '../middlewares';
 
 const router = express.Router();
 
+// Defined routes that require authentication/authorization
 const Routes = [
-     "/delete/:id",
-      "/create",
-      "/update",
-  "/getall/user",
-     "/getall/user/filter"
-  ];
+  '/delete/:id',
+  '/create',
+  '/update',
+  '/getall/user',
+  '/getall/user/filter',
+  '/update/image'
+];
 
-// function add hook onRequest -> protectedRoutes(appInstance, Routes you want to protect)
+// Apply protection middleware to the specific routes listed above
+protectedRoutes(router, Routes);
 
-protectedRoutes(router, Routes); 
+// --- Store Management Routes ---
 
-router.post("/create", /* checkStoreCreationLimit, */ storeController.handleCreateStore);
-router.post("/update",storeController.handleUpdate);
-router.get("/get", storeController.handelGetSingleItem);
-router.get("/getall/user", storeController.handelGetAllStoresForUser);
-router.get("/getall/user/filter", storeController.handleGetAllStoresForUserwithFilter);
+// Create a new store (includes image processing via middleware upstream)
+router.post('/create', storeController.handleCreateStore);
 
-router.get("/getall", storeController.handelGetAllStores);
-router.patch("/update/image", storeController.handleUpdateImages);
+// Update store metadata
+router.post('/update', storeController.handleUpdate);
 
-// Delete Product (with validation)
-router.delete(
-  "/delete/:id",
-  storeController.handleDelete
-);
+// Update store images specifically
+router.patch('/update/image', storeController.handleUpdateImages);
+
+// Delete a store by ID
+router.delete('/delete/:id', storeController.handleDelete);
+
+// --- Data Fetching Routes ---
+
+// Get a single store by ID (Public or Protected depending on implementation)
+router.get('/get', storeController.handelGetSingleItem);
+
+// Get all stores globally
+router.get('/getall', storeController.handelGetAllStores);
+
+// Get all stores belonging to the logged-in user
+router.get('/getall/user', storeController.handelGetAllStoresForUser);
+
+// Get all stores for the logged-in user with filtering and pagination
+router.get('/getall/user/filter', storeController.handleGetAllStoresForUserwithFilter);
+
 export default router;

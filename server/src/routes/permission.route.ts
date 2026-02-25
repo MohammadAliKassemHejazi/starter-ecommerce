@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   handleFetchPermissions,
   handleCreatePermission,
@@ -6,20 +6,14 @@ import {
   handleDeletePermission,
   handleAddPermissionToRole,
   handleRemovePermissionFromRole,
-} from "../controllers/permission.controller";
-import { protectedRoutes } from "../middlewares";
-import { body, param } from "express-validator";
+} from '../controllers/permission.controller';
+import { protectedRoutes } from '../middlewares';
+import { body, param } from 'express-validator';
 
 const router = Router();
 
 // Define routes to protect
-const protectedRoutesList = [
-  "/create",
-  "/update/:id",
-  "/delete/:id",
-  "/:roleId/permissions",
-  "/:roleId/permissions/:permissionId",
-];
+const protectedRoutesList = ['/create', '/update/:id', '/delete/:id', '/:roleId/permissions', '/:roleId/permissions/:permissionId'];
 protectedRoutes(router, protectedRoutesList);
 
 /**
@@ -40,7 +34,7 @@ protectedRoutes(router, protectedRoutesList);
  *               items:
  *                 $ref: '#/components/schemas/Permission'
  */
-router.get("/", handleFetchPermissions);
+router.get('/', handleFetchPermissions);
 
 /**
  * @swagger
@@ -66,11 +60,7 @@ router.get("/", handleFetchPermissions);
  *       400:
  *         description: Invalid input (missing or invalid fields)
  */
-router.post(
-  "/create",
-  [body("name").isString().notEmpty().withMessage("Name is required")],
-  handleCreatePermission
-);
+router.post('/create', [body('name').isString().notEmpty().withMessage('Name is required')], handleCreatePermission);
 
 /**
  * @swagger
@@ -106,12 +96,9 @@ router.post(
  *         description: Permission not found
  */
 router.put(
-  "/update/:id",
-  [
-    param("id").isUUID().withMessage("Invalid UUID format"),
-    body("name").isString().notEmpty().withMessage("Name is required"),
-  ],
-  handleUpdatePermission
+  '/update/:id',
+  [param('id').isUUID().withMessage('Invalid UUID format'), body('name').isString().notEmpty().withMessage('Name is required')],
+  handleUpdatePermission,
 );
 
 /**
@@ -135,11 +122,7 @@ router.put(
  *       404:
  *         description: Permission not found
  */
-router.delete(
-  "/delete/:id",
-  [param("id").isUUID().withMessage("Invalid UUID format")],
-  handleDeletePermission
-);
+router.delete('/delete/:id', [param('id').isUUID().withMessage('Invalid UUID format')], handleDeletePermission);
 
 /**
  * @swagger
@@ -175,12 +158,9 @@ router.delete(
  *         description: Role or permission not found
  */
 router.post(
-  "/:roleId/permissions",
-  [
-    param("roleId").isUUID().withMessage("Invalid role ID"),
-    body("permissionId").isUUID().withMessage("Invalid permission ID"),
-  ],
-  handleAddPermissionToRole
+  '/:roleId/permissions',
+  [param('roleId').isUUID().withMessage('Invalid role ID'), body('permissionId').isUUID().withMessage('Invalid permission ID')],
+  handleAddPermissionToRole,
 );
 
 /**
@@ -211,12 +191,9 @@ router.post(
  *         description: Role or permission not found
  */
 router.delete(
-  "/:roleId/permissions/:permissionId",
-  [
-    param("roleId").isUUID().withMessage("Invalid role ID"),
-    param("permissionId").isUUID().withMessage("Invalid permission ID"),
-  ],
-  handleRemovePermissionFromRole
+  '/:roleId/permissions/:permissionId',
+  [param('roleId').isUUID().withMessage('Invalid role ID'), param('permissionId').isUUID().withMessage('Invalid permission ID')],
+  handleRemovePermissionFromRole,
 );
 
 export default router;

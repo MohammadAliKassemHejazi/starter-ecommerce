@@ -1,5 +1,5 @@
-import { Model } from "sequelize";
-import { IOrderItemAttributes } from "../interfaces/types/models/orderitem.model.types";
+import { Model } from 'sequelize';
+import { IOrderItemAttributes } from '../interfaces/types/models/orderitem.model.types';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class OrderItem extends Model<IOrderItemAttributes> implements IOrderItemAttributes {
@@ -15,32 +15,35 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
   }
 
-  OrderItem.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+  OrderItem.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      orderId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      productId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
     },
-    orderId: {
-      type: DataTypes.UUID,
-      allowNull: false
+    {
+      sequelize,
+      modelName: 'OrderItem',
     },
-    productId: {
-      type: DataTypes.UUID,
-      allowNull: false
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false
-    }
-  }, {
-    sequelize,
-    modelName: 'OrderItem'
-  });
+  );
 
   return OrderItem;
 };

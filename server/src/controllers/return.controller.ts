@@ -16,16 +16,16 @@ export const getReturns = async (req: Request, res: Response) => {
       include: [
         {
           model: db.Order,
-          attributes: ['id', 'orderNumber', 'totalPrice']
+          attributes: ['id', 'orderNumber', 'totalPrice'],
         },
         {
           model: db.User,
-          attributes: ['id', 'name', 'email']
-        }
+          attributes: ['id', 'name', 'email'],
+        },
       ],
       order: [['createdAt', 'DESC']],
       limit: Number(limit),
-      offset
+      offset,
     });
 
     ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Return requests retrieved successfully');
@@ -45,7 +45,7 @@ export const createReturnRequest = async (req: Request, res: Response) => {
       userId,
       reason,
       refundAmount,
-      status: 'PENDING'
+      status: 'PENDING',
     });
 
     ResponseFormatter.success(res, returnRequest, 'Return request created successfully', 201);
@@ -82,13 +82,13 @@ export const getReturnById = async (req: Request, res: Response) => {
       include: [
         {
           model: db.Order,
-          attributes: ['id', 'orderNumber', 'totalPrice']
+          attributes: ['id', 'orderNumber', 'totalPrice'],
         },
         {
           model: db.User,
-          attributes: ['id', 'name', 'email']
-        }
-      ]
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
     });
 
     if (!returnRequest) {
