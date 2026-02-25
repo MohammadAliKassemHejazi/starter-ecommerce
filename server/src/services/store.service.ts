@@ -204,7 +204,9 @@ export const updateImages = async (storeId: string, files: Express.Multer.File[]
       updatedImageUrl: newImageUrl,
     };
   } catch (error) {
+
     logger.error('Error updating store image', { error });
+
     throw error;
   }
 };

@@ -6,7 +6,7 @@ export const trackEvent = async (userId: string, eventType: string, eventData: a
     eventType,
     eventData,
     sessionId,
-    pageUrl
+    pageUrl,
   });
 };
 
@@ -18,7 +18,7 @@ export const getAnalytics = async (query: any) => {
   if (eventType) whereClause.eventType = eventType;
   if (startDate && endDate) {
     whereClause.createdAt = {
-      [db.Sequelize.Op.between]: [startDate, endDate]
+      [db.Sequelize.Op.between]: [startDate, endDate],
     };
   }
 
@@ -27,12 +27,12 @@ export const getAnalytics = async (query: any) => {
     include: [
       {
         model: db.User,
-        attributes: ['id', 'name', 'email']
-      }
+        attributes: ['id', 'name', 'email'],
+      },
     ],
     order: [['createdAt', 'DESC']],
     limit: Number(limit),
-    offset
+    offset,
   });
 };
 
@@ -42,17 +42,14 @@ export const getEventStats = async (query: any) => {
   const whereClause: any = {};
   if (startDate && endDate) {
     whereClause.createdAt = {
-      [db.Sequelize.Op.between]: [startDate, endDate]
+      [db.Sequelize.Op.between]: [startDate, endDate],
     };
   }
 
   return await db.Analytics.findAll({
     where: whereClause,
-    attributes: [
-      'eventType',
-      [db.Sequelize.fn('COUNT', db.Sequelize.col('eventType')), 'count']
-    ],
+    attributes: ['eventType', [db.Sequelize.fn('COUNT', db.Sequelize.col('eventType')), 'count']],
     group: ['eventType'],
-    raw: true
+    raw: true,
   });
 };

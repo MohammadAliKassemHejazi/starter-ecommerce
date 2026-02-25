@@ -1,4 +1,4 @@
-import config from "../config/config";
+import config from '../config/config';
 import fs from 'fs';
 import path from 'path';
 
@@ -19,25 +19,25 @@ const loadAllSchemas = async (schemaPath: string): Promise<any> => {
         try {
           const filePath = path.join(schemaPath, file);
           const module = await import(filePath);
-          
+
           // Handle both default exports and named exports
           const schemaExports = module.default || module;
-          
+
           // If it's an object with multiple schemas, merge them
           if (typeof schemaExports === 'object' && schemaExports !== null) {
-            Object.keys(schemaExports).forEach(key => {
+            Object.keys(schemaExports).forEach((key) => {
               if (key.includes('RouteSchema') || key.includes('Schema')) {
                 allSchemas[key] = schemaExports[key];
               }
             });
           }
-          
+
           console.log(`✅ Loaded schemas from ${file}`);
         } catch (error) {
           console.warn(`⚠️  Could not load ${file}:`, (error as Error).message);
         }
       }
-    })
+    }),
   );
 
   return allSchemas;
@@ -57,136 +57,136 @@ const convertSchemaToOpenAPI = (schemaName: string, schema: any) => {
   // Determine path from schema name
   let path = '';
   const baseName = schemaName.replace('RouteSchema', '').replace('Schema', '');
-  
+
   // Map schema names to API paths
   const pathMappings: { [key: string]: string } = {
     // Authentication
-    'loginRouteSchema': '/api/auth/login',
-    'registerRouteSchema': '/api/auth/register',
-    'isAuthenticatedRouteSchema': '/api/auth/isauthenticated',
-    
+    loginRouteSchema: '/api/auth/login',
+    registerRouteSchema: '/api/auth/register',
+    isAuthenticatedRouteSchema: '/api/auth/isauthenticated',
+
     // Shop/Products
-    'createProductRouteSchema': '/api/shop/create',
-    'getAllProductsRouteSchema': '/api/shop/all',
-    'getSingleProductRouteSchema': '/api/shop/single',
-    'updateProductRouteSchema': '/api/shop/update',
-    'deleteProductRouteSchema': '/api/shop/delete/{id}',
-    
+    createProductRouteSchema: '/api/shop/create',
+    getAllProductsRouteSchema: '/api/shop/all',
+    getSingleProductRouteSchema: '/api/shop/single',
+    updateProductRouteSchema: '/api/shop/update',
+    deleteProductRouteSchema: '/api/shop/delete/{id}',
+
     // Cart
-    'getCartRouteSchema': '/api/cart',
-    'addToCartRouteSchema': '/api/cart/add',
-    'decreaseCartRouteSchema': '/api/cart/decrease',
-    'removeFromCartRouteSchema': '/api/cart/remove',
-    'clearCartRouteSchema': '/api/cart/clear',
-    
+    getCartRouteSchema: '/api/cart',
+    addToCartRouteSchema: '/api/cart/add',
+    decreaseCartRouteSchema: '/api/cart/decrease',
+    removeFromCartRouteSchema: '/api/cart/remove',
+    clearCartRouteSchema: '/api/cart/clear',
+
     // Orders
-    'getLastOrderRouteSchema': '/api/orders/last',
-    'getOrderItemsRouteSchema': '/api/orders/{orderId}/items',
-    'getOrdersByDateRangeRouteSchema': '/api/orders/date-range',
-    'createOrderRouteSchema': '/api/orders/create',
-    'updateOrderStatusRouteSchema': '/api/orders/{orderId}/status',
-    
+    getLastOrderRouteSchema: '/api/orders/last',
+    getOrderItemsRouteSchema: '/api/orders/{orderId}/items',
+    getOrdersByDateRangeRouteSchema: '/api/orders/date-range',
+    createOrderRouteSchema: '/api/orders/create',
+    updateOrderStatusRouteSchema: '/api/orders/{orderId}/status',
+
     // Stores
-    'createStoreRouteSchema': '/api/stores/create',
-    'getAllStoresRouteSchema': '/api/stores/all',
-    'getStoreByIdRouteSchema': '/api/stores/{id}',
-    'updateStoreRouteSchema': '/api/stores/{id}',
-    'deleteStoreRouteSchema': '/api/stores/{id}',
-    
+    createStoreRouteSchema: '/api/stores/create',
+    getAllStoresRouteSchema: '/api/stores/all',
+    getStoreByIdRouteSchema: '/api/stores/{id}',
+    updateStoreRouteSchema: '/api/stores/{id}',
+    deleteStoreRouteSchema: '/api/stores/{id}',
+
     // Categories
-    'createCategoryRouteSchema': '/api/categories/create',
-    'getAllCategoriesRouteSchema': '/api/categories/all',
-    'getCategoryByIdRouteSchema': '/api/categories/{id}',
-    'updateCategoryRouteSchema': '/api/categories/{id}',
-    'deleteCategoryRouteSchema': '/api/categories/{id}',
-    
+    createCategoryRouteSchema: '/api/categories/create',
+    getAllCategoriesRouteSchema: '/api/categories/all',
+    getCategoryByIdRouteSchema: '/api/categories/{id}',
+    updateCategoryRouteSchema: '/api/categories/{id}',
+    deleteCategoryRouteSchema: '/api/categories/{id}',
+
     // Users
-    'createUserRouteSchema': '/api/users/create',
-    'getAllUsersRouteSchema': '/api/users/all',
-    'getUserByIdRouteSchema': '/api/users/{id}',
-    'updateUserRouteSchema': '/api/users/{id}',
-    'deleteUserRouteSchema': '/api/users/{id}',
-    'getUserProfileRouteSchema': '/api/users/profile',
-    
+    createUserRouteSchema: '/api/users/create',
+    getAllUsersRouteSchema: '/api/users/all',
+    getUserByIdRouteSchema: '/api/users/{id}',
+    updateUserRouteSchema: '/api/users/{id}',
+    deleteUserRouteSchema: '/api/users/{id}',
+    getUserProfileRouteSchema: '/api/users/profile',
+
     // Payments
-    'createPaymentRouteSchema': '/api/payment/create',
-    'getAllPaymentsRouteSchema': '/api/payment/all',
-    'getPaymentByIdRouteSchema': '/api/payment/{id}',
-    'updatePaymentStatusRouteSchema': '/api/payment/{id}/status',
-    'processRefundRouteSchema': '/api/payment/{id}/refund',
-    
+    createPaymentRouteSchema: '/api/payment/create',
+    getAllPaymentsRouteSchema: '/api/payment/all',
+    getPaymentByIdRouteSchema: '/api/payment/{id}',
+    updatePaymentStatusRouteSchema: '/api/payment/{id}/status',
+    processRefundRouteSchema: '/api/payment/{id}/refund',
+
     // Roles
-    'createRoleRouteSchema': '/api/admin/roles/create',
-    'getAllRolesRouteSchema': '/api/admin/roles/all',
-    'getRoleByIdRouteSchema': '/api/admin/roles/{id}',
-    'updateRoleRouteSchema': '/api/admin/roles/{id}',
-    'deleteRoleRouteSchema': '/api/admin/roles/{id}',
-    'assignRoleToUserRouteSchema': '/api/admin/roles/assign',
-    
+    createRoleRouteSchema: '/api/admin/roles/create',
+    getAllRolesRouteSchema: '/api/admin/roles/all',
+    getRoleByIdRouteSchema: '/api/admin/roles/{id}',
+    updateRoleRouteSchema: '/api/admin/roles/{id}',
+    deleteRoleRouteSchema: '/api/admin/roles/{id}',
+    assignRoleToUserRouteSchema: '/api/admin/roles/assign',
+
     // Articles
-    'createArticleRouteSchema': '/api/articles/create',
-    'getAllArticlesRouteSchema': '/api/articles/all',
-    'getArticleByIdRouteSchema': '/api/articles/{id}',
-    'updateArticleRouteSchema': '/api/articles/{id}',
-    'deleteArticleRouteSchema': '/api/articles/{id}',
-    
+    createArticleRouteSchema: '/api/articles/create',
+    getAllArticlesRouteSchema: '/api/articles/all',
+    getArticleByIdRouteSchema: '/api/articles/{id}',
+    updateArticleRouteSchema: '/api/articles/{id}',
+    deleteArticleRouteSchema: '/api/articles/{id}',
+
     // Comments
-    'createCommentRouteSchema': '/api/comments/create',
-    'getAllCommentsRouteSchema': '/api/comments/all',
-    'getCommentByIdRouteSchema': '/api/comments/{id}',
-    'updateCommentRouteSchema': '/api/comments/{id}',
-    'deleteCommentRouteSchema': '/api/comments/{id}',
-    
+    createCommentRouteSchema: '/api/comments/create',
+    getAllCommentsRouteSchema: '/api/comments/all',
+    getCommentByIdRouteSchema: '/api/comments/{id}',
+    updateCommentRouteSchema: '/api/comments/{id}',
+    deleteCommentRouteSchema: '/api/comments/{id}',
+
     // Favorites
-    'addToFavoritesRouteSchema': '/api/favorites/add',
-    'removeFromFavoritesRouteSchema': '/api/favorites/remove',
-    'getFavoritesRouteSchema': '/api/favorites',
-    
+    addToFavoritesRouteSchema: '/api/favorites/add',
+    removeFromFavoritesRouteSchema: '/api/favorites/remove',
+    getFavoritesRouteSchema: '/api/favorites',
+
     // Packages
-    'createPackageRouteSchema': '/api/packages/create',
-    'getAllPackagesRouteSchema': '/api/packages/all',
-    'getPackageByIdRouteSchema': '/api/packages/{id}',
-    'updatePackageRouteSchema': '/api/packages/{id}',
-    'deletePackageRouteSchema': '/api/packages/{id}',
-    
+    createPackageRouteSchema: '/api/packages/create',
+    getAllPackagesRouteSchema: '/api/packages/all',
+    getPackageByIdRouteSchema: '/api/packages/{id}',
+    updatePackageRouteSchema: '/api/packages/{id}',
+    deletePackageRouteSchema: '/api/packages/{id}',
+
     // Promotions
-    'createPromotionRouteSchema': '/api/promotions/create',
-    'getAllPromotionsRouteSchema': '/api/promotions/all',
-    'getPromotionByIdRouteSchema': '/api/promotions/{id}',
-    'updatePromotionRouteSchema': '/api/promotions/{id}',
-    'deletePromotionRouteSchema': '/api/promotions/{id}',
-    
+    createPromotionRouteSchema: '/api/promotions/create',
+    getAllPromotionsRouteSchema: '/api/promotions/all',
+    getPromotionByIdRouteSchema: '/api/promotions/{id}',
+    updatePromotionRouteSchema: '/api/promotions/{id}',
+    deletePromotionRouteSchema: '/api/promotions/{id}',
+
     // Returns
-    'createReturnRouteSchema': '/api/returns/create',
-    'getAllReturnsRouteSchema': '/api/returns/all',
-    'getReturnByIdRouteSchema': '/api/returns/{id}',
-    'updateReturnRouteSchema': '/api/returns/{id}',
-    'deleteReturnRouteSchema': '/api/returns/{id}',
-    
+    createReturnRouteSchema: '/api/returns/create',
+    getAllReturnsRouteSchema: '/api/returns/all',
+    getReturnByIdRouteSchema: '/api/returns/{id}',
+    updateReturnRouteSchema: '/api/returns/{id}',
+    deleteReturnRouteSchema: '/api/returns/{id}',
+
     // RLS Schemas (with tenant context)
-    'rlsCreateProductRouteSchema': '/api/shop/create',
-    'rlsGetAllProductsRouteSchema': '/api/shop/all',
-    'rlsGetSingleProductRouteSchema': '/api/shop/single',
-    'rlsUpdateProductRouteSchema': '/api/shop/update',
-    'rlsDeleteProductRouteSchema': '/api/shop/delete/{id}',
-    
-    'rlsCreateStoreRouteSchema': '/api/stores/create',
-    'rlsGetAllStoresRouteSchema': '/api/stores/all',
-    'rlsGetStoreByIdRouteSchema': '/api/stores/{id}',
-    'rlsUpdateStoreRouteSchema': '/api/stores/{id}',
-    'rlsDeleteStoreRouteSchema': '/api/stores/{id}',
-    
-    'rlsGetCartRouteSchema': '/api/cart',
-    'rlsAddToCartRouteSchema': '/api/cart/add',
-    'rlsDecreaseCartRouteSchema': '/api/cart/decrease',
-    'rlsRemoveFromCartRouteSchema': '/api/cart/remove',
-    'rlsClearCartRouteSchema': '/api/cart/clear',
-    
-    'rlsGetLastOrderRouteSchema': '/api/orders/last',
-    'rlsGetOrderItemsRouteSchema': '/api/orders/{orderId}/items',
-    'rlsGetOrdersByDateRangeRouteSchema': '/api/orders/date-range',
-    'rlsCreateOrderRouteSchema': '/api/orders/create',
-    'rlsUpdateOrderStatusRouteSchema': '/api/orders/{orderId}/status'
+    rlsCreateProductRouteSchema: '/api/shop/create',
+    rlsGetAllProductsRouteSchema: '/api/shop/all',
+    rlsGetSingleProductRouteSchema: '/api/shop/single',
+    rlsUpdateProductRouteSchema: '/api/shop/update',
+    rlsDeleteProductRouteSchema: '/api/shop/delete/{id}',
+
+    rlsCreateStoreRouteSchema: '/api/stores/create',
+    rlsGetAllStoresRouteSchema: '/api/stores/all',
+    rlsGetStoreByIdRouteSchema: '/api/stores/{id}',
+    rlsUpdateStoreRouteSchema: '/api/stores/{id}',
+    rlsDeleteStoreRouteSchema: '/api/stores/{id}',
+
+    rlsGetCartRouteSchema: '/api/cart',
+    rlsAddToCartRouteSchema: '/api/cart/add',
+    rlsDecreaseCartRouteSchema: '/api/cart/decrease',
+    rlsRemoveFromCartRouteSchema: '/api/cart/remove',
+    rlsClearCartRouteSchema: '/api/cart/clear',
+
+    rlsGetLastOrderRouteSchema: '/api/orders/last',
+    rlsGetOrderItemsRouteSchema: '/api/orders/{orderId}/items',
+    rlsGetOrdersByDateRangeRouteSchema: '/api/orders/date-range',
+    rlsCreateOrderRouteSchema: '/api/orders/create',
+    rlsUpdateOrderStatusRouteSchema: '/api/orders/{orderId}/status',
   };
 
   path = pathMappings[schemaName] || `/api/${baseName.toLowerCase()}`;
@@ -202,44 +202,44 @@ const convertSchemaToOpenAPI = (schemaName: string, schema: any) => {
         description: 'Success',
         content: {
           'application/json': {
-            schema: schema.response?.[200] || { type: 'object' }
-          }
-        }
+            schema: schema.response?.[200] || { type: 'object' },
+          },
+        },
       },
       '400': {
         description: 'Bad Request',
         content: {
           'application/json': {
-            schema: { $ref: '#/components/schemas/Error' }
-          }
-        }
+            schema: { $ref: '#/components/schemas/Error' },
+          },
+        },
       },
       '401': {
         description: 'Unauthorized',
         content: {
           'application/json': {
-            schema: { $ref: '#/components/schemas/Error' }
-          }
-        }
+            schema: { $ref: '#/components/schemas/Error' },
+          },
+        },
       },
       '404': {
         description: 'Not Found',
         content: {
           'application/json': {
-            schema: { $ref: '#/components/schemas/Error' }
-          }
-        }
-      }
-    }
+            schema: { $ref: '#/components/schemas/Error' },
+          },
+        },
+      },
+    },
   };
 
   // Add parameters if they exist
   if (schema.params) {
-    openAPISchema.parameters = Object.keys(schema.params.properties || {}).map(key => ({
+    openAPISchema.parameters = Object.keys(schema.params.properties || {}).map((key) => ({
       name: key,
       in: 'path',
       required: schema.params.required?.includes(key) || false,
-      schema: schema.params.properties[key]
+      schema: schema.params.properties[key],
     }));
   }
 
@@ -249,21 +249,21 @@ const convertSchemaToOpenAPI = (schemaName: string, schema: any) => {
       required: true,
       content: {
         'application/json': {
-          schema: schema.body
-        }
-      }
+          schema: schema.body,
+        },
+      },
     };
   }
 
   // Add query parameters if they exist
   if (schema.querystring) {
     if (!openAPISchema.parameters) openAPISchema.parameters = [];
-    Object.keys(schema.querystring.properties || {}).forEach(key => {
+    Object.keys(schema.querystring.properties || {}).forEach((key) => {
       openAPISchema.parameters.push({
         name: key,
         in: 'query',
         required: schema.querystring.required?.includes(key) || false,
-        schema: schema.querystring.properties[key]
+        schema: schema.querystring.properties[key],
       });
     });
   }
@@ -273,7 +273,7 @@ const convertSchemaToOpenAPI = (schemaName: string, schema: any) => {
 
 export const generateAutoSwagger = async () => {
   console.log('🚀 Generating automatic Swagger documentation from all schema files...');
-  
+
   const schemasPath = path.resolve(__dirname, '../routes/swaggerSchema/');
   const allSchemas = await loadAllSchemas(schemasPath);
 
@@ -282,9 +282,9 @@ export const generateAutoSwagger = async () => {
   const paths: Record<string, any> = {};
 
   // Convert each schema to OpenAPI format
-  Object.keys(allSchemas).forEach(schemaName => {
+  Object.keys(allSchemas).forEach((schemaName) => {
     const { path: apiPath, method, schema } = convertSchemaToOpenAPI(schemaName, allSchemas[schemaName]);
-    
+
     if (apiPath) {
       if (!paths[apiPath]) {
         paths[apiPath] = {};
@@ -295,120 +295,120 @@ export const generateAutoSwagger = async () => {
 
   // Create comprehensive OpenAPI document
   const swaggerDoc = {
-    openapi: "3.0.0",
+    openapi: '3.0.0',
     info: {
-      title: "E-Commerce Multi-Tenant API",
-      description: "Comprehensive API documentation for the E-Commerce platform with RLS-based multi-tenancy support",
-      version: "2.0.0",
+      title: 'E-Commerce Multi-Tenant API',
+      description: 'Comprehensive API documentation for the E-Commerce platform with RLS-based multi-tenancy support',
+      version: '2.0.0',
       contact: {
-        name: "API Support",
-        email: "support@ecommerce.com"
-      }
+        name: 'API Support',
+        email: 'support@ecommerce.com',
+      },
     },
     servers: [
       {
         url: `http://localhost:${config.port}`,
-        description: "Development server"
+        description: 'Development server',
       },
       {
-        url: "https://api.ecommerce.com",
-        description: "Production server"
-      }
+        url: 'https://api.ecommerce.com',
+        description: 'Production server',
+      },
     ],
     security: [
       {
-        apiKey: []
+        apiKey: [],
       },
       {
-        bearerAuth: []
-      }
+        bearerAuth: [],
+      },
     ],
     components: {
       securitySchemes: {
         apiKey: {
-          type: "apiKey",
-          in: "header",
-          name: "x-api-key"
+          type: 'apiKey',
+          in: 'header',
+          name: 'x-api-key',
         },
         bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT"
-        }
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
       },
       schemas: {
         Error: {
-          type: "object",
+          type: 'object',
           properties: {
             success: {
-              type: "boolean",
-              example: false
+              type: 'boolean',
+              example: false,
             },
             error: {
-              type: "string",
-              description: "Error message"
+              type: 'string',
+              description: 'Error message',
             },
             code: {
-              type: "string",
-              description: "Error code"
-            }
-          }
+              type: 'string',
+              description: 'Error code',
+            },
+          },
         },
         Success: {
-          type: "object",
+          type: 'object',
           properties: {
             success: {
-              type: "boolean",
-              example: true
+              type: 'boolean',
+              example: true,
             },
             message: {
-              type: "string",
-              description: "Success message"
-            }
-          }
+              type: 'string',
+              description: 'Success message',
+            },
+          },
         },
         TenantContext: {
-          type: "object",
+          type: 'object',
           properties: {
             id: {
-              type: "string",
-              format: "uuid",
-              description: "Tenant ID"
+              type: 'string',
+              format: 'uuid',
+              description: 'Tenant ID',
             },
             slug: {
-              type: "string",
-              description: "Tenant slug"
+              type: 'string',
+              description: 'Tenant slug',
             },
             name: {
-              type: "string",
-              description: "Tenant name"
-            }
-          }
+              type: 'string',
+              description: 'Tenant name',
+            },
+          },
         },
         Pagination: {
-          type: "object",
+          type: 'object',
           properties: {
             page: {
-              type: "number",
-              description: "Current page number"
+              type: 'number',
+              description: 'Current page number',
             },
             limit: {
-              type: "number",
-              description: "Items per page"
+              type: 'number',
+              description: 'Items per page',
             },
             total: {
-              type: "number",
-              description: "Total number of items"
+              type: 'number',
+              description: 'Total number of items',
             },
             pages: {
-              type: "number",
-              description: "Total number of pages"
-            }
-          }
-        }
-      }
+              type: 'number',
+              description: 'Total number of pages',
+            },
+          },
+        },
+      },
     },
-    paths
+    paths,
   };
 
   // Write the swagger.json file
@@ -423,9 +423,9 @@ export const generateAutoSwagger = async () => {
   // Also create a comprehensive version
   const comprehensivePath = path.resolve(__dirname, '../routes/swaggerSchema/swagger-comprehensive.json');
   fs.writeFileSync(comprehensivePath, JSON.stringify(swaggerDoc, null, 2));
-  
+
   console.log(`📄 Comprehensive version: ${comprehensivePath}`);
-  
+
   return swaggerDoc;
 };
 

@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 
-import { Model, UUIDV4 } from "sequelize";
+import { Model, UUIDV4 } from 'sequelize';
 
-import { IFavoriteAttributes } from "../interfaces/types/models/favorite.model.types";
+import { IFavoriteAttributes } from '../interfaces/types/models/favorite.model.types';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Favorite extends Model<IFavoriteAttributes> implements IFavoriteAttributes {
     id!: string;
 
     static associate(models: any) {
- Favorite.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
-    Favorite.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+      Favorite.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
+      Favorite.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
     }
   }
 
@@ -25,8 +25,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
     {
       sequelize,
-      modelName: "Favorite",
-    }
+      modelName: 'Favorite',
+    },
   );
 
   return Favorite;
