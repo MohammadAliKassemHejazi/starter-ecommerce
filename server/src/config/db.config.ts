@@ -1,35 +1,39 @@
-import config from "./config"; // this is important!
+// src/config/db.config.ts
+import dotenv from 'dotenv';
+dotenv.config();
 
-
-module.exports = {
+export default {
   development: {
-    username: config.database.username,
-    password: config.database.password,
-    database: config.database.dbDevelopment,
-    host: config.database.host,
-    port: config.database.port || 5432, // Include port if needed
-    dialect: config.database.dialect,
-    dialectOptions: config.database.dialectOptions, // Add SSL/TLS options
-    logging: false, // Disable logging if not needed
+    username: process.env.DB_USERNAME || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres',
+    database: process.env.DB_DATABASE_DEVELOPMENT || 'ecommerce_dev',
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    logging: console.log,
   },
   test: {
-    username: config.database.username,
-    password: config.database.password,
-    database: config.database.dbTest,
-    host: config.database.host,
-    port: config.database.port || 5432,
-    dialect: config.database.dialect,
-    dialectOptions: config.database.dialectOptions,
+    username: process.env.DB_USERNAME || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres',
+    database: process.env.DB_DATABASE_TEST || 'ecommerce_test',
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
     logging: false,
   },
   production: {
-    username: config.database.username,
-    password: config.database.password,
-    database: config.database.dbProduction,
-    host: config.database.host,
-    port: config.database.port || 5432,
-    dialect: config.database.dialect,
-    dialectOptions: config.database.dialectOptions,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE_PRODUCTION,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: 'postgres',
     logging: false,
-  },
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
+  }
 };
