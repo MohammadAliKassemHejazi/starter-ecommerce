@@ -5,6 +5,7 @@ import { canCreateProduct, isSuperAdmin } from "../services/package.service";
 import path from "node:path";
 import fs from "fs";
 import { validationResult } from "express-validator";
+import customError from "../utils/customError";
 
 export const handleCreateProduct = async (
   request: CustomRequest,
@@ -191,6 +192,21 @@ export const handleUpdateImages = async (
   try {
 
     const productId = request.body.productID; // Assuming the product ID is passed as a route parameter
+    const userId = request.UserId;
+
+    if (!productId) {
+      throw customError({ message: "Product ID is required", statusCode: 400 });
+    }
+
+    const product = await shopService.getProductById(productId);
+    if (!product) {
+      throw customError({ message: "Product not found", statusCode: 404 });
+    }
+
+    const isAdmin = await isSuperAdmin(userId!);
+    if (product.ownerId !== userId && !isAdmin) {
+      throw customError({ message: "You do not have permission to update this product", statusCode: 403 });
+    }
 
     // Extract files and body data
     const files = request.files as Express.Multer.File[] || [];
