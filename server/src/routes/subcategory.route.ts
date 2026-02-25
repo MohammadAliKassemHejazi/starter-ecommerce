@@ -1,16 +1,16 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   handleFetchSubCategories,
   handleCreateSubCategory,
   handleUpdateSubCategory,
   handleDeleteSubCategory,
-} from "../controllers/subcategory.controller";
-import { protectedRoutes } from "../middlewares";
+} from '../controllers/subcategory.controller';
+import { protectedRoutes } from '../middlewares';
 
 const router = Router();
 
 // Define routes to protect
-const protectedRoutesList = ["/","/create", "/update/:id", "/delete/:id"];
+const protectedRoutesList = ['/', '/create', '/update/:id', '/delete/:id'];
 protectedRoutes(router, protectedRoutesList);
 
 /**
@@ -29,7 +29,7 @@ protectedRoutes(router, protectedRoutesList);
  *               items:
  *                 $ref: '#/components/schemas/SubCategory'
  */
-router.get("/", handleFetchSubCategories);
+router.get('/', handleFetchSubCategories);
 
 /**
  * @swagger
@@ -57,7 +57,7 @@ router.get("/", handleFetchSubCategories);
  *       401:
  *         description: Unauthorized (missing or invalid token)
  */
-router.post("/", handleCreateSubCategory);
+router.post('/', handleCreateSubCategory);
 
 /**
  * @swagger
@@ -94,7 +94,7 @@ router.post("/", handleCreateSubCategory);
  *       404:
  *         description: Subcategory not found
  */
-router.put("/:id", handleUpdateSubCategory);
+router.put('/:id', handleUpdateSubCategory);
 
 /**
  * @swagger
@@ -119,6 +119,6 @@ router.put("/:id", handleUpdateSubCategory);
  *       404:
  *         description: Subcategory not found
  */
-router.delete("/:id", handleDeleteSubCategory);
+router.delete('/:id', handleDeleteSubCategory);
 
 export default router;

@@ -3,17 +3,12 @@ import { getComments, addComment, updateComment, deleteComment } from '../contro
 import { protectedRoutes } from '../middlewares/protectedRoutes.middleware';
 
 const router = express.Router();
-const Routes = [
-  "/add",
-  "/:id",
-];
+const Routes = ['/add', '/:id'];
 
 // Apply protectedRoutes middleware
 protectedRoutes(router, Routes);
 // GET /api/comments - Get comments for a product (public)
 router.get('/', getComments);
-
-
 
 // POST /api/comments - Add comment
 router.post('/add', addComment);

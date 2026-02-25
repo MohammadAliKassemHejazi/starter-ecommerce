@@ -121,7 +121,7 @@ export const shopMiddleWare = async (req: Request, res: Response, next: NextFunc
             throw new Error(`Failed to process non-image file ${fileName}: ${nonImageError}`);
           }
         }
-      })
+      }),
     );
 
     // Debug: Log contents of uploads directory after processing

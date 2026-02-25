@@ -1,5 +1,5 @@
-import { Model, UUIDV4 } from "sequelize";
-import { IPaymentAttributes } from "../interfaces/types/models/payment.model.types";
+import { Model, UUIDV4 } from 'sequelize';
+import { IPaymentAttributes } from '../interfaces/types/models/payment.model.types';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Payment extends Model<IPaymentAttributes> implements IPaymentAttributes {
@@ -40,12 +40,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'pending', // Default status
-      }
+      },
     },
     {
       sequelize,
-      modelName: "Payment",
-    }
+      modelName: 'Payment',
+    },
   );
 
   return Payment;

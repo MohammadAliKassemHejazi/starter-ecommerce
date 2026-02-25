@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   handleFetchUsersByCreator,
   handleCreateUser,
@@ -6,13 +6,13 @@ import {
   handleDeleteUser,
   handleAssignRoleToUser,
   handleRemoveRoleFromUser,
-} from "../controllers/user.controller";
-import { protectedRoutes } from "../middlewares";
+} from '../controllers/user.controller';
+import { protectedRoutes } from '../middlewares';
 
 const router = Router();
 
 // Define routes to protect
-const protectedRoutesList = ["/", "/create", "/update/:id", "/delete/:id", "/:userId/roles", "/:userId/roles/:roleId"];
+const protectedRoutesList = ['/', '/create', '/update/:id', '/delete/:id', '/:userId/roles', '/:userId/roles/:roleId'];
 protectedRoutes(router, protectedRoutesList);
 
 /**
@@ -33,7 +33,7 @@ protectedRoutes(router, protectedRoutesList);
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get("/", handleFetchUsersByCreator);
+router.get('/', handleFetchUsersByCreator);
 
 /**
  * @swagger
@@ -59,7 +59,7 @@ router.get("/", handleFetchUsersByCreator);
  *       400:
  *         description: Invalid input (missing or invalid fields)
  */
-router.post("/", handleCreateUser);
+router.post('/', handleCreateUser);
 
 /**
  * @swagger
@@ -94,7 +94,7 @@ router.post("/", handleCreateUser);
  *       404:
  *         description: User not found
  */
-router.put("/:id", handleUpdateUser);
+router.put('/:id', handleUpdateUser);
 
 /**
  * @swagger
@@ -117,7 +117,7 @@ router.put("/:id", handleUpdateUser);
  *       404:
  *         description: User not found
  */
-router.delete("/:id", handleDeleteUser);
+router.delete('/:id', handleDeleteUser);
 
 /**
  * @swagger
@@ -152,7 +152,7 @@ router.delete("/:id", handleDeleteUser);
  *       404:
  *         description: User or role not found
  */
-router.post("/:userId/roles", handleAssignRoleToUser);
+router.post('/:userId/roles', handleAssignRoleToUser);
 
 /**
  * @swagger
@@ -181,6 +181,6 @@ router.post("/:userId/roles", handleAssignRoleToUser);
  *       404:
  *         description: User or role not found
  */
-router.delete("/:userId/roles/:roleId", handleRemoveRoleFromUser);
+router.delete('/:userId/roles/:roleId', handleRemoveRoleFromUser);
 
 export default router;

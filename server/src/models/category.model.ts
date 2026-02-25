@@ -7,33 +7,34 @@ module.exports = (sequelize: any, DataTypes: any) => {
     name!: string;
     description?: string;
 
-
     static associate(models: any) {
-      Category.hasMany(models.SubCategory, {  foreignKey: 'categoryId' });
+      Category.hasMany(models.SubCategory, { foreignKey: 'categoryId' });
       Category.hasMany(models.Product, { foreignKey: 'categoryId' });
       Category.belongsTo(models.User, { foreignKey: 'userId', as: 'Owner' });
     }
   }
 
-  Category.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
+  Category.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    {
+      sequelize,
+      modelName: 'Category',
     },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    }
-  }, {
-    sequelize,
-    modelName: 'Category',
-  });
+  );
 
-
-  return  Category ;
+  return Category;
 };

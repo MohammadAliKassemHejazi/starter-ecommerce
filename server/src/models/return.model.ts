@@ -1,5 +1,5 @@
-"use strict";
-import { Model, DataTypes } from "sequelize";
+'use strict';
+import { Model, DataTypes } from 'sequelize';
 
 module.exports = (sequelize: any) => {
   class ReturnRequest extends Model {
@@ -9,31 +9,34 @@ module.exports = (sequelize: any) => {
     }
   }
 
-  ReturnRequest.init({
-    orderId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Orders',
-        key: 'id'
-      }
+  ReturnRequest.init(
+    {
+      orderId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Orders',
+          key: 'id',
+        },
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+      },
+      reason: DataTypes.TEXT,
+      status: DataTypes.ENUM('PENDING', 'APPROVED', 'REJECTED'),
+      refundAmount: DataTypes.FLOAT,
+      resolutionNote: DataTypes.TEXT,
     },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Users',
-        key: 'id'
-      }
+    {
+      sequelize,
+      modelName: 'ReturnRequest',
     },
-    reason: DataTypes.TEXT,
-    status: DataTypes.ENUM('PENDING', 'APPROVED', 'REJECTED'),
-    refundAmount: DataTypes.FLOAT,
-    resolutionNote: DataTypes.TEXT
-  }, {
-    sequelize,
-    modelName: 'ReturnRequest'
-  });
+  );
 
   return ReturnRequest;
 };
