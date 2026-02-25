@@ -217,6 +217,20 @@ export const handleUpdateImages = async (
   try {
 
     const storeId = request.body.storeID ; // Assuming the product ID is passed as a route parameter
+    const userId = request.UserId;
+
+    // Check if user is super admin or owns the store
+    const isAdmin = await isSuperAdmin(userId!);
+    if (!isAdmin) {
+      const storeData = await storeService.getStoreById(storeId);
+      if (!storeData || !storeData.store || storeData.store.userId !== userId) {
+        response.status(403).json({
+          success: false,
+          message: 'You do not have permission to update this store image'
+        });
+        return;
+      }
+    }
 
     // Extract files and body data
     const files = request.files as Express.Multer.File[] || [];
