@@ -28,14 +28,17 @@ export const createUser = async (data: { name: string; email: string; password: 
   return user;
 };
 
-export const updateUser = async (id: string, data: { name?: string; email?: string }): Promise<IUserAttributes> => {
+export const updateUser = async (id: string, data: { name?: string; email?: string; phone?: string; address?: string; bio?: string }): Promise<IUserAttributes> => {
   const user = await db.User.findByPk(id);
   if (!user) {
     throw customError(userErrors.UserNotFound);
   }
 
-  if (data.name) user.name = data.name;
-  if (data.email) user.email = data.email;
+  if (data.name !== undefined) user.name = data.name;
+  if (data.email !== undefined) user.email = data.email;
+  if (data.phone !== undefined) user.phone = data.phone;
+  if (data.address !== undefined) user.address = data.address;
+  if (data.bio !== undefined) user.bio = data.bio;
 
   await user.save();
   return user;

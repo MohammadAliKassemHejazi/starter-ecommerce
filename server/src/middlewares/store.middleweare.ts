@@ -135,12 +135,12 @@ export const storeMiddleWear = async (req: Request, res: Response, next: NextFun
             try {
               // For non-image files, return the original file buffer without compression
               console.log(`📖 Reading non-image file buffer for ${fileName}...`);
-              const fileBuffer = fs.readFileSync(filePath);
+              const fileBuffer = await fs.promises.readFile(filePath);
               console.log(`✅ Non-image file buffer read successfully, size: ${fileBuffer.length} bytes`);
 
               // Delete the original uploaded file
               console.log(`🗑️ Deleting original non-image file: ${filePath}`);
-              fs.unlinkSync(filePath);
+              await fs.promises.unlink(filePath);
               console.log(`✅ Original non-image file deleted successfully`);
 
               return {

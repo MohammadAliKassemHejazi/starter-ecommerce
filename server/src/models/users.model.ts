@@ -10,6 +10,7 @@ module.exports = (sequelize: any) => {
     declare password: string;
     declare phone: string;
     declare address: string;
+    declare bio: string;
     declare createdById: string | null; // Optional field to track who created the user
     static associate(models: any) {
       // One-to-one relations
@@ -82,6 +83,10 @@ module.exports = (sequelize: any) => {
       },
       address: {
         type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      bio: {
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       createdById: {

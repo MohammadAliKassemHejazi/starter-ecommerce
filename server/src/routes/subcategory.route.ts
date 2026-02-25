@@ -10,115 +10,47 @@ import { protectedRoutes } from '../middlewares';
 const router = Router();
 
 // Define routes to protect
+// Note: We use the full path strings as they appear in the router definitions below
 const protectedRoutesList = ['/', '/create', '/update/:id', '/delete/:id'];
 protectedRoutes(router, protectedRoutesList);
 
 /**
  * @swagger
  * /subcategories:
- *   get:
- *     summary: Fetch all subcategories
- *     tags: [SubCategories]
- *     responses:
- *       200:
- *         description: A list of subcategories
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/SubCategory'
+ * get:
+ * summary: Fetch all subcategories
+ * tags: [SubCategories]
+ * responses:
+ * 200:
+ * description: A list of subcategories
  */
 router.get('/', handleFetchSubCategories);
 
 /**
  * @swagger
  * /subcategories:
- *   post:
- *     summary: Create a new subcategory
- *     tags: [SubCategories]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateSubCategoryRequest'
- *     responses:
- *       201:
- *         description: Subcategory created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SubCategory'
- *       400:
- *         description: Invalid input (missing or invalid fields)
- *       401:
- *         description: Unauthorized (missing or invalid token)
+ * post:
+ * summary: Create a new subcategory
+ * tags: [SubCategories]
  */
 router.post('/', handleCreateSubCategory);
 
 /**
  * @swagger
- * /subcategories/{id}:
- *   put:
- *     summary: Update a subcategory by ID
- *     tags: [SubCategories]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the subcategory to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateSubCategoryRequest'
- *     responses:
- *       200:
- *         description: Subcategory updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SubCategory'
- *       400:
- *         description: Invalid input (missing or invalid fields)
- *       401:
- *         description: Unauthorized (missing or invalid token)
- *       404:
- *         description: Subcategory not found
+ * /subcategories/update/{id}:
+ * put:
+ * summary: Update a subcategory by ID
+ * tags: [SubCategories]
  */
-router.put('/:id', handleUpdateSubCategory);
+router.put("/update/:id", handleUpdateSubCategory);
 
 /**
  * @swagger
- * /subcategories/{id}:
- *   delete:
- *     summary: Delete a subcategory by ID
- *     tags: [SubCategories]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the subcategory to delete
- *     responses:
- *       200:
- *         description: Subcategory deleted successfully
- *       401:
- *         description: Unauthorized (missing or invalid token)
- *       404:
- *         description: Subcategory not found
+ * /subcategories/delete/{id}:
+ * delete:
+ * summary: Delete a subcategory by ID
+ * tags: [SubCategories]
  */
-router.delete('/:id', handleDeleteSubCategory);
+router.delete("/delete/:id", handleDeleteSubCategory);
 
 export default router;

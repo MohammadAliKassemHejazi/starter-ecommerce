@@ -47,7 +47,7 @@ export const handleCreateUser = async (req: Request, res: Response, next: NextFu
 
 export const handleUpdateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const id = req.params.id;
-  const { name, email } = req.body;
+  const { name, email, phone, address, bio } = req.body;
 
   if (!id) {
     res.status(400).json({ error: 'User ID is required' });
@@ -55,7 +55,7 @@ export const handleUpdateUser = async (req: Request, res: Response, next: NextFu
   }
 
   try {
-    const user = await userService.updateUser(id, { name, email });
+    const user = await userService.updateUser(id, { name, email, phone, address, bio });
     res.json(user);
   } catch (error) {
     next(customError(userErrors.UserUpdateFailure));
