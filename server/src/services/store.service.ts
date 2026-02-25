@@ -109,9 +109,9 @@ export const deleteStore = async (id: string, userId: string): Promise<any | nul
     // Delete images from the filesystem using Promise.all
     await Promise.all(
       images.map(async (photo: any) => {
+
         const outputPath = path.join(__dirname, '..', '..', 'compressed', photo); // Specify output path for compressed file
 
-        const imagePath = path.join(__dirname, '..', '..', 'compressed', photo); // Adjust the path as necessary
         try {
           await fsPromises.unlink(imagePath); // Use fs.promises.unlink for async file deletion
         } catch (err) {
@@ -204,6 +204,7 @@ export const updateImages = async (storeId: string, files: Express.Multer.File[]
       updatedImageUrl: newImageUrl,
     };
   } catch (error) {
+
 
     logger.error('Error updating store image', { error });
 
