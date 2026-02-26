@@ -177,7 +177,7 @@ const PromotionsPage = () => {
         editPath="/promotions/edit"
         deleteAction={async (id) => {
           const promotion = promotions.find(p => p.id === id);
-          if (promotion) handleDeletePromotion(promotion);
+          if (promotion) { handleDeletePromotion(promotion); }
         }}
         exportButton={{ onClick: () => console.log('Export promotions') }}
         filterButton={{ onClick: () => console.log('Filter promotions') }}

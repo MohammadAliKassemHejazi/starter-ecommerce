@@ -14,7 +14,7 @@ type signProps = {
 };
 
 // next local api
-export const signIn = async (user: SignInResponse): Promise<SignIn> => {
+export const signIn = async (user: signProps): Promise<SignIn> => {
 	const { data: response } = await httpClient.post<SignIn>(
 		`/user/auth/login`,
 		user,

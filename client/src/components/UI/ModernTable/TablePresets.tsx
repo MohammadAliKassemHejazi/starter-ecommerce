@@ -359,7 +359,7 @@ export const PackageTablePreset = {
   ]
 };
 
-export default {
+const TablePresets = {
   UserTablePreset,
   StoreTablePreset,
   ProductTablePreset,
@@ -367,3 +367,5 @@ export default {
   OrderTablePreset,
   PackageTablePreset
 };
+
+export default TablePresets;

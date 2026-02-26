@@ -4,32 +4,32 @@ interface ThemeSwitcherProps {
   className?: string;
 }
 
+const themes = [
+  {
+    id: 'normal',
+    name: 'Normal',
+    description: 'Clean and professional',
+    colors: ['#8b5cf6', '#6366f1', '#10b981'],
+    icon: '🎨'
+  },
+  {
+    id: 'black-friday',
+    name: 'Black Friday',
+    description: 'Dark and dramatic',
+    colors: ['#ff6b35', '#d32f2f', '#000000'],
+    icon: '🛍️'
+  },
+  {
+    id: 'christmas',
+    name: 'Christmas',
+    description: 'Festive and joyful',
+    colors: ['#d32f2f', '#2e7d32', '#ffc107'],
+    icon: '🎄'
+  }
+];
+
 const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className = '' }) => {
   const [currentTheme, setCurrentTheme] = useState<string>('normal');
-
-  const themes = [
-    {
-      id: 'normal',
-      name: 'Normal',
-      description: 'Clean and professional',
-      colors: ['#8b5cf6', '#6366f1', '#10b981'],
-      icon: '🎨'
-    },
-    {
-      id: 'black-friday',
-      name: 'Black Friday',
-      description: 'Dark and dramatic',
-      colors: ['#ff6b35', '#d32f2f', '#000000'],
-      icon: '🛍️'
-    },
-    {
-      id: 'christmas',
-      name: 'Christmas',
-      description: 'Festive and joyful',
-      colors: ['#d32f2f', '#2e7d32', '#ffc107'],
-      icon: '🎄'
-    }
-  ];
 
   useEffect(() => {
     // Load saved theme from localStorage
@@ -110,8 +110,3 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className = '' }) => {
 };
 
 export default ThemeSwitcher;
-
-
-
-
-

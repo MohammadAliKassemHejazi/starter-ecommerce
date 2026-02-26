@@ -11,7 +11,7 @@ const nextConfig = {
       "./node_modules",
     ],
     // This prepends content to every SCSS file compiled by Next.js
-    prependData: `@import "_base-theme.scss";`,
+    prependData: `@import "_base-variables.scss";`,
   },
   images: {
     remotePatterns: [
