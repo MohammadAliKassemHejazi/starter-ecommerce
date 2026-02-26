@@ -36,7 +36,7 @@ const initialState: UserState = {
 
 export const signIn = createAsyncThunk(
 	"auth/signin",
-	async (credential: SignInResponse, { dispatch }) => {
+	async (credential: SignAction, { dispatch }) => {
 	
 		const resp = await authService.signIn(credential);
          

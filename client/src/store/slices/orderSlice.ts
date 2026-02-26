@@ -83,7 +83,7 @@ export const orderSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchLastOrder.fulfilled, (state, action) => {
-        state.lastOrder = action.payload;
+        state.lastOrder = action.payload.data;
         state.loading = false;
       })
       .addCase(fetchLastOrder.rejected, (state) => {
@@ -91,7 +91,7 @@ export const orderSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchOrdersByDate.fulfilled, (state, action) => {
-        state.orders = action.payload;
+        state.orders = action.payload.data.items;
       })
       .addCase(fetchOrdersByDate.rejected, (state) => {
         state.error = "Failed to fetch orders by date";
@@ -103,8 +103,8 @@ export const orderSlice = createSlice({
         
         state.orders = action.payload.data.items;
         state.totalOrders = action.payload.data.meta.totalItems;
-        state.currentPage = action.payload.data.meta.page;
-        state.pageSize = action.payload.data.meta.pageSize;
+        state.currentPage = action.payload.data.meta.currentPage;
+        state.pageSize = action.payload.data.meta.itemsPerPage;
         state.error = "";
    
         state.loading = false;
@@ -114,9 +114,9 @@ export const orderSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchOrderItems.fulfilled, (state, action) => {
-        const order = state.orders.find((o) => o.id === action.payload.orderId);
+        const order = state.orders.find((o) => o.id === action.payload.data.orderId);
         if (order) {
-          order.orderItems = action.payload.items;
+          order.orderItems = action.payload.data.items;
         }
       })
 

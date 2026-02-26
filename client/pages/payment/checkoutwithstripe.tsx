@@ -72,8 +72,8 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
         // Use the new package purchase service
         const response = await purchasePackage(packageId, amount, currency.toLowerCase(), paymentMethod.id);
 
-        if (response.body && response.body.status === 'success') {
-          const paymentId = response.body.transactionId;
+        if (response.data && response.data.status === 'succeeded') {
+          const paymentId = response.data.id;
           showToast.success('Package subscription successful!');
 
           trackEvent('purchase', {

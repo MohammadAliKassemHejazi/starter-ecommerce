@@ -7,6 +7,7 @@ import { TablePage } from "@/components/UI/PageComponents";
 import SubscriptionGate from "@/components/SubscriptionGate";
 import ProtectedRoute from "@/components/protectedRoute";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 type Props = {
   articles?: IArticleModelWithUser[];
@@ -85,10 +86,10 @@ const ArticlesList = ({ articles }: Props) => {
       ]}
       headerActions={
         <SubscriptionGate requireSubscription={true}>
-          <a className="btn btn-primary" href="/articles/create">
+          <Link className="btn btn-primary" href="/articles/create">
             <i className="fas fa-plus me-2"></i>
             Create Article
-          </a>
+          </Link>
         </SubscriptionGate>
       }
     />

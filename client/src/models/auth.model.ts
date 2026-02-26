@@ -5,6 +5,7 @@ export interface SignIn { data:{
 	name: string
 	address: string
 	phone: string
+	bio?: string;
 	accessToken: string
 	roles?: Array<{ id: string; name: string; }>;
 	permissions?: Array<{ id: string; name: string; }>;
@@ -43,6 +44,8 @@ export interface GetSession {
 	email:string,
 	name:string,
 	address:string,
+	phone:string,
+	bio?:string,
 	accessToken:string,
 	roles?: Array<{ id: string; name: string; }>;
 	permissions?: Array<{ id: string; name: string; }>;

@@ -17,7 +17,7 @@ export const fetchStoreById = createAsyncThunk(
   async (id: string) => {
     const { data: response } = await storeService.requestStoreById(id);
     console.log(response, " response from storeSlice");
-    return response.store;
+    return response;
   }
 );
 
@@ -115,7 +115,7 @@ const storeSlice = createSlice({
     builder
       .addCase(fetchAllStoresWithFilter.fulfilled, (state, action) => {
         console.log(action.payload, " filtered stores payload");
-    state.stores = action.payload.stores || [];
+    state.stores = action.payload || [];
 })
 .addCase(fetchAllStoresWithFilter.rejected, (state, action) => {
   state.error = action.error.message || "Failed to fetch filtered stores.";
