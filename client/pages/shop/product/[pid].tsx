@@ -88,7 +88,7 @@ const SingleItem = ({ product }: Props) => {
     },
     image:
       process.env.NEXT_PUBLIC_BASE_URL_Images +
-      (product?.ProductImages?.[0]?.imageUrl ?? ""),
+      (product?.productImages?.[0]?.imageUrl ?? ""),
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: product?.ratings ?? 0,
@@ -163,7 +163,7 @@ const SingleItem = ({ product }: Props) => {
                 <div className="row">
                   <MySwiperComponent
                     imageLinks={
-                      product?.ProductImages?.map(
+                      product?.productImages?.map(
                         (photo: any) =>
                           process.env.NEXT_PUBLIC_BASE_URL_Images +
                           photo.imageUrl
@@ -217,7 +217,7 @@ const SingleItem = ({ product }: Props) => {
     }
 
     // Find the selected size's stock quantity
-    const selectedSize = product?.SizeItems?.find(
+    const selectedSize = product?.sizeItems?.find(
       (size) => size.id === values.sizeId
     );
     const availableStock = selectedSize?.quantity || 0;
@@ -244,7 +244,7 @@ const SingleItem = ({ product }: Props) => {
           name="quantity"
           min={1}
           max={
-            product?.SizeItems?.find((size) => size.id === values.sizeId)
+            product?.sizeItems?.find((size) => size.id === values.sizeId)
               ?.quantity || 1
           } // Dynamically set max attribute based on stock
         />
@@ -257,7 +257,7 @@ const SingleItem = ({ product }: Props) => {
       <div className='formField'>
         <label className='formLabel'>Size</label>
         <div className='sizeOptions'>
-          {product?.SizeItems?.map((size) => (
+          {product?.sizeItems?.map((size) => (
             <div key={size.id} className="position-relative">
               <Field
                 className={`sizeOption ${
@@ -452,7 +452,7 @@ export async function generateMetadata({
         {
           url:
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            ((product?.data?.ProductImages?.[0] as any)?.imageUrl ?? ""),
+            ((product?.data?.productImages?.[0] as any)?.imageUrl ?? ""),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
@@ -466,7 +466,7 @@ export async function generateMetadata({
         "Product Description",
       image:
         process.env.NEXT_PUBLIC_BASE_URL_Images +
-        ((product?.data?.ProductImages?.[0] as any)?.imageUrl ?? ""),
+        ((product?.data?.productImages?.[0] as any)?.imageUrl ?? ""),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };
