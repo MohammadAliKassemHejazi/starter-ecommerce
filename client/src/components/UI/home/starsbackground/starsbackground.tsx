@@ -20,7 +20,9 @@ const StarsBackground = () => {
   }, []);
 
   const particles = useMemo(() => {
-    if (!mounted) { return []; }
+    if (!mounted) {
+      return [];
+    }
 
     return Array.from({ length: PARTICLE_COUNT }).map((_, i) => {
       // Create depth by varying size (layer) and speed
@@ -43,7 +45,9 @@ const StarsBackground = () => {
     });
   }, [mounted]);
 
-  if (!mounted) { return null; }
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="stars-container">

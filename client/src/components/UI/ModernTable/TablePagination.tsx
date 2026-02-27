@@ -62,7 +62,9 @@ export const TablePagination: React.FC<TablePaginationProps> = ({
   };
 
   const getPageInfo = () => {
-    if (!totalItems || !pageSize) { return null; }
+    if (!totalItems || !pageSize) {
+      return null;
+    }
     
     const startItem = (currentPage - 1) * pageSize + 1;
     const endItem = Math.min(currentPage * pageSize, totalItems);
