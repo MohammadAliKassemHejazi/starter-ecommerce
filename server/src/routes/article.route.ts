@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   handleGetArticles,
   handleGetArticleById,
@@ -6,13 +6,13 @@ import {
   handleCreate,
   handleUpdate,
   handleDelete,
-} from "../controllers/article.controller";
-import { protectedRoutes } from "../middlewares";
+} from '../controllers/article.controller';
+import { protectedRoutes } from '../middlewares';
 
 const router = Router();
 
 // Routes to protect
-const Routes = ["/get/author", "/create", "/update/:id", "/delete/:id"];
+const Routes = ['/get/author', '/create', '/update/:id', '/delete/:id'];
 
 // Apply protectedRoutes middleware
 protectedRoutes(router, Routes);
@@ -35,7 +35,7 @@ protectedRoutes(router, Routes);
  *       500:
  *         description: Internal server error
  */
-router.get("/", handleGetArticles);
+router.get('/', handleGetArticles);
 
 /**
  * @swagger
@@ -64,7 +64,7 @@ router.get("/", handleGetArticles);
  *       500:
  *         description: Internal server error
  */
-router.get("/get", handleGetArticleById);
+router.get('/get', handleGetArticleById);
 
 /**
  * @swagger
@@ -88,7 +88,7 @@ router.get("/get", handleGetArticleById);
  *       500:
  *         description: Internal server error
  */
-router.get("/get/author", handleGetByAuthor);
+router.get('/get/author', handleGetByAuthor);
 
 /**
  * @swagger
@@ -118,7 +118,7 @@ router.get("/get/author", handleGetByAuthor);
  *       500:
  *         description: Internal server error
  */
-router.post("/create", handleCreate);
+router.post('/create', handleCreate);
 
 /**
  * @swagger
@@ -157,7 +157,7 @@ router.post("/create", handleCreate);
  *       500:
  *         description: Internal server error
  */
-router.patch("/update/:id", handleUpdate);
+router.patch('/update/:id', handleUpdate);
 
 /**
  * @swagger
@@ -184,6 +184,6 @@ router.patch("/update/:id", handleUpdate);
  *       500:
  *         description: Internal server error
  */
-router.delete("/delete/:id", handleDelete);
+router.delete('/delete/:id', handleDelete);
 
 export default router;

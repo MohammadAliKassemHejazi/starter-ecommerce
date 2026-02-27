@@ -11,13 +11,15 @@ export interface ValidationRules {
 }
 
 export const validateField = (value: any, rules: ValidationRule): string | null => {
+  const isEmpty = value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
+
   // Required validation
-  if (rules.required && (!value || value.toString().trim() === '')) {
+  if (rules.required && isEmpty) {
     return 'This field is required';
   }
 
   // Skip other validations if value is empty and not required
-  if (!value || value.toString().trim() === '') {
+  if (isEmpty) {
     return null;
   }
 

@@ -161,7 +161,7 @@ function CreateProduct() {
     try {
       const response = await dispatch(createProduct(formData)).unwrap();
 
-      router.push(`/shop/product/${response.product.id}`);
+      router.push(`/shop/product/${response.data.id}`);
 
       Toast.fire({
         icon: "success",

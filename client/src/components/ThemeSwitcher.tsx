@@ -4,41 +4,32 @@ interface ThemeSwitcherProps {
   className?: string;
 }
 
+const themes = [
+  {
+    id: 'normal',
+    name: 'Normal',
+    description: 'Clean and professional',
+    colors: ['#8b5cf6', '#6366f1', '#10b981'],
+    icon: '🎨'
+  },
+  {
+    id: 'black-friday',
+    name: 'Black Friday',
+    description: 'Dark and dramatic',
+    colors: ['#ff6b35', '#d32f2f', '#000000'],
+    icon: '🛍️'
+  },
+  {
+    id: 'christmas',
+    name: 'Christmas',
+    description: 'Festive and joyful',
+    colors: ['#d32f2f', '#2e7d32', '#ffc107'],
+    icon: '🎄'
+  }
+];
+
 const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className = '' }) => {
   const [currentTheme, setCurrentTheme] = useState<string>('normal');
-
-  const themes = [
-    {
-      id: 'normal',
-      name: 'Normal',
-      description: 'Clean and professional',
-      colors: ['#8b5cf6', '#6366f1', '#10b981'],
-      icon: '🎨'
-    },
-    {
-      id: 'black-friday',
-      name: 'Black Friday',
-      description: 'Dark and dramatic',
-      colors: ['#ff6b35', '#d32f2f', '#000000'],
-      icon: '🛍️'
-    },
-    {
-      id: 'christmas',
-      name: 'Christmas',
-      description: 'Festive and joyful',
-      colors: ['#d32f2f', '#2e7d32', '#ffc107'],
-      icon: '🎄'
-    }
-  ];
-
-  useEffect(() => {
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('selected-theme');
-    if (savedTheme && themes.find(t => t.id === savedTheme)) {
-      setCurrentTheme(savedTheme);
-      applyTheme(savedTheme);
-    }
-  }, []);
 
   const applyTheme = (themeId: string) => {
     // Remove existing theme classes
@@ -50,6 +41,16 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className = '' }) => {
     // Save to localStorage
     localStorage.setItem('selected-theme', themeId);
   };
+
+  useEffect(() => {
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('selected-theme');
+    if (savedTheme && themes.find(t => t.id === savedTheme)) {
+      setCurrentTheme(savedTheme);
+      applyTheme(savedTheme);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleThemeChange = (themeId: string) => {
     setCurrentTheme(themeId);
@@ -110,8 +111,3 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className = '' }) => {
 };
 
 export default ThemeSwitcher;
-
-
-
-
-

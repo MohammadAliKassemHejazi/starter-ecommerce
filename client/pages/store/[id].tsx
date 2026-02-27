@@ -8,7 +8,7 @@ import { fetchProductsByStore, productByStoreSelector } from "@/store/slices/sho
 import Image from "next/image";
 import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
-import { requestAllStoresForUser, requestStoreById } from "@/services/storeService";
+import { requestStoreById } from "@/services/storeService";
 
 import ErrorBoundary from "@/components/Error/ErrorBoundary";
 import ProtectedRoute from "@/components/protectedRoute";
@@ -142,25 +142,7 @@ const SingleStore = ({ initialStore, initialProducts }: SingleStoreProps) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    const response = await requestAllStoresForUser();
-    const stores = response?.data;
-
-    if (!Array.isArray(stores) || stores.length === 0) {
-      return { paths: [], fallback: "blocking" };
-    }
-
-    const paths = stores
-      .filter((store: any) => store && store.id)
-      .map((store: any) => ({
-        params: { id: store.id.toString() },
-      }));
-
-    return { paths, fallback: "blocking" };
-  } catch (error) {
-    console.error("Error generating static paths:", error);
-    return { paths: [], fallback: "blocking" };
-  }
+  return { paths: [], fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps<SingleStoreProps> = async (context) => {

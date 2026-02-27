@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import {
   articleAuthorSelector,
   deleteArticles,
@@ -94,9 +95,9 @@ const Articles = ({}: Props) => {
           <span className="text-muted">
             You have: {articleList?.length || 0} article{articleList?.length !== 1 && "s"}
           </span>
-          <a href="/articles/create" className="btn btn-primary">
+          <Link href="/articles/create" className="btn btn-primary">
             New Article
-          </a>
+          </Link>
         </div>
       }
     />

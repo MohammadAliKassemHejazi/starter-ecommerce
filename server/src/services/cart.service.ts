@@ -1,9 +1,9 @@
 // services/cartService.ts
-import db from "../models"; // Import your database models
-import { ICartItemAttributes } from "../interfaces/types/models/cartitem.model.types";
-import { ICartAttributes } from "../interfaces/types/models/cart.model.types";
-import customError from "../utils/customError";
-import cartErrors from "../utils/errors/cart.errors";
+import db from '../models'; // Import your database models
+import { ICartItemAttributes } from '../interfaces/types/models/cartitem.model.types';
+import { ICartAttributes } from '../interfaces/types/models/cart.model.types';
+import customError from '../utils/customError';
+import cartErrors from '../utils/errors/cart.errors';
 
 export const getCart = async (userId: string): Promise<ICartAttributes> => {
   try {
@@ -19,7 +19,7 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
               include: [db.ProductImage], // Include product images
             },
             {
-              model: db.SizeItem ,// Include size information
+              model: db.SizeItem, // Include size information
               include: [db.Size], // Include size details
             },
           ],
@@ -69,32 +69,27 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
     };
   } catch (error) {
     // Log the error for debugging purposes
-    console.error("Error in getCart:", error);
+    console.error('Error in getCart:', error);
 
     // Re-throw the error or return a custom error response
     throw customError({
-      message: "Failed to fetch cart",
-      code: "CART_FETCH_FAILED",
+      message: 'Failed to fetch cart',
+      code: 'CART_FETCH_FAILED',
       statusCode: 500,
     });
   }
 };
 
-export const addToCart = async (
-  userId: string,
-  productId: string,
-  quantity: number,
-  sizeId: string,
-): Promise<any> => {
+export const addToCart = async (userId: string, productId: string, quantity: number, sizeId: string): Promise<any> => {
   try {
     // Check if the product exists
-    console.log("Looking for product with ID:", productId);
+    console.log('Looking for product with ID:', productId);
     const product = await db.Product.findByPk(productId);
-    console.log("Found product:", product ? "YES" : "NO");
+    console.log('Found product:', product ? 'YES' : 'NO');
     if (!product) {
       throw customError({
-        message: "Product not found",
-        code: "PRODUCT_NOT_FOUND",
+        message: 'Product not found',
+        code: 'PRODUCT_NOT_FOUND',
         statusCode: 404,
       });
     }
@@ -102,42 +97,42 @@ export const addToCart = async (
     // Check if the size exists and has sufficient quantity
     const sizeItem = await db.SizeItem.findOne({
       where: { productId, id: sizeId },
-      raw: true
+      raw: true,
     });
     if (!sizeItem) {
       throw customError({
-        message: "Size not found for this product",
-        code: "SIZE_NOT_FOUND",
+        message: 'Size not found for this product',
+        code: 'SIZE_NOT_FOUND',
         statusCode: 404,
       });
     }
 
     if (sizeItem.quantity < quantity) {
       throw customError({
-        message: "Insufficient stock for the selected size",
-        code: "INSUFFICIENT_STOCK",
+        message: 'Insufficient stock for the selected size',
+        code: 'INSUFFICIENT_STOCK',
         statusCode: 400,
       });
     }
 
     // Find or create the user's cart
     let cart = await getCartByUserId(userId);
-    console.log("Existing cart:", cart);
-    
+    console.log('Existing cart:', cart);
+
     // If no cart exists, create one
     if (!cart) {
-      console.log("Creating new cart for user:", userId);
+      console.log('Creating new cart for user:', userId);
       cart = await createCartForUser(userId);
-      console.log("Created cart:", cart);
+      console.log('Created cart:', cart);
     }
 
     // Verify cart has an ID after creation/retrieval
     const cartId = cart?.id || cart?.dataValues?.id;
     if (!cart || !cartId) {
-      console.error("Cart validation failed:", { cart, hasId: cartId });
+      console.error('Cart validation failed:', { cart, hasId: cartId });
       throw customError({
-        message: "Cart is missing an ID",
-        code: "INVALID_CART",
+        message: 'Cart is missing an ID',
+        code: 'INVALID_CART',
         statusCode: 500,
       });
     }
@@ -147,58 +142,53 @@ export const addToCart = async (
       where: { cartId: cartId, productId, sizeItemId: sizeId },
       defaults: { cartId: cartId, productId, sizeItemId: sizeId, quantity },
     });
-    
+
     const cartitemJson = cartItem.toJSON();
-    
+
     // If the cart item already exists, update its quantity
     if (!created) {
       const newQuantity = cartitemJson.quantity + quantity;
       if (newQuantity > sizeItem.quantity) {
         throw customError({
-          message: "Cannot add more than available stock",
-          code: "EXCEEDS_STOCK",
+          message: 'Cannot add more than available stock',
+          code: 'EXCEEDS_STOCK',
           statusCode: 400,
         });
       }
       await cartItem.update({ quantity: newQuantity });
-      await cartItem.reload(); 
+      await cartItem.reload();
     }
 
     return cartItem;
   } catch (error) {
-    console.error("Error in addToCart:", error);
-    
+    console.error('Error in addToCart:', error);
+
     // Re-throw custom errors as-is
     if (error && typeof error === 'object' && 'code' in error) {
       throw error;
     }
-    
+
     // Wrap other errors
     throw customError({
-      message: "Failed to add product to cart",
-      code: "CART_ADD_FAILED",
+      message: 'Failed to add product to cart',
+      code: 'CART_ADD_FAILED',
       statusCode: 500,
     });
   }
 };
 
 export const getCartByUserId = async (userId: string): Promise<any> => {
-  return await db.Cart.findOne({ 
+  return await db.Cart.findOne({
     where: { userId },
-    raw: false  // Remove raw: true to get proper Sequelize instance
-  }); 
+    raw: false, // Remove raw: true to get proper Sequelize instance
+  });
 };
 
 export const createCartForUser = async (userId: string): Promise<any> => {
-  return await db.Cart.create({ userId }); 
+  return await db.Cart.create({ userId });
 };
 
-export const decreaseCart = async (
-  userId: string,
-  productId: string,
-  quantity: number,
-    sizeId: string,
-): Promise<ICartItemAttributes | null> => {
+export const decreaseCart = async (userId: string, productId: string, quantity: number, sizeId: string): Promise<ICartItemAttributes | null> => {
   try {
     // Find the user's cart
     const cart = await db.Cart.findOne({ where: { userId }, raw: true });
@@ -208,12 +198,12 @@ export const decreaseCart = async (
 
     // Find the cart item
     const cartItem = await db.CartItem.findOne({
-      where: { cartId: cart.id, productId, sizeItemId:sizeId },
+      where: { cartId: cart.id, productId, sizeItemId: sizeId },
     });
     if (!cartItem) {
       throw customError(cartErrors.CartItemNotFound);
     }
-const cartItemJson = cartItem.toJSON()
+    const cartItemJson = cartItem.toJSON();
     // If quantity is greater than the requested decrease, decrement; otherwise, remove item
     if (cartItemJson.quantity > quantity) {
       await cartItem.update({ quantity: cartItemJson.quantity - quantity });
@@ -224,10 +214,10 @@ const cartItemJson = cartItem.toJSON()
       return null; // Indicating the item has been removed
     }
   } catch (error) {
-    console.error("Error in decreaseCart:", error);
+    console.error('Error in decreaseCart:', error);
     throw customError({
-      message: "Failed to decrease product quantity",
-      code: "CART_DECREASE_FAILED",
+      message: 'Failed to decrease product quantity',
+      code: 'CART_DECREASE_FAILED',
       statusCode: 500,
     });
   }
@@ -236,7 +226,7 @@ const cartItemJson = cartItem.toJSON()
 export const removeFromCart = async (
   userId: string,
   productId: string,
-  sizeId: string // Add sizeId parameter
+  sizeId: string, // Add sizeId parameter
 ): Promise<void> => {
   try {
     // Find the user's cart
@@ -247,22 +237,22 @@ export const removeFromCart = async (
 
     // Remove the item from the cart
     const deletedRows = await db.CartItem.destroy({
-      where: { cartId: cart.id, productId, sizeItemId :sizeId },
+      where: { cartId: cart.id, productId, sizeItemId: sizeId },
     });
 
     // If no rows were deleted, the product was not in the cart
     if (deletedRows === 0) {
       throw customError({
-        message: "Product not found in cart",
-        code: "PRODUCT_NOT_IN_CART",
+        message: 'Product not found in cart',
+        code: 'PRODUCT_NOT_IN_CART',
         statusCode: 404,
       });
     }
   } catch (error) {
-    console.error("Error in removeFromCart:", error);
+    console.error('Error in removeFromCart:', error);
     throw customError({
-      message: "Failed to remove product from cart",
-      code: "CART_REMOVE_FAILED",
+      message: 'Failed to remove product from cart',
+      code: 'CART_REMOVE_FAILED',
       statusCode: 500,
     });
   }
@@ -271,7 +261,7 @@ export const removeFromCart = async (
 export const clearCart = async (userId: string): Promise<void> => {
   try {
     // Find the user's cart
-    const cart = await db.Cart.findOne({ where: { userId } ,raw:true});
+    const cart = await db.Cart.findOne({ where: { userId }, raw: true });
     if (!cart) {
       throw customError(cartErrors.CartNotFound);
     }
@@ -279,10 +269,10 @@ export const clearCart = async (userId: string): Promise<void> => {
     // Clear all items in the cart
     await db.CartItem.destroy({ where: { cartId: cart.id } });
   } catch (error) {
-    console.error("Error in clearCart:", error);
+    console.error('Error in clearCart:', error);
     throw customError({
-      message: "Failed to clear cart",
-      code: "CART_CLEAR_FAILED",
+      message: 'Failed to clear cart',
+      code: 'CART_CLEAR_FAILED',
       statusCode: 500,
     });
   }

@@ -24,45 +24,45 @@ export const responseStandardizer = (req: Request, res: Response, next: NextFunc
         // User prefers flat structure for pagination.
         let mergedRest = { ...rest };
         if (mergedRest.meta && typeof mergedRest.meta === 'object') {
-             const meta = mergedRest.meta;
-             delete mergedRest.meta;
-             mergedRest = { ...mergedRest, ...meta };
+          const meta = mergedRest.meta;
+          delete mergedRest.meta;
+          mergedRest = { ...mergedRest, ...meta };
         }
 
         // If data is missing, create it as an object to hold the rest
         if (newData === undefined || newData === null) {
-            newData = mergedRest;
+          newData = mergedRest;
         } else if (Array.isArray(newData)) {
-            // If data is an array, we can't merge properties into it easily without changing structure
-             newData = {
-                items: newData, // STANDARDIZED: Using 'items' consistently
-                ...mergedRest
-             };
+          // If data is an array, we can't merge properties into it easily without changing structure
+          newData = {
+            items: newData, // STANDARDIZED: Using 'items' consistently
+            ...mergedRest,
+          };
         } else if (typeof newData === 'object') {
-            // If data is already an object, merge the rest into it
-            newData = {
-                ...newData,
-                ...mergedRest
-            };
+          // If data is already an object, merge the rest into it
+          newData = {
+            ...newData,
+            ...mergedRest,
+          };
         } else {
-             // specific edge case: data is a primitive?
-             newData = {
-                 value: newData,
-                 ...mergedRest
-             }
+          // specific edge case: data is a primitive?
+          newData = {
+            value: newData,
+            ...mergedRest,
+          };
         }
 
         // Call original with standardized structure
         return originalJson.call(this, {
-            success,
-            message: message || (success ? 'Success' : 'Error'),
-            data: newData
+          success,
+          message: message || (success ? 'Success' : 'Error'),
+          data: newData,
         });
       }
 
       // If perfectly formatted, just pass through (or ensure message is set)
       if (!message) {
-         body.message = success ? 'Success' : 'Error';
+        body.message = success ? 'Success' : 'Error';
       }
       return originalJson.call(this, body);
     }
@@ -75,7 +75,7 @@ export const responseStandardizer = (req: Request, res: Response, next: NextFunc
     return originalJson.call(this, {
       success: true,
       message: 'Success',
-      data: body
+      data: body,
     });
   };
 

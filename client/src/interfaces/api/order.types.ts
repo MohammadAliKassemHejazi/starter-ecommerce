@@ -1,4 +1,5 @@
 import { ApiResponse, PaginatedApiResponse } from './apiResponse.types';
+import { IOrderModel } from "@/models/order.model";
 
 // Order API Response Types
 export interface OrderResponse extends ApiResponse<{
@@ -30,17 +31,15 @@ export interface OrderResponse extends ApiResponse<{
   };
 }> {}
 
-export interface OrdersListResponse extends PaginatedApiResponse<{
-  id: string;
-  paymentId: string;
-  customerName: string;
-  customerEmail: string;
-  totalPrice: number;
-  status: string;
-  currency: string;
-  createdAt: string;
-  updatedAt: string;
-  itemsCount: number;
+export interface OrdersListResponse extends ApiResponse<{
+  items: IOrderModel[];
+  meta: {
+    totalItems: number;
+    itemCount: number;
+    itemsPerPage: number;
+    totalPages: number;
+    currentPage: number;
+  };
 }> {}
 
 export interface OrderItemsResponse extends ApiResponse<{
@@ -58,7 +57,7 @@ export interface OrderItemsResponse extends ApiResponse<{
       name: string;
       description: string;
       price: number;
-      ProductImages?: Array<{
+      productImages?: Array<{
         id: string;
         url: string;
         alt?: string;

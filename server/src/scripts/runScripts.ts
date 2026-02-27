@@ -4,7 +4,7 @@ import db from '../models';
 const runScripts = async () => {
   try {
     console.log('Starting database scripts...');
-    
+
     // Sync database (optional: { force: true } will drop tables)
     // await db.sequelize.sync({ alter: true });
 

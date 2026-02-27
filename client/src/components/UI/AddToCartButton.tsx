@@ -34,7 +34,6 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-  const isGuest = useSelector((state: RootState) => state.user.isGuest);
   const cartLoading = useSelector((state: RootState) => state.cart.status === 'loading');
 
   const handleAddToCart = async () => {
@@ -47,7 +46,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     }
 
     // For authenticated users, ensure sizeId is provided
-    if (isAuthenticated && !isGuest && !product.sizeId) {
+    if (isAuthenticated && !product.sizeId) {
       Toast.fire({
         icon: 'warning',
         title: 'Please select a size before adding to cart',

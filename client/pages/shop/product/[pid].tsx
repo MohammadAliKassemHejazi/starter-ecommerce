@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layouts/Layout";
 import MySwiperComponent from "@/components/UI/General/ImagesSlider/MySwiperComponent";
 import { useRouter } from "next/router";
@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { Formik, Form, Field } from "formik";
 import { IProductModel } from "../../../src/models/product.model"; // Adjust the import path as needed
 import {
-  requestAllProductID,
   requestProductById,
 } from "@/services/shopService";
 import Head from "next/head";
@@ -399,35 +398,10 @@ export default function ProtectedSingleItem({ product }: Props) {
 
 // Fetch all product IDs at build time
 export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    const res = await requestAllProductID(); // Fetch all product IDs
-
-    // ✅ Handle object-shaped response (not array)
-    if (!res || !res.data || (typeof res.data !== 'object')) {
-      console.error("Invalid response structure:", res);
-      return { paths: [], fallback: "blocking" };
-    }
-
-    // ✅ Convert object like { "0": {...}, "1": {...} } → array of values
-    const productArray = Object.values(res.data);
-
-    // Optional: validate each item has an `id`
-    const validProducts = productArray.filter(
-      (item: any) => item && typeof item.id !== 'undefined'
-    );
-
-    const paths = validProducts.map((product: any) => ({
-      params: { pid: product.id.toString() },
-    }));
-
-    return {
-      paths,
-      fallback: "blocking",
-    };
-  } catch (error) {
-    console.error("Error fetching product IDs:", error);
-    return { paths: [], fallback: "blocking" };
-  }
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
 };
 // Fetch product data at build time
 export const getStaticProps: GetStaticProps = async ({ params }) => {

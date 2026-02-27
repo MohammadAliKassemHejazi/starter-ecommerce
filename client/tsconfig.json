@@ -26,9 +26,11 @@
       "@/utils/*": ["utils/*"],
       "@/styles/*": ["styles/*"],
       "@/constants/*": ["constants/*"],
-      "@/*": ["/*"],
+      "@/contexts/*": ["contexts/*"],
+      "@/features/*": ["features/*"],
+      "@/*": ["/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx"]
 }

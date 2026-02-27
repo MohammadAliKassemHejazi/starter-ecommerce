@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter ,Router } from 'next/router';
+import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { getNavigationItems, getAnonymousNavigationItems, getQuickActions, NavigationItem as NavigationItemType } from '@/config/navigation';
@@ -494,23 +495,23 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
           {/* Core Navigation - Always visible for authenticated users */}
           {user.isAuthenticated && (
             <div className="menu-section">
-              <a href="/dashboard" className={router.pathname === '/dashboard' ? 'active' : ''}>
+              <Link href="/dashboard" className={router.pathname === '/dashboard' ? 'active' : ''}>
                 <i className="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
-              </a>
-              <a href="/shop" className={router.pathname === '/shop' ? 'active' : ''}>
+              </Link>
+              <Link href="/shop" className={router.pathname === '/shop' ? 'active' : ''}>
                 <i className="fas fa-shopping-bag"></i>
                 <span>Shop</span>
-              </a>
-              <a href="/orders" className={router.pathname === '/orders' ? 'active' : ''}>
+              </Link>
+              <Link href="/orders" className={router.pathname === '/orders' ? 'active' : ''}>
                 <i className="fas fa-receipt"></i>
                 <span>Orders</span>
-              </a>
-              <a href="/analytics" className={router.pathname === '/analytics' ? 'active' : ''}>
+              </Link>
+              <Link href="/analytics" className={router.pathname === '/analytics' ? 'active' : ''}>
                 <i className="fas fa-chart-line"></i>
                 <span>Analytics</span>
-              </a>
-              <a href="/cart" className={router.pathname === '/cart' ? 'active' : ''}>
+              </Link>
+              <Link href="/cart" className={router.pathname === '/cart' ? 'active' : ''}>
                 <i className="fas fa-shopping-cart"></i>
                 <span>Cart</span>
                 {user.isGuest ? (
@@ -518,7 +519,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
                 ) : cartCount > 0 ? (
                   <span className="badge" style={{background: 'linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-secondary) 100%)', color: 'var(--bs-white)', border: '1px solid var(--bs-gray-300)', padding: '2px 6px', fontSize: '10px', marginLeft: '8px'}}>{cartCount}</span>
                 ) : null}
-              </a>
+              </Link>
             </div>
           )}
           
@@ -527,28 +528,28 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
             <div className="menu-section">
               <div className="section-title">User Management</div>
               {canAccessPage('users') && (
-                <a href="/users" className={router.pathname === '/users' ? 'active' : ''}>
+                <Link href="/users" className={router.pathname === '/users' ? 'active' : ''}>
                   <i className="fas fa-users"></i>
                   <span>Users</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('roles') && (
-                <a href="/roles" className={router.pathname === '/roles' ? 'active' : ''}>
+                <Link href="/roles" className={router.pathname === '/roles' ? 'active' : ''}>
                   <i className="fas fa-shield-alt"></i>
                   <span>Roles</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('roles') && (
-                <a href="/roles/Assignment" className={router.pathname === '/roles/Assignment' ? 'active' : ''}>
+                <Link href="/roles/Assignment" className={router.pathname === '/roles/Assignment' ? 'active' : ''}>
                   <i className="fas fa-user-check"></i>
                   <span>Role Assignment</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('permissions') && (
-                <a href="/permissions" className={router.pathname === '/permissions' ? 'active' : ''}>
+                <Link href="/permissions" className={router.pathname === '/permissions' ? 'active' : ''}>
                   <i className="fas fa-lock"></i>
                   <span>Permissions</span>
-                </a>
+                </Link>
               )}
             </div>
           )}
@@ -558,34 +559,34 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
             <div className="menu-section">
               <div className="section-title">Content Management</div>
               {canAccessPage('categories') && (
-                <a href="/categories" className={router.pathname === '/categories' ? 'active' : ''}>
+                <Link href="/categories" className={router.pathname === '/categories' ? 'active' : ''}>
                   <i className="fas fa-tags"></i>
                   <span>Categories</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('subcategories') && (
-                <a href="/subcategories" className={router.pathname === '/subcategories' ? 'active' : ''}>
+                <Link href="/subcategories" className={router.pathname === '/subcategories' ? 'active' : ''}>
                   <i className="fas fa-tag"></i>
                   <span>Subcategories</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('products') && (
-                <a href="/shop/product" className={router.pathname === '/products' ? 'active' : ''}>
+                <Link href="/shop/product" className={router.pathname === '/products' ? 'active' : ''}>
                   <i className="fas fa-box"></i>
                   <span>Products</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('articles') && (
-                <a href="/articles" className={router.pathname === '/articles' ? 'active' : ''}>
+                <Link href="/articles" className={router.pathname === '/articles' ? 'active' : ''}>
                   <i className="fas fa-newspaper"></i>
                   <span>Articles</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('comments') && (
-                <a href="/comments" className={router.pathname === '/comments' ? 'active' : ''}>
+                <Link href="/comments" className={router.pathname === '/comments' ? 'active' : ''}>
                   <i className="fas fa-comments"></i>
                   <span>Comments</span>
-                </a>
+                </Link>
               )}
             </div>
           )}
@@ -595,22 +596,22 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
             <div className="menu-section">
               <div className="section-title">Business Operations</div>
               {canAccessPage('promotions') && (
-                <a href="/promotions" className={router.pathname === '/promotions' ? 'active' : ''}>
+                <Link href="/promotions" className={router.pathname === '/promotions' ? 'active' : ''}>
                   <i className="fas fa-percentage"></i>
                   <span>Promotions</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('returns') && (
-                <a href="/returns" className={router.pathname === '/returns' ? 'active' : ''}>
+                <Link href="/returns" className={router.pathname === '/returns' ? 'active' : ''}>
                   <i className="fas fa-undo"></i>
                   <span>Returns</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('store') && (
-                <a href="/store" className={router.pathname === '/store' ? 'active' : ''}>
+                <Link href="/store" className={router.pathname === '/store' ? 'active' : ''}>
                   <i className="fas fa-store"></i>
                   <span>My Store</span>
-                </a>
+                </Link>
               )}
             </div>
           )}
@@ -620,34 +621,34 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
             <div className="menu-section">
               <div className="section-title">System Management</div>
               {canAccessPage('packages') && (
-                <a href="/packages" className={router.pathname === '/packages' ? 'active' : ''}>
+                <Link href="/packages" className={router.pathname === '/packages' ? 'active' : ''}>
                   <i className="fas fa-boxes"></i>
                   <span>Packages</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('shipping') && (
-                <a href="/shipping" className={router.pathname === '/shipping' ? 'active' : ''}>
+                <Link href="/shipping" className={router.pathname === '/shipping' ? 'active' : ''}>
                   <i className="fas fa-truck"></i>
                   <span>Shipping</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('sizes') && (
-                <a href="/sizes" className={router.pathname === '/sizes' ? 'active' : ''}>
+                <Link href="/sizes" className={router.pathname === '/sizes' ? 'active' : ''}>
                   <i className="fas fa-ruler"></i>
                   <span>Sizes</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('taxes') && (
-                <a href="/taxes" className={router.pathname === '/taxes' ? 'active' : ''}>
+                <Link href="/taxes" className={router.pathname === '/taxes' ? 'active' : ''}>
                   <i className="fas fa-calculator"></i>
                   <span>Taxes</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('settings') && (
-                <a href="/settings" className={router.pathname === '/settings' ? 'active' : ''}>
+                <Link href="/settings" className={router.pathname === '/settings' ? 'active' : ''}>
                   <i className="fas fa-cog"></i>
                   <span>System Settings</span>
-                </a>
+                </Link>
               )}
             </div>
           )}
@@ -657,28 +658,28 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
             <div className="menu-section">
               <div className="section-title">Platform Management</div>
               {canAccessPage('admin-admins') && (
-                <a href="/admin/admins" className={router.pathname === '/admin/admins' ? 'active' : ''}>
+                <Link href="/admin/admins" className={router.pathname === '/admin/admins' ? 'active' : ''}>
                   <i className="fas fa-user-tie"></i>
                   <span>All Admins</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('admin-users') && (
-                <a href="/admin/users" className={router.pathname === '/admin/users' ? 'active' : ''}>
+                <Link href="/admin/users" className={router.pathname === '/admin/users' ? 'active' : ''}>
                   <i className="fas fa-users-cog"></i>
                   <span>All Users</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('admin-stores') && (
-                <a href="/admin/stores" className={router.pathname === '/admin/stores' ? 'active' : ''}>
+                <Link href="/admin/stores" className={router.pathname === '/admin/stores' ? 'active' : ''}>
                   <i className="fas fa-building"></i>
                   <span>All Stores</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('admin-analytics') && (
-                <a href="/admin/analytics" className={router.pathname === '/admin/analytics' ? 'active' : ''}>
+                <Link href="/admin/analytics" className={router.pathname === '/admin/analytics' ? 'active' : ''}>
                   <i className="fas fa-chart-bar"></i>
                   <span>Platform Analytics</span>
-                </a>
+                </Link>
               )}
             </div>
           )}
@@ -688,22 +689,22 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
             <div className="menu-section">
               <div className="section-title">Monitoring</div>
               {canAccessPage('audit-logs') && (
-                <a href="/admin/audit-logs" className={router.pathname === '/admin/audit-logs' ? 'active' : ''}>
+                <Link href="/admin/audit-logs" className={router.pathname === '/admin/audit-logs' ? 'active' : ''}>
                   <i className="fas fa-clipboard-list"></i>
                   <span>Audit Logs</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('user-sessions') && (
-                <a href="/admin/user-sessions" className={router.pathname === '/admin/user-sessions' ? 'active' : ''}>
+                <Link href="/admin/user-sessions" className={router.pathname === '/admin/user-sessions' ? 'active' : ''}>
                   <i className="fas fa-desktop"></i>
                   <span>User Sessions</span>
-                </a>
+                </Link>
               )}
               {canAccessPage('system-health') && (
-                <a href="/admin/system-health" className={router.pathname === '/admin/system-health' ? 'active' : ''}>
+                <Link href="/admin/system-health" className={router.pathname === '/admin/system-health' ? 'active' : ''}>
                   <i className="fas fa-heartbeat"></i>
                   <span>System Health</span>
-                </a>
+                </Link>
               )}
             </div>
           )}
@@ -712,14 +713,14 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
           {user.isAuthenticated && (
             <div className="menu-section">
               <div className="section-title">Account</div>
-              <a href="/profile" className={router.pathname === '/profile' ? 'active' : ''}>
+              <Link href="/profile" className={router.pathname === '/profile' ? 'active' : ''}>
                 <i className="fas fa-user"></i>
                 <span>Profile</span>
-              </a>
-              <a href="/settings" className={router.pathname === '/settings' ? 'active' : ''}>
+              </Link>
+              <Link href="/settings" className={router.pathname === '/settings' ? 'active' : ''}>
                 <i className="fas fa-cog"></i>
                 <span>Settings</span>
-              </a>
+              </Link>
             </div>
           )}
 
@@ -727,26 +728,26 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
           {user.isAuthenticated && (isAdmin || isSuperAdmin) && (
             <div className="menu-section testing-section">
               <div className="section-title">Testing & Demos</div>
-              <a href="/test-permissions" className={router.pathname === '/test-permissions' ? 'active' : ''}>
+              <Link href="/test-permissions" className={router.pathname === '/test-permissions' ? 'active' : ''}>
                 <i className="fas fa-shield-alt"></i>
                 <span>Test Permissions</span>
                 <span className="testing-badge">TEST</span>
-              </a>
-              <a href="/navigation-demo" className={router.pathname === '/navigation-demo' ? 'active' : ''}>
+              </Link>
+              <Link href="/navigation-demo" className={router.pathname === '/navigation-demo' ? 'active' : ''}>
                 <i className="fas fa-bars"></i>
                 <span>Navigation Demo</span>
                 <span className="testing-badge">DEMO</span>
-              </a>
-              <a href="/permission-demo" className={router.pathname === '/permission-demo' ? 'active' : ''}>
+              </Link>
+              <Link href="/permission-demo" className={router.pathname === '/permission-demo' ? 'active' : ''}>
                 <i className="fas fa-key"></i>
                 <span>Permission Demo</span>
                 <span className="testing-badge">DEMO</span>
-              </a>
-              <a href="/table-demo" className={router.pathname === '/table-demo' ? 'active' : ''}>
+              </Link>
+              <Link href="/table-demo" className={router.pathname === '/table-demo' ? 'active' : ''}>
                 <i className="fas fa-table"></i>
                 <span>Table Demo</span>
                 <span className="testing-badge">DEMO</span>
-              </a>
+              </Link>
             </div>
           )}
 
@@ -762,14 +763,14 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
               </a>
             ) : (
               <>
-                <a href="/auth/signin" className={router.pathname === '/auth/signin' ? 'active' : ''}>
+                <Link href="/auth/signin" className={router.pathname === '/auth/signin' ? 'active' : ''}>
                   <i className="fas fa-sign-in-alt"></i>
                   <span>Login</span>
-                </a>
-                <a href="/auth/signup" className={router.pathname === '/auth/signup' ? 'active' : ''}>
+                </Link>
+                <Link href="/auth/signup" className={router.pathname === '/auth/signup' ? 'active' : ''}>
                   <i className="fas fa-user-plus"></i>
                   <span>Register</span>
-                </a>
+                </Link>
               </>
             )}
           </div>

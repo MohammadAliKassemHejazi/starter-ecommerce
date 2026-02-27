@@ -64,8 +64,8 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({ currentProduct })
                     src={
                       product.photos && product.photos.length > 0
                         ? process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0].imageUrl
-                        : (product.ProductImages && product.ProductImages.length > 0
-                            ? process.env.NEXT_PUBLIC_BASE_URL_Images + product.ProductImages[0].imageUrl
+                        : (product.productImages && product.productImages.length > 0
+                            ? process.env.NEXT_PUBLIC_BASE_URL_Images + product.productImages[0].url
                             : '/images/placeholder.png')
                     }
                     alt={product.name}

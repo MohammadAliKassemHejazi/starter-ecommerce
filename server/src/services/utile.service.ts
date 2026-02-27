@@ -1,10 +1,8 @@
-import {ICategoryAttributes} from 'interfaces/types/models/category.model.types';
+import { ICategoryAttributes } from 'interfaces/types/models/category.model.types';
 
 import db from '../models/index';
 import { ISubCategoryAttributes } from 'interfaces/types/models/subcategory.model.types';
 import { ISizeAttributes } from 'interfaces/types/models/size.model.types';
-
-
 
 const getAllCategories = async (): Promise<{ categories: ICategoryAttributes[] } | null> => {
   const categories: ICategoryAttributes[] | null = await db.Category.findAll();
@@ -15,10 +13,8 @@ const getAllCategories = async (): Promise<{ categories: ICategoryAttributes[] }
   return { categories };
 };
 
-const getSubCategories = async (categoryId:string): Promise<{ subcategories: ISubCategoryAttributes[] } | null> => {
-  const subcategories: ISubCategoryAttributes[] | null = await db.SubCategory.findAll(
-    {where : {categoryId:categoryId}}
-  );
+const getSubCategories = async (categoryId: string): Promise<{ subcategories: ISubCategoryAttributes[] } | null> => {
+  const subcategories: ISubCategoryAttributes[] | null = await db.SubCategory.findAll({ where: { categoryId: categoryId } });
 
   if (!subcategories) {
     return null;
@@ -27,13 +23,13 @@ const getSubCategories = async (categoryId:string): Promise<{ subcategories: ISu
   return { subcategories };
 };
 
-const getAllSizes = async (): Promise<ISizeAttributes[]  | null> => {
-  const Sizes : ISizeAttributes[] = await db.Size.findAll({ raw: true });
+const getAllSizes = async (): Promise<ISizeAttributes[] | null> => {
+  const Sizes: ISizeAttributes[] = await db.Size.findAll({ raw: true });
   if (!Sizes) {
     return null;
   }
 
-  return  Sizes  ;
+  return Sizes;
 };
 export const getManagedUserIds = async (rootUserId: string): Promise<string[]> => {
   const query = `
@@ -65,5 +61,5 @@ export default {
   getManagedUserIds,
   getAllCategories,
   getSubCategories,
-  getAllSizes
+  getAllSizes,
 };

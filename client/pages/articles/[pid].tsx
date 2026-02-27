@@ -1,11 +1,10 @@
-import { PageLayout } from "@/components/UI/PageComponents";
+import { PageLayout, ActionButton } from "@/components/UI/PageComponents";
 import ProtectedRoute from "@/components/protectedRoute";
 import { usePageData } from "@/hooks/usePageData";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import Link from "next/link";
-import { ActionButton } from "@/components/UI/PageComponents";
 
 interface Article {
   id: string;
@@ -27,35 +26,35 @@ const ArticleById = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchArticle = async () => {
+        try {
+          setLoading(true);
+          const token = localStorage.getItem('token');
+          const response = await fetch(`/api/articles/${pid}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setArticle(data.data);
+          } else {
+            throw new Error('Failed to fetch article');
+          }
+        } catch (error) {
+          console.error('Error fetching article:', error);
+          showToast.error('Failed to load article');
+        } finally {
+          setLoading(false);
+        }
+      };
+
     if (pid) {
       fetchArticle();
     }
   }, [pid]);
-
-  const fetchArticle = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/articles/${pid}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setArticle(data.data);
-      } else {
-        throw new Error('Failed to fetch article');
-      }
-    } catch (error) {
-      console.error('Error fetching article:', error);
-      showToast.error('Failed to load article');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleEdit = () => {
     if (article) {
@@ -64,7 +63,7 @@ const ArticleById = () => {
   };
 
   const handleDelete = async () => {
-    if (!article) return;
+    if (!article) { return; }
 
     try {
       const token = localStorage.getItem('token');
@@ -166,7 +165,7 @@ const ArticleById = () => {
       ) : !loading ? (
         <div className="text-center py-5">
           <h3 className="text-muted">Article not found</h3>
-          <p className="text-muted">The article you're looking for doesn't exist or has been removed.</p>
+          <p className="text-muted">The article you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           <Link href="/articles" className="btn btn-primary">
             <i className="bi bi-arrow-left me-2"></i>
             Back to Articles

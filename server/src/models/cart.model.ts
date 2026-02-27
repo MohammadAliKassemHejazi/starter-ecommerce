@@ -1,24 +1,23 @@
-"use strict";
+'use strict';
 
-import { Model, UUIDV4 } from "sequelize";
-import { ICartAttributes } from "../interfaces/types/models/cart.model.types";
+import { Model, UUIDV4 } from 'sequelize';
+import { ICartAttributes } from '../interfaces/types/models/cart.model.types';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Cart extends Model<ICartAttributes> implements ICartAttributes {
     id!: string;
 
-
     static associate(models: any) {
       // Define the relationship with User
       Cart.belongsTo(models.User, {
-        foreignKey: "userId",
-        onDelete: "CASCADE",
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
       });
 
       // Define the relationship with CartItem
       Cart.hasMany(models.CartItem, {
-        foreignKey: "cartId", // Foreign key in CartItem pointing to Cart
-        onDelete: "CASCADE",
+        foreignKey: 'cartId', // Foreign key in CartItem pointing to Cart
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -34,12 +33,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
       userId: {
         type: DataTypes.UUID,
         allowNull: false,
-      }
+      },
     },
     {
       sequelize,
-      modelName: "Cart",
-    }
+      modelName: 'Cart',
+    },
   );
 
   return Cart;

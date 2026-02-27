@@ -18,7 +18,7 @@ export const getTranslations = async (req: Request, res: Response) => {
       where: whereClause,
       order: [['createdAt', 'DESC']],
       limit: Number(limit),
-      offset
+      offset,
     });
 
     ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Translations retrieved successfully');
@@ -37,7 +37,7 @@ export const createTranslation = async (req: Request, res: Response) => {
       recordId,
       language,
       field,
-      translation
+      translation,
     });
 
     ResponseFormatter.success(res, translationRecord, 'Translation created successfully', 201);
@@ -90,7 +90,7 @@ export const getTranslationsByRecord = async (req: Request, res: Response) => {
 
     const translations = await db.Translation.findAll({
       where: { model, recordId },
-      order: [['language', 'ASC']]
+      order: [['language', 'ASC']],
     });
 
     // Group translations by language

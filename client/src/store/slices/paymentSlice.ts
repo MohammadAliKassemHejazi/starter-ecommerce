@@ -28,7 +28,7 @@ export const createPayment = createAsyncThunk<
   async ({ amount, currency, paymentMethodId }, { rejectWithValue }) => {
     try {
       const response = await paymentService.createPayment({ amount, currency, paymentMethodId });
-      return { clientSecret: response.body.clientSecret }; // Return clientSecret
+      return { clientSecret: response.data.clientSecret! }; // Return clientSecret
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message || 'Failed to process payment');

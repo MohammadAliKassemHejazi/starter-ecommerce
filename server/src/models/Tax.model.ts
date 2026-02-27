@@ -1,5 +1,5 @@
-"use strict";
-import { Model, DataTypes } from "sequelize";
+'use strict';
+import { Model, DataTypes } from 'sequelize';
 
 module.exports = (sequelize: any) => {
   class TaxRule extends Model {
@@ -8,14 +8,17 @@ module.exports = (sequelize: any) => {
     }
   }
 
-  TaxRule.init({
-    region: DataTypes.STRING,
-    rate: DataTypes.FLOAT,
-    taxType: DataTypes.ENUM('VAT', 'GST', 'SALES_TAX')
-  }, {
-    sequelize,
-    modelName: 'TaxRule'
-  });
+  TaxRule.init(
+    {
+      region: DataTypes.STRING,
+      rate: DataTypes.FLOAT,
+      taxType: DataTypes.ENUM('VAT', 'GST', 'SALES_TAX'),
+    },
+    {
+      sequelize,
+      modelName: 'TaxRule',
+    },
+  );
 
   return TaxRule;
 };

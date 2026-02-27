@@ -4,6 +4,7 @@ export interface UserState {
 	name: string;
 	address: string;
 	phone: string;
+	bio?: string;
 	isAuthenticated: boolean;
 	isAuthenticating: boolean;
 	accessToken: string;

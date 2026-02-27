@@ -12,7 +12,7 @@ export const getTaxRules = async (req: Request, res: Response) => {
 
     const taxRules = await db.TaxRule.findAll({
       where: whereClause,
-      order: [['region', 'ASC']]
+      order: [['region', 'ASC']],
     });
 
     ResponseFormatter.success(res, taxRules, 'Tax rules retrieved successfully');
@@ -29,7 +29,7 @@ export const createTaxRule = async (req: Request, res: Response) => {
     const taxRule = await db.TaxRule.create({
       region,
       rate,
-      taxType
+      taxType,
     });
 
     ResponseFormatter.success(res, taxRule, 'Tax rule created successfully', 201);
@@ -81,7 +81,7 @@ export const calculateTax = async (req: Request, res: Response) => {
     const { region, amount } = req.body;
 
     const taxRule = await db.TaxRule.findOne({
-      where: { region }
+      where: { region },
     });
 
     if (!taxRule) {
@@ -91,13 +91,17 @@ export const calculateTax = async (req: Request, res: Response) => {
     const taxAmount = (amount * taxRule.rate) / 100;
     const totalAmount = amount + taxAmount;
 
-    ResponseFormatter.success(res, {
-      originalAmount: amount,
-      taxRate: taxRule.rate,
-      taxAmount,
-      totalAmount,
-      taxType: taxRule.taxType
-    }, 'Tax calculated successfully');
+    ResponseFormatter.success(
+      res,
+      {
+        originalAmount: amount,
+        taxRate: taxRule.rate,
+        taxAmount,
+        totalAmount,
+        taxType: taxRule.taxType,
+      },
+      'Tax calculated successfully',
+    );
   } catch (error) {
     console.error('Error calculating tax:', error);
     ResponseFormatter.error(res, 'Failed to calculate tax', 500);
