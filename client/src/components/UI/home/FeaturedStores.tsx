@@ -2,12 +2,14 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { fetchPublicStores, selectPublicStores } from "@/store/slices/publicSlice";
+import { fetchPublicStores, selectPublicStores, selectPublicErrors } from "@/store/slices/publicSlice";
 import { useAppDispatch } from "@/store/store";
+import DataFetchError from "@/components/UI/DataFetchError";
 
 const FeaturedStores: React.FC = () => {
   const dispatch = useAppDispatch();
   const stores = useSelector(selectPublicStores);
+  const errors = useSelector(selectPublicErrors);
 
   useEffect(() => {
     // Only fetch if stores are empty to avoid duplicate calls if already fetched by home page or other components
@@ -15,6 +17,20 @@ const FeaturedStores: React.FC = () => {
       dispatch(fetchPublicStores());
     }
   }, [dispatch, stores]);
+
+  if (errors.stores) {
+    return (
+      <section className="py-5" style={{ background: 'var(--bs-component-bg)' }}>
+        <div className="container">
+          <h2 className="text-center mb-5 fw-bold">Featured Stores</h2>
+          <DataFetchError
+            error={errors.stores}
+            onRetry={() => dispatch(fetchPublicStores())}
+          />
+        </div>
+      </section>
+    );
+  }
 
   // Display top 4 stores
   const featuredStores = stores?.slice(0, 4) || [];

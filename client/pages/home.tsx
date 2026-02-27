@@ -27,7 +27,7 @@ const Home = () => {
   const HeroSection = () => (
     <header className="py-5 border-bottom mb-4 overflow-hidden">
       <ParticleComponent />
-      <BubbleAnimation stores={storesModel!} />
+      <BubbleAnimation stores={storesModel || []} />
     </header>
   );
 

@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IProductModel } from "@/models/product.model";
-import { fetchProductsListing, productSelector, totalProductsSelector, pageSelector, pageSizeSelector, selectShopLoading } from "@/store/slices/shopSlice";
+import { fetchProductsListing, productSelector, totalProductsSelector, pageSelector, pageSizeSelector, selectShopLoading, productListingforStore } from "@/store/slices/shopSlice";
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import AddToCartButton from "@/components/UI/AddToCartButton";
+import DataFetchError from "@/components/UI/DataFetchError";
 
 interface ProductListProps {}
 
@@ -17,6 +18,7 @@ const ProductList: React.FC<ProductListProps> = () => {
   const total = useSelector(totalProductsSelector);
   const page = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
+  const shopState = useSelector(productListingforStore);
   
   const observer = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -60,6 +62,17 @@ const ProductList: React.FC<ProductListProps> = () => {
     },
     [dispatch, loading, hasMore, page, pageSize]
   );
+
+  if (shopState?.error) {
+    return (
+      <div className="container" style={{ background: 'var(--bs-component-bg)' }}>
+        <DataFetchError
+          error={shopState.error}
+          onRetry={() => dispatch(fetchProductsListing({ page: 1, pageSize: 10 }))}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="container" style={{ background: 'var(--bs-component-bg)' }}>

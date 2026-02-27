@@ -1,17 +1,35 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectPublicArticles } from "@/store/slices/publicSlice";
+import { selectPublicArticles, selectPublicErrors, fetchPublicArticles } from "@/store/slices/publicSlice";
 import Link from "next/link";
+import DataFetchError from "@/components/UI/DataFetchError";
+import { useAppDispatch } from "@/store/store";
 
 const LatestArticles: React.FC = () => {
+  const dispatch = useAppDispatch();
   const articles = useSelector(selectPublicArticles);
+  const errors = useSelector(selectPublicErrors);
+
+  // Handle error state
+  if (errors.articles) {
+    return (
+      <section className="py-5" style={{ background: 'var(--bs-component-bg)' }}>
+        <div className="container">
+          <h2 className="fw-bold mb-4">Latest News</h2>
+          <DataFetchError
+            error={errors.articles}
+            onRetry={() => dispatch(fetchPublicArticles())}
+          />
+        </div>
+      </section>
+    );
+  }
 
   // Take top 3 articles
-
-   if (articles.length === 0) {
+  if (!articles || articles.length === 0) {
     return null;
   }
-  const latestArticles = articles?.slice(0, 3) || [];
+  const latestArticles = articles.slice(0, 3);
 
   if (latestArticles.length === 0) {
     return null;
