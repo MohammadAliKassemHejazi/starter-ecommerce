@@ -64,7 +64,14 @@ const ProductList: React.FC<ProductListProps> = () => {
   return (
     <div className="container" style={{ background: 'var(--bs-component-bg)' }}>
       {loading && products?.length === 0 ? (
-        <div>Loading...</div>
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
+          <div className="text-center">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-3">Loading products...</p>
+          </div>
+        </div>
       ) : (
         <div className="row">
           {products.map((product, index) => {

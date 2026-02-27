@@ -50,7 +50,18 @@ const SalesAnalytics: React.FC<SalesAnalyticsProps> = ({ salesData }) => {
           <Line data={chartData} />
         ) : (
           <div className="text-center">
-            {salesData ? "No sales data available" : "Loading sales data..."}
+            {salesData ? (
+              "No sales data available"
+            ) : (
+              <div className="d-flex justify-content-center align-items-center p-4">
+                <div className="text-center">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <p className="mt-3">Loading sales data...</p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
