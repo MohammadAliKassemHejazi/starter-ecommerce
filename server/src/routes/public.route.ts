@@ -9,7 +9,7 @@ const router = express.Router();
 // Get all public stores (for home page)
 router.get('/stores', async (req, res, next) => {
   try {
-    const result = await storeController.handelGetAllStores(req, res, next);
+    const result = await storeController.handleGetAllStores(req, res, next);
     return result;
   } catch (error) {
     next(error);
@@ -19,7 +19,7 @@ router.get('/stores', async (req, res, next) => {
 // Get public store by ID
 router.get('/stores/:id', async (req, res, next) => {
   try {
-    const result = await storeController.handelGetSingleItem(req, res, next);
+    const result = await storeController.handleGetStoreById(req, res, next);
     return result;
   } catch (error) {
     next(error);
