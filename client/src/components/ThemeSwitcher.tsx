@@ -31,15 +31,6 @@ const themes = [
 const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className = '' }) => {
   const [currentTheme, setCurrentTheme] = useState<string>('normal');
 
-  useEffect(() => {
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('selected-theme');
-    if (savedTheme && themes.find(t => t.id === savedTheme)) {
-      setCurrentTheme(savedTheme);
-      applyTheme(savedTheme);
-    }
-  }, []);
-
   const applyTheme = (themeId: string) => {
     // Remove existing theme classes
     document.documentElement.removeAttribute('data-theme');
@@ -50,6 +41,16 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ className = '' }) => {
     // Save to localStorage
     localStorage.setItem('selected-theme', themeId);
   };
+
+  useEffect(() => {
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('selected-theme');
+    if (savedTheme && themes.find(t => t.id === savedTheme)) {
+      setCurrentTheme(savedTheme);
+      applyTheme(savedTheme);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleThemeChange = (themeId: string) => {
     setCurrentTheme(themeId);
