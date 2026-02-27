@@ -124,14 +124,13 @@ export const ProductTablePreset = {
   columns: [
     createIdColumn(),
     {
-      key: 'ProductImages',
+      key: 'productImages',
       label: 'Image',
       width: '100px',
       align: 'center' as const,
       render: (_value: any, row: any) => {
     
-        console.log({row}, "row in product table")
-    const imageUrl = row.ProductImages?.[0]?.url || '/default-product.png';
+    const imageUrl = row.productImages?.[0]?.url || '/default-product.png';
     return renderImage(imageUrl, row.name || 'Product', 'sm');
   }
     },

@@ -20,12 +20,12 @@ export interface IProductModel {
   metaTitle?: string;
   metaDescription?: string; 
   photos?: ImageListType;
-  ProductImages?: ImageListType;
+  productImages?: ImageListType;
   store? : IStoreModel;
   ratings ?:  number;
   commentsCount? :   number;
   comments ?: IComment[];
-  SizeItems?: ISizeItem[];
+  sizeItems?: ISizeItem[];
   quantity?: number;
   sizeId?: string;
   updatedAt?: string;
@@ -51,5 +51,5 @@ export interface IProductModelErrors {
     metaTitle?: string; 
     metaDescription?: string;
     photos: string;
-    ProductImages: string;
+    productImages: string;
   }

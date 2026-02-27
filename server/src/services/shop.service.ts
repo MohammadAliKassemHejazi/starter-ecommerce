@@ -29,24 +29,24 @@ export interface IProductResponse {
   commentsCount?: number;
   createdAt: string;
   updatedAt: string;
-  ProductImages?: Array<{
+  productImages?: Array<{
     id: string;
     url: string;
     alt?: string;
   }>;
-  Store?: {
+  store?: {
     id: string;
     name: string;
   };
-  Category?: {
+  category?: {
     id: string;
     name: string;
   };
-  Subcategory?: {
+  subcategory?: {
     id: string;
     name: string;
   };
-  SizeItems?: Array<{
+  sizeItems?: Array<{
     id: string;
     size: string;
     sizeId: string;
@@ -95,24 +95,24 @@ const formatProduct = (product: Model<IProductAttributes> | any): IProductRespon
     commentsCount,
     createdAt: json.createdAt,
     updatedAt: json.updatedAt,
-    ProductImages: json.ProductImages ? json.ProductImages.map((img: any) => ({
+    productImages: json.ProductImages ? json.ProductImages.map((img: any) => ({
         id: img.id,
         url: img.imageUrl, // Map imageUrl to url
         alt: img.alt
     })) : [],
-    Store: json.Store ? {
+    store: json.Store ? {
         id: json.Store.id,
         name: json.Store.name
     } : undefined,
-    Category: json.Category ? {
+    category: json.Category ? {
         id: json.Category.id,
         name: json.Category.name
     } : undefined,
-    Subcategory: json.SubCategory ? {
+    subcategory: json.SubCategory ? {
         id: json.SubCategory.id,
         name: json.SubCategory.name
     } : undefined,
-    SizeItems: json.SizeItems ? json.SizeItems.map((item: any) => ({
+    sizeItems: json.SizeItems ? json.SizeItems.map((item: any) => ({
         id: item.id,
         size: item.Size ? item.Size.size : item.sizeId,
         sizeId: item.sizeId,

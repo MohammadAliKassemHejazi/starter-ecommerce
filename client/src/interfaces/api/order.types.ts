@@ -57,7 +57,7 @@ export interface OrderItemsResponse extends ApiResponse<{
       name: string;
       description: string;
       price: number;
-      ProductImages?: Array<{
+      productImages?: Array<{
         id: string;
         url: string;
         alt?: string;
