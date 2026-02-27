@@ -43,20 +43,20 @@ export interface PublicProductResponse extends ApiResponse<{
   commentsCount?: number;
   createdAt: string;
   updatedAt: string;
-  ProductImages?: Array<{
+  productImages?: Array<{
     id: string;
     url: string;
     alt?: string;
   }>;
-  Store?: {
+  store?: {
     id: string;
     name: string;
   };
-  Category?: {
+  category?: {
     id: string;
     name: string;
   };
-  Subcategory?: {
+  subcategory?: {
     id: string;
     name: string;
   };
@@ -75,20 +75,20 @@ export interface PublicProductsListResponse extends PaginatedApiResponse<{
   commentsCount?: number;
   createdAt: string;
   updatedAt: string;
-  ProductImages?: Array<{
+  productImages?: Array<{
     id: string;
     url: string;
     alt?: string;
   }>;
-  Store?: {
+  store?: {
     id: string;
     name: string;
   };
-  Category?: {
+  category?: {
     id: string;
     name: string;
   };
-  Subcategory?: {
+  subcategory?: {
     id: string;
     name: string;
   };
