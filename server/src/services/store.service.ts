@@ -113,9 +113,9 @@ export const deleteStore = async (id: string, userId: string): Promise<any | nul
         const outputPath = path.join(__dirname, '..', '..', 'compressed', photo); // Specify output path for compressed file
 
         try {
-          await fsPromises.unlink(imagePath); // Use fs.promises.unlink for async file deletion
+          await fsPromises.unlink(outputPath); // Use fs.promises.unlink for async file deletion
         } catch (err) {
-          logger.error(`Failed to delete image`, { imagePath, error: err });
+          logger.error(`Failed to delete image`, { outputPath, error: err });
         }
       }),
     );
@@ -275,4 +275,5 @@ export default {
   updateImages,
   getAllStoresforuser,
   getAllStoresForUserWithFilter,
+  deleteStoreImage,
 };

@@ -4,32 +4,41 @@ import { useSelector } from 'react-redux';
 import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from '@/components/protectedRoute';
 import { useAppDispatch } from '@/store/store';
-import { updateProfile } from '@/store/slices/userSlice';
+import { updateProfile, userSelector } from '@/store/slices/userSlice';
 import { useToast } from '@/contexts/ToastContext';
+import { mapUserToProfile } from '@/features/profile/utils';
+import { ProfileViewModel } from '@/features/profile/types';
 
 const ProfilePage: NextPage = () => {
-  const user = useSelector((state: any) => state.user);
+  const user = useSelector(userSelector);
   const dispatch = useAppDispatch();
   const { showSuccess, showError } = useToast();
+
+  // Use the mapper to get the view model
+  const profileView: ProfileViewModel = mapUserToProfile(user);
+
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Local state for editing, initialized from the view model
   const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    phone: user?.phone || '',
-    bio: user?.bio || '',
+    name: profileView.displayName,
+    email: profileView.email,
+    phone: profileView.phoneNumber,
+    bio: profileView.bio,
   });
 
+  // Sync form data when user/profileView changes and we're not editing
   useEffect(() => {
-    if (user && !isEditing) {
+    if (!isEditing) {
       setFormData({
-        name: user.name || '',
-        email: user.email || '',
-        phone: user.phone || '',
-        bio: user.bio || '',
+        name: profileView.displayName,
+        email: profileView.email,
+        phone: profileView.phoneNumber,
+        bio: profileView.bio,
       });
     }
-  }, [user, isEditing]);
+  }, [profileView.displayName, profileView.email, profileView.phoneNumber, profileView.bio, isEditing]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -40,7 +49,7 @@ const ProfilePage: NextPage = () => {
   };
 
   const handleSave = async () => {
-    if (!user?.id) {
+    if (!profileView.id) {
       showError('Error', 'User ID not found');
       return;
     }
@@ -48,7 +57,7 @@ const ProfilePage: NextPage = () => {
     setIsSaving(true);
     try {
       await dispatch(updateProfile({
-        id: user.id,
+        id: profileView.id,
         ...formData
       })).unwrap();
 
@@ -63,10 +72,10 @@ const ProfilePage: NextPage = () => {
 
   const handleCancel = () => {
     setFormData({
-      name: user?.name || '',
-      email: user?.email || '',
-      phone: user?.phone || '',
-      bio: user?.bio || '',
+      name: profileView.displayName,
+      email: profileView.email,
+      phone: profileView.phoneNumber,
+      bio: profileView.bio,
     });
     setIsEditing(false);
   };
@@ -89,16 +98,16 @@ const ProfilePage: NextPage = () => {
               </div>
             </div>
             <div className="modern-profile-details">
-              <h1 className="modern-profile-name">{user?.name || 'User Name'}</h1>
-              <p className="modern-profile-email">{user?.email || 'user@example.com'}</p>
+              <h1 className="modern-profile-name">{profileView.displayName}</h1>
+              <p className="modern-profile-email">{profileView.email}</p>
               <div className="modern-profile-badges">
                 <span className="modern-profile-badge modern-profile-badge-role">
                   <i className="bi bi-shield-check"></i>
-                  {user?.role || 'User'}
+                  {profileView.role}
                 </span>
                 <span className="modern-profile-badge modern-profile-badge-status">
                   <i className="bi bi-circle-fill"></i>
-                  Active
+                  {profileView.status}
                 </span>
               </div>
             </div>
@@ -121,19 +130,19 @@ const ProfilePage: NextPage = () => {
         {/* Profile Stats */}
         <div className="modern-profile-stats">
           <div className="modern-profile-stat">
-            <div className="modern-profile-stat-number">24</div>
+            <div className="modern-profile-stat-number">{profileView.stats.ordersCount}</div>
             <div className="modern-profile-stat-label">Orders</div>
           </div>
           <div className="modern-profile-stat">
-            <div className="modern-profile-stat-number">156</div>
+            <div className="modern-profile-stat-number">{profileView.stats.favoritesCount}</div>
             <div className="modern-profile-stat-label">Favorites</div>
           </div>
           <div className="modern-profile-stat">
-            <div className="modern-profile-stat-number">8</div>
+            <div className="modern-profile-stat-number">{profileView.stats.reviewsCount}</div>
             <div className="modern-profile-stat-label">Reviews</div>
           </div>
           <div className="modern-profile-stat">
-            <div className="modern-profile-stat-number">4.8</div>
+            <div className="modern-profile-stat-number">{profileView.stats.rating}</div>
             <div className="modern-profile-stat-label">Rating</div>
           </div>
         </div>
@@ -195,7 +204,7 @@ const ProfilePage: NextPage = () => {
                       <input
                         type="text"
                         className="modern-form-input"
-                        value={user?.role || 'User'}
+                        value={profileView.role}
                         disabled
                       />
                     </div>
