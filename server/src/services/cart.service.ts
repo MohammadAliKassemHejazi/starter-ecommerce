@@ -51,7 +51,7 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
       name: cartItem.Product.name,
       description: cartItem.Product.description,
       price: cartItem.Product.price,
-      photos: cartItem.Product.ProductImages.map((image: any) => ({
+      photos: cartItem.smap((image: any) => ({
         id: image.id,
         imageUrl: image.imageUrl,
       })), // Map product images
