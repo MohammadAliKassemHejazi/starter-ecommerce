@@ -27,6 +27,7 @@
       "@/styles/*": ["styles/*"],
       "@/constants/*": ["constants/*"],
       "@/contexts/*": ["contexts/*"],
+      "@/features/*": ["features/*"],
       "@/*": ["/*"]
     }
   },
