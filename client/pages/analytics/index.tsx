@@ -25,7 +25,7 @@ interface AnalyticsEvent {
   eventData: any;
   userId: string;
   createdAt: string;
-  User?: {
+  user?: {
     id: string;
     name: string;
     email: string;
@@ -80,7 +80,7 @@ const AnalyticsPage = () => {
       )
     },
     {
-      key: 'User',
+      key: 'user',
       label: 'User',
       render: (value: any) => value ? (
         <div>

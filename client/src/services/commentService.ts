@@ -7,7 +7,7 @@ export interface Comment {
   text: string;
   rating: number;
   createdAt: string;
-  User?: {
+  user?: {
     id: string;
     name: string;
   };

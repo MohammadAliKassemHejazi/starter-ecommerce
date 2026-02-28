@@ -52,7 +52,7 @@ export interface OrderItemsResponse extends ApiResponse<{
     price: number;
     sizeId?: string;
     size?: string;
-    Product?: {
+    product?: {
       id: string;
       name: string;
       description: string;

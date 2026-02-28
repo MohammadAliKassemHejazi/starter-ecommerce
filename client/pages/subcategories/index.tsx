@@ -41,7 +41,7 @@ const SubCategoriesGrid = () => {
       render: (value: string) => <span className="fw-semibold">{value}</span>
     },
     {
-      key: 'Category',
+      key: 'category',
       label: 'Category',
       render: (value: any) => value.name || "N/A"
     }

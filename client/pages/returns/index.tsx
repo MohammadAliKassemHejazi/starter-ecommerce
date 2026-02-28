@@ -17,7 +17,7 @@ interface ReturnRequest {
     orderNumber: string;
     totalPrice: number;
   };
-  User?: {
+  user?: {
     id: string;
     name: string;
     email: string;
@@ -150,7 +150,7 @@ const ReturnsPage = () => {
       ) : 'N/A'
     },
     {
-      key: 'User',
+      key: 'user',
       label: 'Customer',
       render: (value: any) => value ? (
         <div>

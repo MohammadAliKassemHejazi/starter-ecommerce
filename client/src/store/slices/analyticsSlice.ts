@@ -8,7 +8,7 @@ interface AnalyticsEvent {
   eventData: any;
   userId: string;
   createdAt: string;
-  User?: {
+  user?: {
     id: string;
     name: string;
     email: string;

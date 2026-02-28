@@ -42,7 +42,7 @@ const ArticlesList = ({ articles }: Props) => {
       )
     },
     {
-      key: 'User',
+      key: 'user',
       label: 'Author',
       render: (value: any) => value?.name || 'Unknown'
     },

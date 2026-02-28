@@ -202,7 +202,7 @@ const About = ({ articles }: Props) => {
           <div className="mt-auto">
             <div className="small text-muted mb-3">
               <i className="fas fa-user me-1"></i>
-              By {article.User?.name ?? "Anonymous"}
+              By {article.user?.name ?? "Anonymous"}
             </div>
             <Link href="/articles" className="btn btn-outline-primary">
               Read More <i className="fas fa-arrow-right ms-1"></i>

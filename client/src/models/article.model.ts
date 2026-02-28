@@ -4,7 +4,7 @@ export interface IArticleModel {
   text: string
   createdAt: string
   updatedAt: string
-  UserId: string
+  userId: string
 }
 
 
@@ -14,7 +14,7 @@ export interface IArticleModelWithUser {
   text: string
   createdAt: string
   updatedAt: string
-  User: IArticleAuthor | undefined
+  user: IArticleAuthor | undefined
 }
 
 export interface IArticleAuthor {

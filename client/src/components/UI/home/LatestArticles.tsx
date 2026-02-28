@@ -55,7 +55,7 @@ const LatestArticles: React.FC = () => {
                   <div className="d-flex align-items-center">
                     <div className="small">
                       <span className="text-muted">By </span>
-                      <span className="fw-bold">{article.User?.name || "Admin"}</span>
+                      <span className="fw-bold">{article.user?.name || "Admin"}</span>
                     </div>
                   </div>
                 </div>

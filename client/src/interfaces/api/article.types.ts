@@ -7,7 +7,7 @@ export interface ArticleResponse extends ApiResponse<{
   text: string;
   createdAt: string;
   updatedAt: string;
-  UserId: string;
+  userId: string;
 }> {}
 
 export interface ArticleWithUserResponse extends ApiResponse<{
@@ -16,7 +16,7 @@ export interface ArticleWithUserResponse extends ApiResponse<{
   text: string;
   createdAt: string;
   updatedAt: string;
-  User: {
+  user: {
     id: string;
     name: string;
   };
@@ -28,7 +28,7 @@ export interface ArticlesListResponse extends PaginatedApiResponse<{
   text: string;
   createdAt: string;
   updatedAt: string;
-  User: {
+  user: {
     id: string;
     name: string;
   };
@@ -40,7 +40,7 @@ export interface CreateArticleResponse extends ApiResponse<{
   text: string;
   createdAt: string;
   updatedAt: string;
-  UserId: string;
+  userId: string;
 }> {}
 
 export interface UpdateArticleResponse extends ApiResponse<{
@@ -49,7 +49,7 @@ export interface UpdateArticleResponse extends ApiResponse<{
   text: string;
   createdAt: string;
   updatedAt: string;
-  UserId: string;
+  userId: string;
 }> {}
 
 export interface DeleteArticleResponse extends ApiResponse<{

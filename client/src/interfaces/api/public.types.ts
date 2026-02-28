@@ -9,7 +9,7 @@ export interface PublicStoreResponse extends ApiResponse<{
   categoryId: string;
   isActive: boolean;
   createdAt: string;
-  Category?: {
+  category?: {
     id: string;
     name: string;
   };
@@ -23,7 +23,7 @@ export interface PublicStoresListResponse extends PaginatedApiResponse<{
   categoryId: string;
   isActive: boolean;
   createdAt: string;
-  Category?: {
+  category?: {
     id: string;
     name: string;
   };

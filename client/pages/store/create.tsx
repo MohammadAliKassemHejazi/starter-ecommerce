@@ -131,19 +131,19 @@ const CreateStore = () => {
 
   const handleDeleteImage = async (index: number) => {
   if (!store?.croppedImages || !store?.photos) {
-    console.error("ProductImages or photos is undefined or null.");
+    console.error("productImages or photos is undefined or null.");
     return;
   }
   
- const newProductImages = store.croppedImages!.filter((_, i) => i !== index)
+ const newproductImages = store.croppedImages!.filter((_, i) => i !== index)
     const newphotos= store.photos!.filter((_, i) => i !== index)
-  // Remove the image from both ProductImages and photos
+  // Remove the image from both productImages and photos
   setStore((prevProduct) => ({
     ...prevProduct,
-    ProductImages: newProductImages,
+    productImages: newproductImages,
     photos: newphotos,
   }));
-  handlePhotoChange(newProductImages);
+  handlePhotoChange(newproductImages);
 };
 
   if (!canCreateStore && packageLimits) {
