@@ -13,12 +13,12 @@ export interface StoreResponse extends ApiResponse<{
   metaDescription?: string;
   createdAt: string;
   updatedAt: string;
-  User?: {
+  user?: {
     id: string;
     name: string;
     email: string;
   };
-  Category?: {
+  category?: {
     id: string;
     name: string;
   };
@@ -36,12 +36,12 @@ export interface StoresListResponse extends PaginatedApiResponse<{
   metaDescription?: string;
   createdAt: string;
   updatedAt: string;
-  User?: {
+  user?: {
     id: string;
     name: string;
     email: string;
   };
-  Category?: {
+  category?: {
     id: string;
     name: string;
   };

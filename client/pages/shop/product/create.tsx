@@ -75,7 +75,7 @@ function CreateProduct() {
     const selectedStore = listOfStores?.find(
       (store) => store.id === selectedStoreId
     );
-    const categoryId = selectedStore ? selectedStore.categoryId : "";
+    const categoryId = selectedStore? selectedStore.categoryId : "";
 
     // Set the storeId
     setFieldValue("storeId", selectedStoreId);
@@ -114,8 +114,10 @@ function CreateProduct() {
     metaDescription: "",
     photos: [],
     productImages: [],
-    sizeItems: [{ sizeId: "", quantity: 0, Size: { size: "" } }],
-  };
+
+    sizeItems: [{ sizeId: "", quantity: 0, size: { size: "" } }],
+
+
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
     

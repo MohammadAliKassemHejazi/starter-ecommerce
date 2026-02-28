@@ -144,7 +144,7 @@ const Orders = () => {
             <label className="form-label">Store</label>
             <select
               className="form-select"
-              value={selectedStore ?? ""}
+              value={selectedStore?? ""}
               onChange={(e) => setSelectedStore(e.target.value)}
             >
               <option value="" disabled>Select Store</option>

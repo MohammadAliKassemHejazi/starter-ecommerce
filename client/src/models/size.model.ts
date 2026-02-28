@@ -10,7 +10,7 @@ export interface ISize {
 export interface ISizeItem {
   id?: string;
   sizeId: string;
-  Size?: { size: string }; 
+  size?: { size: string };
   quantity: number;
 }
   

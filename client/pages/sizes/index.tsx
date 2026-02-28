@@ -18,7 +18,7 @@ interface SizeItem {
   productId: string;
   sizeId: string;
   quantity: number;
-  Product?: {
+  product?: {
     id: string;
     name: string;
   };
@@ -166,7 +166,7 @@ const SizesPage = () => {
   // Table columns for size items
   const sizeItemColumns = [
     {
-      key: 'Product',
+      key: 'product',
       label: 'Product',
       render: (value: any) => value?.name || 'N/A'
     },

@@ -85,7 +85,7 @@ const CommentsList: React.FC<CommentsListProps> = ({ productId, refreshTrigger }
               <div className="card-body">
                 <div className="d-flex justify-content-between mb-2">
                   <h6 className="card-subtitle mb-2 text-muted">
-                    {comment.User?.name || 'Anonymous'}
+                    {comment.user?.name || 'Anonymous'}
                   </h6>
                   <small className="text-muted">{formatDate(comment.createdAt)}</small>
                 </div>

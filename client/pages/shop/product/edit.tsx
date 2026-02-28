@@ -85,7 +85,7 @@ function EditProduct() {
     const selectedStore = listOfStores?.find(
       (store) => store.id === selectedStoreId
     );
-    const categoryId = selectedStore ? selectedStore.categoryId : "";
+    const categoryId = selectedStore? selectedStore.categoryId : "";
 
     setFieldValue("storeId", selectedStoreId);
     setFieldValue("categoryId", categoryId);

@@ -267,12 +267,12 @@ const SingleItem = ({ product }: Props) => {
                 name="sizeId"
                 value={size.id}
                 onClick={() => {
-                  setFieldValue("size", size.Size?.size); // Update size field
+                  setFieldValue("size", size.size?.size); // Update size field
                   setFieldValue("quantity", 1); // Reset quantity when size changes
                 }}
               />
               <span className={`sizeMark`}>
-                {size.Size?.size} 
+                {size.size?.size}
               </span>
             </div>
           ))}

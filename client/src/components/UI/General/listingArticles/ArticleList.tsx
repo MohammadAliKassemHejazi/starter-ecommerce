@@ -20,7 +20,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
                   <h2 className="card-title h4">{article.title}</h2>
                   <p className="card-text">{article.text}</p>
                   <p className="card-text">
-                    Author: {article.User?.name ?? "Unknown"}
+                    Author: {article.user?.name ?? "Unknown"}
                   </p>
                   <a className="btn btn-primary mt-3" href={`/articles/${article.id}`}>
                     Read more →
