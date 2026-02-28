@@ -139,14 +139,14 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
         return prevProduct; // Prevent errors if `product` is undefined
       }
 
-      const existingImages = prevProduct?.ProductImages || [];
+      const existingImages = prevProduct?.productImages || [];
       const updatedImages = [...existingImages, ...updatedImagesFromResponse];
 
       console.log("Updated images from response:", updatedImages);
 
       return {
         ...prevProduct,
-        ProductImages: updatedImages,
+        productImages: updatedImages,
       };
     });
 
@@ -182,13 +182,13 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
       }
     });
       formData.append("productID",id!.toString());
-    product?.ProductImages?.forEach((file) => {
+    product?.productImages?.forEach((file) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
     });
 
-    formData.append("sizes", JSON.stringify(values?.SizeItems));
+    formData.append("sizes", JSON.stringify(values?.sizeItems));
 
     try {
       
@@ -211,13 +211,13 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
 
   const handleDeleteImage = async (index: number) => {
   
-   if (!product?.ProductImages) {
+   if (!product?.productImages) {
     // Handle the case where ProductImages is undefined or null
     console.error('ProductImages is undefined or null.');
     return;
   }
 
-  const imageToDelete: ImageListType | any = product.ProductImages[index];
+  const imageToDelete: ImageListType | any = product.productImages[index];
     console.log(imageToDelete?.imageUrl, "imageToDelete");
     console.log(isonline)
   if (isonline && imageToDelete?.imageUrl) {
@@ -228,7 +228,7 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
       // Remove the image locally only if the server deletion is successful
       setProduct((prevProduct:any) => ({
         ...prevProduct,
-        ProductImages: prevProduct?.ProductImages?.filter((_: any, i: number) => i !== index) || [],
+        productImages: prevProduct?.productImages?.filter((_: any, i: number) => i !== index) || [],
       }));
 
       Toast.fire({
@@ -245,7 +245,7 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
     // For locally added images (not online), simply remove it from the array
     setProduct((prevProduct:any) => ({
       ...prevProduct,
-      ProductImages: prevProduct?.ProductImages?.filter((_: any, i: number) => i !== index) || [],
+      productImages: prevProduct?.productImages?.filter((_: any, i: number) => i !== index) || [],
     }));
   }
   };
@@ -262,7 +262,7 @@ return (
       <div className="container">
         <h2 className="text-center mb-4">Edit Product</h2>
         <Formik
-            initialValues={product || { name: "", price: 0, description: "", isActive: false, storeId: "", categoryId: "", sizes: [], ProductImages: [] }}
+            initialValues={product || { name: "", price: 0, description: "", isActive: false, storeId: "", categoryId: "", sizes: [], productImages: [] }}
           enableReinitialize={true} 
           onSubmit={handleSubmit}
           validate={(values) => {
@@ -355,14 +355,14 @@ return (
               <div className="card mb-4">
                 <div className="card-header">Sizes and Quantities</div>
                 <div className="card-body">
-               <FieldArray name="SizeItems">
+               <FieldArray name="sizeItems">
   {({ push, remove, form }) => (
     <div>
-      {form.values.SizeItems.map((size: any, index: number) => (
+      {form.values.sizeItems.map((size: any, index: number) => (
         <div key={index} className="d-flex align-items-center mb-3">
           <Field
             as="select"
-            name={`SizeItems[${index}].sizeId`}
+            name={`sizeItems[${index}].sizeId`}
             className="form-control mr-2"
           >
             <option value="">Select size</option>
@@ -374,7 +374,7 @@ return (
           </Field>
           <Field
             type="number"
-            name={`SizeItems[${index}].quantity`}
+            name={`sizeItems[${index}].quantity`}
             className="form-control mr-2"
             placeholder="Quantity"
           />
@@ -438,12 +438,12 @@ return (
                 <div className="card-body">
                   <ImageUploadComponent
                     onImagesChange={handlePhotoChange}
-                    updatedPhotos={product?.ProductImages || []}
+                    updatedPhotos={product?.productImages || []}
                     defaultImages={product?.photos || []}
                   />
                   <h3 className="mt-4">Cropped Images</h3>
                   <ImageViewer
-                    productImages={product?.ProductImages || []}
+                    productImages={product?.productImages || []}
                     isonline={isonline}
                     onDeleteImage={handleDeleteImage}
                   />

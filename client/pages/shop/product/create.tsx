@@ -97,7 +97,7 @@ function CreateProduct() {
     metaTitle: "",
     metaDescription: "",
     photos: [],
-    ProductImages: [],
+    productImages: [],
     originalPrice:0,
   });
 
@@ -113,15 +113,15 @@ function CreateProduct() {
     metaTitle: "",
     metaDescription: "",
     photos: [],
-    ProductImages: [],
-    SizeItems: [{ sizeId: "", quantity: 0, Size: { size: "" } }],
+    productImages: [],
+    sizeItems: [{ sizeId: "", quantity: 0, Size: { size: "" } }],
   };
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
     
     setProduct((prevProduct) => ({
       ...prevProduct,
-      ProductImages: croppedImages,
+      productImages: croppedImages,
     }));
   }, []);
 
@@ -145,7 +145,7 @@ function CreateProduct() {
       }
     });
 
-    product.ProductImages?.forEach((file) => {
+    product.productImages?.forEach((file) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
@@ -156,7 +156,7 @@ function CreateProduct() {
     //   formData.append(`sizes[${index}][quantity]`, size.quantity.toString());
     // });
 
-    formData.append("sizes", JSON.stringify(values?.SizeItems));
+    formData.append("sizes", JSON.stringify(values?.sizeItems));
 
     try {
       const response = await dispatch(createProduct(formData)).unwrap();
@@ -179,17 +179,17 @@ function CreateProduct() {
   };
 
 const handleDeleteImage = async (index: number) => {
-  if (!product?.ProductImages || !product?.photos) {
+  if (!product?.productImages || !product?.photos) {
     console.error("ProductImages or photos is undefined or null.");
     return;
   }
   
- const newProductImages = product.ProductImages!.filter((_, i) => i !== index)
+ const newProductImages = product.productImages!.filter((_, i) => i !== index)
     const newphotos= product.photos!.filter((_, i) => i !== index)
   // Remove the image from both ProductImages and photos
   setProduct((prevProduct) => ({
     ...prevProduct,
-    ProductImages: newProductImages,
+    productImages: newProductImages,
     photos: newphotos,
   }));
   handlePhotoChange(newProductImages);
@@ -316,14 +316,14 @@ return (
               <div className="card mb-4">
                 <div className="card-header">Sizes and Quantities</div>
                 <div className="card-body">
-                  <FieldArray name="SizeItems">
+                  <FieldArray name="sizeItems">
                     {({ push, remove, form }) => (
                       <div>
-                        {form.values.SizeItems.map((size :any, index : number) => (
+                        {form.values.sizeItems.map((size :any, index : number) => (
                           <div key={index} className="d-flex align-items-center mb-3">
                             <Field
                               as="select"
-                              name={`SizeItems[${index}].sizeId`}
+                              name={`sizeItems[${index}].sizeId`}
                               className="form-control mr-2"
                             >
                               <option value="">Select size</option>
@@ -333,7 +333,7 @@ return (
                             </Field>
                             <Field
                               type="number"
-                              name={`SizeItems[${index}].quantity`}
+                              name={`sizeItems[${index}].quantity`}
                               className="form-control mr-2"
                               placeholder="Quantity"
                             />
@@ -385,12 +385,12 @@ return (
                 <div className="card-body">
                   <ImageUploadComponent
                     onImagesChange={handlePhotoChange}
-                    updatedPhotos={product?.ProductImages || []}
+                    updatedPhotos={product?.productImages || []}
                     defaultImages={product.photos ?? []}
                   />
                   <h3 className="mt-4">Cropped Images</h3>
                   <ImageViewer
-                    productImages={product.ProductImages ?? []}
+                    productImages={product.productImages ?? []}
                     isonline={isonline}
                     onDeleteImage={handleDeleteImage}
                   />

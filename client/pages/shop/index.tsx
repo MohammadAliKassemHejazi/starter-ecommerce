@@ -151,7 +151,7 @@ const Shop = () => {
 
   const transformedProducts = productList?.map((product: any) => ({
     ...product,
-    ProductImages: product.photos?.map((photo: any) => ({
+    productImages: product.photos?.map((photo: any) => ({
       url: process.env.NEXT_PUBLIC_BASE_URL_Images + photo.imageUrl
     })) || []
   })) || [];

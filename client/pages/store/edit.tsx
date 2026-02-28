@@ -230,7 +230,7 @@ const handleDeleteImage = async (index: number) => {
           <h2 className="text-center mb-4">Edit Store</h2>
           {<p>{store.id}</p>}
           <Formik
-           initialValues={store || { name: "", description: "", storeId: "", categoryId: "",  ProductImages: [] }} // Initialize with fetched store data
+           initialValues={store || { name: "", description: "", storeId: "", categoryId: "",  productImages: [] }} // Initialize with fetched store data
             onSubmit={handleSubmit}
             enableReinitialize // Allow form to update when store changes
             validate={(values) => {
