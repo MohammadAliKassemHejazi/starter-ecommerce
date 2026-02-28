@@ -114,8 +114,10 @@ function CreateProduct() {
     metaDescription: "",
     photos: [],
     productImages: [],
+
     sizeItems: [{ sizeId: "", quantity: 0, size: { size: "" } }],
-  };
+
+
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
     
