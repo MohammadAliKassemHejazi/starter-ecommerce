@@ -6,12 +6,13 @@ import { IStoreResponseModel } from "@/models/store.model";
 import { IProductModel } from "@/models/product.model";
 import { IArticleModelWithUser } from "@/models/article.model";
 import { Cast } from "lucide-react";
+import { ICategories } from "@/models/utils.model";
 
 interface PublicState {
   stores: IStoreResponseModel[];
   products: IProductModel[];
   articles: IArticleModelWithUser[];
-  categories: any[];
+  categories: ICategories[];
   packages: IPackage[];
   loading: {
     stores: boolean;

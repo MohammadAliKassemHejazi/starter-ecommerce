@@ -3,8 +3,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as permissionService from "@/services/permissionService";
 import { RootState } from "../store";
 
+export interface PermissionModel {
+  id: string;
+  name: string;
+}
+
 interface PermissionState {
-  permissions: any[];
+  permissions: PermissionModel[];
   error: string | null;
 }
 
@@ -70,20 +75,20 @@ const permissionSlice = createSlice({
     // Handle adding a permission to a role
     builder.addCase(addPermissionToRole.fulfilled, (state, action) => {
       const { roleId, permission } = action.payload;
-      const roleIndex = state.permissions.findIndex((perm: any) => perm.id === roleId);
+      const roleIndex = state.permissions.findIndex((perm: PermissionModel & {permissions?: PermissionModel[]}) => perm.id === roleId);
       if (roleIndex !== -1) {
-        state.permissions[roleIndex].permissions.push(permission);
+        (state.permissions[roleIndex] as any).permissions.push(permission);
       }
     });
 
     // Handle removing a permission from a role
     builder.addCase(removePermissionFromRole.fulfilled, (state, action) => {
       const { roleId, permissionId } = action.meta.arg;
-      const roleIndex = state.permissions.findIndex((perm: any) => perm.id === roleId);
+      const roleIndex = state.permissions.findIndex((perm: PermissionModel & {permissions?: PermissionModel[]}) => perm.id === roleId);
       if (roleIndex !== -1) {
-        state.permissions[roleIndex].permissions = state.permissions[
+        (state.permissions[roleIndex] as any).permissions = (state.permissions[
           roleIndex
-        ].permissions.filter((perm: any) => perm.id !== permissionId);
+        ] as any).permissions.filter((perm: PermissionModel) => perm.id !== permissionId);
       }
     });
     builder.addCase(fetchPermissions.fulfilled, (state, action) => {
@@ -94,7 +99,7 @@ const permissionSlice = createSlice({
     });
     builder.addCase(updatePermission.fulfilled, (state, action) => {
       const index = state.permissions.findIndex(
-        (perm: any) => perm.id === action.meta.arg.id
+        (perm: PermissionModel) => perm.id === action.meta.arg.id
       );
       if (index !== -1) {
         state.permissions[index] = action.payload;
@@ -102,12 +107,12 @@ const permissionSlice = createSlice({
     });
     builder.addCase(deletePermission.fulfilled, (state, action) => {
       state.permissions = state.permissions.filter(
-        (perm: any) => perm.id !== action.meta.arg
+        (perm: PermissionModel) => perm.id !== action.meta.arg
       );
     });
   },
 });
 
-export const permissionsSelector = (state: RootState): any | undefined => state.permission.permissions;
+export const permissionsSelector = (state: RootState): PermissionModel[] | undefined => state.permission.permissions;
 
 export default permissionSlice.reducer;
