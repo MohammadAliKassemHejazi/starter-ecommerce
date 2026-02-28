@@ -2,9 +2,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as subCategoryService from "@/services/subCategoryService";
 import { RootState } from "../store";
+import { ISubCategories } from "@/models/utils.model";
 
 interface SubCategoryState {
-  subCategories: any[];
+  subCategories: ISubCategories[];
   error: string | null;
 }
 
@@ -53,13 +54,13 @@ const subCategorySlice = createSlice({
     });
     builder.addCase(deleteSubCategory.fulfilled, (state, action) => {
       state.subCategories = state.subCategories.filter(
-        (subCat: any) => subCat.id !== action.meta.arg
+        (subCat: ISubCategories) => subCat.id !== action.meta.arg
       );
     });
   },
 });
 
-export const subCategoriesSelector = (state: RootState): any | undefined =>
+export const subCategoriesSelector = (state: RootState): ISubCategories[] | undefined =>
   state.subCategories.subCategories;
 
 export default subCategorySlice.reducer;

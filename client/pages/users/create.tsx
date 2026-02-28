@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { createUser, usersSelector } from "@/store/slices/myUsersSlice";
+import { createUser } from "@/store/slices/myUsersSlice";
 import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
+import { userSelector } from "@/store/slices/userSlice";
 import { FormPage } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
@@ -11,7 +12,7 @@ import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 
 const CreateUserModal = () => {
   const dispatch = useAppDispatch();
-  const currentUser = useSelector(usersSelector);
+  const currentUser = useSelector(userSelector);
   const { isAuthenticated } = usePageData();
 
   const [name, setName] = useState<string>("");
@@ -26,7 +27,7 @@ const CreateUserModal = () => {
           name,
           email,
           password,
-          createdById: currentUser.id,
+            createdById: currentUser!.id,
         })
       ).unwrap();
       showToast.success("User created successfully");

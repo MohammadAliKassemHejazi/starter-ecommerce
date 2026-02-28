@@ -167,7 +167,7 @@ const RolePermissionGrid = () => {
                             <option value="" disabled>
                               Select Permission
                             </option>
-                            {permissions.map((perm: any) => (
+                            {permissions?.map((perm: any) => (
                               <option key={perm.id} value={perm.id}>
                                 {perm.name}
                               </option>
@@ -185,7 +185,7 @@ const RolePermissionGrid = () => {
                               if (selectElement && selectElement.value) {
                                 Swal.fire({
                                   title: "Are you sure?",
-                                  text: `Add permission "${permissions.find(
+                                  text: `Add permission "${permissions?.find(
                                     (p: any) => p.id === selectElement.value
                                   )?.name}" to role "${role.name}"?`,
                                   icon: "question",
@@ -213,7 +213,7 @@ const RolePermissionGrid = () => {
                               if (selectElement && selectElement.value) {
                                 Swal.fire({
                                   title: "Are you sure?",
-                                  text: `Remove permission "${permissions.find(
+                                  text: `Remove permission "${permissions?.find(
                                     (p: any) => p.id === selectElement.value
                                   )?.name}" from role "${role.name}"?`,
                                   icon: "warning",
