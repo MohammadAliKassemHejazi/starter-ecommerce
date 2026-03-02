@@ -18,6 +18,9 @@ const CreateUserModal = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  // Example of using the mapped view model if editing, though this is create.
+  // For Create, we start empty, but we can utilize the ViewModel structure for formData if we wished.
+
   const handleCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
