@@ -13,6 +13,8 @@ export interface ProductResponse extends ApiResponse<{
   subcategoryId: string;
   categoryId: string;
   storeId: string;
+  ownerId: string;
+  thumbnail?: string;
   metaTitle?: string;
   metaDescription?: string;
   ratings?: number;
@@ -36,9 +38,6 @@ export interface ProductResponse extends ApiResponse<{
     id: string;
     name: string;
   };
-  page: number;
-  pageSize: number;
-  total: number;
   sizeItems?: Array<{
     id: string;
     size: string;
@@ -59,6 +58,8 @@ export interface ProductsListResponse extends PaginatedApiResponse<{
   subcategoryId: string;
   categoryId: string;
   storeId: string;
+  ownerId: string;
+  thumbnail?: string;
   ratings?: number;
   commentsCount?: number;
   createdAt: string;
@@ -80,9 +81,6 @@ export interface ProductsListResponse extends PaginatedApiResponse<{
     id: string;
     name: string;
   };
-  page: number;
-  pageSize: number;
-  total: number;
   sizeItems?: Array<{
     id: string;
     size: string;
@@ -103,6 +101,8 @@ export interface CreateProductResponse extends ApiResponse<{
   subcategoryId: string;
   categoryId: string;
   storeId: string;
+  ownerId: string;
+  thumbnail?: string;
   createdAt: string;
   updatedAt: string;
 }> {}
@@ -119,6 +119,8 @@ export interface UpdateProductResponse extends ApiResponse<{
   subcategoryId: string;
   categoryId: string;
   storeId: string;
+  ownerId: string;
+  thumbnail?: string;
   createdAt: string;
   updatedAt: string;
 }> {}

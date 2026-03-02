@@ -23,6 +23,7 @@ export interface IProductResponse {
   categoryId: string;
   storeId: string;
   ownerId: string; // Required for backend permission checks
+  thumbnail?: string;
   metaTitle?: string;
   metaDescription?: string;
   ratings?: number;
@@ -76,6 +77,14 @@ const formatProduct = (product: Model<IProductAttributes> | any): IProductRespon
   // Calculate stock quantity from size items
   const stockQuantity = json.SizeItems ? json.SizeItems.reduce((acc: number, item: any) => acc + item.quantity, 0) : 0;
 
+  const mappedImages = json.ProductImages ? json.ProductImages.map((img: any) => ({
+      id: img.id,
+      url: img.imageUrl, // Map imageUrl to url
+      alt: img.alt
+  })) : [];
+
+  const thumbnail = mappedImages.length > 0 ? mappedImages[0].url : undefined;
+
   return {
     id: json.id,
     name: json.name,
@@ -89,17 +98,14 @@ const formatProduct = (product: Model<IProductAttributes> | any): IProductRespon
     categoryId: json.categoryId,
     storeId: json.storeId,
     ownerId: json.ownerId, // Included for controller logic
+    thumbnail,
     metaTitle: json.metaTitle,
     metaDescription: json.metaDescription,
     ratings,
     commentsCount,
     createdAt: json.createdAt,
     updatedAt: json.updatedAt,
-    productImages: json.ProductImages ? json.ProductImages.map((img: any) => ({
-        id: img.id,
-        url: img.imageUrl, // Map imageUrl to url
-        alt: img.alt
-    })) : [],
+    productImages: mappedImages,
     store: json.Store ? {
         id: json.Store.id,
         name: json.Store.name

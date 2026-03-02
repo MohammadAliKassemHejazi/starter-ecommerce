@@ -109,6 +109,7 @@ function CreateProduct() {
     isActive: false,
     subcategoryId: "",
     storeId: "",
+    ownerId: "",
     categoryId: "", // Added categoryId to initial values
     metaTitle: "",
     metaDescription: "",
@@ -116,7 +117,7 @@ function CreateProduct() {
     productImages: [],
 
     sizeItems: [{ sizeId: "", quantity: 0, size: { size: "" } }],
-
+  };
 
 
   const handlePhotoChange = useCallback((croppedImages: ImageListType) => {
