@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as userService from "@/services/myUsersService";
 import { RootState } from "../store";
+import { UserModel } from "@/models/user.model";
 
 import { UserViewModel } from "@/interfaces/viewModels";
 
 interface UserState {
+
   users: UserViewModel[];
   error: string | null;
 }
@@ -64,11 +66,11 @@ const userSlice = createSlice({
       state.users = action.payload.data;
     });
     builder.addCase(deleteUser.fulfilled, (state, action) => {
-      state.users = state.users.filter((user: any) => user.id !== action.meta.arg);
+      state.users = state.users.filter((user: UserModel) => user.id !== action.meta.arg);
     });
   },
 });
 
-export const usersSelector = (state: RootState): any | undefined => state.users.users;
+export const usersSelector = (state: RootState): UserModel[] | undefined => state.users.users;
 
 export default userSlice.reducer;

@@ -161,7 +161,7 @@ const UserRoleGrid = () => {
                             <option value="" disabled>
                               Select Role
                             </option>
-                            {roles.map((role: any) => (
+                            {roles?.map((role: any) => (
                               <option key={role.id} value={role.id}>
                                 {role.name}
                               </option>
@@ -179,7 +179,7 @@ const UserRoleGrid = () => {
                               if (selectElement && selectElement.value) {
                                 Swal.fire({
                                   title: "Are you sure?",
-                                  text: `Assign role "${roles.find(
+                                  text: `Assign role "${roles?.find(
                                     (r: any) => r.id === selectElement.value
                                   )?.name}" to user "${user.name}"?`,
                                   icon: "question",
@@ -207,7 +207,7 @@ const UserRoleGrid = () => {
                               if (selectElement && selectElement.value) {
                                 Swal.fire({
                                   title: "Are you sure?",
-                                  text: `Remove role "${roles.find(
+                                  text: `Remove role "${roles?.find(
                                     (r: any) => r.id === selectElement.value
                                   )?.name}" from user "${user.name}"?`,
                                   icon: "warning",
