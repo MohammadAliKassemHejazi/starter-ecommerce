@@ -109,6 +109,7 @@ function CreateProduct() {
     isActive: false,
     subcategoryId: "",
     storeId: "",
+    ownerId: "",
     categoryId: "", // Added categoryId to initial values
     metaTitle: "",
     metaDescription: "",

@@ -20,10 +20,13 @@ const UsersGrid = () => {
     await dispatch(deleteUser(id));
   };
 
-  // Transform users data to include avatar
+  // Transform users data to include avatar and fallback to default values
   const transformedUsers = users?.map((user: any) => ({
-    ...user,
-    avatar: user.avatar || null
+    id: user.id || '',
+    name: user.name || 'Unknown User',
+    email: user.email || 'no-email@example.com',
+    roles: user.roles || [],
+    avatar: user.avatarUrl || null,
   })) || [];
 
   return (

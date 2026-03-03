@@ -7,24 +7,25 @@ import { useAppDispatch } from '@/store/store';
 import { updateProfile, userSelector } from '@/store/slices/userSlice';
 import { useToast } from '@/contexts/ToastContext';
 import { mapUserToProfile } from '@/features/profile/utils';
-import { ProfileViewModel } from '@/features/profile/types';
+import { ProfileViewModel, defaultProfileData } from '@/features/profile/types';
 
 const ProfilePage: NextPage = () => {
   const user = useSelector(userSelector);
   const dispatch = useAppDispatch();
   const { showSuccess, showError } = useToast();
 
-  // Use the mapper to get the view model
-  const profileView: ProfileViewModel = mapUserToProfile(user);
+  // Use the mapper to get the view model, fallback to defaultProfileData if user is not available
+  const profileView: ProfileViewModel = user ? mapUserToProfile(user) : defaultProfileData;
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   // Local state for editing, initialized from the view model
   const [formData, setFormData] = useState({
-    name: profileView.displayName,
+    name: profileView.name,
     email: profileView.email,
-    phone: profileView.phoneNumber,
+    phone: profileView.phone,
+    address: profileView.address,
     bio: profileView.bio,
   });
 
@@ -32,13 +33,14 @@ const ProfilePage: NextPage = () => {
   useEffect(() => {
     if (!isEditing) {
       setFormData({
-        name: profileView.displayName,
+        name: profileView.name,
         email: profileView.email,
-        phone: profileView.phoneNumber,
+        phone: profileView.phone,
+        address: profileView.address,
         bio: profileView.bio,
       });
     }
-  }, [profileView.displayName, profileView.email, profileView.phoneNumber, profileView.bio, isEditing]);
+  }, [profileView.name, profileView.email, profileView.phone, profileView.address, profileView.bio, isEditing]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -72,9 +74,10 @@ const ProfilePage: NextPage = () => {
 
   const handleCancel = () => {
     setFormData({
-      name: profileView.displayName,
+      name: profileView.name,
       email: profileView.email,
-      phone: profileView.phoneNumber,
+      phone: profileView.phone,
+      address: profileView.address,
       bio: profileView.bio,
     });
     setIsEditing(false);
@@ -98,7 +101,7 @@ const ProfilePage: NextPage = () => {
               </div>
             </div>
             <div className="modern-profile-details">
-              <h1 className="modern-profile-name">{profileView.displayName}</h1>
+              <h1 className="modern-profile-name">{profileView.name}</h1>
               <p className="modern-profile-email">{profileView.email}</p>
               <div className="modern-profile-badges">
                 <span className="modern-profile-badge modern-profile-badge-role">
@@ -185,7 +188,7 @@ const ProfilePage: NextPage = () => {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-md-4">
                     <div className="modern-form-group">
                       <label className="modern-form-label">Phone Number</label>
                       <input
@@ -198,7 +201,20 @@ const ProfilePage: NextPage = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-4">
+                    <div className="modern-form-group">
+                      <label className="modern-form-label">Address</label>
+                      <input
+                        type="text"
+                        name="address"
+                        className="modern-form-input"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-4">
                     <div className="modern-form-group">
                       <label className="modern-form-label">Role</label>
                       <input

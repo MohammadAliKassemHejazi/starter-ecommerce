@@ -17,6 +17,8 @@ export interface IProductModel {
   subcategoryId?: string;
   categoryId?:string;
   storeId?: string;
+  ownerId?: string;
+  thumbnail?: string;
   metaTitle?: string;
   metaDescription?: string; 
   photos?: ImageListType;
@@ -48,6 +50,7 @@ export interface IProductModelErrors {
     isActive?: string;
     subcategoryId?: string; 
     storeId?: string;
+    ownerId?: string;
     metaTitle?: string; 
     metaDescription?: string;
     photos: string;

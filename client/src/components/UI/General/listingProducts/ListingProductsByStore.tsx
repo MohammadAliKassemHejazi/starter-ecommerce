@@ -127,9 +127,9 @@ const ListingProductsByStore: React.FC<ListingProductsByStore> = ({ storeId  }) 
                 className="col-lg-3 col-sm-6 d-flex flex-column align-items-center justify-content-center product-item my-3"
               >
                 <div className="product">
-                  {product.photos && (
+                  {product.thumbnail && (
                     <Image
-                      src={process.env.NEXT_PUBLIC_BASE_URL_Images + product.photos[0]?.imageUrl}
+                      src={(process.env.NEXT_PUBLIC_BASE_URL_Images || "") + product.thumbnail}
                       alt=""
                       width={300}
                       height={350}

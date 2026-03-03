@@ -3,8 +3,11 @@ import * as userService from "@/services/myUsersService";
 import { RootState } from "../store";
 import { UserModel } from "@/models/user.model";
 
+import { UserViewModel } from "@/interfaces/viewModels";
+
 interface UserState {
-  users: UserModel[];
+
+  users: UserViewModel[];
   error: string | null;
 }
 

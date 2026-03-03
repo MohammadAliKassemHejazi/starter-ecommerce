@@ -21,6 +21,8 @@ import { addComment } from "@/services/commentService";
 import { usePermissions } from "@/hooks/usePermissions";
 import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
 
+import { ProductViewModel, defaultProductViewModel } from "@/interfaces/viewModels";
+
 type Props = {
   product?: IProductModel | null;
 };
@@ -39,6 +41,9 @@ const Toast = Swal.mixin({
 
 const SingleItem = ({ product }: Props) => {
   const dispatch = useAppDispatch();
+
+  // Apply fallback
+  const productView = product || (defaultProductViewModel as any);
   const router = useRouter();
   // Using usePermissions hook from main branch which likely handles auth check
   const { isAuthenticated } = usePermissions();
@@ -50,19 +55,19 @@ const SingleItem = ({ product }: Props) => {
   const [refreshComments, setRefreshComments] = useState(0);
 
   useEffect(() => {
-    if (product && isAuthenticated) {
+    if (productView.id && isAuthenticated) {
       trackEvent('product_view', {
-        productId: product.id,
-        productName: product.name,
-        price: product.price,
-        storeId: product.storeId,
-        categoryId: product.categoryId
+        productId: productView.id,
+        productName: productView.name,
+        price: productView.price,
+        storeId: productView.storeId,
+        categoryId: productView.categoryId
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product?.id, isAuthenticated]);
+  }, [productView?.id, isAuthenticated]);
 
-  console.log("product", product);
+  console.log("product", productView);
 
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -72,27 +77,27 @@ const SingleItem = ({ product }: Props) => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: product?.name ?? "",
-    description: product?.description ?? "",
-    sku: product?.id ?? "",
+    name: productView?.name ?? "",
+    description: productView?.description ?? "",
+    sku: productView?.id ?? "",
     brand: {
       "@type": "Brand",
-      name: product?.store?.name ?? "",
+      name: productView?.store?.name ?? "",
     },
     offers: {
       "@type": "Offer",
       priceCurrency: "USD",
-      price: product?.price ?? 0,
+      price: productView?.price ?? 0,
       itemCondition: "https://schema.org/NewCondition",
       availability: "https://schema.org/InStock",
     },
     image:
       process.env.NEXT_PUBLIC_BASE_URL_Images +
-      (product?.productImages?.[0]?.imageUrl ?? ""),
+      (productView?.productImages?.[0]?.imageUrl ?? ""),
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: product?.ratings ?? 0,
-      reviewCount: product?.commentsCount ?? 0,
+      ratingValue: productView?.ratings ?? 0,
+      reviewCount: productView?.commentsCount ?? 0,
     },
   };
 
@@ -163,7 +168,7 @@ const SingleItem = ({ product }: Props) => {
                 <div className="row">
                   <MySwiperComponent
                     imageLinks={
-                      product?.productImages?.map(
+                      productView?.productImages?.map(
                         (photo: any) =>
                           process.env.NEXT_PUBLIC_BASE_URL_Images +
                           photo.imageUrl
@@ -176,27 +181,27 @@ const SingleItem = ({ product }: Props) => {
 
         {/* Product Details */}
         <div className='productDetails'>
-          <h1 className='productName'>{product?.name}</h1>
+          <h1 className='productName'>{productView?.name}</h1>
        <div className='productPrice'>
   {/* Original Price */}
   <span
-    className={`${product?.discount ? 'discountPrice' : 'originalPrice' } `}
+    className={`${productView?.discount ? 'discountPrice' : 'originalPrice' } `}
   >
-    ${product?.price?.toFixed(2)}
+    ${productView?.price?.toFixed(2)}
   </span>
 
   {/* Discounted Price */}
-  {product?.discount && (
+  {productView?.discount && (
     <span className='originalPrice'>
       $
       {(
-        product.price! -
-        (product.price! * product.discount) / 100
+        productView.price! -
+        (productView.price! * productView.discount) / 100
       ).toFixed(2)}
     </span>
   )}
 </div>
-          <p className='productDescription'>{product?.description}</p>
+          <p className='productDescription'>{productView?.description}</p>
 
           {/* Add to Cart Form */}
 
@@ -208,7 +213,7 @@ const SingleItem = ({ product }: Props) => {
   }}
   onSubmit={(values) => {
     
-    handleAddToCart(product!, values.size, values.sizeId, values.quantity);
+    handleAddToCart(productView!, values.size, values.sizeId, values.quantity);
   }}
   validate={(values) => {
     const errors: any = {};
@@ -217,8 +222,8 @@ const SingleItem = ({ product }: Props) => {
     }
 
     // Find the selected size's stock quantity
-    const selectedSize = product?.sizeItems?.find(
-      (size) => size.id === values.sizeId
+    const selectedSize = productView?.sizeItems?.find(
+      (size: any) => size.id === values.sizeId
     );
     const availableStock = selectedSize?.quantity || 0;
 
@@ -244,7 +249,7 @@ const SingleItem = ({ product }: Props) => {
           name="quantity"
           min={1}
           max={
-            product?.sizeItems?.find((size) => size.id === values.sizeId)
+            productView?.sizeItems?.find((size: any) => size.id === values.sizeId)
               ?.quantity || 1
           } // Dynamically set max attribute based on stock
         />
@@ -257,7 +262,7 @@ const SingleItem = ({ product }: Props) => {
       <div className='formField'>
         <label className='formLabel'>Size</label>
         <div className='sizeOptions'>
-          {product?.sizeItems?.map((size) => (
+          {productView?.sizeItems?.map((size: any) => (
             <div key={size.id} className="position-relative">
               <Field
                 className={`sizeOption ${
@@ -296,8 +301,8 @@ const SingleItem = ({ product }: Props) => {
           Add To Cart
         </button>
         <FavoritesButton
-          productId={product?.id || ''}
-          productName={product?.name || 'Product'}
+          productId={productView?.id || ''}
+          productName={productView?.name || 'Product'}
           variant="button"
           size="md"
           showText={true}
@@ -357,8 +362,8 @@ const SingleItem = ({ product }: Props) => {
 
                 try {
                
-                  console.log("Submitting product", product?.id ?? "");
-                  await addComment(product?.id ?? "", feedback.comment, feedback.rating);
+                  console.log("Submitting product", productView?.id ?? "");
+                  await addComment(productView?.id ?? "", feedback.comment, feedback.rating);
                   Toast.fire({
                     icon: 'success',
                     title: 'Feedback submitted successfully'
@@ -381,8 +386,8 @@ const SingleItem = ({ product }: Props) => {
 
       {/* Suggested Products and Comments outside the flex container */}
       <div className="container mt-5">
-        <SuggestedProducts currentProduct={product!} />
-        <CommentsList productId={product?.id || ''} refreshTrigger={refreshComments} />
+        <SuggestedProducts currentProduct={productView!} />
+        <CommentsList productId={productView?.id || ''} refreshTrigger={refreshComments} />
       </div>
     </Layout>
   );
