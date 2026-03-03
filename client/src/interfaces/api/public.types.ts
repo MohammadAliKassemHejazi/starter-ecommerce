@@ -101,7 +101,7 @@ export interface PublicCategoryResponse extends ApiResponse<{
   description?: string;
   isActive: boolean;
   createdAt: string;
-  Subcategories?: Array<{
+  subcategories?: Array<{
     id: string;
     name: string;
     description?: string;
@@ -115,7 +115,7 @@ export interface PublicCategoriesListResponse extends PaginatedApiResponse<{
   description?: string;
   isActive: boolean;
   createdAt: string;
-  Subcategories?: Array<{
+  subcategories?: Array<{
     id: string;
     name: string;
     description?: string;
