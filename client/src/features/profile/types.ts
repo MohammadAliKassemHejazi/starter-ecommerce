@@ -1,8 +1,9 @@
 export interface ProfileViewModel {
   id: string;
-  displayName: string;
+  name: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
+  address: string;
   bio: string;
   role: string;
   status: 'Active' | 'Inactive'; // Assuming status logic
@@ -14,3 +15,20 @@ export interface ProfileViewModel {
     rating: number;
   };
 }
+
+export const defaultProfileData: ProfileViewModel = {
+  id: '',
+  name: 'Unknown User',
+  email: 'no-email@example.com',
+  phone: 'N/A',
+  address: 'N/A',
+  bio: 'No biography available.',
+  role: 'Guest',
+  status: 'Inactive',
+  stats: {
+    ordersCount: 0,
+    favoritesCount: 0,
+    reviewsCount: 0,
+    rating: 0,
+  }
+};

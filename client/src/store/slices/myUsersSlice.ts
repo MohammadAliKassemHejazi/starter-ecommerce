@@ -2,8 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as userService from "@/services/myUsersService";
 import { RootState } from "../store";
 
+import { UserViewModel } from "@/interfaces/viewModels";
+
 interface UserState {
-  users: any[];
+  users: UserViewModel[];
   error: string | null;
 }
 

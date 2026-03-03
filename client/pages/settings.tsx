@@ -3,34 +3,15 @@ import { NextPage } from 'next';
 import { useSelector } from 'react-redux';
 import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from '@/components/protectedRoute';
+import { SettingsViewModel, defaultSettingsData } from '@/features/settings/types';
 
 const SettingsPage: NextPage = () => {
   const user = useSelector((state: any) => state.user);
   const [activeTab, setActiveTab] = useState('general');
-  const [settings, setSettings] = useState({
-    // General Settings
-    language: 'en',
-    timezone: 'UTC',
-    dateFormat: 'MM/DD/YYYY',
-    
-    // Notification Settings
-    emailNotifications: true,
-    pushNotifications: true,
-    orderUpdates: true,
-    promotions: false,
-    securityAlerts: true,
-    
-    // Privacy Settings
-    profileVisibility: 'public',
-    showEmail: false,
-    showPhone: false,
-    allowMessages: true,
-    
-    // Security Settings
-    twoFactorAuth: false,
-    loginAlerts: true,
-    sessionTimeout: 30,
-  });
+
+  // Try to load settings from server/redux in the future, fallback to default
+  const serverSettings: SettingsViewModel | null = null;
+  const [settings, setSettings] = useState<SettingsViewModel>(serverSettings || defaultSettingsData);
 
   const handleSettingChange = (key: string, value: any) => {
     setSettings(prev => ({
