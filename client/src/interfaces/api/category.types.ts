@@ -9,12 +9,12 @@ export interface CategoryResponse extends ApiResponse<{
   createdAt: string;
   updatedAt: string;
   createdById?: string;
-  CreatedBy?: {
+  createdBy?: {
     id: string;
     name: string;
     email: string;
   };
-  Subcategories?: Array<{
+  subcategories?: Array<{
     id: string;
     name: string;
     description?: string;
@@ -30,12 +30,12 @@ export interface CategoriesListResponse extends PaginatedApiResponse<{
   createdAt: string;
   updatedAt: string;
   createdById?: string;
-  CreatedBy?: {
+  createdBy?: {
     id: string;
     name: string;
     email: string;
   };
-  Subcategories?: Array<{
+  subcategories?: Array<{
     id: string;
     name: string;
     description?: string;

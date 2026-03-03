@@ -12,7 +12,7 @@ export interface UserResponse extends ApiResponse<{
   createdAt: string;
   updatedAt: string;
   createdById?: string;
-  CreatedBy?: {
+  createdBy?: {
     id: string;
     name: string;
     email: string;
@@ -52,7 +52,7 @@ export interface UsersListResponse extends PaginatedApiResponse<{
   createdAt: string;
   updatedAt: string;
   createdById?: string;
-  CreatedBy?: {
+  createdBy?: {
     id: string;
     name: string;
     email: string;

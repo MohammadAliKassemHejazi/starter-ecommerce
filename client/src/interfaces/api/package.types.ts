@@ -44,7 +44,7 @@ export interface UserPackageResponse extends ApiResponse<{
   endDate: string | null;
   isActive: boolean;
   createdById: string | null;
-  Package: {
+  package: {
     id: string;
     name: string;
     description: string;
