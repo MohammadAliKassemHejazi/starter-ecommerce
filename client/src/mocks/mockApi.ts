@@ -9,39 +9,101 @@ import { IArticleModel } from "../models/article.model";
  * Utility to simulate network delay.
  * Allows testing loading states in the UI.
  */
-const delay = (ms: number = 500) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number = 800) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Mock Paginated API Response Wrapper (Matches typical backend output)
+interface PaginatedResponse<T> {
+  success: boolean;
+  message?: string;
+  data: T[];
+  meta: {
+    total: number;
+    page: number;
+    totalPages: number;
+    limit: number;
+  };
+}
+
+// Helper for pagination
+const paginate = <T>(array: T[], page: number, limit: number): PaginatedResponse<T> => {
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const data = array.slice(startIndex, endIndex);
+  return {
+    success: true,
+    data,
+    meta: {
+      total: array.length,
+      page,
+      limit,
+      totalPages: Math.ceil(array.length / limit)
+    }
+  };
+};
 
 /**
- * MOCK API LAYER
- * This acts as the backend server. It provides asynchronous methods that perform CRUD
- * operations on the stateful `mockDatabase` arrays, simulating a real API interaction.
- *
- * Replace real `axios` or `fetch` calls in your services with these methods during development.
+ * ADVANCED MOCK API LAYER
+ * This acts as a highly realistic backend server providing query params,
+ * pagination, filtering, searching, and relational integrity.
  */
 export const mockApi = {
   // ============================
   // PRODUCTS
   // ============================
-  getProducts: async () => {
+  getProducts: async (params?: { page?: number; limit?: number; search?: string; categoryId?: string; storeId?: string; isActive?: boolean }): Promise<PaginatedResponse<IProductModel>> => {
     await delay();
-    return { data: [...mockDatabase.products], success: true };
+    let result = [...mockDatabase.products];
+
+    if (params) {
+      if (params.search) {
+        const term = params.search.toLowerCase();
+        result = result.filter(p => p.name?.toLowerCase().includes(term) || p.description?.toLowerCase().includes(term));
+      }
+      if (params.categoryId) {
+        result = result.filter(p => p.categoryId === params.categoryId);
+      }
+      if (params.storeId) {
+        result = result.filter(p => p.storeId === params.storeId);
+      }
+      if (params.isActive !== undefined) {
+        result = result.filter(p => p.isActive === params.isActive);
+      }
+    }
+
+    const page = params?.page || 1;
+    const limit = params?.limit || 10;
+    return paginate(result, page, limit);
   },
 
   getProductById: async (id: string) => {
     await delay();
     const product = mockDatabase.products.find(p => p.id === id);
     if (!product) { throw new Error("Product not found"); }
-    return { data: product, success: true };
+
+    // Resolve relations for advanced view
+    const comments = mockDatabase.comments.filter(c => c.productId === id);
+    const sizes = mockDatabase.productSizes.filter(s => s.productId === id);
+    const store = mockDatabase.stores.find(s => s.id === product.storeId);
+
+    const fullProduct = {
+      ...product,
+      comments,
+      sizeItems: sizes,
+      store: store ? { id: store.id, name: store.name, description: store.description } : undefined
+    };
+
+    return { data: fullProduct, success: true };
   },
 
   createProduct: async (productData: IProductModel) => {
     await delay();
     const newProduct = {
       ...productData,
-      id: `prod-${Date.now()}`,
-      isActive: true,
+      id: `prod-new-${Date.now()}`,
+      isActive: productData.isActive !== false, // default true
       ratings: 0,
       commentsCount: 0,
+      createdAt: new Date().toISOString()
     };
     mockDatabase.products.push(newProduct);
     return { data: newProduct, success: true, message: "Product created successfully." };
@@ -52,7 +114,7 @@ export const mockApi = {
     const index = mockDatabase.products.findIndex(p => p.id === id);
     if (index === -1) { throw new Error("Product not found"); }
 
-    mockDatabase.products[index] = { ...mockDatabase.products[index], ...productData };
+    mockDatabase.products[index] = { ...mockDatabase.products[index], ...productData, updatedAt: new Date().toISOString() };
     return { data: mockDatabase.products[index], success: true, message: "Product updated successfully." };
   },
 
@@ -62,6 +124,10 @@ export const mockApi = {
     if (index === -1) { throw new Error("Product not found"); }
 
     mockDatabase.products.splice(index, 1);
+    // Relational cleanup
+    mockDatabase.comments = mockDatabase.comments.filter(c => c.productId !== id);
+    mockDatabase.productSizes = mockDatabase.productSizes.filter(s => s.productId !== id);
+
     return { success: true, message: "Product deleted successfully." };
   },
 
@@ -69,24 +135,36 @@ export const mockApi = {
   // ============================
   // STORES
   // ============================
-  getStores: async () => {
+  getStores: async (params?: { page?: number; limit?: number; isActive?: boolean }): Promise<PaginatedResponse<IStoreResponseModel>> => {
     await delay();
-    return { data: [...mockDatabase.stores], success: true };
+    let result = [...mockDatabase.stores];
+
+    if (params && params.isActive !== undefined) {
+      result = result.filter(s => s.isActive === params.isActive);
+    }
+
+    const page = params?.page || 1;
+    const limit = params?.limit || 10;
+    return paginate(result, page, limit);
   },
 
   getStoreById: async (id: string) => {
     await delay();
     const store = mockDatabase.stores.find(s => s.id === id);
     if (!store) { throw new Error("Store not found"); }
-    return { data: store, success: true };
+
+    // Also fetch store products for the view
+    const products = mockDatabase.products.filter(p => p.storeId === id);
+
+    return { data: { store, products }, success: true };
   },
 
   createStore: async (storeData: IStoreModel) => {
     await delay();
     const newStore: IStoreResponseModel = {
       ...storeData,
-      id: `store-${Date.now()}`,
-      imgUrl: "https://example.com/placeholder-store.jpg",
+      id: `store-new-${Date.now()}`,
+      imgUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80",
       isActive: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -109,60 +187,30 @@ export const mockApi = {
     const index = mockDatabase.stores.findIndex(s => s.id === id);
     if (index === -1) { throw new Error("Store not found"); }
 
+    // Optionally set inactive instead of hard delete, or handle cascading.
+    // We will simulate hard delete cascading products.
     mockDatabase.stores.splice(index, 1);
-    return { success: true, message: "Store deleted successfully." };
-  },
+    mockDatabase.products = mockDatabase.products.filter(p => p.storeId !== id);
 
-
-  // ============================
-  // CATEGORIES
-  // ============================
-  getCategories: async () => {
-    await delay();
-    return { data: [...mockDatabase.categories], success: true };
-  },
-
-  createCategory: async (categoryData: ICategories) => {
-    await delay();
-    const newCategory = {
-      ...categoryData,
-      id: `cat-${Date.now()}`,
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    mockDatabase.categories.push(newCategory);
-    return { data: newCategory, success: true, message: "Category created." };
-  },
-
-  updateCategory: async (id: string, categoryData: Partial<ICategories>) => {
-    await delay();
-    const index = mockDatabase.categories.findIndex(c => c.id === id);
-    if (index === -1) { throw new Error("Category not found"); }
-
-    mockDatabase.categories[index] = { ...mockDatabase.categories[index], ...categoryData, updatedAt: new Date().toISOString() };
-    return { data: mockDatabase.categories[index], success: true, message: "Category updated." };
-  },
-
-  deleteCategory: async (id: string) => {
-    await delay();
-    const index = mockDatabase.categories.findIndex(c => c.id === id);
-    if (index === -1) { throw new Error("Category not found"); }
-
-    mockDatabase.categories.splice(index, 1);
-    // Also cleanup subcategories associated
-    mockDatabase.subcategories = mockDatabase.subcategories.filter(sub => sub.categoryId !== id);
-
-    return { success: true, message: "Category deleted." };
+    return { success: true, message: "Store and its products deleted successfully." };
   },
 
 
   // ============================
   // USERS
   // ============================
-  getUsers: async () => {
+  getUsers: async (params?: { page?: number; limit?: number; search?: string }): Promise<PaginatedResponse<UserModel>> => {
     await delay();
-    return { data: [...mockDatabase.users], success: true };
+    let result = [...mockDatabase.users];
+
+    if (params?.search) {
+      const term = params.search.toLowerCase();
+      result = result.filter(u => u.name?.toLowerCase().includes(term) || u.email?.toLowerCase().includes(term));
+    }
+
+    const page = params?.page || 1;
+    const limit = params?.limit || 10;
+    return paginate(result, page, limit);
   },
 
   getUserById: async (id: string) => {
@@ -181,53 +229,41 @@ export const mockApi = {
     return { data: mockDatabase.users[index], success: true, message: "User updated." };
   },
 
-  deleteUser: async (id: string) => {
-    await delay();
-    const index = mockDatabase.users.findIndex(u => u.id === id);
-    if (index === -1) { throw new Error("User not found"); }
 
-    mockDatabase.users.splice(index, 1);
-    return { success: true, message: "User deleted." };
+  // ============================
+  // UTILS / CATEGORIES
+  // ============================
+  getCategories: async () => {
+    await delay(300); // Faster lookup
+    return { data: [...mockDatabase.categories], success: true };
+  },
+
+  getSubCategories: async (categoryId?: string) => {
+    await delay(300);
+    let result = [...mockDatabase.subcategories];
+    if (categoryId) {
+      result = result.filter(sub => sub.categoryId === categoryId);
+    }
+    return { data: result, success: true };
   },
 
 
   // ============================
-  // ARTICLES
+  // ANALYTICS / ADMIN
   // ============================
-  getArticles: async () => {
+  getDashboardStats: async () => {
     await delay();
-    return { data: [...mockDatabase.articles], success: true };
-  },
-
-  createArticle: async (articleData: IArticleModel) => {
-    await delay();
-    const user = mockDatabase.users.find(u => u.id === articleData.userId);
-    const newArticle = {
-      ...articleData,
-      id: `article-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      user: user ? { id: user.id, name: user.name } : { id: "unknown", name: "Unknown" }
+    return {
+      data: {
+        totalProducts: mockDatabase.products.length,
+        totalStores: mockDatabase.stores.length,
+        totalUsers: mockDatabase.users.length,
+        totalOrders: mockDatabase.orders.length,
+        salesData: mockDatabase.analytics.salesData,
+        visitorStats: mockDatabase.analytics.visitorStats,
+        recentOrders: mockDatabase.orders.slice(0, 5) // Last 5
+      },
+      success: true
     };
-    mockDatabase.articles.push(newArticle);
-    return { data: newArticle, success: true, message: "Article created." };
-  },
-
-  updateArticle: async (id: string, articleData: Partial<IArticleModel>) => {
-    await delay();
-    const index = mockDatabase.articles.findIndex(a => a.id === id);
-    if (index === -1) { throw new Error("Article not found"); }
-
-    mockDatabase.articles[index] = { ...mockDatabase.articles[index], ...articleData, updatedAt: new Date().toISOString() };
-    return { data: mockDatabase.articles[index], success: true, message: "Article updated." };
-  },
-
-  deleteArticle: async (id: string) => {
-    await delay();
-    const index = mockDatabase.articles.findIndex(a => a.id === id);
-    if (index === -1) { throw new Error("Article not found"); }
-
-    mockDatabase.articles.splice(index, 1);
-    return { success: true, message: "Article deleted." };
   }
 };
