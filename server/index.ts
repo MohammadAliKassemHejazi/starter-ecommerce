@@ -469,7 +469,7 @@ async function initializeDatabase(): Promise<void> {
   try {
     if (!IS_PRODUCTION) {
       console.log('🔄 Performing database reset in development...');
-      await db.sequelize.sync();
+      await db.sequelize.sync({ alter: true });
       console.log('✅ Database schema has been reset.');
       
       // await runScripts();
