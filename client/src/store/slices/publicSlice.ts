@@ -187,7 +187,7 @@ const publicSlice = createSlice({
       })
       .addCase(fetchPublicArticles.fulfilled, (state, action) => {
         state.loading.articles = false;
-        state.articles = action.payload || [];
+        state.articles = action.payload as any || [];
       })
       .addCase(fetchPublicArticles.rejected, (state, action) => {
         state.loading.articles = false;

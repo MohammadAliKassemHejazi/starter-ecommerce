@@ -148,7 +148,7 @@ function CreateProduct() {
       }
     });
 
-    product.productImages?.forEach((file) => {
+    product.productImages?.forEach((file: any) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
@@ -187,8 +187,8 @@ const handleDeleteImage = async (index: number) => {
     return;
   }
   
- const newProductImages = product.productImages!.filter((_, i) => i !== index)
-    const newphotos= product.photos!.filter((_, i) => i !== index)
+ const newProductImages = product.productImages!.filter((_: any, i: number) => i !== index)
+    const newphotos= product.photos!.filter((_: any, i: number) => i !== index)
   // Remove the image from both ProductImages and photos
   setProduct((prevProduct) => ({
     ...prevProduct,

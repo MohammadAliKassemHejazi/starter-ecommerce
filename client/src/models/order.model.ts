@@ -1,25 +1,34 @@
 export interface IOrder {
   id: string;
-
+  userId: string;
+  storeId: string;
+  status: string;
+  totalAmount: number;
+  shippingAddress: string;
+  paymentMethod: string;
+  paymentStatus: string;
   createdAt: string;
   updatedAt: string;
-  orderItems: IOrderItem[]; // Include order items
 }
 
 export interface IOrderItem {
   id: string;
+  orderId: string;
   productId: string;
   quantity: number;
   price: number;
+  productName?: string;
 }
 
-export interface IOrderModel {
-  id: string;
-  paymentId: string;
-  customerName: string;
-  totalPrice: number;
-  status: string; // e.g., "Pending", "Completed", "Cancelled"
-  createdAt: string; // ISO string for date-time
-  updatedAt: string; // ISO string for date-time
-  orderItems?: IOrderItem[]; // Optional: list of items in the order
+export interface IOrderModel extends IOrder {
+  items: IOrderItem[];
+  store?: {
+    id: string;
+    name: string;
+  };
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }

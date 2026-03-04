@@ -146,18 +146,18 @@ export const userSlice = createSlice({
 			state.accessToken = "";
 			state.email = action.payload.data.email;
 			state.name = action.payload.data.name;
-			state.address = action.payload.data.address;
-			state.phone = action.payload.data.phone;
+			state.address = action.payload.data.address || "";
+			state.phone = action.payload.data.phone || "";
 			state.isAuthenticated = false;
 		});
 		builder.addCase(signIn.fulfilled, (state, action) => {
 			console.log("sign in", action.payload);
 			state.id = action.payload.data.id;
-			state.accessToken = action.payload.data.accessToken;
+			state.accessToken = action.payload.data.accessToken || "";
 			state.email = action.payload.data.email;
 			state.name = action.payload.data.name;
-			state.address = action.payload.data.address;
-			state.phone = action.payload.data.phone;
+			state.address = action.payload.data.address || "";
+			state.phone = action.payload.data.phone || "";
 			state.bio = action.payload.data.bio || "";
 			state.roles = action.payload.data.roles || [];
 			state.permissions = action.payload.data.permissions || [];
@@ -180,11 +180,11 @@ export const userSlice = createSlice({
 			state.isAuthenticating = false;
 			console.log("fetch session", action.payload.data);
 			if (action.payload.data && action.payload.data.email && action.payload.data.accessToken) {
-				state.accessToken = action.payload.data.accessToken;
+				state.accessToken = action.payload.data.accessToken || "";
 				state.id = action.payload.data.id;
 				state.email = action.payload.data.email;
 				state.name = action.payload.data.name;
-				state.address = action.payload.data.address;
+				state.address = action.payload.data.address || "";
 				state.phone = action.payload.data.phone || "";
 				state.bio = action.payload.data.bio || "";
 				state.roles = action.payload.data.roles || [];
@@ -232,8 +232,8 @@ export const userSlice = createSlice({
 			if (action.payload.data) {
 				state.name = action.payload.data.name;
 				state.email = action.payload.data.email;
-				state.address = action.payload.data.address;
-				state.phone = action.payload.data.phone;
+				state.address = action.payload.data.address || "";
+				state.phone = action.payload.data.phone || "";
 				state.bio = action.payload.data.bio || "";
 			}
 		});

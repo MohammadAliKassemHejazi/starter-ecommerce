@@ -22,7 +22,7 @@ export const selectCartCount = createSelector(
 
 export const selectCartItemCount = createSelector(
   [selectCartItems],
-  (cartItems) => cartItems.reduce((total, item) => total + item.cartQuantity, 0)
+  (cartItems) => cartItems.reduce((total, item) => total + item.quantity, 0)
 );
 
 // Combined selector that returns appropriate cart based on auth state
@@ -39,7 +39,7 @@ export const selectAllCartItems = createSelector(
 
 export const selectAllCartItemCount = createSelector(
   [selectAllCartItems],
-  (cartItems) => cartItems.reduce((total, item) => total + item.cartQuantity, 0)
+  (cartItems) => cartItems.reduce((total, item) => total + item.quantity, 0)
 );
 
 export const selectCartIsEmpty = createSelector(
