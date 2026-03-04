@@ -1,10 +1,36 @@
 import { IProductModel } from "../models/product.model";
-import { IStoreResponseModel } from "../models/store.model";
-import { IArticleModel } from "../models/article.model";
+import { IStoreResponseModel, IStoreModel } from "../models/store.model";
+import { IArticleModel, IArticleModelWithUser } from "../models/article.model";
 import { UserModel } from "../models/user.model";
 import { CartItem } from "../models/cart.model";
-import { IOrderModel } from "../models/order.model";
+import { IOrderModel, IOrder } from "../models/order.model";
 import { IComment } from "../models/comment.model";
+import { SignIn, SignUp } from "../models/auth.model";
+import { ISize, ISizeItem } from "../models/size.model";
+import { ICategories, ISubCategories } from "../models/utils.model";
+
+export const authPageMocks = {
+  signInSuccess: {
+    data: {
+      id: "user-1",
+      email: "user@example.com",
+      name: "John Doe",
+      address: "123 Main St, Springfield, USA",
+      phone: "+1234567890",
+      bio: "Tech enthusiast.",
+      accessToken: "mock-jwt-token-abc123xyz",
+      roles: [{ id: "role-1", name: "Admin" }],
+      permissions: [{ id: "perm-1", name: "manage_products" }]
+    }
+  } as SignIn,
+  signUpRequest: {
+    email: "newuser@example.com",
+    password: "securepassword123",
+    name: "Jane Doe",
+    address: "456 Elm St, Gotham",
+    phone: "+0987654321"
+  } as SignUp
+};
 
 export const homePageMocks = {
   stores: [
@@ -149,8 +175,8 @@ export const productDetailsPageMocks = {
     ratings: 4.5,
     commentsCount: 12,
     sizeItems: [
-      { id: "size-1", sizeId: "sz-1", quantity: 50 }
-    ],
+      { id: "size-item-1", sizeId: "sz-1", size: { size: "Standard" }, quantity: 50 }
+    ] as ISizeItem[],
     comments: [
       {
         id: "com-1",
@@ -163,7 +189,11 @@ export const productDetailsPageMocks = {
         comment: "Comfortable for long hours."
       }
     ] as IComment[]
-  } as IProductModel
+  } as IProductModel,
+  availableSizes: [
+    { id: "sz-1", size: "Standard" },
+    { id: "sz-2", size: "Large" }
+  ] as ISize[]
 };
 
 export const dashboardPageMocks = {
@@ -199,10 +229,6 @@ export const ordersPageMocks = {
   orders: [
     {
       id: "ord-1",
-      paymentId: "pay-123",
-      customerName: "Alice Smith",
-      totalPrice: 219.98,
-      status: "Completed",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       orderItems: [
@@ -212,14 +238,13 @@ export const ordersPageMocks = {
     },
     {
       id: "ord-3",
-      paymentId: "pay-125",
-      customerName: "Charlie Davis",
-      totalPrice: 45.00,
-      status: "Cancelled",
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      orderItems: [
+        { id: "oi-3", productId: "prod-3", quantity: 1, price: 999.99 }
+      ]
     }
-  ] as IOrderModel[]
+  ] as IOrder[]
 };
 
 export const articlesPageMocks = {
@@ -230,7 +255,10 @@ export const articlesPageMocks = {
       text: "A review of the best gadgets to buy this year...",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      userId: "user-1"
+      user: {
+        id: "user-1",
+        name: "John Doe"
+      }
     },
     {
       id: "article-2",
@@ -238,9 +266,12 @@ export const articlesPageMocks = {
       text: "What to wear this spring season...",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      userId: "user-2"
+      user: {
+        id: "user-2",
+        name: "Jane Smith"
+      }
     }
-  ] as IArticleModel[]
+  ] as IArticleModelWithUser[]
 };
 
 export const storePageMocks = {
@@ -254,6 +285,12 @@ export const storePageMocks = {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   } as IStoreResponseModel,
+  storeFormInitialValues: {
+    name: "Tech Haven",
+    description: "Latest gadgets and electronics.",
+    categoryId: "cat-1",
+    croppedImages: []
+  } as IStoreModel,
   storeProducts: [
     {
       id: "prod-1",
@@ -280,4 +317,45 @@ export const storePageMocks = {
       storeId: "store-1"
     }
   ] as IProductModel[]
+};
+
+export const categoriesPageMocks = {
+  categories: [
+    {
+      id: "cat-1",
+      name: "Electronics",
+      description: "Devices, gadgets, and accessories.",
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "cat-2",
+      name: "Fashion",
+      description: "Clothing, shoes, and jewelry.",
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ] as ICategories[],
+  subCategories: [
+    {
+      id: "sub-1",
+      name: "Smartphones",
+      description: "Mobile phones.",
+      categoryId: "cat-1",
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "sub-2",
+      name: "Men's Clothing",
+      description: "Apparel for men.",
+      categoryId: "cat-2",
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ] as ISubCategories[]
 };
