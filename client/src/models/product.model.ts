@@ -15,7 +15,7 @@ export interface IProductModel {
   stockQuantity?: number;
   isActive?: boolean;
   subcategoryId?: string;
-  categoryId?:string;
+  categoryId?: string;
   storeId?: string;
   ownerId?: string;
   thumbnail?: string;
@@ -49,6 +49,7 @@ export interface IProductModelErrors {
     stockQuantity?: string;
     isActive?: string;
     subcategoryId?: string; 
+    categoryId?: string;
     storeId?: string;
     ownerId?: string;
     metaTitle?: string; 
