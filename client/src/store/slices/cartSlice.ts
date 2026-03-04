@@ -57,7 +57,7 @@ export const addToCart = createAsyncThunk(
     const existingItem = state.cart.cartItems.find((item) => item.id === product.id);
 
     // If product.quantity is provided and greater than 1, use it; otherwise, increment existing quantity or default to 1
-    const quantity = product.quantity && product.quantity > 1 ? product.quantity : (existingItem ? existingItem.cartQuantity + 1 : 1);
+    const quantity = product.quantity && product.quantity > 1 ? product.quantity : (existingItem ? existingItem.quantity + 1 : 1);
 
     // For authenticated users, use API
     if (!product.sizeId) {
@@ -98,8 +98,8 @@ export const decreaseCart = createAsyncThunk(
     const state = getState() as { cart: CartState };
     const existingItem = state.cart.cartItems.find((item) => item.id === product.id);
 
-    if (existingItem && existingItem.cartQuantity > 1) {
-      const quantity = existingItem.cartQuantity - 1;
+    if (existingItem && existingItem.quantity > 1) {
+      const quantity = existingItem.quantity - 1;
 
       // Optimistically update the Redux state
       dispatch(cartSlice.actions.decreaseCartOptimistic({ product, quantity }));
@@ -175,8 +175,8 @@ export const getTotals = createAsyncThunk(
     let totalQuantity = 0;
 
     cartItems.forEach((item) => {
-      totalAmount += (item?.price ?? 0) * item.cartQuantity;
-      totalQuantity += item.cartQuantity;
+      totalAmount += (item?.price ?? 0) * item.quantity;
+      totalQuantity += item.quantity;
     });
 
     return { totalAmount, totalQuantity };
@@ -193,9 +193,9 @@ const cartSlice = createSlice({
       const existingItem = state.cartItems.find((item) => item.id === product.id);
 
       if (existingItem) {
-        existingItem.cartQuantity += 1;
+        existingItem.quantity += 1;
       } else {
-        state.cartItems.push({ ...product, cartQuantity: quantity });
+        state.cartItems.push({ ...product, quantity: quantity, cartItemId: product.id || "" });
       }
     },
     decreaseCartOptimistic: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
@@ -203,7 +203,7 @@ const cartSlice = createSlice({
       const existingItem = state.cartItems.find((item) => item.id === product.id);
 
       if (existingItem) {
-        existingItem.cartQuantity = quantity;
+        existingItem.quantity = quantity;
       }
     },
     removeFromCartOptimistic: (state, action: PayloadAction<string>) => {
@@ -218,7 +218,7 @@ const cartSlice = createSlice({
       const existingItem = state.cartItems.find((item) => item.id === product.id);
 
       if (existingItem) {
-        existingItem.cartQuantity -= 1;
+        existingItem.quantity -= 1;
       } else {
         state.cartItems = state.cartItems.filter((item) => item.id !== product.id);
       }
@@ -228,7 +228,7 @@ const cartSlice = createSlice({
       const existingItem = state.cartItems.find((item) => item.id === product.id);
 
       if (existingItem) {
-        existingItem.cartQuantity += 1;
+        existingItem.quantity += 1;
       }
     },
     revertRemoveFromCart: (state, action: PayloadAction<string>) => {

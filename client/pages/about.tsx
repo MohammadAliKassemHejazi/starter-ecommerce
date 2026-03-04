@@ -193,16 +193,16 @@ const About = ({ articles }: Props) => {
         <div className="card-body d-flex flex-column">
           <div className="small text-muted mb-2">
             <i className="fas fa-calendar-alt me-1"></i>
-            {new Date(article.createdAt).toLocaleDateString()}
+            {new Date(article.createdAt || "").toLocaleDateString()}
           </div>
           <h3 className="card-title h5 mb-3">{article.title}</h3>
           <p className="card-text flex-grow-1 text-muted">
-            {article.text.length > 150 ? `${article.text.substring(0, 150)}...` : article.text}
+            {article.content.length > 150 ? `${article.content.substring(0, 150)}...` : article.content}
           </p>
           <div className="mt-auto">
             <div className="small text-muted mb-3">
               <i className="fas fa-user me-1"></i>
-              By {article.user?.name ?? "Anonymous"}
+              By {article.author?.name ?? "Anonymous"}
             </div>
             <Link href="/articles" className="btn btn-outline-primary">
               Read More <i className="fas fa-arrow-right ms-1"></i>

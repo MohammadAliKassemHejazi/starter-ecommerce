@@ -1,24 +1,26 @@
+import { ImageListType } from "react-images-uploading";
+
 export interface IArticleModel {
-  id: string
-  title: string
-  text: string
-  createdAt: string
-  updatedAt: string
-  userId: string
+  id?: string;
+  title: string;
+  slug?: string;
+  content: string;
+  authorId?: string;
+  published: boolean;
+  views?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  photos?: ImageListType;
+  images?: any;
 }
 
-
-export interface IArticleModelWithUser {
-  id: string
-  title: string
-  text: string
-  createdAt: string
-  updatedAt: string
-  user: IArticleAuthor | undefined
+export interface IArticleModelWithUser extends IArticleModel {
+  author?: IArticleAuthor;
 }
 
 export interface IArticleAuthor {
-  id: string
-  name: string 
-
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl?: string;
 }

@@ -2,7 +2,6 @@ import { ImageListType } from "react-images-uploading";
 import { IStoreModel } from "./store.model";
 import { IComment } from "./comment.model";
 import { ISizeItem } from "./size.model";
-import { ReactNode } from "react";
 
 export interface IProductModel {
   originalPrice: number;
@@ -15,31 +14,28 @@ export interface IProductModel {
   stockQuantity?: number;
   isActive?: boolean;
   subcategoryId?: string;
-  categoryId?:string;
+  categoryId?: string;
   storeId?: string;
   ownerId?: string;
   thumbnail?: string;
   metaTitle?: string;
   metaDescription?: string; 
   photos?: ImageListType;
-  productImages?: ImageListType;
-  store? : IStoreModel;
-  ratings ?:  number;
-  commentsCount? :   number;
-  comments ?: IComment[];
+  productImages?: any;
+  store?: IStoreModel;
+  ratings?: number;
+  commentsCount?: number;
+  comments?: IComment[];
   sizeItems?: ISizeItem[];
   quantity?: number;
   sizeId?: string;
   updatedAt?: string;
   createdAt?: string;
-
 }
 
 export interface productresponse {
-product : IProductModel
+  product: IProductModel
 }
-
-
 
 export interface IProductModelErrors {
     id?: string;
@@ -55,4 +51,4 @@ export interface IProductModelErrors {
     metaDescription?: string;
     photos: string;
     productImages: string;
-  }
+}

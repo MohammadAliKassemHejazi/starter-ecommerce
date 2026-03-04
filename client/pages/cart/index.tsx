@@ -118,7 +118,7 @@ const Cart = () => {
         >
           -
         </button>
-        <div className='count'>{cartItem.cartQuantity}</div>
+        <div className='count'>{cartItem.quantity}</div>
         <button
           className='quantityBtn'
           onClick={() => handleAddToCart(cartItem)}

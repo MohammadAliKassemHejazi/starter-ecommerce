@@ -2,34 +2,7 @@ import { ApiResponse, PaginatedApiResponse } from './apiResponse.types';
 import { IOrderModel } from "@/models/order.model";
 
 // Order API Response Types
-export interface OrderResponse extends ApiResponse<{
-  id: string;
-  paymentId: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone?: string;
-  totalPrice: number;
-  status: string;
-  currency: string;
-  createdAt: string;
-  updatedAt: string;
-  orderItems: Array<{
-    id: string;
-    productId: string;
-    productName: string;
-    quantity: number;
-    price: number;
-    sizeId?: string;
-    size?: string;
-  }>;
-  shippingDetails?: {
-    address: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-  };
-}> {}
+export interface OrderResponse extends ApiResponse<IOrderModel> {}
 
 export interface OrdersListResponse extends ApiResponse<{
   items: IOrderModel[];
@@ -66,28 +39,6 @@ export interface OrderItemsResponse extends ApiResponse<{
   }>;
 }> {}
 
-export interface CreateOrderResponse extends ApiResponse<{
-  id: string;
-  paymentId: string;
-  customerName: string;
-  totalPrice: number;
-  status: string;
-  currency: string;
-  createdAt: string;
-  updatedAt: string;
-}> {}
-
-export interface UpdateOrderResponse extends ApiResponse<{
-  id: string;
-  paymentId: string;
-  customerName: string;
-  totalPrice: number;
-  status: string;
-  currency: string;
-  createdAt: string;
-  updatedAt: string;
-}> {}
-
-export interface DeleteOrderResponse extends ApiResponse<{
-  message: string;
-}> {}
+export interface CreateOrderResponse extends ApiResponse<IOrderModel> {}
+export interface UpdateOrderResponse extends ApiResponse<IOrderModel> {}
+export interface DeleteOrderResponse extends ApiResponse<{ message: string; }> {}

@@ -182,7 +182,7 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
       }
     });
       formData.append("productID",id!.toString());
-    product?.productImages?.forEach((file) => {
+    product?.productImages?.forEach((file: any) => {
       if (file && file.file instanceof File) {
         formData.append(`photos`, file.file, file.file.name);
       }
