@@ -10,6 +10,7 @@ import { TablePage } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import router from "next/router";
+import { ISubcategoriesPageViewModel } from "@/interfaces/pages/subcategories.viewmodel";
 
 const SubCategoriesGrid = () => {
   const dispatch = useAppDispatch();

@@ -17,29 +17,7 @@ import ListingProductsByStore from "@/components/UI/General/listingProducts/List
 
 import { GetStaticPaths, GetStaticProps } from "next";
 import { IProductModel } from "@/models/product.model";
-
-interface IParams extends ParsedUrlQuery {
-  id: string;
-}
-
-interface SingleStoreProps {
-  initialStore?: {
-    id: string;
-    name: string;
-    description?: string;
-    imgUrl: string;
-    categoryId: string;
-    metaTitle?: string;
-    metaDescription?: string;
-  };
-  initialProducts?: Array<{
-    page: number;
-    pageSize: number;
-    total: number;
-    products: IProductModel[];
-
-  }>;
-}
+import { IParams, SingleStoreProps, IStoreIdPageViewModel } from "@/interfaces/pages/storeid.viewmodel";
 
 const SingleStore = ({ initialStore, initialProducts }: SingleStoreProps) => {
   const dispatch = useAppDispatch();

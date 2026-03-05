@@ -10,10 +10,7 @@ import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-
-type Props = {
-  article?: IArticleModel;
-};
+import { Props, IArticlesEditPageViewModel } from "@/interfaces/pages/articlesedit.viewmodel";
 
 const EditArticle = ({ article }: Props) => {
   const dispatch = useAppDispatch();

@@ -7,6 +7,7 @@ import Layout from "@/components/Layouts/Layout";
 import ProtectedRoute from "@/components/protectedRoute";
 import Link from "next/link";
 import { getUserActivePackage } from "@/services/packageService";
+import { IRolesEditPageViewModel } from "@/interfaces/pages/rolesedit.viewmodel";
 
 const Toast = Swal.mixin({
   toast: true,

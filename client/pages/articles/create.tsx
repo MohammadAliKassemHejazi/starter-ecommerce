@@ -6,6 +6,7 @@ import { usePageData } from "@/hooks/usePageData";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
+import { IArticlesCreatePageViewModel } from "@/interfaces/pages/articlescreate.viewmodel";
 
 const CreateArticle = () => {
   const dispatch = useAppDispatch();

@@ -5,26 +5,7 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
-
-interface ReturnRequest {
-  id: string;
-  reason: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'PROCESSED';
-  refundAmount: number;
-  resolutionNote?: string;
-  Order?: {
-    id: string;
-    orderNumber: string;
-    totalPrice: number;
-  };
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
+import { ReturnRequest, IReturnsPageViewModel } from "@/interfaces/pages/returns.viewmodel";
 
 const ReturnsPage = () => {
   const { t } = useTranslation();

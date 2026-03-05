@@ -9,19 +9,7 @@ import { useSelector } from 'react-redux';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import CheckoutPage from './payment/checkoutwithstripe';
 import { getAllPackages, activatePackage, selectAllPackages, selectPackageLoading, selectPackageError } from '@/store/slices/packageSlice';
-
-interface Package {
-  id: string;
-  name: string;
-  description?: string;
-  storeLimit: number;
-  categoryLimit: number;
-  productLimit: number;
-  userLimit: number;
-  isSuperAdminPackage: boolean;
-  price: number;
-  isActive: boolean;
-}
+import { Package, IPlansPageViewModel } from "@/interfaces/pages/plans.viewmodel";
 
 const PlansPage = () => {
   const { t } = useTranslation();

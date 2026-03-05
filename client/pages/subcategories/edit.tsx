@@ -9,8 +9,8 @@ import { useSelector } from "react-redux";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { useTranslation } from "react-i18next";
 import { on } from "events";
+import { ISubcategoriesEditPageViewModel } from "@/interfaces/pages/subcategoriesedit.viewmodel";
 
-  
 const EditSubCategoryModal = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();

@@ -8,18 +8,9 @@ import { PageLayout } from '@/components/UI/PageComponents';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import { purchasePackage } from '@/services/packageService';
 import { useAnalyticsTracker } from '@/hooks/useAnalyticsTracker';
+import { CheckoutFormProps, CheckoutPageProps, IPaymentCheckoutwithstripePageViewModel } from "@/interfaces/pages/paymentcheckoutwithstripe.viewmodel";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_Stripe_Key ?? "");
-
-export interface CheckoutFormProps {
-  amount: number;
-  currency: string;
-  onSuccess?: (paymentId: string) => void;
-  onError?: (error: string) => void;
-  packageId?: string; // Optional: Only for package purchases
-  type?: 'cart' | 'package'; // Optional: Defaults to 'cart' if not provided
-}
-
 export const CheckoutForm: React.FC<CheckoutFormProps> = ({
   amount,
   currency,
@@ -177,18 +168,6 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({
     </form>
   );
 };
-
-interface CheckoutPageProps {
-  package: {
-    id: string;
-    name: string;
-    price: number;
-  };
-  onSuccess?: (paymentId: string) => void;
-  onError?: (error: string) => void;
-  onCancel?: () => void;
-}
-
 const CheckoutPage: React.FC<CheckoutPageProps> = ({ 
   package: pkg, 
   onSuccess, 

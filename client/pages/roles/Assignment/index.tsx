@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import { getUserActivePackage } from "@/services/packageService";
 import ProtectedRoute from "@/components/protectedRoute";
 import { usePermissions } from "@/hooks/usePermissions";
+import { IRolesAssignmentPageViewModel } from "@/interfaces/pages/rolesassignment.viewmodel";
 
 const Toast = Swal.mixin({
   toast: true,

@@ -22,6 +22,8 @@ import {
 } from "@/store/slices/utilsSlice";
 import { ISize } from "@/models/size.model";
 import { useSelector } from "react-redux";
+import { IShopProductEditPageViewModel } from "@/interfaces/pages/shopproductedit.viewmodel";
+
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",

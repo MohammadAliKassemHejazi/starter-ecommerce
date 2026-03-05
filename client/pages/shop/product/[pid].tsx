@@ -22,10 +22,7 @@ import { usePermissions } from "@/hooks/usePermissions";
 import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
 
 import { ProductViewModel, defaultProductViewModel } from "@/interfaces/viewModels";
-
-type Props = {
-  product?: IProductModel | null;
-};
+import { Props, IShopProductPidPageViewModel } from "@/interfaces/pages/shopproductpid.viewmodel";
 
 const Toast = Swal.mixin({
   toast: true,

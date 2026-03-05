@@ -3,8 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
-
-type Props = {};
+import { Props, IAuthForgotPasswordPageViewModel } from "@/interfaces/pages/authforgotpassword.viewmodel";
 
 export default function ForgotPassword({}: Props) {
   const [responseText, setResponseText] = useState("");
