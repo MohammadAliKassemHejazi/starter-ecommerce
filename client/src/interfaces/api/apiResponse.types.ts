@@ -47,3 +47,11 @@ export interface ApiSuccessResponse<T = any> {
 
 // Generic API Response Type
 export type ApiResult<T = any> = ApiSuccessResponse<T> | ApiErrorResponse;
+
+// Shared shape for global data representation
+export interface GlobalDataResponse {
+  id: string;
+  title: string;
+  metrics: number;
+  media: string;
+}
