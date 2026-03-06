@@ -4,15 +4,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default {
-
-
   development: {
     username: process.env.DB_USERNAME || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
     database: process.env.DB_DATABASE_DEVELOPMENT || 'ecommerce_dev',
     host: process.env.DB_HOST || '127.0.0.1',
     port: process.env.DB_PORT || 5432,
-    dialect: 'postgres',
+    dialect: process.env.DB_DIALECT || 'postgres',
+    storage: process.env.DB_STORAGE || undefined,
     logging: console.log,
   },
   test: {
@@ -21,7 +20,8 @@ export default {
     database: process.env.DB_DATABASE_TEST || 'ecommerce_test',
     host: process.env.DB_HOST || '127.0.0.1',
     port: process.env.DB_PORT || 5432,
-    dialect: 'postgres',
+    dialect: process.env.DB_DIALECT || 'postgres',
+    storage: process.env.DB_STORAGE || undefined,
     logging: false,
   },
   production: {
