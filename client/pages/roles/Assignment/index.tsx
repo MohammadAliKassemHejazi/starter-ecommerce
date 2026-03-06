@@ -11,8 +11,13 @@ import { rolesSelector, fetchRoles } from "@/store/slices/roleSlice";
 import { TablePage } from "@/components/UI/PageComponents";
 import Swal from "sweetalert2";
 import ProtectedRoute from "@/components/protectedRoute";
+
 import { usePageData } from "@/hooks/usePageData";
 import router from "next/router";
+
+import { usePermissions } from "@/hooks/usePermissions";
+import { IRolesAssignmentPageViewModel } from "@/interfaces/pages/rolesassignment.viewmodel";
+
 
 const Toast = Swal.mixin({
   toast: true,

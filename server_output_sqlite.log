@@ -1,12 +1,3 @@
-
-> nodejs-express-mrcs-starter-template@1.0.0 dev
-> nodemon index.ts
-
-[33m[nodemon] 3.1.9[39m
-[33m[nodemon] to restart at any time, enter `rs`[39m
-[33m[nodemon] watching path(s): *.*[39m
-[33m[nodemon] watching extensions: ts,json[39m
-[32m[nodemon] starting `ts-node index.ts`[39m
 ✅ Config loaded from: /app/server/src/config/db.config.ts
 🔧 Database config: {
   dialect: 'sqlite',
@@ -117,139 +108,131 @@
 🔗 Set up associations for: User
 🔗 Set up associations for: UserSession
 🎉 Database initialization complete. Models loaded: TaxRule, Analytics, Article, Cart, CartItem, Category, Comment, Favorite, FavoriteItem, AuditLog, Translation, Order, OrderItem, Package, Payment, Permission, Product, ProductImage, Promotion, ReturnRequest, Role, RolePermission, RoleUser, OrderShipping, ShippingMethod, Size, SizeItem, Store, SubCategory, UserPackage, User, UserSession
-❌ Missing required environment variables: NODE_ENV
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `ts-node index.ts`[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `ts-node index.ts`[39m
-✅ Config loaded from: /app/server/src/config/db.config.ts
-🔧 Database config: {
-  dialect: 'postgres',
-  host: '127.0.0.1',
-  port: 5432,
-  database: 'ecommerce_dev',
-  use_env_variable: undefined,
-  hasUsername: true,
-  hasPassword: true
+🔄 Performing database reset in development...
+Executing (default): PRAGMA foreign_keys = OFF
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='TaxRules';
+✅ Database connection established successfully.
+Executing (default): PRAGMA INDEX_LIST(`TaxRules`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Analytics';
+Executing (default): PRAGMA INDEX_LIST(`Analytics`)
+Executing (default): PRAGMA INDEX_INFO(`analytics_event_type`)
+Executing (default): PRAGMA INDEX_INFO(`analytics_session_id`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Articles';
+Executing (default): PRAGMA INDEX_LIST(`Articles`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Articles_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Carts';
+Executing (default): PRAGMA INDEX_LIST(`Carts`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Carts_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='CartItems';
+Executing (default): PRAGMA INDEX_LIST(`CartItems`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_CartItems_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Categories';
+Executing (default): PRAGMA INDEX_LIST(`Categories`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Categories_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Comments';
+Executing (default): PRAGMA INDEX_LIST(`Comments`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Comments_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Favorites';
+Executing (default): PRAGMA INDEX_LIST(`Favorites`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Favorites_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='FavoriteItems';
+Executing (default): PRAGMA INDEX_LIST(`FavoriteItems`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_FavoriteItems_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='AuditLogs';
+Executing (default): PRAGMA INDEX_LIST(`AuditLogs`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Translations';
+Executing (default): PRAGMA INDEX_LIST(`Translations`)
+Executing (default): PRAGMA INDEX_INFO(`translations_model_record_id`)
+Executing (default): PRAGMA INDEX_INFO(`translations_model_record_id_language_field`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Orders';
+Executing (default): PRAGMA INDEX_LIST(`Orders`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Orders_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='OrderItems';
+Executing (default): PRAGMA INDEX_LIST(`OrderItems`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_OrderItems_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Packages';
+Executing (default): PRAGMA INDEX_LIST(`Packages`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Packages_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Payments';
+Executing (default): PRAGMA INDEX_LIST(`Payments`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Payments_1`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Payments_2`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Permissions';
+Executing (default): PRAGMA INDEX_LIST(`Permissions`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Permissions_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Products';
+Executing (default): PRAGMA INDEX_LIST(`Products`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Products_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='ProductImages';
+Executing (default): PRAGMA INDEX_LIST(`ProductImages`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_ProductImages_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Promotions';
+Executing (default): PRAGMA INDEX_LIST(`Promotions`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Promotions_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='ReturnRequests';
+Executing (default): PRAGMA INDEX_LIST(`ReturnRequests`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Roles';
+Executing (default): PRAGMA INDEX_LIST(`Roles`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Roles_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='RolePermissions';
+Executing (default): PRAGMA INDEX_LIST(`RolePermissions`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_RolePermissions_1`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_RolePermissions_2`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='RoleUsers';
+Executing (default): PRAGMA INDEX_LIST(`RoleUsers`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_RoleUsers_1`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_RoleUsers_2`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='OrderShippings';
+Executing (default): CREATE TABLE IF NOT EXISTS `OrderShippings` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `trackingNumber` VARCHAR(255) UNIQUE, `carrier` VARCHAR(255), `status` TEXT, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `orderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `OrderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `ShippingMethodId` INTEGER REFERENCES `ShippingMethods` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);
+Executing (default): PRAGMA foreign_keys = ON
+❌ Database initialization failed: Error
+    at Database.<anonymous> (/app/server/node_modules/sequelize/src/dialects/sqlite/query.js:236:27)
+    at /app/server/node_modules/sequelize/src/dialects/sqlite/query.js:234:50
+    at new Promise (<anonymous>)
+    at Query.run (/app/server/node_modules/sequelize/src/dialects/sqlite/query.js:234:12)
+    at /app/server/node_modules/sequelize/src/sequelize.js:650:28
+    at async SQLiteQueryInterface.createTable (/app/server/node_modules/sequelize/src/dialects/abstract/query-interface.js:229:12)
+    at async Function.sync (/app/server/node_modules/sequelize/src/model.js:1353:7)
+    at async /app/server/node_modules/sequelize/src/sequelize.js:847:11
+    at async withSqliteForeignKeysOff (/app/server/node_modules/sequelize/src/dialects/sqlite/sqlite-utils.ts:8:12)
+    at async Sequelize._syncModelsWithCyclicReferences (/app/server/node_modules/sequelize/src/sequelize.js:845:7) {
+  name: 'SequelizeDatabaseError',
+  parent: [Error: SQLITE_ERROR: duplicate column name: OrderId] {
+    errno: 1,
+    code: 'SQLITE_ERROR',
+    sql: 'CREATE TABLE IF NOT EXISTS `OrderShippings` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `trackingNumber` VARCHAR(255) UNIQUE, `carrier` VARCHAR(255), `status` TEXT, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `orderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `OrderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `ShippingMethodId` INTEGER REFERENCES `ShippingMethods` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);'
+  },
+  original: [Error: SQLITE_ERROR: duplicate column name: OrderId] {
+    errno: 1,
+    code: 'SQLITE_ERROR',
+    sql: 'CREATE TABLE IF NOT EXISTS `OrderShippings` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `trackingNumber` VARCHAR(255) UNIQUE, `carrier` VARCHAR(255), `status` TEXT, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `orderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `OrderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `ShippingMethodId` INTEGER REFERENCES `ShippingMethods` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);'
+  },
+  sql: 'CREATE TABLE IF NOT EXISTS `OrderShippings` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `trackingNumber` VARCHAR(255) UNIQUE, `carrier` VARCHAR(255), `status` TEXT, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `orderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `OrderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `ShippingMethodId` INTEGER REFERENCES `ShippingMethods` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);',
+  parameters: {}
 }
-🔗 Connecting to database: ecommerce_dev at 127.0.0.1:5432
-📁 Loading 32 model files: [
-  'Tax.model.ts',
-  'analytics.model.ts',
-  'article.model.ts',
-  'cart.model.ts',
-  'cartitem.model.ts',
-  'category.model.ts',
-  'comments.model.ts',
-  'favorite.model.ts',
-  'favoriteitem.model.ts',
-  'log.model.ts',
-  'multilan.model.ts',
-  'order.model.ts',
-  'orderitem.model.ts',
-  'package.model.ts',
-  'payment.model.ts',
-  'permission.model.ts',
-  'product.model.ts',
-  'productimage.ts',
-  'promotion.model.ts',
-  'return.model.ts',
-  'role.model.ts',
-  'rolepermission .model.ts',
-  'roleuser.model.ts',
-  'shippment.model.ts',
-  'shippmentmethod.model.ts',
-  'size.model.ts',
-  'sizeitem.model.ts',
-  'store.model.ts',
-  'subcategory.model.ts',
-  'userpackage.model.ts',
-  'users.model.ts',
-  'usersession.model.ts'
-]
-✅ Loaded model: TaxRule
-✅ Loaded model: Analytics
-✅ Loaded model: Article
-✅ Loaded model: Cart
-✅ Loaded model: CartItem
-✅ Loaded model: Category
-✅ Loaded model: Comment
-✅ Loaded model: Favorite
-✅ Loaded model: FavoriteItem
-✅ Loaded model: AuditLog
-✅ Loaded model: Translation
-✅ Loaded model: Order
-✅ Loaded model: OrderItem
-✅ Loaded model: Package
-✅ Loaded model: Payment
-✅ Loaded model: Permission
-✅ Loaded model: Product
-✅ Loaded model: ProductImage
-✅ Loaded model: Promotion
-✅ Loaded model: ReturnRequest
-✅ Loaded model: Role
-✅ Loaded model: RolePermission
-✅ Loaded model: RoleUser
-✅ Loaded model: OrderShipping
-✅ Loaded model: ShippingMethod
-✅ Loaded model: Size
-✅ Loaded model: SizeItem
-✅ Loaded model: Store
-✅ Loaded model: SubCategory
-✅ Loaded model: UserPackage
-✅ Loaded model: User
-✅ Loaded model: UserSession
-🔗 Set up associations for: TaxRule
-🔗 Set up associations for: Analytics
-🔗 Set up associations for: Article
-🔗 Set up associations for: Cart
-🔗 Set up associations for: CartItem
-🔗 Set up associations for: Category
-🔗 Set up associations for: Comment
-🔗 Set up associations for: Favorite
-🔗 Set up associations for: FavoriteItem
-🔗 Set up associations for: AuditLog
-🔗 Set up associations for: Translation
-🔗 Set up associations for: Order
-🔗 Set up associations for: OrderItem
-🔗 Set up associations for: Package
-🔗 Set up associations for: Payment
-🔗 Set up associations for: Permission
-🔗 Set up associations for: Product
-🔗 Set up associations for: ProductImage
-🔗 Set up associations for: Promotion
-🔗 Set up associations for: ReturnRequest
-🔗 Set up associations for: Role
-🔗 Set up associations for: RolePermission
-🔗 Set up associations for: RoleUser
-🔗 Set up associations for: OrderShipping
-🔗 Set up associations for: ShippingMethod
-🔗 Set up associations for: Size
-🔗 Set up associations for: SizeItem
-🔗 Set up associations for: Store
-🔗 Set up associations for: SubCategory
-🔗 Set up associations for: UserPackage
-🔗 Set up associations for: User
-🔗 Set up associations for: UserSession
-🎉 Database initialization complete. Models loaded: TaxRule, Analytics, Article, Cart, CartItem, Category, Comment, Favorite, FavoriteItem, AuditLog, Translation, Order, OrderItem, Package, Payment, Permission, Product, ProductImage, Promotion, ReturnRequest, Role, RolePermission, RoleUser, OrderShipping, ShippingMethod, Size, SizeItem, Store, SubCategory, UserPackage, User, UserSession
-/app/server/node_modules/ts-node/src/index.ts:859
-    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
-           ^
-TSError: ⨯ Unable to compile TypeScript:
-src/routes/store.route.ts(4,8): error TS1192: Module '"/app/server/src/middlewares/store.middleweare"' has no default export.
-
-    at createTSError (/app/server/node_modules/ts-node/src/index.ts:859:12)
-    at reportTSError (/app/server/node_modules/ts-node/src/index.ts:863:19)
-    at getOutput (/app/server/node_modules/ts-node/src/index.ts:1077:36)
-    at Object.compile (/app/server/node_modules/ts-node/src/index.ts:1433:41)
-    at Module.m._compile (/app/server/node_modules/ts-node/src/index.ts:1617:30)
-    at node:internal/modules/cjs/loader:1839:10
-    at Object.require.extensions.<computed> [as .ts] (/app/server/node_modules/ts-node/src/index.ts:1621:12)
-    at Module.load (node:internal/modules/cjs/loader:1441:32)
-    at Function._load (node:internal/modules/cjs/loader:1263:12)
-    at TracingChannel.traceSync (node:diagnostics_channel:328:14) {
-  diagnosticCodes: [ 1192 ]
+❌ Failed to start server: Error
+    at Database.<anonymous> (/app/server/node_modules/sequelize/src/dialects/sqlite/query.js:236:27)
+    at /app/server/node_modules/sequelize/src/dialects/sqlite/query.js:234:50
+    at new Promise (<anonymous>)
+    at Query.run (/app/server/node_modules/sequelize/src/dialects/sqlite/query.js:234:12)
+    at /app/server/node_modules/sequelize/src/sequelize.js:650:28
+    at async SQLiteQueryInterface.createTable (/app/server/node_modules/sequelize/src/dialects/abstract/query-interface.js:229:12)
+    at async Function.sync (/app/server/node_modules/sequelize/src/model.js:1353:7)
+    at async /app/server/node_modules/sequelize/src/sequelize.js:847:11
+    at async withSqliteForeignKeysOff (/app/server/node_modules/sequelize/src/dialects/sqlite/sqlite-utils.ts:8:12)
+    at async Sequelize._syncModelsWithCyclicReferences (/app/server/node_modules/sequelize/src/sequelize.js:845:7) {
+  name: 'SequelizeDatabaseError',
+  parent: [Error: SQLITE_ERROR: duplicate column name: OrderId] {
+    errno: 1,
+    code: 'SQLITE_ERROR',
+    sql: 'CREATE TABLE IF NOT EXISTS `OrderShippings` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `trackingNumber` VARCHAR(255) UNIQUE, `carrier` VARCHAR(255), `status` TEXT, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `orderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `OrderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `ShippingMethodId` INTEGER REFERENCES `ShippingMethods` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);'
+  },
+  original: [Error: SQLITE_ERROR: duplicate column name: OrderId] {
+    errno: 1,
+    code: 'SQLITE_ERROR',
+    sql: 'CREATE TABLE IF NOT EXISTS `OrderShippings` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `trackingNumber` VARCHAR(255) UNIQUE, `carrier` VARCHAR(255), `status` TEXT, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `orderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `OrderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `ShippingMethodId` INTEGER REFERENCES `ShippingMethods` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);'
+  },
+  sql: 'CREATE TABLE IF NOT EXISTS `OrderShippings` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `trackingNumber` VARCHAR(255) UNIQUE, `carrier` VARCHAR(255), `status` TEXT, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `orderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `OrderId` UUID REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `ShippingMethodId` INTEGER REFERENCES `ShippingMethods` (`id`) ON DELETE SET NULL ON UPDATE CASCADE);',
+  parameters: {}
 }
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m

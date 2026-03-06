@@ -5,29 +5,7 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
-
-interface Size {
-  id: string;
-  size: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface SizeItem {
-  id: string;
-  productId: string;
-  sizeId: string;
-  quantity: number;
-  product?: {
-    id: string;
-    name: string;
-  };
-  Size?: {
-    id: string;
-    size: string;
-  };
-  createdAt: string;
-}
+import { Size, SizeItem, ISizesPageViewModel } from "@/interfaces/pages/sizes.viewmodel";
 
 const SizesPage = () => {
   const { t } = useTranslation();

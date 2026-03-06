@@ -10,6 +10,7 @@ import ProtectedRoute from "@/components/protectedRoute";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { IStorePageViewModel } from "@/interfaces/pages/store.viewmodel";
 
 const Stores = () => {
   const router = useRouter();

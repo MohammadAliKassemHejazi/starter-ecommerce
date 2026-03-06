@@ -11,6 +11,7 @@ import Layout from "@/components/Layouts/Layout";
 import Swal from "sweetalert2";
 import { getUserActivePackage } from "@/services/packageService";
 import ProtectedRoute from "@/components/protectedRoute";
+import { IRolesAssignmentUsersPageViewModel } from "@/interfaces/pages/rolesassignmentusers.viewmodel";
 
 const Toast = Swal.mixin({
   toast: true,

@@ -5,24 +5,7 @@ import { PageLayout } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
-
-interface Comment {
-  id: string;
-  text: string;
-  rating: number;
-  user: {
-    id: string;
-    name: string;
-  };
-  createdAt: string;
-}
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  images: Array<{ imageUrl: string }>;
-}
+import { Comment, Product, ICommentsPageViewModel } from "@/interfaces/pages/comments.viewmodel";
 
 const CommentsPage = () => {
   const router = useRouter();

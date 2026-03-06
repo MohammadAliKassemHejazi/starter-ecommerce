@@ -25,6 +25,7 @@ import Link from "next/link";
 import { IProductModel } from "@/models/product.model";
 import { IStoreResponseModel } from "@/models/store.model";
 import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
+import { IShopPageViewModel } from "@/interfaces/pages/shop.viewmodel";
 
 const Shop = () => {
   const dispatch = useAppDispatch();

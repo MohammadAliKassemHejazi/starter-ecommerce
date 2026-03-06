@@ -1,0 +1,241 @@
+✅ Config loaded from: /app/server/src/config/db.config.ts
+🔧 Database config: {
+  dialect: 'sqlite',
+  host: '127.0.0.1',
+  port: 5432,
+  database: 'ecommerce_dev',
+  use_env_variable: undefined,
+  hasUsername: true,
+  hasPassword: true
+}
+🔗 Connecting to database: ecommerce_dev at 127.0.0.1:5432
+📁 Loading 32 model files: [
+  'Tax.model.ts',
+  'analytics.model.ts',
+  'article.model.ts',
+  'cart.model.ts',
+  'cartitem.model.ts',
+  'category.model.ts',
+  'comments.model.ts',
+  'favorite.model.ts',
+  'favoriteitem.model.ts',
+  'log.model.ts',
+  'multilan.model.ts',
+  'order.model.ts',
+  'orderitem.model.ts',
+  'package.model.ts',
+  'payment.model.ts',
+  'permission.model.ts',
+  'product.model.ts',
+  'productimage.ts',
+  'promotion.model.ts',
+  'return.model.ts',
+  'role.model.ts',
+  'rolepermission .model.ts',
+  'roleuser.model.ts',
+  'shippment.model.ts',
+  'shippmentmethod.model.ts',
+  'size.model.ts',
+  'sizeitem.model.ts',
+  'store.model.ts',
+  'subcategory.model.ts',
+  'userpackage.model.ts',
+  'users.model.ts',
+  'usersession.model.ts'
+]
+✅ Loaded model: TaxRule
+✅ Loaded model: Analytics
+✅ Loaded model: Article
+✅ Loaded model: Cart
+✅ Loaded model: CartItem
+✅ Loaded model: Category
+✅ Loaded model: Comment
+✅ Loaded model: Favorite
+✅ Loaded model: FavoriteItem
+✅ Loaded model: AuditLog
+✅ Loaded model: Translation
+✅ Loaded model: Order
+✅ Loaded model: OrderItem
+✅ Loaded model: Package
+✅ Loaded model: Payment
+✅ Loaded model: Permission
+✅ Loaded model: Product
+✅ Loaded model: ProductImage
+✅ Loaded model: Promotion
+✅ Loaded model: ReturnRequest
+✅ Loaded model: Role
+✅ Loaded model: RolePermission
+✅ Loaded model: RoleUser
+✅ Loaded model: OrderShipping
+✅ Loaded model: ShippingMethod
+✅ Loaded model: Size
+✅ Loaded model: SizeItem
+✅ Loaded model: Store
+✅ Loaded model: SubCategory
+✅ Loaded model: UserPackage
+✅ Loaded model: User
+✅ Loaded model: UserSession
+🔗 Set up associations for: TaxRule
+🔗 Set up associations for: Analytics
+🔗 Set up associations for: Article
+🔗 Set up associations for: Cart
+🔗 Set up associations for: CartItem
+🔗 Set up associations for: Category
+🔗 Set up associations for: Comment
+🔗 Set up associations for: Favorite
+🔗 Set up associations for: FavoriteItem
+🔗 Set up associations for: AuditLog
+🔗 Set up associations for: Translation
+🔗 Set up associations for: Order
+🔗 Set up associations for: OrderItem
+🔗 Set up associations for: Package
+🔗 Set up associations for: Payment
+🔗 Set up associations for: Permission
+🔗 Set up associations for: Product
+🔗 Set up associations for: ProductImage
+🔗 Set up associations for: Promotion
+🔗 Set up associations for: ReturnRequest
+🔗 Set up associations for: Role
+🔗 Set up associations for: RolePermission
+🔗 Set up associations for: RoleUser
+🔗 Set up associations for: OrderShipping
+🔗 Set up associations for: ShippingMethod
+🔗 Set up associations for: Size
+🔗 Set up associations for: SizeItem
+🔗 Set up associations for: Store
+🔗 Set up associations for: SubCategory
+🔗 Set up associations for: UserPackage
+🔗 Set up associations for: User
+🔗 Set up associations for: UserSession
+🎉 Database initialization complete. Models loaded: TaxRule, Analytics, Article, Cart, CartItem, Category, Comment, Favorite, FavoriteItem, AuditLog, Translation, Order, OrderItem, Package, Payment, Permission, Product, ProductImage, Promotion, ReturnRequest, Role, RolePermission, RoleUser, OrderShipping, ShippingMethod, Size, SizeItem, Store, SubCategory, UserPackage, User, UserSession
+🔄 Performing database reset in development...
+Executing (default): PRAGMA foreign_keys = OFF
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='TaxRules';
+✅ Database connection established successfully.
+Executing (default): PRAGMA INDEX_LIST(`TaxRules`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Analytics';
+Executing (default): PRAGMA INDEX_LIST(`Analytics`)
+Executing (default): PRAGMA INDEX_INFO(`analytics_event_type`)
+Executing (default): PRAGMA INDEX_INFO(`analytics_session_id`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Articles';
+Executing (default): PRAGMA INDEX_LIST(`Articles`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Articles_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Carts';
+Executing (default): PRAGMA INDEX_LIST(`Carts`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Carts_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='CartItems';
+Executing (default): PRAGMA INDEX_LIST(`CartItems`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_CartItems_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Categories';
+Executing (default): PRAGMA INDEX_LIST(`Categories`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Categories_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Comments';
+Executing (default): PRAGMA INDEX_LIST(`Comments`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Comments_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Favorites';
+Executing (default): PRAGMA INDEX_LIST(`Favorites`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Favorites_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='FavoriteItems';
+Executing (default): PRAGMA INDEX_LIST(`FavoriteItems`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_FavoriteItems_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='AuditLogs';
+Executing (default): PRAGMA INDEX_LIST(`AuditLogs`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Translations';
+Executing (default): PRAGMA INDEX_LIST(`Translations`)
+Executing (default): PRAGMA INDEX_INFO(`translations_model_record_id`)
+Executing (default): PRAGMA INDEX_INFO(`translations_model_record_id_language_field`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Orders';
+Executing (default): PRAGMA INDEX_LIST(`Orders`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Orders_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='OrderItems';
+Executing (default): PRAGMA INDEX_LIST(`OrderItems`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_OrderItems_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Packages';
+Executing (default): PRAGMA INDEX_LIST(`Packages`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Packages_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Payments';
+Executing (default): PRAGMA INDEX_LIST(`Payments`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Payments_1`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Payments_2`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Permissions';
+Executing (default): PRAGMA INDEX_LIST(`Permissions`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Permissions_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Products';
+Executing (default): PRAGMA INDEX_LIST(`Products`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Products_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='ProductImages';
+Executing (default): PRAGMA INDEX_LIST(`ProductImages`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_ProductImages_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Promotions';
+Executing (default): PRAGMA INDEX_LIST(`Promotions`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Promotions_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='ReturnRequests';
+Executing (default): PRAGMA INDEX_LIST(`ReturnRequests`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Roles';
+Executing (default): PRAGMA INDEX_LIST(`Roles`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Roles_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='RolePermissions';
+Executing (default): PRAGMA INDEX_LIST(`RolePermissions`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_RolePermissions_1`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_RolePermissions_2`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='RoleUsers';
+Executing (default): PRAGMA INDEX_LIST(`RoleUsers`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_RoleUsers_1`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_RoleUsers_2`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='OrderShippings';
+Executing (default): PRAGMA INDEX_LIST(`OrderShippings`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_OrderShippings_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='ShippingMethods';
+Executing (default): PRAGMA INDEX_LIST(`ShippingMethods`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Sizes';
+Executing (default): PRAGMA INDEX_LIST(`Sizes`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Sizes_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='SizeItems';
+Executing (default): PRAGMA INDEX_LIST(`SizeItems`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_SizeItems_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Stores';
+Executing (default): PRAGMA INDEX_LIST(`Stores`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Stores_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='SubCategories';
+Executing (default): PRAGMA INDEX_LIST(`SubCategories`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_SubCategories_1`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='UserPackages';
+Executing (default): PRAGMA INDEX_LIST(`UserPackages`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_UserPackages_1`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_UserPackages_2`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='Users';
+Executing (default): PRAGMA INDEX_LIST(`Users`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Users_1`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_Users_2`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='UserSessions';
+Executing (default): CREATE TABLE IF NOT EXISTS `UserSessions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userId` UUID REFERENCES `Users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, `ipAddress` VARCHAR(255), `deviceType` VARCHAR(255), `loginAt` DATETIME, `logoutAt` DATETIME, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL);
+Executing (default): PRAGMA INDEX_LIST(`UserSessions`)
+Executing (default): SELECT name FROM sqlite_master WHERE type='table' AND name='PromotionOrders';
+Executing (default): CREATE TABLE IF NOT EXISTS `PromotionOrders` (`createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `PromotionId` INTEGER NOT NULL REFERENCES `Promotions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, `OrderId` UUID NOT NULL REFERENCES `Orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, PRIMARY KEY (`PromotionId`, `OrderId`));
+Executing (default): PRAGMA INDEX_LIST(`PromotionOrders`)
+Executing (default): PRAGMA INDEX_INFO(`sqlite_autoindex_PromotionOrders_1`)
+Executing (default): PRAGMA foreign_keys = ON
+✅ Database schema has been reset.
+✅ uploads directory created: /app/server/uploads
+✅ compressed directory created: /app/server/compressed
+Static directories: {
+  COMPRESSED_DIR: '/app/server/compressed',
+  UPLOAD_DIR: '/app/server/uploads'
+}
+📚 Swagger documentation available at /api-docs
+[32minfo[39m: 🚀 Server running on port 5300 in development mode {"timestamp":"2026-03-03 22:47:43"}
+🚀 Server running on http://localhost:5300
+🚀 Starting storeMiddleWear processing...
+📁 Files received: 0
+⚠️ No files to process, skipping...
+Executing (default): SELECT `id`, `name`, `description`, `imgUrl`, `userId`, `categoryId`, `createdAt`, `updatedAt` FROM `Stores` AS `Store` LIMIT 8;
+[32minfo[39m: ::1 - - [03/Mar/2026:22:49:12 +0000] "GET /api/store/getall HTTP/1.1" 200 46 "-" "curl/8.5.0" {"timestamp":"2026-03-03 22:49:12"}
+Executing (default): SELECT `id`, `name`, `description`, `imgUrl`, `userId`, `categoryId`, `createdAt`, `updatedAt` FROM `Stores` AS `Store` LIMIT 8;
+[32minfo[39m: ::1 - - [03/Mar/2026:22:49:48 +0000] "GET /api/public/stores HTTP/1.1" 200 46 "-" "curl/8.5.0" {"timestamp":"2026-03-03 22:49:48"}
+[31merror[39m: Application error: Failed to fetch categories. {"ip":"::1","method":"GET","stack":"CustomError: Failed to fetch categories.\n    at customError (/app/server/src/utils/customError.ts:25:10)\n    at Object.handleFetchCategories (/app/server/src/controllers/category.controller.ts:11:30)\n    at /app/server/src/routes/public.route.ts:62:45\n    at Layer.handle [as handle_request] (/app/server/node_modules/express/lib/router/layer.js:95:5)\n    at next (/app/server/node_modules/express/lib/router/route.js:149:13)\n    at Route.dispatch (/app/server/node_modules/express/lib/router/route.js:119:3)\n    at Layer.handle [as handle_request] (/app/server/node_modules/express/lib/router/layer.js:95:5)\n    at /app/server/node_modules/express/lib/router/index.js:284:15\n    at Function.process_params (/app/server/node_modules/express/lib/router/index.js:346:12)\n    at next (/app/server/node_modules/express/lib/router/index.js:280:10)","timestamp":"2026-03-03 22:51:07","url":"/api/public/categories","userAgent":"curl/8.5.0"}
+[32minfo[39m: ::1 - - [03/Mar/2026:22:51:07 +0000] "GET /api/public/categories HTTP/1.1" 400 950 "-" "curl/8.5.0" {"timestamp":"2026-03-03 22:51:07"}
+[32minfo[39m: ::1 - - [03/Mar/2026:22:51:42 +0000] "GET /api/public/products/123 HTTP/1.1" 404 73 "-" "curl/8.5.0" {"timestamp":"2026-03-03 22:51:42"}
+[32minfo[39m: Received SIGTERM. Starting graceful shutdown... {"timestamp":"2026-03-03 22:52:57"}
+[32minfo[39m: Database connection closed. {"timestamp":"2026-03-03 22:52:57"}
+[32minfo[39m: Graceful shutdown completed. {"timestamp":"2026-03-03 22:52:57"}
