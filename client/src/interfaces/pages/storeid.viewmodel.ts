@@ -1,7 +1,8 @@
+import { ParsedUrlQuery } from 'querystring';
 import { IProductModel } from "@/models/product.model";
 
 // Auto-generated View Model for StoreId Page
-export interface IParams {
+export interface IParams extends ParsedUrlQuery {
   id: string;
 }
 
