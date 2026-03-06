@@ -95,8 +95,8 @@ const RolesGrid = () => {
         searchPlaceholder="Search roles..."
         emptyMessage="No roles found. Create your first role to get started!"
         addButton={{ href: '/roles/create', label: 'New Role' }}
-        editPath="/roles/edit"
-        deleteAction={handleDeleteRole}
+        // editPath="/roles/edit"
+        // deleteAction={handleDeleteRole}
         exportButton={{ onClick: () => console.log('Export roles') }}
         filterButton={{ onClick: () => console.log('Filter roles') }}
         customActions={[

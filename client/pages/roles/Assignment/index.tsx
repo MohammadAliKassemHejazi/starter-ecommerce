@@ -7,7 +7,7 @@ import {
   permissionsSelector,
 } from "@/store/slices/permissionSlice";
 import { useAppDispatch } from "@/store/store";
-import { rolesSelector } from "@/store/slices/roleSlice";
+import { rolesSelector, fetchRoles } from "@/store/slices/roleSlice";
 import Layout from "@/components/Layouts/Layout";
 import Swal from "sweetalert2";
 import { getUserActivePackage } from "@/services/packageService";
@@ -35,7 +35,9 @@ const RolePermissionGrid = () => {
   const {isSuperAdmin } = usePermissions();
   React.useEffect(() => {
     dispatch(fetchPermissions());
+    dispatch(fetchRoles());
     loadUserPackage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   const loadUserPackage = async () => {
