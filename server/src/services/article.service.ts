@@ -39,8 +39,8 @@ export const deleteArticle = async (id: string, userId: string): Promise<number>
   return response;
 };
 
-export const fetchArticleByAuthor = async (userId: string): Promise<IArticlesBodyResponse> => {
-  const response: IArticlesBodyResponse = await db.Article.findAll({ where: { userId }, raw: true });
+export const fetchArticleByAuthor = async (userId: string): Promise<IArticlesBodyResponse[]> => {
+  const response: IArticlesBodyResponse[] = await db.Article.findAll({ where: { userId }, raw: true }) as unknown as IArticlesBodyResponse[];
   return response;
 };
 
