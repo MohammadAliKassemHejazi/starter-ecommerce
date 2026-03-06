@@ -40,8 +40,8 @@ export const handleGetByAuthor = async (request: CustomRequest, response: Respon
   const userId = request.UserId; // Assuming UserId is accessible via middleware
   if (userId) {
     try {
-      const data: IArticlesBodyResponse = await articleService.fetchArticleByAuthor(userId);
-      const responseData = { data };
+      const data: IArticlesBodyResponse[] = await articleService.fetchArticleByAuthor(userId);
+      const responseData = data;
       response.json(responseData);
     } catch (error) {
       next(error);
