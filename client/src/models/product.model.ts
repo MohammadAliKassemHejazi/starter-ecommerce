@@ -45,6 +45,7 @@ export interface IProductModelErrors {
     stockQuantity?: string;
     isActive?: string;
     subcategoryId?: string; 
+    categoryId?: string;
     storeId?: string;
     ownerId?: string;
     metaTitle?: string; 
