@@ -90,7 +90,7 @@ const SingleItem = ({ product }: Props) => {
     },
     image:
       process.env.NEXT_PUBLIC_BASE_URL_Images +
-      (productView?.productImages?.[0]?.imageUrl ?? ""),
+      (productView?.productImages?.[0]?.url ?? ""),
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: productView?.ratings ?? 0,
@@ -168,7 +168,7 @@ const SingleItem = ({ product }: Props) => {
                       productView?.productImages?.map(
                         (photo: any) =>
                           process.env.NEXT_PUBLIC_BASE_URL_Images +
-                          photo.imageUrl
+                          photo.url
                       ) ?? []
                     }
                   />
@@ -269,12 +269,12 @@ const SingleItem = ({ product }: Props) => {
                 name="sizeId"
                 value={size.id}
                 onClick={() => {
-                  setFieldValue("size", size.size?.size); // Update size field
+                  setFieldValue("size", size.size); // Update size field
                   setFieldValue("quantity", 1); // Reset quantity when size changes
                 }}
               />
               <span className={`sizeMark`}>
-                {size.size?.size}
+                {size.size}
               </span>
             </div>
           ))}
@@ -454,7 +454,7 @@ export async function generateMetadata({
         {
           url:
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            ((product?.data?.productImages?.[0] as any)?.imageUrl ?? ""),
+            ((product?.data?.productImages?.[0] as any)?.url ?? ""),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
@@ -468,7 +468,7 @@ export async function generateMetadata({
         "Product Description",
       image:
         process.env.NEXT_PUBLIC_BASE_URL_Images +
-        ((product?.data?.productImages?.[0] as any)?.imageUrl ?? ""),
+        ((product?.data?.productImages?.[0] as any)?.url ?? ""),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };
