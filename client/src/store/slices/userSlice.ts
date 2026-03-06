@@ -44,7 +44,7 @@ export const signIn = createAsyncThunk(
 			throw new Error("login failed");
 		}
 		// set access token
-		setAccessToken(resp.data.accessToken);
+		setAccessToken(resp.data.accessToken || null);
 
 
 	
