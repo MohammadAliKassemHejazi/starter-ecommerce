@@ -4,7 +4,7 @@ import customError from '../utils/customError';
 import roleErrors from '../utils/errors/role.errors';
 
 export const fetchRoles = async (): Promise<IRoleAttributes[]> => {
-  const roles = await db.Role.findAll();
+  const roles = await db.Role.findAll({ include: [{ model: db.Permission, as: "permissions", through: { attributes: [] } }] });
   return roles;
 };
 
