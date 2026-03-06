@@ -12,8 +12,7 @@ import { TablePage } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import Moment from "react-moment";
-
-type Props = {};
+import { Props, IArticlesPageViewModel } from "@/interfaces/pages/articles.viewmodel";
 
 const Articles = ({}: Props) => {
   const dispatch = useAppDispatch();

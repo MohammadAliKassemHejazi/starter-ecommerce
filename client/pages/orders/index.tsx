@@ -19,6 +19,7 @@ import Moment from "react-moment";
 import DatePicker from "react-datepicker";
 import { IOrderModel } from "@/models/order.model";
 import { IStoreResponseModel } from "@/models/store.model";
+import { IOrdersPageViewModel } from "@/interfaces/pages/orders.viewmodel";
 
 const Orders = () => {
   const dispatch = useAppDispatch();

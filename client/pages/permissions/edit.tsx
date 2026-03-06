@@ -6,6 +6,7 @@ import { FormPage } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
+import { IPermissionsEditPageViewModel } from "@/interfaces/pages/permissionsedit.viewmodel";
 
 const EditPermissionModal = () => {
   const router = useRouter();

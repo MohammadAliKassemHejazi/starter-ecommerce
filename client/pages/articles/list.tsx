@@ -8,10 +8,7 @@ import SubscriptionGate from "@/components/SubscriptionGate";
 import ProtectedRoute from "@/components/protectedRoute";
 import { useRouter } from "next/router";
 import Link from "next/link";
-
-type Props = {
-  articles?: IArticleModelWithUser[];
-};
+import { Props, IArticlesListPageViewModel } from "@/interfaces/pages/articleslist.viewmodel";
 
 const ArticlesList = ({ articles }: Props) => {
   const router = useRouter();

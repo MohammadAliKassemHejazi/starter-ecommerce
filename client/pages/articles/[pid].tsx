@@ -5,18 +5,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import Link from "next/link";
-
-interface Article {
-  id: string;
-  title: string;
-  text: string;
-  createdAt: string;
-  updatedAt: string;
-  author?: {
-    name: string;
-    email: string;
-  };
-}
+import { Article, IArticlesPidPageViewModel } from "@/interfaces/pages/articlespid.viewmodel";
 
 const ArticleById = () => {
   const router = useRouter();

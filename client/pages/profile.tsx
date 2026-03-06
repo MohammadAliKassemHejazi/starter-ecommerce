@@ -8,6 +8,7 @@ import { updateProfile, userSelector } from '@/store/slices/userSlice';
 import { useToast } from '@/contexts/ToastContext';
 import { mapUserToProfile } from '@/features/profile/utils';
 import { ProfileViewModel, defaultProfileData } from '@/features/profile/types';
+import { IProfilePageViewModel } from "@/interfaces/pages/profile.viewmodel";
 
 const ProfilePage: NextPage = () => {
   const user = useSelector(userSelector);

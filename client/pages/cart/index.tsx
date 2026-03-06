@@ -18,6 +18,7 @@ import PaymentMethodSelector from "@/components/Payment/PaymentMethodSelector";
 import { usePermissions } from "@/hooks/usePermissions";
 import { PageLayout } from "@/components/UI/PageComponents";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
+import { ICartPageViewModel } from "@/interfaces/pages/cart.viewmodel";
 
 const Cart = () => {
   const cart = useSelector((state: RootState) => state.cart);

@@ -4,8 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { PageLayout } from "@/components/UI/PageComponents";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
-
-type Props = {};
+import { Props, IAuthResetPasswordTokenPageViewModel } from "@/interfaces/pages/authresetpasswordtoken.viewmodel";
 
 export default function ResetPassword({}: Props) {
   const router = useRouter();

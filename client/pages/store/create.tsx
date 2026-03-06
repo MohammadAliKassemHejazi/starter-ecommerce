@@ -16,6 +16,8 @@ import useRunOnce from "../../src/hooks/useRunOnce";
 import { getUserPackageLimits } from "@/services/packageService";
 import { PackageLimits } from "@/components/Package/PackageLimits";
 import { categoriesSelector, fetchCategories } from "@/store/slices/categorySlice";
+import { IStoreCreatePageViewModel } from "@/interfaces/pages/storecreate.viewmodel";
+
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",

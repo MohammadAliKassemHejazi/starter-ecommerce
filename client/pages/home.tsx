@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { fetchPublicStores, selectPublicStores, fetchPublicArticles } from "@/store/slices/publicSlice";
 import { PageLayout } from "@/components/UI/PageComponents";
 import ProtectedRoute from "@/components/protectedRoute";
+import { IHomePageViewModel } from "@/interfaces/pages/home.viewmodel";
 
 const Home = () => {
   const dispatch = useAppDispatch();

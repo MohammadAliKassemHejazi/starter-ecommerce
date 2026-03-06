@@ -9,6 +9,7 @@ import ProtectedRoute from "@/components/protectedRoute";
 import Link from "next/link";
 import router from "next/router";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
+import { IUsersCreatePageViewModel } from "@/interfaces/pages/userscreate.viewmodel";
 
 const CreateUserModal = () => {
   const dispatch = useAppDispatch();
