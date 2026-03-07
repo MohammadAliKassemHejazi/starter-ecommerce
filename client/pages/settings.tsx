@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from '@/components/protectedRoute';
 import { SettingsViewModel, defaultSettingsData } from '@/features/settings/types';
-import { ISettingsPageViewModel } from "@/interfaces/pages/settings.viewmodel";
 
 const SettingsPage: NextPage = () => {
   const user = useSelector((state: any) => state.user);

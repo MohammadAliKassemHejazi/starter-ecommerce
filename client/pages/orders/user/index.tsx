@@ -8,7 +8,6 @@ import ProtectedRoute from "@/components/protectedRoute";
 import Moment from "react-moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { IOrdersUserPageViewModel } from "@/interfaces/pages/ordersuser.viewmodel";
 
 const Orders = () => {
   const dispatch = useAppDispatch();

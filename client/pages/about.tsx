@@ -9,13 +9,17 @@ import { setAuthHeaders } from "@/utils/httpClient";
 import Image from "next/image";
 import { PageLayout } from "@/components/UI/PageComponents";
 import dynamic from 'next/dynamic';
-import { Props, IAboutPageViewModel } from "@/interfaces/pages/about.viewmodel";
 
 // Dynamically import FavoritesButton to prevent SSR issues
 const FavoritesButton = dynamic(() => import('@/components/UI/FavoritesButton'), {
   ssr: false,
   loading: () => <span className="fas fa-heart" style={{ color: 'var(--bs-secondary)' }}></span>
 });
+
+type Props = {
+  articles?: IArticleModelWithUser[];
+};
+
 const stores = [
   { id: 1, name: 'Store 1', logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Gucci_logo.svg/512px-Gucci_logo.svg.png?20180702130155" },
   { id: 2, name: 'Store 2', logo: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Dior_Logo.svg" },

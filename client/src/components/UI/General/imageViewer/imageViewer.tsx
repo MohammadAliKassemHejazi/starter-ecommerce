@@ -54,7 +54,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ productImages ,isStore =false
     
         <div key={index} onClick={() => handleImageClick(index)}>
           <Image
-              src={(isonline === true) ? (process.env.NEXT_PUBLIC_BASE_URL_Images + (image.imageUrl || image.url)) : (image.data_url ?? "")}
+              src={(isonline === true) ? (process.env.NEXT_PUBLIC_BASE_URL_Images + image.imageUrl) : (image.data_url ?? "")}
             height={isStore ? (800/2):(720/2)}
             width={isStore ? (1200/2):(500/2)}
             alt={index + ""}
@@ -90,7 +90,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ productImages ,isStore =false
           >
             {productImages.map((image: ImageType | any, index) => (
               <SwiperSlide key={index} className={styles["swiper-slide"]}>
-                <DynamicSizedImage url={(isonline === true) ? (process.env.NEXT_PUBLIC_BASE_URL_Images + (image.imageUrl || image.url)) :(image.data_url ?? "")} index={index} />
+                <DynamicSizedImage url={(isonline === true) ? (process.env.NEXT_PUBLIC_BASE_URL_Images + image.imageUrl) :(image.data_url ?? "")} index={index} />
               </SwiperSlide>
             ))}
           </Swiper>

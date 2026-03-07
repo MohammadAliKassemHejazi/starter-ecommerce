@@ -17,10 +17,7 @@ import { ImageListType } from "react-images-uploading";
 import Layout from "@/components/Layouts/Layout";
 import { utileCategoriesSelector, fetchAllCategories } from "@/store/slices/utilsSlice";
 
-import ProtectedRoute from "@/components/protectedRoute";
-import { IStoreEditPageViewModel } from "@/interfaces/pages/storeedit.viewmodel";
-
-
+import ProtectedRoute from "@/components/protectedRoute";;
 
 const Toast = Swal.mixin({
   toast: true,

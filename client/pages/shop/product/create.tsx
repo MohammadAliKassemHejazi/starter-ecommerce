@@ -25,7 +25,6 @@ import {
 } from "@/store/slices/utilsSlice";
 import { useSelector } from "react-redux";
 import { ISize } from "@/models/size.model";
-import { IShopProductCreatePageViewModel } from "@/interfaces/pages/shopproductcreate.viewmodel";
 
 const isonline = false;
 

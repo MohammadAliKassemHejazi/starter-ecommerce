@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { PageLayout } from "@/components/UI/PageComponents";
-import { IHomePageViewModel } from "@/interfaces/pages/home.viewmodel";
 
 const Home: React.FC = () => {
   const router = useRouter();

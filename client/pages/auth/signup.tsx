@@ -6,7 +6,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
-import { Props, IAuthSignupPageViewModel } from "@/interfaces/pages/authsignup.viewmodel";
+
+type Props = {};
 
 export default function SignUp({}: Props) {
   const dispatch = useAppDispatch();

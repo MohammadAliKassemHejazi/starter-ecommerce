@@ -18,7 +18,19 @@ import {
   selectAnalyticsFilters,
   selectAnalyticsPagination
 } from '@/store/slices/analyticsSlice';
-import { AnalyticsEvent, IAnalyticsPageViewModel } from "@/interfaces/pages/analytics.viewmodel";
+
+interface AnalyticsEvent {
+  id: string;
+  eventType: string;
+  eventData: any;
+  userId: string;
+  createdAt: string;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
 
 const AnalyticsPage = () => {
   const { t } = useTranslation();

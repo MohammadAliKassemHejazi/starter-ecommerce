@@ -5,7 +5,16 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from "@/components/protectedRoute";
-import { Package, IPackagesPageViewModel } from "@/interfaces/pages/packages.viewmodel";
+
+interface Package {
+  id: string;
+  name: string;
+  description?: string;
+  storeLimit: number;
+  categoryLimit: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const PackagesPage = () => {
   const { t } = useTranslation();
