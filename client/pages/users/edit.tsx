@@ -6,7 +6,6 @@ import { FormPage } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
-import { IUsersEditPageViewModel } from "@/interfaces/pages/usersedit.viewmodel";
 
 const EditUserModal = () => {
   const router = useRouter();

@@ -22,8 +22,6 @@ import {
 } from "@/store/slices/utilsSlice";
 import { ISize } from "@/models/size.model";
 import { useSelector } from "react-redux";
-import { IShopProductEditPageViewModel } from "@/interfaces/pages/shopproductedit.viewmodel";
-
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -124,13 +122,13 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
     const updatedImagesFromResponse = Array.isArray(response.data)
       ? response.data.map((uploadedImage: any) => ({
           id: uploadedImage.id, // ID of the uploaded image
-          imageUrl: uploadedImage.imageUrl || uploadedImage.url, // URL of the uploaded image
+          imageUrl: uploadedImage.imageUrl, // URL of the uploaded image
           file: null, // Clear the file reference since it's already uploaded
         }))
       : [
           {
             id: response.data.id, // ID of the uploaded image
-            imageUrl: (response.data as any).imageUrl || (response.data as any).url, // URL of the uploaded image
+            imageUrl: (response.data as any).imageUrl, // URL of the uploaded image
             file: null, // Clear the file reference since it's already uploaded
           },
         ];
@@ -220,9 +218,9 @@ const handlePhotoChange = useCallback(async (croppedImages: ImageListType) => {
   }
 
   const imageToDelete: ImageListType | any = product.productImages[index];
-    console.log(imageToDelete?.imageUrl || imageToDelete?.url, "imageToDelete");
+    console.log(imageToDelete?.imageUrl, "imageToDelete");
     console.log(isonline)
-  if (isonline && (imageToDelete?.imageUrl || imageToDelete?.url)) {
+  if (isonline && imageToDelete?.imageUrl) {
     try {
       // Send a request to the server to delete the image
       await dispatch(deleteProductImage(imageToDelete.id)).unwrap();

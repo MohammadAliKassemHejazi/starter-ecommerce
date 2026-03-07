@@ -10,7 +10,6 @@ import { usePermissions } from "@/hooks/usePermissions";
 import SubscriptionGate from "@/components/SubscriptionGate";
 import ConfirmationModal from "@/components/UI/ConfirmationModal";
 import router from "next/router";
-import { ICategoriesPageViewModel } from "@/interfaces/pages/categories.viewmodel";
 
 const CategoriesGrid = () => {
   const { t } = useTranslation();

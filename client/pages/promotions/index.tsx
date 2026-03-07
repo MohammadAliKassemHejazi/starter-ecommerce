@@ -8,7 +8,16 @@ import router from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '../../src/contexts/ToastContext';
 import ConfirmationModal from '@/components/UI/ConfirmationModal';
-import { Promotion, IPromotionsPageViewModel } from "@/interfaces/pages/promotions.viewmodel";
+
+interface Promotion {
+  id: string;
+  code: string;
+  type: 'PERCENTAGE' | 'FIXED';
+  value: number;
+  minCartValue: number;
+  validFrom: string;
+  validTo: string;
+}
 
 const PromotionsPage = () => {
   const { t } = useTranslation();

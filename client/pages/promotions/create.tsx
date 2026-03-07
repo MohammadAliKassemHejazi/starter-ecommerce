@@ -4,7 +4,6 @@ import { FormPage } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import ProtectedRoute from '@/components/protectedRoute';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
-import { IPromotionsCreatePageViewModel } from "@/interfaces/pages/promotionscreate.viewmodel";
 
 const CreatePromotion = () => {
   const router = useRouter();

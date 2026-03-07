@@ -8,7 +8,6 @@ import Link from "next/link";
 import router from "next/router";
 import { getUserActivePackage } from "@/services/packageService";
 import { usePermissions } from "@/hooks/usePermissions";
-import { IRolesCreatePageViewModel } from "@/interfaces/pages/rolescreate.viewmodel";
 
 const Toast = Swal.mixin({
   toast: true,

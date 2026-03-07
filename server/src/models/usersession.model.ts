@@ -4,7 +4,7 @@ import { Model, DataTypes } from 'sequelize';
 module.exports = (sequelize: any) => {
   class UserSession extends Model {
     static associate(models: any) {
-      UserSession.belongsTo(models.User, { foreignKey: 'userId' });
+      UserSession.belongsTo(models.User);
     }
   }
 

@@ -5,7 +5,33 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
-import { ShippingMethod, OrderShipping, IShippingPageViewModel } from "@/interfaces/pages/shipping.viewmodel";
+
+interface ShippingMethod {
+  id: string;
+  name: string;
+  cost: number;
+  deliveryEstimate: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface OrderShipping {
+  id: string;
+  trackingNumber: string;
+  carrier: string;
+  status: 'PENDING' | 'SHIPPED' | 'DELIVERED';
+  Order?: {
+    id: string;
+    orderNumber: string;
+    totalPrice: number;
+  };
+  ShippingMethod?: {
+    id: string;
+    name: string;
+    cost: number;
+  };
+  createdAt: string;
+}
 
 const ShippingPage = () => {
   const { t } = useTranslation();
