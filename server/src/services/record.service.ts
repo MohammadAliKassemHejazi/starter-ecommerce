@@ -8,14 +8,12 @@ export const getRecords = async (): Promise<GlobalDataResponse[]> => {
     ]
   };
 
-  const dbRecords = await Record.findAll();
-
-  const formattedRecords: GlobalDataResponse[] = dbRecords.map(r => ({
+  const dbRecords = await Record.findAll()
+  const formattedRecords = dbRecords.map(r => ({
     id: r.id,
     title: r.db_title,
     metrics: r.db_count,
     media: r.images[0]
-  }));
-
-  return formattedRecords;
+  }))
+  return formattedRecords
 };
