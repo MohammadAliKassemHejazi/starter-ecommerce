@@ -17,16 +17,24 @@ export const validateHeadersAuth = (req: Request): string => {
   return accessToken;
 };
 
-export const verifyToken = async (req: CustomRequest): Promise<boolean> => {
+export const verifyToken = async (req: CustomRequest, res?: any, next?: any): Promise<boolean | void> => {
   try {
     const token = validateHeadersAuth(req);
     const decoded: ITokenDecoded = verify(token, config.webtoken as string) as ITokenDecoded;
 
     // You may need to cast request to any and add properties to it
     (req as any).UserId = decoded.aud;
+
+    if (next) {
+      next();
+    }
     return true;
   } catch (err) {
-    throw customError(authErrors.AuthJWTError);
+    if (next) {
+      next(customError(authErrors.AuthJWTError));
+    } else {
+      throw customError(authErrors.AuthJWTError);
+    }
   }
 };
 
