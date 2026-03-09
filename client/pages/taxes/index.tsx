@@ -5,7 +5,15 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
-import { TaxRule, ITaxesPageViewModel } from "@/interfaces/pages/taxes.viewmodel";
+
+interface TaxRule {
+  id: string;
+  region: string;
+  rate: number;
+  taxType: 'VAT' | 'GST' | 'SALES_TAX';
+  createdAt: string;
+  updatedAt: string;
+}
 
 const TaxesPage = () => {
   const { t } = useTranslation();

@@ -5,7 +5,6 @@ import { useAppDispatch } from "@/store/store";
 import { FormPage } from "@/components/UI/PageComponents";
 import ProtectedRoute from "@/components/protectedRoute";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
-import { ICategoriesEditPageViewModel } from "@/interfaces/pages/categoriesedit.viewmodel";
 
 const EditCategory = () => {
   const router = useRouter();

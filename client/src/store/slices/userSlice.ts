@@ -3,7 +3,7 @@ import { RootState } from "@/store/store"
 import { UserState } from "@/interfaces/types/store/slices/userSlices.types";
 import * as authService from "@/services/authService"
 import * as userService from "@/services/myUsersService";
-import httpClient, { setAccessToken } from "@/utils/httpClient";
+import httpClient from "@/utils/httpClient";
 import  { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import Router from "next/router";
 import { SignInResponse } from "@/interfaces/api";
@@ -44,7 +44,12 @@ export const signIn = createAsyncThunk(
 			throw new Error("login failed");
 		}
 		// set access token
-		setAccessToken(resp.data.accessToken || null);
+		httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+			if (config && config.headers) {
+				config.headers["Authorization"] = `Bearer ${resp.data.accessToken}`;
+			}
+			return config;
+		});
 
 
 	
@@ -62,7 +67,6 @@ export const signUp = createAsyncThunk(
 
 export const signOut = createAsyncThunk("user/signout", async () => {
 	await authService.signOut();
-	setAccessToken(null);
   	Router.push("/auth/signin");
 });
 
@@ -116,8 +120,13 @@ export const updateProfile = createAsyncThunk(
 export const fetchSession = createAsyncThunk("user/fetchSession", async () => {
 	const response = await authService.getSession();
 	// set access token
-	if (response && response.data && response.data.accessToken) {
-		setAccessToken(response.data.accessToken);
+	if (response) {
+		httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+			if (config && config.headers && response.data.email) {
+				config.headers["Authorization"] = `Bearer ${response.data.accessToken}`;
+			}
+			return config;
+		});
 	}
 	return response;
 });

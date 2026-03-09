@@ -6,7 +6,6 @@ import { UserManager } from "@/components/User/UserManager";
 import { UserTablePreset } from "@/components/UI/ModernTable";
 import { TablePage } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
-import { IUsersPageViewModel } from "@/interfaces/pages/users.viewmodel";
 
 const UsersGrid = () => {
   const dispatch = useAppDispatch();

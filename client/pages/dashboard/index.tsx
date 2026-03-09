@@ -20,7 +20,6 @@ import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from '@/components/protectedRoute';
 import { usePageData } from '@/hooks/usePageData';
 import { Console } from 'console';
-import { IDashboardPageViewModel } from "@/interfaces/pages/dashboard.viewmodel";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();

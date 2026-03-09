@@ -8,7 +8,17 @@ import Link from 'next/link';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
 import { fetchFavorites, removeFromFavorites, favoritesSelector, favoritesLoadingSelector } from '@/store/slices/favoritesSlice';
-import { Favorite, IFavoritesPageViewModel } from "@/interfaces/pages/favorites.viewmodel";
+
+interface Favorite {
+  id: string;
+  product: {
+    id: string;
+    name: string;
+    price: number;
+    description: string;
+    images: Array<{ imageUrl: string }>;
+  };
+}
 
 const FavoritesPage = () => {
   const dispatch = useAppDispatch();

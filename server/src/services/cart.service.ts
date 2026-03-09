@@ -27,12 +27,9 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
       ],
     });
 
-    // If the cart is not found, return an empty cart
+    // If the cart is not found, throw a custom error
     if (!cart) {
-      return {
-        userId,
-        cartItems: [],
-      };
+      throw customError(cartErrors.CartItemNotFound);
     }
 
     // Convert the Sequelize instance to a plain object

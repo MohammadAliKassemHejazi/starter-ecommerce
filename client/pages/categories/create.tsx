@@ -9,7 +9,6 @@ import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { useTranslation } from 'react-i18next';
 import { validateForm, commonRules } from '@/utils/validation';
 import { on } from "events";
-import { ICategoriesCreatePageViewModel } from "@/interfaces/pages/categoriescreate.viewmodel";
 
 const CreateCategory = () => {
   const { t } = useTranslation();

@@ -1,30 +1,12 @@
-import axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios'
+import axios, { AxiosResponse, AxiosError } from 'axios'
 import cookie from "cookie";
 import { ACCESS_TOKEN_KEY } from './constant';
 import { ApiResponse, ApiErrorResponse } from '@/interfaces/api/apiResponse.types';
 import { handleApiError } from './apiUtils';
 
-let currentAccessToken: string | null = null;
-
-export const setAccessToken = (token: string | null) => {
-  currentAccessToken = token;
-};
-
 const httpClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL_API,
 })
-
-httpClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    if (currentAccessToken && config.headers) {
-      config.headers['Authorization'] = `Bearer ${currentAccessToken}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 // // Request interceptor to add auth token
 // httpClient.interceptors.request.use(

@@ -1,7 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import { PageLayout } from "@/components/UI/PageComponents";
-import { Props, IShopListPageViewModel } from "@/interfaces/pages/shoplist.viewmodel";
+
+type Props = {};
 
 const ListShop = ({}: Props) => {
   const products = [

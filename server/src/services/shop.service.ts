@@ -256,9 +256,7 @@ export const deleteProduct = async (id: string, userId: string): Promise<number>
     if (product.ProductImages) {
         const basedir = getBaseDir();
         await Promise.all(product.ProductImages.map(async (img: any) => {
-             const imageUrl = img.getDataValue ? img.getDataValue('imageUrl') : img.imageUrl;
-             if (!imageUrl) return;
-             const imagePath = path.join(basedir, 'compressed', imageUrl);
+             const imagePath = path.join(basedir, 'compressed', img.imageUrl);
              try {
                  await fsPromises.unlink(imagePath);
              } catch (e) {
@@ -275,15 +273,12 @@ export const deleteProductImage = async (imageId: string, userId: string): Promi
     if (!image) return 0;
 
     const basedir = getBaseDir();
-    const imageUrl = image.getDataValue ? image.getDataValue('imageUrl') : image.imageUrl;
-    if (imageUrl) {
-        const imagePath = path.join(basedir, 'compressed', imageUrl);
-         try {
-             await fsPromises.unlink(imagePath);
-         } catch (e) {
-             logger.warn(`Failed to delete image ${imagePath}`, e);
-         }
-    }
+    const imagePath = path.join(basedir, 'compressed', image.imageUrl);
+     try {
+         await fsPromises.unlink(imagePath);
+     } catch (e) {
+         logger.warn(`Failed to delete image ${imagePath}`, e);
+     }
 
     return await db.ProductImage.destroy({ where: { id: imageId } });
 };

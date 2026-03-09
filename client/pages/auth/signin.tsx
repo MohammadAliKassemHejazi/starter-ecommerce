@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import styles from "./signin.module.css";
-import { IAuthSigninPageViewModel } from "@/interfaces/pages/authsignin.viewmodel";
 
 const SignIn = () => {
   const dispatch = useAppDispatch();

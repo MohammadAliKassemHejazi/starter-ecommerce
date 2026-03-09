@@ -6,7 +6,6 @@ import { TablePage } from "@/components/UI/PageComponents";
 import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import router from "next/router";
-import { IRolesPageViewModel } from "@/interfaces/pages/roles.viewmodel";
 
 const RolesGrid = () => {
   const dispatch = useAppDispatch();

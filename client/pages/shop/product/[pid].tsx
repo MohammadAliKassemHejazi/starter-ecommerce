@@ -22,7 +22,10 @@ import { usePermissions } from "@/hooks/usePermissions";
 import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
 
 import { ProductViewModel, defaultProductViewModel } from "@/interfaces/viewModels";
-import { Props, IShopProductPidPageViewModel } from "@/interfaces/pages/shopproductpid.viewmodel";
+
+type Props = {
+  product?: IProductModel | null;
+};
 
 const Toast = Swal.mixin({
   toast: true,
@@ -90,7 +93,7 @@ const SingleItem = ({ product }: Props) => {
     },
     image:
       process.env.NEXT_PUBLIC_BASE_URL_Images +
-      (productView?.productImages?.[0]?.url ?? ""),
+      (productView?.productImages?.[0]?.imageUrl ?? ""),
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: productView?.ratings ?? 0,
@@ -168,7 +171,7 @@ const SingleItem = ({ product }: Props) => {
                       productView?.productImages?.map(
                         (photo: any) =>
                           process.env.NEXT_PUBLIC_BASE_URL_Images +
-                          photo.url
+                          photo.imageUrl
                       ) ?? []
                     }
                   />
@@ -269,12 +272,12 @@ const SingleItem = ({ product }: Props) => {
                 name="sizeId"
                 value={size.id}
                 onClick={() => {
-                  setFieldValue("size", size.size); // Update size field
+                  setFieldValue("size", size.size?.size); // Update size field
                   setFieldValue("quantity", 1); // Reset quantity when size changes
                 }}
               />
               <span className={`sizeMark`}>
-                {size.size}
+                {size.size?.size}
               </span>
             </div>
           ))}
@@ -454,7 +457,7 @@ export async function generateMetadata({
         {
           url:
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            ((product?.data?.productImages?.[0] as any)?.url ?? ""),
+            ((product?.data?.productImages?.[0] as any)?.imageUrl ?? ""),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
@@ -468,7 +471,7 @@ export async function generateMetadata({
         "Product Description",
       image:
         process.env.NEXT_PUBLIC_BASE_URL_Images +
-        ((product?.data?.productImages?.[0] as any)?.url ?? ""),
+        ((product?.data?.productImages?.[0] as any)?.imageUrl ?? ""),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };

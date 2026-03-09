@@ -1,0 +1,304 @@
+
+> nextjs-redux-toolkit-template@0.1.0 dev
+> next dev -H 0.0.0.0 -p 3000
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+  - Network:      http://0.0.0.0:3000
+
+ ✓ Starting...
+ ✓ Ready in 1763ms
+ ○ Compiling /auth/signin ...
+ ✓ Compiled /auth/signin in 19.3s (802 modules)
+i18next: languageChanged en-US
+i18next: initialized {
+  debug: true,
+  initImmediate: true,
+  ns: [ 'translation' ],
+  defaultNS: [ 'translation' ],
+  fallbackLng: [ 'en' ],
+  fallbackNS: false,
+  supportedLngs: false,
+  nonExplicitSupportedLngs: false,
+  load: 'all',
+  preload: false,
+  simplifyPluralSuffix: true,
+  keySeparator: '.',
+  nsSeparator: ':',
+  pluralSeparator: '_',
+  contextSeparator: '_',
+  partialBundledLanguages: false,
+  saveMissing: false,
+  updateMissing: false,
+  saveMissingTo: 'fallback',
+  saveMissingPlurals: true,
+  missingKeyHandler: false,
+  missingInterpolationHandler: false,
+  postProcess: false,
+  postProcessPassResolved: false,
+  returnNull: false,
+  returnEmptyString: true,
+  returnObjects: false,
+  joinArrays: false,
+  returnedObjectHandler: false,
+  parseMissingKeyHandler: false,
+  appendNamespaceToMissingKey: false,
+  appendNamespaceToCIMode: false,
+  overloadTranslationOptionHandler: [Function: overloadTranslationOptionHandler],
+  interpolation: {
+    escapeValue: false,
+    format: [Function: bound format],
+    prefix: '{{',
+    suffix: '}}',
+    formatSeparator: ',',
+    unescapePrefix: '-',
+    nestingPrefix: '$t(',
+    nestingSuffix: ')',
+    nestingOptionsSeparator: ',',
+    maxReplaces: 1000,
+    skipOnVariables: true
+  },
+  resources: {
+    en: { translation: [Object] },
+    ar: { translation: [Object] },
+    fr: { translation: [Object] },
+    es: { translation: [Object] }
+  },
+  detection: {
+    order: [ 'localStorage', 'navigator', 'htmlTag' ],
+    caches: [ 'localStorage' ],
+    lookupQuerystring: 'lng',
+    lookupCookie: 'i18next',
+    lookupLocalStorage: 'i18nextLng',
+    lookupSessionStorage: 'i18nextLng',
+    excludeCacheFor: [ 'cimode' ],
+    convertDetectedLanguage: [Function: convertDetectedLanguage]
+  },
+  ignoreJSONStructure: true
+}
+ HEAD /auth/signin 200 in 19849ms
+ GET /auth/signin 200 in 27ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 533ms (804 modules)
+i18next: languageChanged en-US
+i18next: init: i18next is already initialized. You should call init just once!
+i18next: initialized {
+  debug: true,
+  initImmediate: true,
+  ns: [ 'translation' ],
+  defaultNS: [ 'translation' ],
+  fallbackLng: [ 'en' ],
+  fallbackNS: false,
+  supportedLngs: false,
+  nonExplicitSupportedLngs: false,
+  load: 'all',
+  preload: false,
+  simplifyPluralSuffix: true,
+  keySeparator: '.',
+  nsSeparator: ':',
+  pluralSeparator: '_',
+  contextSeparator: '_',
+  partialBundledLanguages: false,
+  saveMissing: false,
+  updateMissing: false,
+  saveMissingTo: 'fallback',
+  saveMissingPlurals: true,
+  missingKeyHandler: false,
+  missingInterpolationHandler: false,
+  postProcess: false,
+  postProcessPassResolved: false,
+  returnNull: false,
+  returnEmptyString: true,
+  returnObjects: false,
+  joinArrays: false,
+  returnedObjectHandler: false,
+  parseMissingKeyHandler: false,
+  appendNamespaceToMissingKey: false,
+  appendNamespaceToCIMode: false,
+  overloadTranslationOptionHandler: [Function: overloadTranslationOptionHandler],
+  interpolation: {
+    escapeValue: false,
+    format: [Function: bound format],
+    prefix: '{{',
+    suffix: '}}',
+    formatSeparator: ',',
+    unescapePrefix: '-',
+    nestingPrefix: '$t(',
+    nestingSuffix: ')',
+    nestingOptionsSeparator: ',',
+    maxReplaces: 1000,
+    skipOnVariables: true
+  },
+  resources: {
+    en: { translation: [Object] },
+    ar: { translation: [Object] },
+    fr: { translation: [Object] },
+    es: { translation: [Object] }
+  },
+  detection: {
+    order: [ 'localStorage', 'navigator', 'htmlTag' ],
+    caches: [ 'localStorage' ],
+    lookupQuerystring: 'lng',
+    lookupCookie: 'i18next',
+    lookupLocalStorage: 'i18nextLng',
+    lookupSessionStorage: 'i18nextLng',
+    excludeCacheFor: [ 'cimode' ],
+    convertDetectedLanguage: [Function: convertDetectedLanguage]
+  },
+  ignoreJSONStructure: true
+}
+ GET /user/auth/session 404 in 627ms
+ POST /user/auth/login 404 in 18ms
+ ✓ Compiled /roles/Assignment in 291ms (810 modules)
+i18next: languageChanged en-US
+i18next: init: i18next is already initialized. You should call init just once!
+i18next: initialized {
+  debug: true,
+  initImmediate: true,
+  ns: [ 'translation' ],
+  defaultNS: [ 'translation' ],
+  fallbackLng: [ 'en' ],
+  fallbackNS: false,
+  supportedLngs: false,
+  nonExplicitSupportedLngs: false,
+  load: 'all',
+  preload: false,
+  simplifyPluralSuffix: true,
+  keySeparator: '.',
+  nsSeparator: ':',
+  pluralSeparator: '_',
+  contextSeparator: '_',
+  partialBundledLanguages: false,
+  saveMissing: false,
+  updateMissing: false,
+  saveMissingTo: 'fallback',
+  saveMissingPlurals: true,
+  missingKeyHandler: false,
+  missingInterpolationHandler: false,
+  postProcess: false,
+  postProcessPassResolved: false,
+  returnNull: false,
+  returnEmptyString: true,
+  returnObjects: false,
+  joinArrays: false,
+  returnedObjectHandler: false,
+  parseMissingKeyHandler: false,
+  appendNamespaceToMissingKey: false,
+  appendNamespaceToCIMode: false,
+  overloadTranslationOptionHandler: [Function: overloadTranslationOptionHandler],
+  interpolation: {
+    escapeValue: false,
+    format: [Function: bound format],
+    prefix: '{{',
+    suffix: '}}',
+    formatSeparator: ',',
+    unescapePrefix: '-',
+    nestingPrefix: '$t(',
+    nestingSuffix: ')',
+    nestingOptionsSeparator: ',',
+    maxReplaces: 1000,
+    skipOnVariables: true
+  },
+  resources: {
+    en: { translation: [Object] },
+    ar: { translation: [Object] },
+    fr: { translation: [Object] },
+    es: { translation: [Object] }
+  },
+  detection: {
+    order: [ 'localStorage', 'navigator', 'htmlTag' ],
+    caches: [ 'localStorage' ],
+    lookupQuerystring: 'lng',
+    lookupCookie: 'i18next',
+    lookupLocalStorage: 'i18nextLng',
+    lookupSessionStorage: 'i18nextLng',
+    excludeCacheFor: [ 'cimode' ],
+    convertDetectedLanguage: [Function: convertDetectedLanguage]
+  },
+  ignoreJSONStructure: true
+}
+ GET /roles/Assignment 200 in 407ms
+ GET /user/auth/session 404 in 12ms
+ ○ Compiling /roles ...
+ ✓ Compiled /roles in 550ms (818 modules)
+i18next: languageChanged en-US
+i18next: init: i18next is already initialized. You should call init just once!
+i18next: initialized {
+  debug: true,
+  initImmediate: true,
+  ns: [ 'translation' ],
+  defaultNS: [ 'translation' ],
+  fallbackLng: [ 'en' ],
+  fallbackNS: false,
+  supportedLngs: false,
+  nonExplicitSupportedLngs: false,
+  load: 'all',
+  preload: false,
+  simplifyPluralSuffix: true,
+  keySeparator: '.',
+  nsSeparator: ':',
+  pluralSeparator: '_',
+  contextSeparator: '_',
+  partialBundledLanguages: false,
+  saveMissing: false,
+  updateMissing: false,
+  saveMissingTo: 'fallback',
+  saveMissingPlurals: true,
+  missingKeyHandler: false,
+  missingInterpolationHandler: false,
+  postProcess: false,
+  postProcessPassResolved: false,
+  returnNull: false,
+  returnEmptyString: true,
+  returnObjects: false,
+  joinArrays: false,
+  returnedObjectHandler: false,
+  parseMissingKeyHandler: false,
+  appendNamespaceToMissingKey: false,
+  appendNamespaceToCIMode: false,
+  overloadTranslationOptionHandler: [Function: overloadTranslationOptionHandler],
+  interpolation: {
+    escapeValue: false,
+    format: [Function: bound format],
+    prefix: '{{',
+    suffix: '}}',
+    formatSeparator: ',',
+    unescapePrefix: '-',
+    nestingPrefix: '$t(',
+    nestingSuffix: ')',
+    nestingOptionsSeparator: ',',
+    maxReplaces: 1000,
+    skipOnVariables: true
+  },
+  resources: {
+    en: { translation: [Object] },
+    ar: { translation: [Object] },
+    fr: { translation: [Object] },
+    es: { translation: [Object] }
+  },
+  detection: {
+    order: [ 'localStorage', 'navigator', 'htmlTag' ],
+    caches: [ 'localStorage' ],
+    lookupQuerystring: 'lng',
+    lookupCookie: 'i18next',
+    lookupLocalStorage: 'i18nextLng',
+    lookupSessionStorage: 'i18nextLng',
+    excludeCacheFor: [ 'cimode' ],
+    convertDetectedLanguage: [Function: convertDetectedLanguage]
+  },
+  ignoreJSONStructure: true
+}
+ GET /roles 200 in 695ms
+ GET /permissions 200 in 697ms
+ GET /auth/signin 200 in 25ms
+ GET /user/auth/session 404 in 12ms
+ POST /user/auth/login 404 in 13ms
+ GET /roles/Assignment 200 in 28ms
+ GET /user/auth/session 404 in 10ms
+ GET /permissions 200 in 21ms
+ GET /roles 200 in 23ms
+ GET /roles/Assignment 200 in 13ms
+ GET /auth/login 404 in 8ms
+ GET /user/auth/session 404 in 12ms
+ GET /auth/login 404 in 7ms
+ GET /user/auth/session 404 in 14ms

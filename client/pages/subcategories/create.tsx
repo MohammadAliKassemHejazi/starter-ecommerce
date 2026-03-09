@@ -10,7 +10,6 @@ import router from "next/router";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { useTranslation } from "react-i18next";
 import { on } from "events";
-import { ISubcategoriesCreatePageViewModel } from "@/interfaces/pages/subcategoriescreate.viewmodel";
 
 const CreateSubCategoryModal = () => {
     const { t } = useTranslation();

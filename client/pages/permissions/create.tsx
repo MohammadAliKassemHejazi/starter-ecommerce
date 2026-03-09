@@ -6,7 +6,6 @@ import { usePageData } from "@/hooks/usePageData";
 import ProtectedRoute from "@/components/protectedRoute";
 import router from "next/router";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
-import { IPermissionsCreatePageViewModel } from "@/interfaces/pages/permissionscreate.viewmodel";
 
 const CreatePermissionModal = () => {
   const dispatch = useAppDispatch();
