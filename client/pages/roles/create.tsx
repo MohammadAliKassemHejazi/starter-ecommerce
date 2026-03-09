@@ -29,6 +29,7 @@ const CreateRoleModal = () => {
 
   useEffect(() => {
     loadUserPackage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadUserPackage = async () => {

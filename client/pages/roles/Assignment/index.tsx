@@ -8,7 +8,11 @@ import {
 } from "@/store/slices/permissionSlice";
 import { useAppDispatch } from "@/store/store";
 import { rolesSelector, fetchRoles } from "@/store/slices/roleSlice";
+
+import Layout from "@/components/Layouts/Layout";
+
 import { TablePage } from "@/components/UI/PageComponents";
+
 import Swal from "sweetalert2";
 import ProtectedRoute from "@/components/protectedRoute";
 import { usePageData } from "@/hooks/usePageData";
@@ -35,6 +39,10 @@ const RolePermissionGrid = () => {
   useEffect(() => {
     dispatch(fetchPermissions());
     dispatch(fetchRoles());
+
+    // loadUserPackage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dispatch]);
 
   const handleAddPermission = async (roleId: string, permissionId: string) => {
