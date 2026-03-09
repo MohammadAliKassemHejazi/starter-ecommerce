@@ -40,7 +40,7 @@ const RolePermissionGrid = () => {
     dispatch(fetchPermissions());
     dispatch(fetchRoles());
 
-    loadUserPackage();
+    // loadUserPackage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
   }, [dispatch]);
