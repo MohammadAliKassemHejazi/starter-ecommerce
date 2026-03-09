@@ -43,7 +43,7 @@ const SubCategoriesGrid = () => {
     {
       key: 'category',
       label: 'Category',
-      render: (value: any) => value.name || "N/A"
+      render: (value: any) => value?.name || "N/A"
     }
   ];
 console.log(subCategories, 'Rendering subcategories:');
