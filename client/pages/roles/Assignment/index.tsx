@@ -8,11 +8,15 @@ import {
 } from "@/store/slices/permissionSlice";
 import { useAppDispatch } from "@/store/store";
 import { rolesSelector, fetchRoles } from "@/store/slices/roleSlice";
+
 import Layout from "@/components/Layouts/Layout";
+
+import { TablePage } from "@/components/UI/PageComponents";
+
 import Swal from "sweetalert2";
-import { getUserActivePackage } from "@/services/packageService";
 import ProtectedRoute from "@/components/protectedRoute";
-import { usePermissions } from "@/hooks/usePermissions";
+import { usePageData } from "@/hooks/usePageData";
+import router from "next/router";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -30,26 +34,16 @@ const RolePermissionGrid = () => {
   const dispatch = useAppDispatch();
   const permissions = useSelector(permissionsSelector);
   const roles = useSelector(rolesSelector);
-  //const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const {isSuperAdmin } = usePermissions();
-  React.useEffect(() => {
+  const { isSuperAdmin, loading } = usePageData({ loadUserPackage: true });
+
+  useEffect(() => {
     dispatch(fetchPermissions());
     dispatch(fetchRoles());
+
     loadUserPackage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
 
-  const loadUserPackage = async () => {
-    try {
-      await getUserActivePackage();
-  
-    } catch (error) {
-      console.error('Error loading user package:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [dispatch]);
 
   const handleAddPermission = async (roleId: string, permissionId: string) => {
     if (!isSuperAdmin) {
@@ -84,7 +78,7 @@ const RolePermissionGrid = () => {
     }
 
     try {
-      await dispatch(removePermissionFromRole({ roleId, permissionId }));
+      await dispatch(removePermissionFromRole({ roleId, permissionId })).unwrap();
       Toast.fire({
         icon: "success",
         title: "Permission removed successfully",
@@ -97,151 +91,162 @@ const RolePermissionGrid = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <Layout>
-        <div className="container mt-5">
-          <div className="text-center">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
+  const columns = [
+    {
+      key: 'name',
+      label: 'Role Name',
+      sortable: true,
+      render: (value: string) => <span className="fw-semibold">{value}</span>
+    },
+    {
+      key: 'permissions',
+      label: 'Assigned Permissions',
+      render: (value: any[]) => (
+        <div className="d-flex flex-wrap gap-1">
+          {value?.length > 0
+            ? value.map((perm: any) => (
+                <span key={perm.id} className="badge bg-secondary">
+                  {perm.name}
+                </span>
+              ))
+            : <span className="text-muted">None</span>
+          }
         </div>
-      </Layout>
-    );
-  }
+      )
+    },
+    {
+      key: 'actions',
+      label: 'Actions',
+      sortable: false,
+      render: (_: any, role: any) => (
+        <div className="d-flex gap-2">
+          {/* Permission Selector */}
+          <select
+            id={`role-${role.id}`}
+            className="form-select form-select-sm flex-grow-1"
+            defaultValue=""
+          >
+            <option value="" disabled>
+              Select Permission
+            </option>
+            {permissions?.map((perm: any) => (
+              <option key={perm.id} value={perm.id}>
+                {perm.name}
+              </option>
+            ))}
+          </select>
+
+          {/* Add Button */}
+          <button
+            className="btn btn-success btn-sm"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const selectElement = document.querySelector(
+                `#role-${role.id}`
+              ) as HTMLSelectElement;
+              if (selectElement && selectElement.value) {
+                Swal.fire({
+                  title: "Are you sure?",
+                  text: `Add permission "${permissions?.find(
+                    (p: any) => p.id === selectElement.value
+                  )?.name}" to role "${role.name}"?`,
+                  icon: "question",
+                  showCancelButton: true,
+                  confirmButtonText: "Add",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    handleAddPermission(role.id, selectElement.value);
+                  }
+                });
+              }
+            }}
+          >
+            Add
+          </button>
+
+          {/* Remove Button */}
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const selectElement = document.querySelector(
+                `#role-${role.id}`
+              ) as HTMLSelectElement;
+              if (selectElement && selectElement.value) {
+                Swal.fire({
+                  title: "Are you sure?",
+                  text: `Remove permission "${permissions?.find(
+                    (p: any) => p.id === selectElement.value
+                  )?.name}" from role "${role.name}"?`,
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonText: "Remove",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    handleRemovePermission(role.id, selectElement.value);
+                  }
+                });
+              }
+            }}
+          >
+            Remove
+          </button>
+        </div>
+      )
+    }
+  ];
 
   if (!isSuperAdmin) {
     return (
-      <Layout>
-        <div className="container mt-5">
-          <div className="row justify-content-center">
-            <div className="col-md-10">
-              <h1 className="mb-4 text-center fw-bold">Role-Permission Assignment</h1>
-              <div className="alert alert-warning">
-                <h4>Access Denied</h4>
-                <p>Only super admins can manage role-permission assignments.</p>
-                <p>Please contact your administrator or upgrade your package.</p>
-              </div>
-            </div>
+      <TablePage
+        title="Role-Permission Assignment"
+        subtitle="Manage role-permission assignments"
+        data={[]}
+        columns={columns}
+        loading={false}
+        emptyMessage="Access Denied - Only super admins can manage assignments"
+        headerActions={
+          <div className="alert alert-warning mb-0">
+            <h6 className="mb-1">Access Denied</h6>
+            <p className="mb-0">Only super admins can manage role-permission assignments.</p>
           </div>
-        </div>
-      </Layout>
+        }
+      />
     );
   }
 
   return (
-    <Layout>
-      <div className="container mt-5">
-        <div className="row justify-content-center">
-          <div className="col-md-10">
-            <h1 className="mb-4 text-center fw-bold">Role-Permission Assignment</h1>
-            <div className="alert alert-info">
-              <h5>Super Admin Access</h5>
-              <p>You have super admin privileges to manage role-permission assignments for your organization.</p>
-            </div>
-            <div className="table-responsive shadow-sm bg-white">
-              <table className="table table-hover table-bordered border-secondary">
-                <thead className="bg-dark text-light text-center">
-                  <tr>
-                    <th scope="col">Role</th>
-                    <th scope="col">Assigned Permissions</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {roles?.map((role: any) => (
-                    <tr key={role.id} className="align-middle">
-                      <td className="fw-semibold">{role.name}</td>
-                      <td>
-                        {role.permissions?.length > 0
-                          ? role.permissions.map((perm: any) => perm.name).join(", ")
-                          : "None"}
-                      </td>
-                      <td>
-                        <div className="d-flex gap-2">
-                          {/* Permission Selector */}
-                          <select
-                            id={`role-${role.id}`}
-                            className="form-select form-select-sm flex-grow-1"
-                            defaultValue=""
-                          >
-                            <option value="" disabled>
-                              Select Permission
-                            </option>
-                            {permissions?.map((perm: any) => (
-                              <option key={perm.id} value={perm.id}>
-                                {perm.name}
-                              </option>
-                            ))}
-                          </select>
-
-                          {/* Add Button */}
-                          <button
-                            className="btn btn-success btn-sm"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              const selectElement = document.querySelector(
-                                `#role-${role.id}`
-                              ) as HTMLSelectElement;
-                              if (selectElement && selectElement.value) {
-                                Swal.fire({
-                                  title: "Are you sure?",
-                                  text: `Add permission "${permissions?.find(
-                                    (p: any) => p.id === selectElement.value
-                                  )?.name}" to role "${role.name}"?`,
-                                  icon: "question",
-                                  showCancelButton: true,
-                                  confirmButtonText: "Add",
-                                }).then((result) => {
-                                  if (result.isConfirmed) {
-                                    handleAddPermission(role.id, selectElement.value);
-                                  }
-                                });
-                              }
-                            }}
-                          >
-                            Add
-                          </button>
-
-                          {/* Remove Button */}
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              const selectElement = document.querySelector(
-                                `#role-${role.id}`
-                              ) as HTMLSelectElement;
-                              if (selectElement && selectElement.value) {
-                                Swal.fire({
-                                  title: "Are you sure?",
-                                  text: `Remove permission "${permissions?.find(
-                                    (p: any) => p.id === selectElement.value
-                                  )?.name}" from role "${role.name}"?`,
-                                  icon: "warning",
-                                  showCancelButton: true,
-                                  confirmButtonText: "Remove",
-                                }).then((result) => {
-                                  if (result.isConfirmed) {
-                                    handleRemovePermission(role.id, selectElement.value);
-                                  }
-                                });
-                              }
-                            }}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+    <>
+      <div className="alert alert-info mb-4">
+        <h5>Super Admin Access</h5>
+        <p>You have super admin privileges to manage role-permission assignments for your organization.</p>
       </div>
-    </Layout>
+
+      <TablePage
+        title="Role-Permission Assignment"
+        subtitle="Manage role-permission assignments for your organization"
+        data={roles || []}
+        columns={columns}
+        loading={loading}
+        searchPlaceholder="Search roles..."
+        emptyMessage="No roles found."
+        headerActions={
+          <div className="d-flex align-items-center gap-3">
+            <span className="text-muted">
+              Total Roles: {roles?.length || 0}
+            </span>
+            <button
+              className="btn btn-secondary"
+              onClick={() => router.push('/roles')}
+            >
+              Back to Roles
+            </button>
+          </div>
+        }
+      />
+    </>
   );
 };
 

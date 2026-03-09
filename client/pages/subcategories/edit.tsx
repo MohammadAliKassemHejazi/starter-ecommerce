@@ -10,7 +10,7 @@ import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import { useTranslation } from "react-i18next";
 import { on } from "events";
 
-  
+
 const EditSubCategoryModal = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
