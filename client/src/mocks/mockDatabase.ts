@@ -24,11 +24,11 @@ const d = (daysAgo: number) => {
 
 export const mockDatabase = {
   users: [
-    { id: "user-superadmin", email: "admin@marketplace.com", name: "System Administrator", address: "1 Admin Way, Tech City", phone: "+18005550001", isActive: true, createdAt: d(400), bio: "Overseeing the entire platform." },
-    { id: "user-storeowner1", email: "alice@techhaven.com", name: "Alice Wonderland", address: "123 Silicon Blvd", phone: "+18005550002", isActive: true, createdAt: d(350), bio: "Tech enthusiast and store manager." },
-    { id: "user-storeowner2", email: "bob@fashionhub.com", name: "Bob Builder", address: "456 Runway Ave", phone: "+18005550003", isActive: true, createdAt: d(300), bio: "Curating the best fashion trends." },
-    { id: "user-customer1", email: "charlie@gmail.com", name: "Charlie Chaplin", address: "789 Movie St", phone: "+18005550004", isActive: true, createdAt: d(150), bio: "Regular shopper." },
-    { id: "user-customer2", email: "diana@yahoo.com", name: "Diana Prince", address: "321 Themyscira Island", phone: "+18005550005", isActive: true, createdAt: d(20), bio: "Looking for deals." }
+    { id: "user-superadmin", email: "admin@marketplace.com", name: "System Administrator", address: "1 Admin Way, Tech City", phone: "+18005550001", createdAt: d(400), bio: "Overseeing the entire platform." },
+    { id: "user-storeowner1", email: "alice@techhaven.com", name: "Alice Wonderland", address: "123 Silicon Blvd", phone: "+18005550002", createdAt: d(350), bio: "Tech enthusiast and store manager." },
+    { id: "user-storeowner2", email: "bob@fashionhub.com", name: "Bob Builder", address: "456 Runway Ave", phone: "+18005550003", createdAt: d(300), bio: "Curating the best fashion trends." },
+    { id: "user-customer1", email: "charlie@gmail.com", name: "Charlie Chaplin", address: "789 Movie St", phone: "+18005550004", createdAt: d(150), bio: "Regular shopper." },
+    { id: "user-customer2", email: "diana@yahoo.com", name: "Diana Prince", address: "321 Themyscira Island", phone: "+18005550005", createdAt: d(20), bio: "Looking for deals." }
   ] as UserModel[],
 
   roles: [
@@ -101,39 +101,45 @@ export const mockDatabase = {
   ],
 
   articles: [
-    { id: "article-tech1", title: "The Future of Mobile Computing in 2025", text: "As AI integration becomes the standard, our smartphones are transforming into predictive assistants. Let's explore the top trends...", createdAt: d(30), updatedAt: d(29), user: { id: "user-superadmin", name: "System Administrator" } },
-    { id: "article-fash1", title: "Sustainable Fashion: Why Organic Matters", text: "The textile industry is changing. Consumers are demanding transparency and eco-friendly materials...", createdAt: d(60), updatedAt: d(60), user: { id: "user-storeowner2", name: "Bob Builder" } }
+    { id: "article-tech1", title: "The Future of Mobile Computing in 2025", content: "As AI integration becomes the standard, our smartphones are transforming into predictive assistants. Let's explore the top trends...", published: true, createdAt: d(30), updatedAt: d(29), author: { id: "user-superadmin", name: "System Administrator", email: "admin@marketplace.com" } },
+    { id: "article-fash1", title: "Sustainable Fashion: Why Organic Matters", content: "The textile industry is changing. Consumers are demanding transparency and eco-friendly materials...", published: true, createdAt: d(60), updatedAt: d(60), author: { id: "user-storeowner2", name: "Bob Builder", email: "bob@fashionhub.com" } }
   ] as IArticleModelWithUser[],
 
   cartItems: [
-    { id: "prod-102", name: "Noise-Cancelling Earbuds Z", price: 149.99, originalPrice: 149.99, discount: 0, thumbnail: "https://images.unsplash.com/photo-1590658268037-6f5947c66576", cartQuantity: 1, size: "Universal" },
-    { id: "prod-203", name: "Organic Cotton T-Shirt 3-Pack", price: 45.00, originalPrice: 60.00, discount: 15, thumbnail: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab", cartQuantity: 2, size: "L" }
+    { id: "prod-102", name: "Noise-Cancelling Earbuds Z", price: 149.99, originalPrice: 149.99, discount: 0, thumbnail: "https://images.unsplash.com/photo-1590658268037-6f5947c66576", quantity: 1, size: "Universal" },
+    { id: "prod-203", name: "Organic Cotton T-Shirt 3-Pack", price: 45.00, originalPrice: 60.00, discount: 15, thumbnail: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab", quantity: 2, size: "L" }
   ] as CartItem[],
 
   orders: [
     {
       id: "ord-889901",
-      paymentId: "pi_3MtwBwLkdIwHu7ix28a3tqND",
-      customerName: "Diana Prince",
-      totalPrice: 1144.00, // 1099 + 45
+      userId: "user-customer2",
+      storeId: "store-tech1",
+      paymentStatus: "Paid",
+      paymentMethod: "Stripe",
+      shippingAddress: "321 Themyscira Island",
+      totalAmount: 1144.00, // 1099 + 45
       status: "Delivered",
       createdAt: d(15),
       updatedAt: d(12),
-      orderItems: [
-        { id: "oi-1", productId: "prod-101", quantity: 1, price: 1099.00 },
-        { id: "oi-2", productId: "prod-203", quantity: 1, price: 45.00 }
+      items: [
+        { id: "oi-1", orderId: "ord-889901", productId: "prod-101", quantity: 1, price: 1099.00 },
+        { id: "oi-2", orderId: "ord-889901", productId: "prod-203", quantity: 1, price: 45.00 }
       ]
     },
     {
       id: "ord-889902",
-      paymentId: "pi_3MtwBwLkdIwHu7ix28a3tqNE",
-      customerName: "Charlie Chaplin",
-      totalPrice: 240.00, // 120 * 2
+      userId: "user-customer1",
+      storeId: "store-fash1",
+      paymentStatus: "Pending",
+      paymentMethod: "PayPal",
+      shippingAddress: "789 Movie St",
+      totalAmount: 240.00, // 120 * 2
       status: "Processing",
       createdAt: d(1),
       updatedAt: d(1),
-      orderItems: [
-        { id: "oi-3", productId: "prod-202", quantity: 2, price: 120.00 }
+      items: [
+        { id: "oi-3", orderId: "ord-889902", productId: "prod-202", quantity: 2, price: 120.00 }
       ]
     }
   ] as IOrderModel[],

@@ -27,7 +27,7 @@ export const pages_index_tsx_mocks = {
 
 export const pages_home_tsx_mocks = {
   stores: [{ id: "store-1", name: "Tech Haven", description: "Latest gadgets.", imgUrl: "https://example.com/tech.jpg", categoryId: "cat-1", isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as IStoreResponseModel[],
-  articles: [{ id: "article-1", title: "Top 10 Gadgets", text: "Review...", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), userId: "user-1" }] as IArticleModel[],
+  articles: [{ id: "article-1", title: "Top 10 Gadgets", content: "Review...", published: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), authorId: "user-1" }] as IArticleModel[],
   featuredProducts: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, discount: 20, stockQuantity: 50, isActive: true, thumbnail: "https://example.com/headphones.jpg" }] as IProductModel[]
 };
 
@@ -40,7 +40,7 @@ export const pages_plans_tsx_mocks = {
 };
 
 export const pages_profile_tsx_mocks = {
-  userProfile: { id: "user-1", email: "user@example.com", name: "John Doe", address: "123 Main St", phone: "+1234567890", isActive: true, createdAt: new Date().toISOString() } as UserModel
+  userProfile: { id: "user-1", email: "user@example.com", name: "John Doe", address: "123 Main St", phone: "+1234567890", createdAt: new Date().toISOString() } as UserModel
 };
 
 export const pages_settings_tsx_mocks = {
@@ -58,7 +58,7 @@ export const pages_api_user_AUTH_ts_mocks = {
 };
 
 export const pages_articles_pid_tsx_mocks = {
-  articleDetails: { id: "article-1", title: "Top 10 Gadgets", text: "Full review...", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), userId: "user-1" } as IArticleModel
+  articleDetails: { id: "article-1", title: "Top 10 Gadgets", content: "Full review...", published: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), authorId: "user-1" } as IArticleModel
 };
 
 export const pages_articles_create_tsx_mocks = {
@@ -74,7 +74,7 @@ export const pages_articles_index_tsx_mocks = {
 };
 
 export const pages_articles_list_tsx_mocks = {
-  articlesList: [{ id: "article-1", title: "Top 10 Gadgets", text: "Review...", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), user: { id: "user-1", name: "John Doe" } }] as IArticleModelWithUser[]
+  articlesList: [{ id: "article-1", title: "Top 10 Gadgets", content: "Review...", published: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), author: { id: "user-1", name: "John Doe", email: "user@example.com" } }] as IArticleModelWithUser[]
 };
 
 export const pages_auth_reset_password_token_tsx_mocks = {
@@ -90,11 +90,11 @@ export const pages_auth_signin_tsx_mocks = {
 };
 
 export const pages_auth_signup_tsx_mocks = {
-  signUpRequestForm: { email: "", password: "", name: "", address: "", phone: "" } as SignUp
+  signUpRequestForm: { data: { id: "", email: "", name: "", address: "", phone: "" } } as SignUp
 };
 
 export const pages_cart_index_tsx_mocks = {
-  cartItems: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, discount: 20, cartQuantity: 2, size: "One Size" }] as CartItem[],
+  cartItems: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, discount: 20, quantity: 2, size: "One Size" }] as CartItem[],
   summary: { subtotal: 399.98, shipping: 10.00, total: 409.98 }
 };
 
@@ -116,7 +116,7 @@ export const pages_comments_index_tsx_mocks = {
 
 export const pages_dashboard_index_tsx_mocks = {
   stats: { totalSales: 15400.50, activeOrders: 42, newCustomers: 15, totalProducts: 120 },
-  recentOrders: [{ id: "ord-1", paymentId: "pay-123", customerName: "Alice Smith", totalPrice: 219.98, status: "Completed", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as IOrderModel[]
+  recentOrders: [{ id: "ord-1", userId: "user-1", storeId: "store-1", status: "Completed", totalAmount: 219.98, shippingAddress: "123 Main St", paymentMethod: "Credit Card", paymentStatus: "Paid", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), items: [] }] as IOrderModel[]
 };
 
 export const pages_favorites_index_tsx_mocks = {
@@ -124,11 +124,11 @@ export const pages_favorites_index_tsx_mocks = {
 };
 
 export const pages_orders_user_index_tsx_mocks = {
-  userOrdersList: [{ id: "ord-1", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), orderItems: [{ id: "oi-1", productId: "prod-1", quantity: 1, price: 199.99 }] }] as IOrder[]
+  userOrdersList: [{ id: "ord-1", userId: "user-1", storeId: "store-1", status: "Completed", totalAmount: 199.99, shippingAddress: "123 Main St", paymentMethod: "Credit Card", paymentStatus: "Paid", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as IOrder[]
 };
 
 export const pages_orders_index_tsx_mocks = {
-  allOrdersList: [{ id: "ord-1", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), orderItems: [{ id: "oi-1", productId: "prod-1", quantity: 1, price: 199.99 }] }] as IOrder[]
+  allOrdersList: [{ id: "ord-1", userId: "user-1", storeId: "store-1", status: "Completed", totalAmount: 199.99, shippingAddress: "123 Main St", paymentMethod: "Credit Card", paymentStatus: "Paid", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as IOrder[]
 };
 
 export const pages_packages_index_tsx_mocks = {
@@ -255,11 +255,11 @@ export const pages_users_create_tsx_mocks = {
 };
 
 export const pages_users_edit_tsx_mocks = {
-  userEditFormInitialData: { id: "user-1", email: "user@example.com", name: "John Doe", address: "123 Main St", phone: "+1234567890", isActive: true, createdAt: new Date().toISOString() } as UserModel
+  userEditFormInitialData: { id: "user-1", email: "user@example.com", name: "John Doe", address: "123 Main St", phone: "+1234567890", createdAt: new Date().toISOString() } as UserModel
 };
 
 export const pages_users_index_tsx_mocks = {
-  usersList: [{ id: "user-1", email: "user@example.com", name: "John Doe", address: "123 Main St", phone: "+1234567890", isActive: true, createdAt: new Date().toISOString() }] as UserModel[]
+  usersList: [{ id: "user-1", email: "user@example.com", name: "John Doe", address: "123 Main St", phone: "+1234567890", createdAt: new Date().toISOString() }] as UserModel[]
 };
 
 export const pages_navigation_demo_tsx_mocks = {
