@@ -16,7 +16,7 @@ interface Favorite {
     name: string;
     price: number;
     description: string;
-    images: Array<{ imageUrl: string }>;
+    productImages: Array<{ url: string }>;
   };
 }
 
@@ -52,9 +52,9 @@ const FavoritesPage = () => {
   const FavoriteCard = ({ favorite }: { favorite: any }) => (
     <div className="col-md-4 col-lg-3 mb-4">
       <div className="card h-100">
-        {favorite.product.images && favorite.product.images.length > 0 && (
+        {favorite.product.productImages && favorite.product.productImages.length > 0 && (
           <Image
-            src={`${process.env.NEXT_PUBLIC_BASE_URL_Images}${favorite.product.images[0].imageUrl}`}
+            src={`${process.env.NEXT_PUBLIC_BASE_URL_Images}${favorite.product.productImages[0].url}`}
             alt={favorite.product.name}
             className="card-img-top"
             width={300}

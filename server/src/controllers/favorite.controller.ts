@@ -14,16 +14,26 @@ export const getFavorites = async (req: Request, res: Response) => {
           include: [
             {
               model: db.ProductImage,
-              attributes: ['imageUrl'],
+              attributes: [['imageUrl', 'url']],
             },
           ],
         },
       ],
     });
 
+    // Map to standardize 'url' property shape if not handled natively
+    const formattedFavorites = favorites.map((fav: any) => {
+      const favJson = fav.toJSON();
+      if (favJson.Product && favJson.Product.ProductImages) {
+        favJson.Product.productImages = favJson.Product.ProductImages;
+        delete favJson.Product.ProductImages;
+      }
+      return favJson;
+    });
+
     res.status(200).json({
       success: true,
-      data: favorites,
+      data: formattedFavorites,
     });
   } catch (error) {
     console.error('Error getting favorites:', error);
