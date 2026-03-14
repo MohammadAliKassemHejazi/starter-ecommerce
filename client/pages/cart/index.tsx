@@ -94,11 +94,11 @@ const Cart = () => {
 
   const CartItem = ({ cartItem }: { cartItem: CartItem }) => (
     <div key={cartItem.id} className='productCard'>
-      {cartItem?.photos && cartItem.photos.length > 0 && (
+      {cartItem?.productImages && cartItem.productImages.length > 0 && (
         <Image
           src={
             process.env.NEXT_PUBLIC_BASE_URL_Images +
-            cartItem.photos[0]?.imageUrl
+            cartItem.productImages[0]?.url
           }
           alt={cartItem.name ?? ""}
           className='productImage'
