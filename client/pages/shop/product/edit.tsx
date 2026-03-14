@@ -52,17 +52,14 @@ function EditProduct() {
         .unwrap()
          .then((fetchedProduct: IProductModel | any) => {
            // Create a shallow copy of fetchedProduct
-       
-    const updatedProduct = {
-      ...fetchedProduct,
-      discount: fetchedProduct.discount ?? 0, // Set default value for discount
-    };
+       console.log("Fetched product:", fetchedProduct); 
+
 
     // Update the state with the copied object
-    setProduct(updatedProduct);
+    setProduct(fetchedProduct);
 
     // Fetch subcategories based on categoryId
-    dispatch(fetchAllSubCategoriesID(updatedProduct.categoryId ?? ""));
+    dispatch(fetchAllSubCategoriesID(fetchedProduct.categoryId ?? ""));
   }).catch((error) => {
           Toast.fire({
             icon: "error",

@@ -38,8 +38,9 @@ const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   },
 });
-
+  
 const SingleItem = ({ product }: Props) => {
+
   const dispatch = useAppDispatch();
 
   // Apply fallback
@@ -64,6 +65,7 @@ const SingleItem = ({ product }: Props) => {
         categoryId: productView.categoryId
       });
     }
+    console.log("Received product prop:", productView);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productView?.id, isAuthenticated]);
 
@@ -412,11 +414,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { pid } = params as { pid: string };
 
-  console.log("Fetching data for ID:", pid);
+  
 
   try {
     const  product  = await requestProductById(pid);
-
+console.log("Fetched product data for PID:", pid, product);
+console.log("Product data structure:", product.data.sizeItems);
     if (!product) {
       return { notFound: true };
     }

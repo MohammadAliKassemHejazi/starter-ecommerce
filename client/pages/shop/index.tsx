@@ -57,7 +57,7 @@ const Shop = () => {
           pageSize,
           searchQuery: query,
         })
-      );
+      ).then((result) => {console.log("Fetch products result:", result)});
     },
     [selectedStore, currentPage, pageSize, dispatch, trackEvent]
   );
@@ -118,7 +118,7 @@ const Shop = () => {
         pageSize,
         searchQuery,
       })
-    );
+    )
   };
 
   const handleAddToCart = (product: IProductModel) => {
@@ -151,7 +151,7 @@ const Shop = () => {
 
   const transformedProducts = productList?.map((product: any) => ({
     ...product,
-    productImages: product.photos?.map((photo: any) => ({
+    productImages: product.productImages?.map((photo: any) => ({
       url: process.env.NEXT_PUBLIC_BASE_URL_Images + photo.imageUrl
     })) || []
   })) || [];
