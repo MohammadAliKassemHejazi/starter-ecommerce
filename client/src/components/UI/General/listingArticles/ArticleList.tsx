@@ -15,12 +15,12 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
               <div className="card mb-4">
                 <div className="card-body">
                   <div className="small text-muted">
-                    {new Date(article.createdAt).toLocaleDateString()}
+                    {new Date(article.createdAt || "").toLocaleDateString()}
                   </div>
                   <h2 className="card-title h4">{article.title}</h2>
-                  <p className="card-text">{article.text}</p>
+                  <p className="card-text">{article.content}</p>
                   <p className="card-text">
-                    Author: {article.user?.name ?? "Unknown"}
+                    Author: {article.author?.name ?? "Unknown"}
                   </p>
                   <a className="btn btn-primary mt-3" href={`/articles/${article.id}`}>
                     Read more →

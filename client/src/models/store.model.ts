@@ -5,10 +5,14 @@ export interface IStoreModel {
     storeId?: string;
     name: string;
     description: string;
-    categoryId : string;
+    categoryId: string;
     photos?: ImageListType;
     croppedImages: ImageListType;
     productImages?: ImageListType;
+    imgUrl?: string;
+    metaTitle?: string;
+    metaDescription?: string;
+    isActive?: boolean;
 }
 
 export interface IStoreModelErrors {
@@ -16,7 +20,7 @@ export interface IStoreModelErrors {
     storeId?: string;
     name: string;
     description: string;
-    categoryId : string;
+    categoryId: string;
     photos?: ImageListType;
     croppedImages: string;
     productImages?: string;
@@ -34,4 +38,13 @@ export interface IStoreResponseModel {
   updatedAt?: string;
   metaTitle?: string;
   metaDescription?: string;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  category?: {
+    id: string;
+    name: string;
+  };
 }

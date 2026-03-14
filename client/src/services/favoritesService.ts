@@ -5,7 +5,7 @@ export interface FavoriteProduct {
   name: string;
   price: number;
   description?: string;
-  images: Array<{ imageUrl: string }>;
+  productImages: Array<{ url: string }>;
 }
 
 export interface Favorite {

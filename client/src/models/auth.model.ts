@@ -1,70 +1,25 @@
+import { UserModel } from "./user.model";
 
-export interface SignIn { data:{
-	id: string
-	email: string
-	name: string
-	address: string
-	phone: string
-	bio?: string;
-	accessToken: string
-	roles?: Array<{ id: string; name: string; }>;
-	permissions?: Array<{ id: string; name: string; }>;
-	packages?: Array<{
-		id: string;
-		name: string;
-		description: string;
-		storeLimit: number;
-		categoryLimit: number;
-		productLimit: number;
-		userLimit: number;
-		isSuperAdminPackage: boolean;
-		price: number;
-		isActive: boolean;
-		UserPackage: {
-			startDate: string;
-			endDate: string | null;
-			isActive: boolean;
-		};
-	}>;
-	error?: string;
-	}
+export interface SignIn {
+  data: UserModel;
+  message?: string;
+  success?: boolean;
 }
 
 export interface SignUp {
-	email: string
-	password: string
-	name: string
-	address: string
-	phone: string
+  data: {
+    id: string;
+    email: string;
+    name: string;
+    address: string;
+    phone: string;
+  };
+  message?: string;
+  success?: boolean;
 }
 
-
 export interface GetSession {
-	id:string,
-	email:string,
-	name:string,
-	address:string,
-	phone:string,
-	bio?:string,
-	accessToken:string,
-	roles?: Array<{ id: string; name: string; }>;
-	permissions?: Array<{ id: string; name: string; }>;
-	packages?: Array<{
-		id: string;
-		name: string;
-		description: string;
-		storeLimit: number;
-		categoryLimit: number;
-		productLimit: number;
-		userLimit: number;
-		isSuperAdminPackage: boolean;
-		price: number;
-		isActive: boolean;
-		UserPackage: {
-			startDate: string;
-			endDate: string | null;
-			isActive: boolean;
-		};
-	}>;
-	error?: string;
+  data: UserModel;
+  message?: string;
+  success?: boolean;
 }

@@ -25,7 +25,7 @@ const EditArticle = ({ article }: Props) => {
   useEffect(() => {
     if (article) {
       setTitle(article.title || "");
-      setText(article.text || "");
+      setText(article.content || "");
     }
   }, [article]);
 
@@ -63,10 +63,10 @@ const EditArticle = ({ article }: Props) => {
       label: "Text",
       value: text,
       onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setText(e.target.value),
-      placeholder: "Input your article text here.",
+      placeholder: "Input your article.content here.",
       required: true,
       rows: 4,
-      helpText: "Input your article text here."
+      helpText: "Input your article.content here."
     }
   ];
 
