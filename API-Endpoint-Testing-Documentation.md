@@ -44,6 +44,7 @@ The `meta` property at the top level holds pagination variables (total, page, et
 The following endpoints need verification against a running database.
 
 ### 🏪 Store Endpoints
+
 - [ ] GET /api/store/getall -> StoresListResponse
 - [ ] GET /api/store/getall/user -> StoresListResponse
 - [ ] GET /api/store/getall/user/filter -> StoresListResponse
@@ -55,6 +56,7 @@ The following endpoints need verification against a running database.
 - [ ] DELETE /api/store/delete/image/:id -> DeleteStoreResponse
 
 ### 🛒 Shop (Products) Endpoints
+
 - [ ] GET /api/shop/getall -> ProductsListResponse
 - [ ] GET /api/shop/get/single?id=:id -> ProductResponse
 - [ ] GET /api/shop/get/storeProducts/:storeId -> ProductsListResponse
@@ -65,17 +67,20 @@ The following endpoints need verification against a running database.
 - [ ] DELETE /api/shop/delete/image/:id -> DeleteProductResponse
 
 ### 📦 Order Endpoints
+
 - [ ] GET /api/admin/orders/last -> OrderResponse
 - [ ] POST /api/admin/orders/date-range -> OrdersListResponse
 - [ ] GET /api/admin/orders/:orderId/items -> OrderItemsResponse
 
 ### 🏷️ Category Endpoints
+
 - [ ] GET /api/categories -> CategoriesListResponse
 - [ ] POST /api/categories -> CreateCategoryResponse
 - [ ] PUT /api/categories/update/:id -> UpdateCategoryResponse
 - [ ] DELETE /api/categories/delete/:id -> DeleteCategoryResponse
 
 ### 👥 User Endpoints
+
 - [ ] GET /api/users?createdById=me -> UsersListResponse
 - [ ] POST /api/users -> CreateUserResponse
 - [ ] PUT /api/users/:id -> UpdateUserResponse
@@ -84,6 +89,7 @@ The following endpoints need verification against a running database.
 - [ ] DELETE /api/users/:id/roles/:roleId -> RemoveRoleResponse
 
 ### 📝 Article Endpoints
+
 - [ ] GET /api/articles -> ArticlesListResponse
 - [ ] GET /api/articles/get/author -> ArticlesListResponse
 - [ ] POST /api/articles/create -> CreateArticleResponse
@@ -91,6 +97,7 @@ The following endpoints need verification against a running database.
 - [ ] DELETE /api/articles/delete/:id -> DeleteArticleResponse
 
 ### 🎁 Package Endpoints
+
 - [ ] GET /api/packages -> PackagesListResponse
 - [ ] GET /api/packages?id=:id -> PackageResponse
 - [ ] GET /api/packages/active -> UserPackageResponse
@@ -102,6 +109,7 @@ The following endpoints need verification against a running database.
 - [ ] POST /api/packages/activate -> ActivatePackageResponse
 
 ### 🌐 Public Endpoints
+
 - [ ] GET /api/public/stores -> PublicStoresListResponse
 - [ ] GET /api/public/stores/:id -> PublicStoresListResponse
 - [ ] GET /api/public/categories -> PublicCategoriesListResponse
@@ -110,6 +118,8 @@ The following endpoints need verification against a running database.
 - [ ] GET /api/public/articles -> ArticlesListResponse
 
 ### 💳 Cart & Payment Endpoints
+
+
 - [ ] GET /api/cart/get -> CartResponse
 - [ ] POST /api/cart/update -> AddToCartResponse
 - [ ] PUT /api/cart/decrease -> UpdateCartResponse
@@ -117,6 +127,8 @@ The following endpoints need verification against a running database.
 - [ ] DELETE /api/cart/delete -> ClearCartResponse
 
 ### 🔒 Auth Endpoints
+
+
 - [ ] POST /api/user/auth/login -> SignIn
 - [ ] POST /api/user/auth/logout -> LogoutResponse
 - [ ] POST /api/user/auth/register -> SignUpResponse
