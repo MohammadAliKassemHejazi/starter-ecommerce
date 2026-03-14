@@ -117,7 +117,6 @@ export interface ProductViewModel {
     id: string;
     url: string;
     alt?: string;
-    imageUrl?: string;
   }>;
   store?: {
     id: string;

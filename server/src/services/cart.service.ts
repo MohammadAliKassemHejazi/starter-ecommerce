@@ -51,11 +51,11 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
       name: cartItem.Product.name,
       description: cartItem.Product.description,
       price: cartItem.Product.price,
-      photos: cartItem.Product.ProductImages.map((image: any) => ({
+      productImages: cartItem.Product.ProductImages.map((image: any) => ({
         id: image.id,
-        imageUrl: image.imageUrl,
+        url: image.imageUrl,
       })), // Map product images
-      cartQuantity: cartItem.quantity, // Assuming quantity is stored in CartItem
+      quantity: cartItem.quantity, // Assuming quantity is stored in CartItem
       sizeId: cartItem.sizeItemId, // Include sizeId
       size: cartItem.SizeItem.Size.size, // Include size
       totalPrice: cartItem.Product.price * cartItem.quantity, // Calculate total price

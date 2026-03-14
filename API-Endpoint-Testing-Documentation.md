@@ -5,11 +5,11 @@ This document tracks the testing of backend endpoints to ensure their responses 
 ## Status Note
 Important. The backend uses PostgreSQL, but the database connection (127.0.0.1:5432) is refused in the current sandbox environment. Therefore, actual endpoint testing via curl against the running server could not be completed. The global responseStandardizer middleware has been heavily tested in isolation and updated to dynamically capture paginated arrays (e.g. stores, products, orders) and meta (pagination) attributes and structure them precisely as expected by the frontend.
 
-The data property holds the array.
+The `data` property holds the array.
 
-The meta property at the top level holds pagination variables (total, page, etc.).
+The `meta` property at the top level holds pagination variables (total, page, etc.).
 
-success and message properties are automatically added to raw controller responses.
+`success` and `message` properties are automatically added to raw controller responses.
 
 ## Frontend Expected Format
 
@@ -119,6 +119,7 @@ The following endpoints need verification against a running database.
 
 ### 💳 Cart & Payment Endpoints
 
+
 - [ ] GET /api/cart/get -> CartResponse
 - [ ] POST /api/cart/update -> AddToCartResponse
 - [ ] PUT /api/cart/decrease -> UpdateCartResponse
@@ -126,6 +127,7 @@ The following endpoints need verification against a running database.
 - [ ] DELETE /api/cart/delete -> ClearCartResponse
 
 ### 🔒 Auth Endpoints
+
 
 - [ ] POST /api/user/auth/login -> SignIn
 - [ ] POST /api/user/auth/logout -> LogoutResponse
