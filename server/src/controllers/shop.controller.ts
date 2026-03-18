@@ -219,7 +219,16 @@ export const handleUpdateImages = async (request: CustomRequest, response: Respo
 export const handelgetall = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   try {
     const results = await shopService.getTopProductIds();
-    response.status(200).json({ ...results });
+    response.status(200).json({
+      success: true,
+      data: results.products,
+      meta: {
+        page: 1,
+        pageSize: results.products.length,
+        total: results.products.length,
+        totalPages: 1
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -236,10 +245,10 @@ export const handleGetSingleItem = async (request: CustomRequest, response: Resp
   try {
     const product = await shopService.getProductById(id);
     if (!product) {
-      response.status(404).json({ error: 'Product not found' });
+      response.status(404).json({ success: false, message: 'Product not found' });
       return;
     }
-    response.status(200).json(product);
+    response.status(200).json({ success: true, data: product });
   } catch (error) {
     next(error);
   }
@@ -265,7 +274,14 @@ export const getProductsByStore = async (request: CustomRequest, response: Respo
     });
 
     response.json({
-      ...result,
+      success: true,
+      data: result.products,
+      meta: {
+        page: result.page,
+        pageSize: result.pageSize,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.pageSize) || 1,
+      }
     });
   } catch (error) {
     next(error);
@@ -288,7 +304,14 @@ export const getProductsListing = async (request: CustomRequest, response: Respo
     });
 
     response.json({
-      ...result,
+      success: true,
+      data: result.products,
+      meta: {
+        page: result.page,
+        pageSize: result.pageSize,
+        total: result.total,
+        totalPages: Math.ceil(result.total / result.pageSize) || 1,
+      }
     });
   } catch (error) {
     next(error);
