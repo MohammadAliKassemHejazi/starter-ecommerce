@@ -35,3 +35,4 @@ Since this is a large task, I have completed the initial round focusing on the m
 - [ ] \`pages/subcategories/\`
 - [ ] \`pages/taxes/\`
 - [ ] \`pages/users/\`
+- [x] `pages/analytics/` -> AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse

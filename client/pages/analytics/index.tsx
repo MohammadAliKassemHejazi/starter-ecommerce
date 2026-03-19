@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
 import { PageLayout, FilterCard, StatsGrid } from '@/components/UI/PageComponents';
@@ -6,6 +6,7 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import ProtectedRoute from '@/components/protectedRoute';
 import { ModernTable, TableColumn } from '@/components/UI/ModernTable';
+import { AnalyticsEvent } from '@/interfaces/api/analytics.types';
 import {
   fetchAnalytics,
   fetchAnalyticsStats,
@@ -18,19 +19,6 @@ import {
   selectAnalyticsFilters,
   selectAnalyticsPagination
 } from '@/store/slices/analyticsSlice';
-
-interface AnalyticsEvent {
-  id: string;
-  eventType: string;
-  eventData: any;
-  userId: string;
-  createdAt: string;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
 
 const AnalyticsPage = () => {
   const { t } = useTranslation();
