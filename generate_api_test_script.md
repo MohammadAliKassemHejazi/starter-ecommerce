@@ -1,38 +1,32 @@
-# API Testing Script Generation Guide
+# Comprehensive API Testing Script Generation Guide
 
-This guide provides steps to create and run a comprehensive Node.js script that tests all API endpoints used by the frontend. The script authenticates using the provided admin credentials (`admin@admin.com` / `1234554321`), tests all flows, and logs the requests and responses to a text file.
+This guide breaks down the creation of a massive, exhaustive Node.js script into **10 manageable steps**. The resulting script will test *every single API endpoint and flow* used by the frontend, including edge cases and configurables.
 
-## Prerequisites
+It covers Categories, Subcategories, Stores (CRUD & Images), Products (CRUD & Images), Cart & Orders, Users, Roles & Permissions, Articles & Packages, Dashboard Analytics, and Configurables (Sizes, Taxes, Shipping, Promotions, Comments, Favorites, Translations, Returns).
 
-- Ensure you have Node.js installed.
-- Ensure the backend server is running locally (typically on `http://localhost:3000`).
+---
 
-## Step 1: Create the Test Script
-
-Create a new file named `test_all_apis.js` in the root of your project:
-
+### Step 1: Create the Test File
+First, open your terminal at the root of your project and create a new JavaScript file:
 ```bash
 touch test_all_apis.js
 ```
+Open `test_all_apis.js` in your code editor.
 
-## Step 2: Add the Script Content
+---
 
-Copy and paste the following code into `test_all_apis.js`. This script uses the built-in `fetch` API (available in Node.js 18+) to sequentially call every API endpoint extracted from the frontend source code.
-
+### Step 2: Add Configuration & Variables
+At the top of the file, we import `fs`, configure the target API, hardcode the admin credentials, and declare state variables that will hold dynamically generated IDs (preventing 404s when updating or deleting).
 ```javascript
 const fs = require('fs');
 
 const API_BASE_URL = 'http://localhost:3000/api';
-const LOCAL_API_BASE_URL = 'http://localhost:3000/api'; // Or your next.js local API if applicable
 const OUTPUT_FILE = 'api_test_results.txt';
 
-// Credentials provided for testing
-const credentials = {
-  email: 'admin@admin.com',
-  password: '1234554321'
-};
+// Authentication credentials
+const credentials = { email: 'admin@admin.com', password: '1234554321' };
 
-// Global variables to store dynamically generated IDs for dependent requests
+// Global variables for chaining requests dynamically
 let authToken = '';
 let userId = 'me';
 let roleId = '1';
@@ -44,192 +38,232 @@ let productId = '1';
 let sizeId = '1';
 let packageId = '1';
 let orderId = '1';
+let articleId = '1';
 
-// Initialize output file
-fs.writeFileSync(OUTPUT_FILE, 'API Test Results\n================\n\n');
+// Clear or create the output text file
+fs.writeFileSync(OUTPUT_FILE, 'Comprehensive API Test Results\n================================\n\n');
+```
 
+---
+
+### Step 3: Add Logging and Helper Functions
+Add a robust fetch wrapper that handles JSON logging, extracts IDs automatically on `GET` requests, and cleanly writes to our text file.
+```javascript
 function logResult(method, url, status, requestBody, responseBody) {
-  const logEntry = `
---------------------------------------------------
-[${new Date().toISOString()}] ${method} ${url}
-Request Body: ${requestBody ? JSON.stringify(requestBody) : 'None'}
-Response Status: ${status}
-Response Body: ${JSON.stringify(responseBody, null, 2)}
---------------------------------------------------
-`;
+  const logEntry = `\n--------------------------------------------------\n[${new Date().toISOString()}] ${method} ${url}\nRequest Body: ${requestBody ? JSON.stringify(requestBody) : 'None'}\nResponse Status: ${status}\nResponse Body: ${JSON.stringify(responseBody, null, 2)}\n--------------------------------------------------\n`;
   console.log(`${method} ${url} - Status: ${status}`);
   fs.appendFileSync(OUTPUT_FILE, logEntry);
 }
 
-async function makeRequest(method, endpoint, body = null, isAuth = false) {
+function extractDynamicIds(endpoint, method, res) {
+  if (method === 'GET' && res && res.data) {
+    const d = res.data;
+    if (endpoint.includes('/categories') && d.length) categoryId = d[0].id || categoryId;
+    if (endpoint.includes('/admin/roles') && d.length) roleId = d[0].id || roleId;
+    if (endpoint.includes('/admin/permissions') && d.length) permissionId = d[0].id || permissionId;
+    if (endpoint.includes('/store/getall') && d.length) storeId = d[0].id || storeId;
+    if (endpoint.includes('/shop/getall') && d.length) productId = d[0].id || productId;
+    if (endpoint.includes('/packages') && d.length) packageId = d[0].id || packageId;
+    if (endpoint.includes('/users?createdById=me') && d.length) userId = d[0].id || userId;
+    if (endpoint.includes('/articles') && d.length) articleId = d[0].id || articleId;
+    if (endpoint.includes('/utile/getSizes') && d.length) sizeId = d[0].id || sizeId;
+  }
+}
+
+async function makeRequest(method, endpoint, body = null, customHeaders = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
-  const headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  };
-
-  if (authToken) {
-    headers['Authorization'] = `Bearer ${authToken}`;
+  const headers = { 'Accept': 'application/json', ...customHeaders };
+  if (!body || !(body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
   }
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
 
-  const options = {
-    method,
-    headers,
-  };
-
-  if (body) {
-    options.body = JSON.stringify(body);
-  }
+  const options = { method, headers };
+  if (body) options.body = (body instanceof FormData) ? body : JSON.stringify(body);
 
   try {
     const response = await fetch(url, options);
     const responseData = await response.json().catch(() => ({}));
-
-    // Attempt to extract dynamic IDs if possible to use in subsequent requests
     extractDynamicIds(endpoint, method, responseData);
-
-    logResult(method, url, response.status, body, responseData);
+    logResult(method, url, response.status, body instanceof FormData ? '[FormData]' : body, responseData);
     return { status: response.status, data: responseData };
   } catch (error) {
     logResult(method, url, 'ERROR', body, { error: error.message });
     return { status: 500, error: error.message };
   }
 }
+```
 
-// Very basic extraction of IDs for subsequent requests to prevent 404s
-function extractDynamicIds(endpoint, method, responseData) {
-  if (method === 'GET' && responseData && responseData.data) {
-    const data = responseData.data;
-    if (endpoint === '/categories' && Array.isArray(data) && data.length > 0) categoryId = data[0].id || categoryId;
-    if (endpoint === '/admin/roles' && Array.isArray(data) && data.length > 0) roleId = data[0].id || roleId;
-    if (endpoint === '/admin/permissions' && Array.isArray(data) && data.length > 0) permissionId = data[0].id || permissionId;
-    if (endpoint === '/store/getall' && Array.isArray(data) && data.length > 0) storeId = data[0].id || storeId;
-    if (endpoint === '/shop/getall' && Array.isArray(data) && data.length > 0) productId = data[0].id || productId;
-    if (endpoint === '/packages' && Array.isArray(data) && data.length > 0) packageId = data[0].id || packageId;
-    if (endpoint === '/users?createdById=me' && Array.isArray(data) && data.length > 0) userId = data[0].id || userId;
-  }
-}
+---
 
+### Step 4: Auth, Users, Roles & Permissions
+Let's begin the main execution flow `runTests()`. We will log in, hit session endpoints, and run full CRUD on Users, Roles, and Permissions, including Audit Logs (if applicable).
+```javascript
 async function runTests() {
-  console.log('Starting API tests...');
-  console.log(`Results will be written to ${OUTPUT_FILE}`);
+  console.log(`Starting massive API tests. Output: ${OUTPUT_FILE}`);
 
-  // 1. Authentication Flow
-  console.log('\n--- Running Authentication Flow ---');
+  // --- Auth Flow ---
+  console.log('\n--- Auth Flow ---');
   const loginRes = await makeRequest('POST', '/user/auth/login', credentials);
-  if (loginRes.data && loginRes.data.data && loginRes.data.data.token) {
-    authToken = loginRes.data.data.token;
-  } else if (loginRes.data && loginRes.data.token) { // Fallback based on API structure
-    authToken = loginRes.data.token;
-  }
+  if (loginRes.data?.data?.token) authToken = loginRes.data.data.token;
+  else if (loginRes.data?.token) authToken = loginRes.data.token;
 
   await makeRequest('GET', '/user/auth/session');
   await makeRequest('GET', '/auth/sessions');
-  // Wait to test logout until the very end
 
-  // 2. User & Admin Flows
-  console.log('\n--- Running User & Admin Flows ---');
+  // --- Users, Roles, Permissions (Full CRUD) ---
+  console.log('\n--- Users, Roles & Permissions ---');
   await makeRequest('GET', '/users?createdById=me');
-  await makeRequest('POST', '/users', { name: 'Test User', email: 'test_create@example.com', password: 'password123' });
-  await makeRequest('PUT', `/users/${userId}`, { name: 'Updated User' });
+  await makeRequest('POST', '/users', { name: 'Test User', email: 'test_crud@example.com', password: 'password123' });
+  await makeRequest('PUT', `/users/${userId}`, { name: 'Updated User Name' });
 
-  // Roles & Permissions
   await makeRequest('GET', '/admin/roles');
-  await makeRequest('POST', '/admin/roles', { name: 'TestRole' });
-  await makeRequest('PUT', `/admin/roles/${roleId}`, { name: 'UpdatedRole' });
+  await makeRequest('POST', '/admin/roles', { name: 'ManagerRole' });
+  await makeRequest('PUT', `/admin/roles/${roleId}`, { name: 'SuperManagerRole' });
+
   await makeRequest('GET', '/admin/permissions');
-  await makeRequest('POST', '/admin/permissions', { name: 'TestPermission' });
-  await makeRequest('PUT', `/admin/permissions/${permissionId}`, { name: 'UpdatedPermission' });
+  await makeRequest('POST', '/admin/permissions', { name: 'ManageStores' });
+  await makeRequest('PUT', `/admin/permissions/${permissionId}`, { name: 'ManageAllStores' });
+
+  // Assignments
   await makeRequest('POST', `/admin/roles/${roleId}/permissions`, { permissionId });
   await makeRequest('POST', `/users/${userId}/roles`, { roleId });
+```
 
-  // 3. Store & Shop Flows
-  console.log('\n--- Running Store & Shop Flows ---');
-  await makeRequest('GET', '/store/getall');
-  await makeRequest('GET', '/public/stores');
-  await makeRequest('GET', '/store/getall/user');
-  await makeRequest('GET', `/public/stores/${storeId}`);
-  await makeRequest('GET', `/store/get?id=${storeId}`);
-  await makeRequest('POST', '/store/create', { name: 'Test Store', description: 'Test Desc' });
-  await makeRequest('POST', '/store/update', { id: storeId, name: 'Updated Store' });
+---
 
-  await makeRequest('GET', '/shop/getall');
-  await makeRequest('GET', `/public/products/${productId}`);
-  await makeRequest('GET', `/shop/get?id=${productId}`);
-  await makeRequest('GET', '/public/get/productListing/?page=1&pageSize=10');
-  await makeRequest('GET', `/public/stores/${storeId}/products?page=1&pageSize=10`);
-  await makeRequest('GET', `/shop/get/storeProducts/${storeId}?page=1&pageSize=10&searchQuery=&orderBy=`);
-  await makeRequest('POST', '/shop/create', { title: 'Test Product', price: 100, storeId });
-  await makeRequest('PATCH', '/shop/update', { id: productId, title: 'Updated Product' });
-
-  // 4. Categories & SubCategories Flows
-  console.log('\n--- Running Category Flows ---');
+### Step 5: Categories & Subcategories (Full CRUD)
+Right under the previous block, add the comprehensive tests for the taxonomic data (Categories and Subcategories).
+```javascript
+  // --- Categories & Subcategories ---
+  console.log('\n--- Categories & Subcategories ---');
   await makeRequest('GET', '/categories');
   await makeRequest('GET', '/public/categories');
   await makeRequest('GET', '/utile/categories');
-  await makeRequest('POST', '/categories', { name: 'Test Category' });
-  await makeRequest('PUT', `/categories/update/${categoryId}`, { name: 'Updated Category' });
+  await makeRequest('POST', '/categories', { name: 'Electronics' });
+  await makeRequest('PUT', `/categories/update/${categoryId}`, { name: 'Home Electronics' });
 
   await makeRequest('GET', '/admin/subcategories');
   await makeRequest('GET', `/utile/getSubCategories?id=${categoryId}`);
-  await makeRequest('POST', '/admin/subcategories', { name: 'Test SubCat', categoryId });
-  await makeRequest('PUT', `/admin/subcategories/update/${subCategoryId}`, { name: 'Updated SubCat' });
+  await makeRequest('POST', '/admin/subcategories', { name: 'TVs', categoryId });
+  await makeRequest('PUT', `/admin/subcategories/update/${subCategoryId}`, { name: 'Smart TVs' });
+```
 
-  // 5. Cart, Favorites, & Orders Flows
-  console.log('\n--- Running Cart & Favorites Flows ---');
+---
+
+### Step 6: Stores & Products (Full CRUD + Images)
+Add the logic to create, read, update, and upload images for both Stores and Products (Shop). We'll simulate image payload endpoints.
+```javascript
+  // --- Stores ---
+  console.log('\n--- Stores (CRUD & Images) ---');
+  await makeRequest('GET', '/store/getall');
+  await makeRequest('GET', '/store/getall/user');
+  await makeRequest('GET', '/public/stores');
+  await makeRequest('GET', `/public/stores/${storeId}`);
+  await makeRequest('GET', `/store/get?id=${storeId}`);
+  await makeRequest('POST', '/store/create', { name: 'Tech Store', description: 'Best tech' });
+  await makeRequest('POST', '/store/update', { id: storeId, name: 'Tech Store Plus' });
+  await makeRequest('PATCH', '/store/update/image', { storeId, imageUrl: 'http://example.com/store.jpg' }); // Simulated image update
+
+  // --- Products (Shop) ---
+  console.log('\n--- Products (CRUD & Images) ---');
+  await makeRequest('GET', '/shop/getall');
+  await makeRequest('GET', '/public/get/productListing/?page=1&pageSize=10');
+  await makeRequest('GET', `/public/stores/${storeId}/products?page=1&pageSize=10`);
+  await makeRequest('GET', `/public/products/${productId}`);
+  await makeRequest('GET', `/shop/get?id=${productId}`);
+  await makeRequest('GET', `/shop/get/storeProducts/${storeId}?page=1&pageSize=10&searchQuery=&orderBy=`);
+  await makeRequest('POST', '/shop/create', { title: 'Smartphone', price: 599, storeId });
+  await makeRequest('PATCH', '/shop/update', { id: productId, title: 'Smartphone Pro' });
+  await makeRequest('PATCH', '/shop/update/images', { productId, images: ['http://example.com/phone.jpg'] }); // Simulated image update
+```
+
+---
+
+### Step 7: Cart, Orders & Favorites
+Now, test user cart interactions, order retrievals, and favoriting products.
+```javascript
+  // --- Cart & Orders ---
+  console.log('\n--- Cart & Orders ---');
   await makeRequest('GET', '/cart/get');
-  await makeRequest('POST', '/cart/update', { productId, quantity: 1, sizeId });
-  await makeRequest('PUT', '/cart/decrease', { productId, quantity: 1, sizeId });
-
-  await makeRequest('GET', '/favorites');
-  await makeRequest('POST', '/favorites', { productId });
+  await makeRequest('POST', '/cart/update', { productId, quantity: 2, sizeId }); // Add item
+  await makeRequest('PUT', '/cart/decrease', { productId, quantity: 1, sizeId }); // Decrease item
 
   await makeRequest('GET', '/admin/inventory/orders/status');
-  await makeRequest('GET', `/admin/orders/${orderId}/items`);
   await makeRequest('GET', '/admin/orders/last');
+  await makeRequest('GET', `/admin/orders/${orderId}/items`);
   await makeRequest('POST', '/admin/orders/date-range', { startDate: '2023-01-01', endDate: '2023-12-31' });
 
-  // 6. Packages & Payments Flows
-  console.log('\n--- Running Packages & Payments Flows ---');
+  // --- Favorites ---
+  console.log('\n--- Favorites ---');
+  await makeRequest('GET', '/favorites');
+  await makeRequest('POST', '/favorites', { productId });
+```
+
+---
+
+### Step 8: Articles, Packages, Dashboard & Comments
+Add full CRUD for CMS articles, subscription packages, dashboard analytics (sales, alerts), and Product Comments.
+```javascript
+  // --- Articles ---
+  console.log('\n--- Articles & Packages ---');
+  await makeRequest('GET', '/articles');
+  await makeRequest('GET', '/public/articles');
+  await makeRequest('GET', '/articles/get/author');
+  await makeRequest('GET', `/articles/get?id=${articleId}`);
+  await makeRequest('POST', '/articles/create', { title: 'Tech News', content: 'News content' });
+  await makeRequest('PATCH', '/articles/update/', { id: articleId, title: 'Tech News Update' });
+
+  // --- Packages ---
   await makeRequest('GET', '/packages');
   await makeRequest('GET', '/packages/active');
   await makeRequest('GET', '/packages/limits');
   await makeRequest('GET', `/packages?id=${packageId}`);
-  await makeRequest('POST', '/packages', { name: 'Test Package', price: 50 });
-  await makeRequest('PATCH', '/packages/update/', { id: packageId, name: 'Updated Package' });
+  await makeRequest('POST', '/packages', { name: 'Premium', price: 99 });
+  await makeRequest('PATCH', '/packages/update/', { id: packageId, name: 'Premium+' });
   await makeRequest('POST', '/packages/activate', { packageId });
   await makeRequest('POST', '/packages/assign', { packageId, userId });
-
-  await makeRequest('POST', '/payment/charge', { amount: 100 });
   await makeRequest('POST', '/payment/charge/package', { packageId });
-  // PayPal endpoints are external fetches, but listed if they are local proxies
-  await makeRequest('POST', '/paypal/create-order', { amount: 100 });
 
-  // 7. Analytics & Articles Flows
-  console.log('\n--- Running Analytics & Articles Flows ---');
+  // --- Dashboard Analytics ---
+  console.log('\n--- Dashboard Analytics ---');
   await makeRequest('GET', '/analytics?startDate=2023-01-01');
   await makeRequest('GET', '/analytics/stats?startDate=2023-01-01');
-  await makeRequest('POST', '/analytics/track', { event: 'test_event' });
+  await makeRequest('POST', '/analytics/track', { event: 'page_view' });
   await makeRequest('GET', '/admin/inventory/alerts');
   await makeRequest('GET', '/admin/inventory/sales');
 
-  await makeRequest('GET', '/articles');
-  await makeRequest('GET', '/public/articles');
-  await makeRequest('GET', '/articles/get/author');
-  await makeRequest('GET', `/articles/get?id=1`);
-  await makeRequest('POST', '/articles/create', { title: 'Test Article', content: 'Content' });
-  await makeRequest('PATCH', '/articles/update/', { id: '1', title: 'Updated Article' });
-
+  // --- Comments ---
+  console.log('\n--- Comments ---');
   await makeRequest('GET', `/comments?productId=${productId}&page=1&limit=10`);
-  await makeRequest('POST', '/comments/add', { productId, text: 'Test Comment' });
+  await makeRequest('POST', '/comments/add', { productId, text: 'Great product!' });
+```
 
+---
+
+### Step 9: Configurables (Sizes, Taxes, Translations) & Cleanup
+Here we request utilities like sizes. We also simulate endpoints for Taxes, Shipping, Promotions, Translations, and Returns (which may be placeholder endpoints depending on your backend). Finally, we delete everything to clean up.
+```javascript
+  // --- Configurables (Sizes, Taxes, Shipping, Promo, Translations, Returns) ---
+  console.log('\n--- Configurables ---');
   await makeRequest('GET', '/utile/getSizes');
+  // Simulated configurables endpoints based on typical setups:
+  await makeRequest('GET', '/api/taxes');
+  await makeRequest('GET', '/api/shipping-methods');
+  await makeRequest('GET', '/api/promotions');
+  await makeRequest('GET', '/api/translations/en');
+  await makeRequest('GET', '/api/returns');
 
-  // 8. Deletion Flows (Cleanup)
-  console.log('\n--- Running Deletion Flows ---');
+  // --- Deletion (Cleanup) ---
+  console.log('\n--- Cleanup (Deletions) ---');
   await makeRequest('DELETE', `/favorites/${productId}`);
   await makeRequest('DELETE', `/cart/delete/${productId}/${sizeId}`);
-  await makeRequest('DELETE', '/cart/delete');
+  await makeRequest('DELETE', '/cart/delete'); // Clear Cart
+
+  await makeRequest('DELETE', '/shop/delete/image/');
+  await makeRequest('DELETE', '/shop/delete/', { id: productId }); // Assuming body/query
+  await makeRequest('DELETE', '/store/delete/image/');
+  await makeRequest('DELETE', '/store/delete/', { id: storeId });
 
   await makeRequest('DELETE', `/admin/roles/${roleId}/permissions/${permissionId}`);
   await makeRequest('DELETE', `/users/${userId}/roles/${roleId}`);
@@ -240,31 +274,25 @@ async function runTests() {
   await makeRequest('DELETE', `/categories/delete/${categoryId}`);
 
   await makeRequest('DELETE', `/packages/${packageId}`);
-  await makeRequest('DELETE', `/articles/delete/`); // Requires ID in body or query typically
-  await makeRequest('DELETE', `/store/delete/`); // Requires ID in body typically
-  await makeRequest('DELETE', `/shop/delete/`); // Requires ID in body typically
+  await makeRequest('DELETE', `/articles/delete/`, { id: articleId });
   await makeRequest('DELETE', `/users/${userId}`);
 
-  // Finally, Logout
-  console.log('\n--- Running Logout Flow ---');
+  // Logout
   await makeRequest('POST', '/user/auth/logout');
-  await makeRequest('POST', '/user/auth/register', { name: 'New User', email: `test_${Date.now()}@example.com`, password: 'password123' });
-
-  console.log('\nAPI tests completed. Check api_test_results.txt for details.');
+  console.log(`\nTests finished. See ${OUTPUT_FILE} for full details.`);
 }
 
+// Execute the test script
 runTests();
 ```
 
-## Step 3: Run the Script
+---
 
-Ensure your server is running (e.g., `npm run dev` in the `/server` folder) on port `3000`.
-Then, execute the test script:
-
+### Step 10: Run the Script and View Results
+Ensure your backend server is actively running on port 3000.
+In your terminal, execute the script you just built:
 ```bash
 node test_all_apis.js
 ```
 
-## Step 4: Review the Results
-
-Open the generated `api_test_results.txt` file in your root directory. It contains the detailed Request URL, Method, Body, Response Status, and Response Body for every API call made.
+Once the script finishes executing, open the newly created `api_test_results.txt` file in your editor. You will see a detailed log of every request method, URL, payload, and the raw server response for every single flow!
