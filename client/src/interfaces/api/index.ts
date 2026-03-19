@@ -12,3 +12,5 @@ export * from './cart.types';
 export * from './payment.types';
 export * from './public.types';
 export * from './analytics.types';
+export * from './role.types';
+export * from './permission.types';

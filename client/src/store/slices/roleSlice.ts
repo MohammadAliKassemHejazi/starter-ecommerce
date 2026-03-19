@@ -1,14 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as roleService from "@/services/roleService";
 import { RootState } from "../store";
-
-export interface RoleModel {
-  id: string;
-  name: string;
-}
+import { IRoleModel } from "@/interfaces/api/role.types";
 
 interface RoleState {
-  roles: RoleModel[];
+  roles: IRoleModel[];
   error: string | null;
 }
 
@@ -49,7 +45,7 @@ const roleSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(updateRole.fulfilled, (state, action) => {
       const { id, name } = action.payload;
-      const roleIndex = state.roles.findIndex((role: RoleModel) => role.id === id);
+      const roleIndex = state.roles.findIndex((role: IRoleModel) => role.id === id);
       if (roleIndex !== -1) {
         state.roles[roleIndex].name = name;
       }
@@ -58,11 +54,11 @@ const roleSlice = createSlice({
       state.roles = action.payload;
     });
     builder.addCase(deleteRole.fulfilled, (state, action) => {
-      state.roles = state.roles.filter((role: RoleModel) => role.id !== action.meta.arg);
+      state.roles = state.roles.filter((role: IRoleModel) => role.id !== action.meta.arg);
     });
   },
 });
 
-export const rolesSelector = (state: RootState): RoleModel[] | undefined => state.roles.roles;
+export const rolesSelector = (state: RootState): IRoleModel[] | undefined => state.roles.roles;
 
 export default roleSlice.reducer;
