@@ -1,0 +1,849 @@
+Comprehensive API Test Results
+================================
+
+
+--------------------------------------------------
+[2026-03-19T19:03:49.259Z] POST http://localhost:3000/api/user/auth/login
+Request Body: {"email":"admin@admin.com","password":"1234554321"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.348Z] GET http://localhost:3000/api/user/auth/session
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.353Z] GET http://localhost:3000/api/auth/sessions
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.358Z] GET http://localhost:3000/api/users?createdById=me
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.363Z] POST http://localhost:3000/api/users
+Request Body: {"name":"Test User","email":"test_crud@example.com","password":"password123"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.367Z] PUT http://localhost:3000/api/users/me
+Request Body: {"name":"Updated User Name"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.372Z] GET http://localhost:3000/api/admin/roles
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.376Z] POST http://localhost:3000/api/admin/roles
+Request Body: {"name":"ManagerRole"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.383Z] PUT http://localhost:3000/api/admin/roles/1
+Request Body: {"name":"SuperManagerRole"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.387Z] GET http://localhost:3000/api/admin/permissions
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.390Z] POST http://localhost:3000/api/admin/permissions
+Request Body: {"name":"ManageStores"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.394Z] PUT http://localhost:3000/api/admin/permissions/1
+Request Body: {"name":"ManageAllStores"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.397Z] POST http://localhost:3000/api/admin/roles/1/permissions
+Request Body: {"permissionId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.401Z] POST http://localhost:3000/api/users/me/roles
+Request Body: {"roleId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.404Z] GET http://localhost:3000/api/categories
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.407Z] GET http://localhost:3000/api/public/categories
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.410Z] GET http://localhost:3000/api/utile/categories
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.413Z] POST http://localhost:3000/api/categories
+Request Body: {"name":"Electronics"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.417Z] PUT http://localhost:3000/api/categories/update/1
+Request Body: {"name":"Home Electronics"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.420Z] GET http://localhost:3000/api/admin/subcategories
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.422Z] GET http://localhost:3000/api/utile/getSubCategories?id=1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.425Z] POST http://localhost:3000/api/admin/subcategories
+Request Body: {"name":"TVs","categoryId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.429Z] PUT http://localhost:3000/api/admin/subcategories/update/1
+Request Body: {"name":"Smart TVs"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.432Z] GET http://localhost:3000/api/store/getall
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.435Z] GET http://localhost:3000/api/store/getall/user
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.439Z] GET http://localhost:3000/api/public/stores
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.440Z] GET http://localhost:3000/api/public/stores/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.442Z] GET http://localhost:3000/api/store/get?id=1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.444Z] POST http://localhost:3000/api/store/create
+Request Body: {"name":"Tech Store","description":"Best tech"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.447Z] POST http://localhost:3000/api/store/update
+Request Body: {"id":"1","name":"Tech Store Plus"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.449Z] PATCH http://localhost:3000/api/store/update/image
+Request Body: {"storeId":"1","imageUrl":"http://example.com/store.jpg"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.451Z] GET http://localhost:3000/api/shop/getall
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.453Z] GET http://localhost:3000/api/public/get/productListing/?page=1&pageSize=10
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.456Z] GET http://localhost:3000/api/public/stores/1/products?page=1&pageSize=10
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.458Z] GET http://localhost:3000/api/public/products/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.460Z] GET http://localhost:3000/api/shop/get?id=1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.461Z] GET http://localhost:3000/api/shop/get/storeProducts/1?page=1&pageSize=10&searchQuery=&orderBy=
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.463Z] POST http://localhost:3000/api/shop/create
+Request Body: {"title":"Smartphone","price":599,"storeId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.466Z] PATCH http://localhost:3000/api/shop/update
+Request Body: {"id":"1","title":"Smartphone Pro"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.469Z] PATCH http://localhost:3000/api/shop/update/images
+Request Body: {"productId":"1","images":["http://example.com/phone.jpg"]}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.472Z] GET http://localhost:3000/api/cart/get
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.474Z] POST http://localhost:3000/api/cart/update
+Request Body: {"productId":"1","quantity":2,"sizeId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.477Z] PUT http://localhost:3000/api/cart/decrease
+Request Body: {"productId":"1","quantity":1,"sizeId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.480Z] GET http://localhost:3000/api/admin/inventory/orders/status
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.482Z] GET http://localhost:3000/api/admin/orders/last
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.484Z] GET http://localhost:3000/api/admin/orders/1/items
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.487Z] POST http://localhost:3000/api/admin/orders/date-range
+Request Body: {"startDate":"2023-01-01","endDate":"2023-12-31"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.489Z] GET http://localhost:3000/api/favorites
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.492Z] POST http://localhost:3000/api/favorites
+Request Body: {"productId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.495Z] GET http://localhost:3000/api/articles
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.500Z] GET http://localhost:3000/api/public/articles
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.502Z] GET http://localhost:3000/api/articles/get/author
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.504Z] GET http://localhost:3000/api/articles/get?id=1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.505Z] POST http://localhost:3000/api/articles/create
+Request Body: {"title":"Tech News","content":"News content"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.507Z] PATCH http://localhost:3000/api/articles/update/
+Request Body: {"id":"1","title":"Tech News Update"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.509Z] GET http://localhost:3000/api/packages
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.510Z] GET http://localhost:3000/api/packages/active
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.512Z] GET http://localhost:3000/api/packages/limits
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.514Z] GET http://localhost:3000/api/packages?id=1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.516Z] POST http://localhost:3000/api/packages
+Request Body: {"name":"Premium","price":99}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.518Z] PATCH http://localhost:3000/api/packages/update/
+Request Body: {"id":"1","name":"Premium+"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.520Z] POST http://localhost:3000/api/packages/activate
+Request Body: {"packageId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.522Z] POST http://localhost:3000/api/packages/assign
+Request Body: {"packageId":"1","userId":"me"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.524Z] POST http://localhost:3000/api/payment/charge/package
+Request Body: {"packageId":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.525Z] GET http://localhost:3000/api/analytics?startDate=2023-01-01
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.527Z] GET http://localhost:3000/api/analytics/stats?startDate=2023-01-01
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.528Z] POST http://localhost:3000/api/analytics/track
+Request Body: {"event":"page_view"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.530Z] GET http://localhost:3000/api/admin/inventory/alerts
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.531Z] GET http://localhost:3000/api/admin/inventory/sales
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.575Z] GET http://localhost:3000/api/comments?productId=1&page=1&limit=10
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.577Z] POST http://localhost:3000/api/comments/add
+Request Body: {"productId":"1","text":"Great product!"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.580Z] GET http://localhost:3000/api/utile/getSizes
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.582Z] GET http://localhost:3000/api/api/taxes
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.584Z] GET http://localhost:3000/api/api/shipping-methods
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.586Z] GET http://localhost:3000/api/api/promotions
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.588Z] GET http://localhost:3000/api/api/translations/en
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.589Z] GET http://localhost:3000/api/api/returns
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.622Z] DELETE http://localhost:3000/api/favorites/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.624Z] DELETE http://localhost:3000/api/cart/delete/1/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.626Z] DELETE http://localhost:3000/api/cart/delete
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.628Z] DELETE http://localhost:3000/api/shop/delete/image/
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.629Z] DELETE http://localhost:3000/api/shop/delete/
+Request Body: {"id":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.631Z] DELETE http://localhost:3000/api/store/delete/image/
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.633Z] DELETE http://localhost:3000/api/store/delete/
+Request Body: {"id":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.634Z] DELETE http://localhost:3000/api/admin/roles/1/permissions/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.636Z] DELETE http://localhost:3000/api/users/me/roles/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.638Z] DELETE http://localhost:3000/api/admin/permissions/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.640Z] DELETE http://localhost:3000/api/admin/roles/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.642Z] DELETE http://localhost:3000/api/admin/subcategories/delete/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.644Z] DELETE http://localhost:3000/api/categories/delete/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.646Z] DELETE http://localhost:3000/api/packages/1
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.649Z] DELETE http://localhost:3000/api/articles/delete/
+Request Body: {"id":"1"}
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.650Z] DELETE http://localhost:3000/api/users/me
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
+
+--------------------------------------------------
+[2026-03-19T19:03:49.652Z] POST http://localhost:3000/api/user/auth/logout
+Request Body: None
+Response Status: ERROR
+Response Body: {
+  "error": "fetch failed"
+}
+--------------------------------------------------
