@@ -158,7 +158,19 @@ const createRateLimiters = () => {
     legacyHeaders: false,
   });
 
-  return { generalLimiter, authLimiter };
+  // Rate limiter for public API endpoints
+  const publicApiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: IS_PRODUCTION ? 200 : 1000, // More generous for public browsing
+    message: {
+      error: 'Too many requests to public API from this IP, please try again later.',
+      retryAfter: '15 minutes'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  return { generalLimiter, authLimiter, publicApiLimiter };
 };
 
 // Enhanced multer configuration with better security
@@ -342,7 +354,7 @@ async function createApp(): Promise<Express> {
   }));
   
   // Rate limiting
-  const { generalLimiter, authLimiter } = createRateLimiters();
+  const { generalLimiter, authLimiter, publicApiLimiter } = createRateLimiters();
   app.use(generalLimiter);
   
   // Static file serving with caching
@@ -408,7 +420,7 @@ async function createApp(): Promise<Express> {
   app.use('/api/taxes', taxRouter);
   app.use('/api/returns', returnRouter);
   app.use('/api/paypal', paypalRouter);
-  app.use('/api/public', publicRouter);
+  app.use('/api/public', publicApiLimiter, publicRouter);
   // Admin routes (could add admin middleware here)
   app.use('/api/admin/users', usersRouter);
   app.use('/api/admin/orders', ordersRouter);
