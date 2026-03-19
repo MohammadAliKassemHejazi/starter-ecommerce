@@ -32,9 +32,37 @@ export const mockDatabase = {
   ] as UserModel[],
 
   roles: [
-    { id: "role-1", name: "Super Admin", permissions: ["manage_all", "read_users", "write_users", "read_stores", "write_stores", "read_products", "write_products"] },
-    { id: "role-2", name: "Store Owner", permissions: ["read_stores", "write_stores", "read_products", "write_products"] },
-    { id: "role-3", name: "Customer", permissions: ["read_products", "write_reviews"] }
+    {
+      id: "role-1",
+      name: "Super Admin",
+      permissions: [
+        { id: "perm-1", name: "manage_all" },
+        { id: "perm-2", name: "read_users" },
+        { id: "perm-3", name: "write_users" },
+        { id: "perm-4", name: "read_stores" },
+        { id: "perm-5", name: "write_stores" },
+        { id: "perm-6", name: "read_products" },
+        { id: "perm-7", name: "write_products" }
+      ]
+    },
+    {
+      id: "role-2",
+      name: "Store Owner",
+      permissions: [
+        { id: "perm-4", name: "read_stores" },
+        { id: "perm-5", name: "write_stores" },
+        { id: "perm-6", name: "read_products" },
+        { id: "perm-7", name: "write_products" }
+      ]
+    },
+    {
+      id: "role-3",
+      name: "Customer",
+      permissions: [
+        { id: "perm-6", name: "read_products" },
+        { id: "perm-8", name: "write_reviews" }
+      ]
+    }
   ],
 
   permissions: [
