@@ -1,24 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import * as analyticsService from '../../services/analyticsService';
-
-interface AnalyticsEvent {
-  id: string;
-  eventType: string;
-  eventData: any;
-  userId: string;
-  createdAt: string;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
-
-interface AnalyticsStats {
-  eventType: string;
-  count: number;
-}
+import { AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse } from '../../interfaces/api/analytics.types';
 
 interface AnalyticsState {
   events: AnalyticsEvent[];
@@ -52,7 +35,7 @@ const initialState: AnalyticsState = {
   }
 };
 
-export const fetchAnalytics = createAsyncThunk(
+export const fetchAnalytics = createAsyncThunk<AnalyticsListResponse, any>(
   'analytics/fetchAnalytics',
   async (params: any, { rejectWithValue }) => {
     try {
@@ -64,7 +47,7 @@ export const fetchAnalytics = createAsyncThunk(
   }
 );
 
-export const fetchAnalyticsStats = createAsyncThunk(
+export const fetchAnalyticsStats = createAsyncThunk<AnalyticsStatsResponse, any>(
   'analytics/fetchStats',
   async (params: any, { rejectWithValue }) => {
     try {
@@ -101,12 +84,11 @@ const analyticsSlice = createSlice({
       })
       .addCase(fetchAnalytics.fulfilled, (state, action) => {
         state.loading = false;
-        const data = action.payload.data || {};
-        state.events = data.items || [];
-        state.total = data.total || 0;
-        state.totalPages = data.totalPages || 0;
-        state.page = data.page || 1;
-        state.limit = data.limit || 10;
+        state.events = action.payload.data || [];
+        state.total = action.payload.meta?.total || 0;
+        state.totalPages = action.payload.meta?.totalPages || 0;
+        state.page = action.payload.meta?.page || 1;
+        state.limit = action.payload.meta?.pageSize || 10;
       })
       .addCase(fetchAnalytics.rejected, (state, action) => {
         state.loading = false;
