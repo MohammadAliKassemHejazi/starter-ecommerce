@@ -22,17 +22,17 @@ Since this is a large task, I have completed the initial round focusing on the m
 - [ ] \`pages/comments/\`
 - [ ] \`pages/dashboard/\`
 - [ ] \`pages/favorites/\`
-- [ ] \`pages/packages/\`
+- [x] \`pages/packages/\` -> Package, PackageResponse
 - [ ] \`pages/permissions/\`
 - [ ] \`pages/plans.tsx\`
 - [ ] \`pages/profile.tsx\`
 - [ ] \`pages/promotions/\`
 - [ ] \`pages/returns/\`
-- [ ] \`pages/roles/\`
+- [x] \`pages/roles/\` -> IRoleModel, RoleResponse
 - [ ] \`pages/settings.tsx\`
 - [ ] \`pages/shipping/\`
 - [ ] \`pages/sizes/\`
 - [ ] \`pages/subcategories/\`
 - [ ] \`pages/taxes/\`
-- [ ] \`pages/users/\`
+- [x] \`pages/users/\` -> UserModel, UserResponse
 - [x] `pages/analytics/` -> AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse
