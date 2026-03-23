@@ -36,3 +36,9 @@ Since this is a large task, I have completed the initial round focusing on the m
 - [ ] \`pages/taxes/\`
 - [ ] \`pages/users/\`
 - [x] `pages/analytics/` -> AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse
+
+- [x] `pages/dashboard/` -> Dashboard Analytics (SalesData, InventoryAlerts, OrderStatuses)
+
+- [x] `pages/comments/` -> Comment (CommentViewModel), Product
+
+- [x] `pages/auth/` -> Auth flows use standard SignInResponse/SignUpResponse matching auth controller outputs.

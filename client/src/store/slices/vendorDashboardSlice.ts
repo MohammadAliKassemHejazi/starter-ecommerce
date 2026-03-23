@@ -4,7 +4,7 @@ import { RootState } from '../store';
 import { Console } from 'console';
 
 interface VendorDashboardState {
-  salesData: { date: string; totalSales: number }[];
+  salesData: { totalSales: number, monthlySales: { month: string, totalAmount: number }[] } | null;
   inventoryAlerts: { id: string; productName: string; quantity: number }[];
   orderStatuses: { id: string; status: string; date: string }[];
   loading: boolean;
@@ -12,7 +12,7 @@ interface VendorDashboardState {
 }
 
 const initialState: VendorDashboardState = {
-  salesData: [],
+  salesData: null,
   inventoryAlerts: [],
   orderStatuses: [],
   loading: false,
