@@ -75,16 +75,16 @@ export const mockDatabase = {
   ],
 
   categories: [
-    { id: "cat-elec", name: "Electronics & Tech", description: "Cutting-edge devices and smart gadgets.", isActive: true, createdAt: d(400), updatedAt: d(400) },
-    { id: "cat-fash", name: "Apparel & Fashion", description: "Trendy clothing for all seasons.", isActive: true, createdAt: d(400), updatedAt: d(400) },
-    { id: "cat-home", name: "Home & Living", description: "Furniture, decor, and kitchenware.", isActive: true, createdAt: d(380), updatedAt: d(380) }
+    { id: "cat-elec", name: "Electronics & Tech", description: "Cutting-edge devices and smart gadgets.", createdAt: d(400), updatedAt: d(400) },
+    { id: "cat-fash", name: "Apparel & Fashion", description: "Trendy clothing for all seasons.", createdAt: d(400), updatedAt: d(400) },
+    { id: "cat-home", name: "Home & Living", description: "Furniture, decor, and kitchenware.", createdAt: d(380), updatedAt: d(380) }
   ] as ICategories[],
 
   subcategories: [
-    { id: "sub-phones", name: "Smartphones", description: "Latest mobile devices.", categoryId: "cat-elec", isActive: true, createdAt: d(390), updatedAt: d(390) },
-    { id: "sub-laptops", name: "Laptops & PCs", description: "Computing powerhouses.", categoryId: "cat-elec", isActive: true, createdAt: d(390), updatedAt: d(390) },
-    { id: "sub-shoes", name: "Footwear", description: "Sneakers, boots, and heels.", categoryId: "cat-fash", isActive: true, createdAt: d(390), updatedAt: d(390) },
-    { id: "sub-shirts", name: "Tops & Tees", description: "Casual and formal shirts.", categoryId: "cat-fash", isActive: true, createdAt: d(390), updatedAt: d(390) }
+    { id: "sub-phones", name: "Smartphones", description: "Latest mobile devices.", categoryId: "cat-elec", createdAt: d(390), updatedAt: d(390) },
+    { id: "sub-laptops", name: "Laptops & PCs", description: "Computing powerhouses.", categoryId: "cat-elec", createdAt: d(390), updatedAt: d(390) },
+    { id: "sub-shoes", name: "Footwear", description: "Sneakers, boots, and heels.", categoryId: "cat-fash", createdAt: d(390), updatedAt: d(390) },
+    { id: "sub-shirts", name: "Tops & Tees", description: "Casual and formal shirts.", categoryId: "cat-fash", createdAt: d(390), updatedAt: d(390) }
   ] as ISubCategories[],
 
   stores: [

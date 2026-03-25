@@ -103,11 +103,11 @@ export const pages_categories_create_tsx_mocks = {
 };
 
 export const pages_categories_edit_tsx_mocks = {
-  categoryEditFormInitialData: { id: "cat-1", name: "Electronics (Updated)", description: "Gadgets.", isActive: true } as ICategories
+  categoryEditFormInitialData: { id: "cat-1", name: "Electronics (Updated)", description: "Gadgets." } as ICategories
 };
 
 export const pages_categories_index_tsx_mocks = {
-  categoriesList: [{ id: "cat-1", name: "Electronics", description: "Gadgets.", isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as ICategories[]
+  categoriesList: [{ id: "cat-1", name: "Electronics", description: "Gadgets.", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as ICategories[]
 };
 
 export const pages_comments_index_tsx_mocks = {
@@ -239,11 +239,11 @@ export const pages_subcategories_create_tsx_mocks = {
 };
 
 export const pages_subcategories_edit_tsx_mocks = {
-  subcategoryEditFormInitialData: { id: "sub-1", name: "Smartphones 5G", description: "Phones.", categoryId: "cat-1", isActive: true } as ISubCategories
+  subcategoryEditFormInitialData: { id: "sub-1", name: "Smartphones 5G", description: "Phones.", categoryId: "cat-1" } as ISubCategories
 };
 
 export const pages_subcategories_index_tsx_mocks = {
-  subCategoriesList: [{ id: "sub-1", name: "Smartphones", description: "Phones.", categoryId: "cat-1", isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as ISubCategories[]
+  subCategoriesList: [{ id: "sub-1", name: "Smartphones", description: "Phones.", categoryId: "cat-1", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as ISubCategories[]
 };
 
 export const pages_taxes_index_tsx_mocks = {

@@ -3,8 +3,8 @@ export interface ICategories {
     id?: string;
     name: string;
     description?: string;
-    isActive?: boolean;
-    createdById?: string;
+
+    userId?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -14,7 +14,7 @@ export interface ISubCategories {
     name: string;
     description?: string;
     categoryId?: string;
-    isActive?: boolean;
+
     createdAt?: string;
     updatedAt?: string;
 }

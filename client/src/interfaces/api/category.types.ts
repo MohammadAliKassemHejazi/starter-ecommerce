@@ -5,10 +5,10 @@ export interface CategoryResponse extends ApiResponse<{
   id: string;
   name: string;
   description?: string;
-  isActive: boolean;
+
   createdAt: string;
   updatedAt: string;
-  createdById?: string;
+  userId?: string;
   createdBy?: {
     id: string;
     name: string;
@@ -18,7 +18,7 @@ export interface CategoryResponse extends ApiResponse<{
     id: string;
     name: string;
     description?: string;
-    isActive: boolean;
+
   }>;
 }> {}
 
@@ -26,10 +26,10 @@ export interface CategoriesListResponse extends PaginatedApiResponse<{
   id: string;
   name: string;
   description?: string;
-  isActive: boolean;
+
   createdAt: string;
   updatedAt: string;
-  createdById?: string;
+  userId?: string;
   createdBy?: {
     id: string;
     name: string;
@@ -39,7 +39,7 @@ export interface CategoriesListResponse extends PaginatedApiResponse<{
     id: string;
     name: string;
     description?: string;
-    isActive: boolean;
+
   }>;
 }> {}
 
@@ -47,20 +47,20 @@ export interface CreateCategoryResponse extends ApiResponse<{
   id: string;
   name: string;
   description?: string;
-  isActive: boolean;
+
   createdAt: string;
   updatedAt: string;
-  createdById?: string;
+  userId?: string;
 }> {}
 
 export interface UpdateCategoryResponse extends ApiResponse<{
   id: string;
   name: string;
   description?: string;
-  isActive: boolean;
+
   createdAt: string;
   updatedAt: string;
-  createdById?: string;
+  userId?: string;
 }> {}
 
 export interface DeleteCategoryResponse extends ApiResponse<{
