@@ -18,7 +18,7 @@ Since this is a large task, I have completed the initial round focusing on the m
 
 - [ ] \`pages/analytics/\`
 - [ ] \`pages/auth/\`
-- [ ] \`pages/categories/\`
+- [x] \`pages/categories/\` -> ICategories (refactored isActive->removed)
 - [ ] \`pages/comments/\`
 - [ ] \`pages/dashboard/\`
 - [ ] \`pages/favorites/\`
@@ -32,7 +32,7 @@ Since this is a large task, I have completed the initial round focusing on the m
 - [ ] \`pages/settings.tsx\`
 - [ ] \`pages/shipping/\`
 - [ ] \`pages/sizes/\`
-- [ ] \`pages/subcategories/\`
+- [x] \`pages/subcategories/\` -> ISubCategories (refactored isActive->removed)
 - [ ] \`pages/taxes/\`
 - [ ] \`pages/users/\`
 - [x] `pages/analytics/` -> AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse

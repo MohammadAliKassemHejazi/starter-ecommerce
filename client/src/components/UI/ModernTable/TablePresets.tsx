@@ -203,7 +203,6 @@ export const CategoryTablePreset = {
         </span>
       )
     },
-    createStatusColumn(),
     createDateColumn('createdAt', 'Created')
   ],
   

@@ -6,6 +6,17 @@ import categoryErrors from '../utils/errors/category.errors';
 import { Op } from 'sequelize';
 import * as utilService from './utile.service';
 
+export const formatCategory = (category: any): ICategoryAttributes => {
+  return {
+    id: category.id,
+    name: category.name,
+    description: category.description,
+    userId: category.userId,
+    createdAt: category.createdAt,
+    updatedAt: category.updatedAt,
+  };
+};
+
 export const fetchCategories = async (rootUserId: string): Promise<ICategoryAttributes[]> => {
   try {
     // 1. Get all user IDs in the management hierarchy (including the root user)
@@ -31,7 +42,7 @@ export const fetchCategories = async (rootUserId: string): Promise<ICategoryAttr
       // }],
     });
 
-    return categories as ICategoryAttributes[];
+    return categories.map(formatCategory);
   } catch (error) {
     console.error('Error fetching categories by managed users:', error);
     // Depending on your error handling policy, you might throw or return an empty array
@@ -42,7 +53,7 @@ export const fetchCategories = async (rootUserId: string): Promise<ICategoryAttr
 export const createCategory = async (data: { name: string; description?: string; userId: string }): Promise<ICategoryAttributes> => {
   const { name, description, userId } = data;
   const category = await db.Category.create({ name, description, userId });
-  return category;
+  return formatCategory(category);
 };
 
 export const updateCategory = async (id: string, data: { name: string; description?: string }): Promise<ICategoryAttributes> => {
@@ -58,7 +69,7 @@ export const updateCategory = async (id: string, data: { name: string; descripti
     description: description,
   });
 
-  return updatedCategory;
+  return formatCategory(updatedCategory);
 };
 
 export const deleteCategory = async (id: string): Promise<void> => {

@@ -84,21 +84,6 @@ const CategoriesGrid = () => {
           </div>
         </div>
       </div>
-      <div className="col-md-3">
-        <div className="card bg-success text-white">
-          <div className="card-body">
-            <div className="d-flex align-items-center">
-              <div className="flex-grow-1">
-                <h6 className="card-title mb-0">Active Categories</h6>
-                <h3 className="mb-0">{categories?.filter((c: any) => c.isActive !== false).length || 0}</h3>
-              </div>
-              <div className="fs-1">
-                <i className="bi bi-check-circle"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   ) : null;
 
