@@ -75,10 +75,17 @@ This document tracks the testing of backend endpoints to ensure their responses 
 
 ### 🏷️ Category Endpoints
 
-- [ ] `GET /api/categories` -> `CategoriesListResponse`
-- [ ] `POST /api/categories` -> `CreateCategoryResponse`
-- [ ] `PUT /api/categories/update/:id` -> `UpdateCategoryResponse`
-- [ ] `DELETE /api/categories/delete/:id` -> `DeleteCategoryResponse`
+- [x] `GET /api/categories` -> `CategoriesListResponse`
+- [x] `POST /api/categories` -> `CreateCategoryResponse`
+- [x] `PUT /api/categories/update/:id` -> `UpdateCategoryResponse`
+- [x] `DELETE /api/categories/delete/:id` -> `DeleteCategoryResponse`
+
+### 🏷️ Subcategory Endpoints
+
+- [x] `GET /api/subcategories` -> `SubCategoriesListResponse`
+- [x] `POST /api/subcategories` -> `CreateSubCategoryResponse`
+- [x] `PUT /api/subcategories/update/:id` -> `UpdateSubCategoryResponse`
+- [x] `DELETE /api/subcategories/delete/:id` -> `DeleteSubCategoryResponse`
 
 ### 👥 User Endpoints
 
@@ -134,25 +141,25 @@ This document tracks the testing of backend endpoints to ensure their responses 
 - [ ] `GET /api/user/auth/session` -> `SessionResponse`
 - [ ] `GET /api/auth/sessions` -> `UserSessionsResponse`
 
-- [ ] GET /api/store/getall -> StoresListResponse
-- [ ] GET /api/store/getall/user -> StoresListResponse
-- [ ] GET /api/store/getall/user/filter -> StoresListResponse
-- [ ] GET /api/store/get/:id -> StoreResponse
-- [ ] POST /api/store/create -> CreateStoreResponse
+- [x] GET /api/store/getall -> StoresListResponse
+- [x] GET /api/store/getall/user -> StoresListResponse
+- [x] GET /api/store/getall/user/filter -> StoresListResponse
+- [x] GET /api/store/get/:id -> StoreResponse
+- [x] POST /api/store/create -> CreateStoreResponse
 - [ ] POST /api/store/update -> UpdateStoreResponse
 - [ ] PATCH /api/store/update/image -> UpdateStoreResponse
-- [ ] DELETE /api/store/delete/:id -> DeleteStoreResponse
-- [ ] DELETE /api/store/delete/image/:id -> DeleteStoreResponse
+- [x] DELETE /api/store/delete/:id -> DeleteStoreResponse
+- [x] DELETE /api/store/delete/image/:id -> DeleteStoreResponse
 ### 🛒 Shop (Products) Endpoints
 
-- [ ] GET /api/shop/getall -> ProductsListResponse
+- [x] GET /api/shop/getall -> ProductsListResponse
 - [ ] GET /api/shop/get/single?id=:id -> ProductResponse
-- [ ] GET /api/shop/get/storeProducts/:storeId -> ProductsListResponse
-- [ ] POST /api/shop/create -> CreateProductResponse
-- [ ] PATCH /api/shop/update -> UpdateProductResponse
-- [ ] PATCH /api/shop/update/images -> UpdateProductResponse
-- [ ] DELETE /api/shop/delete/:id -> DeleteProductResponse
-- [ ] DELETE /api/shop/delete/image/:id -> DeleteProductResponse
+- [x] GET /api/shop/get/storeProducts/:storeId -> ProductsListResponse
+- [x] POST /api/shop/create -> CreateProductResponse
+- [x] PATCH /api/shop/update -> UpdateProductResponse
+- [x] PATCH /api/shop/update/images -> UpdateProductResponse
+- [x] DELETE /api/shop/delete/:id -> DeleteProductResponse
+- [x] DELETE /api/shop/delete/image/:id -> DeleteProductResponse
 
 ### 📦 Order Endpoints
 
@@ -162,10 +169,10 @@ This document tracks the testing of backend endpoints to ensure their responses 
 
 ### 🏷️ Category Endpoints
 
-- [ ] GET /api/categories -> CategoriesListResponse
-- [ ] POST /api/categories -> CreateCategoryResponse
-- [ ] PUT /api/categories/update/:id -> UpdateCategoryResponse
-- [ ] DELETE /api/categories/delete/:id -> DeleteCategoryResponse
+- [x] GET /api/categories -> CategoriesListResponse
+- [x] POST /api/categories -> CreateCategoryResponse
+- [x] PUT /api/categories/update/:id -> UpdateCategoryResponse
+- [x] DELETE /api/categories/delete/:id -> DeleteCategoryResponse
 
 ### 👥 User Endpoints
 
@@ -178,41 +185,41 @@ This document tracks the testing of backend endpoints to ensure their responses 
 
 ### 📝 Article Endpoints
 
-- [ ] GET /api/articles -> ArticlesListResponse
-- [ ] GET /api/articles/get/author -> ArticlesListResponse
-- [ ] POST /api/articles/create -> CreateArticleResponse
-- [ ] PATCH /api/articles/update/:id -> UpdateArticleResponse
-- [ ] DELETE /api/articles/delete/:id -> DeleteArticleResponse
+- [x] GET /api/articles -> ArticlesListResponse
+- [x] GET /api/articles/get/author -> ArticlesListResponse
+- [x] POST /api/articles/create -> CreateArticleResponse
+- [x] PATCH /api/articles/update/:id -> UpdateArticleResponse
+- [x] DELETE /api/articles/delete/:id -> DeleteArticleResponse
 
 ### 🎁 Package Endpoints
 
-- [ ] GET /api/packages -> PackagesListResponse
+- [x] GET /api/packages -> PackagesListResponse
 - [ ] GET /api/packages?id=:id -> PackageResponse
-- [ ] GET /api/packages/active -> UserPackageResponse
-- [ ] GET /api/packages/limits -> PackageLimitsResponse
+- [x] GET /api/packages/active -> UserPackageResponse
+- [x] GET /api/packages/limits -> PackageLimitsResponse
 - [ ] POST /api/packages/assign -> AssignPackageResponse
-- [ ] POST /api/packages -> CreatePackageResponse
-- [ ] PATCH /api/packages/update/:id -> UpdatePackageResponse
-- [ ] DELETE /api/packages/:id -> DeletePackageResponse
-- [ ] POST /api/packages/activate -> ActivatePackageResponse
+- [x] POST /api/packages -> CreatePackageResponse
+- [x] PATCH /api/packages/update/:id -> UpdatePackageResponse
+- [x] DELETE /api/packages/:id -> DeletePackageResponse
+- [x] POST /api/packages/activate -> ActivatePackageResponse
 
 ### 🌐 Public Endpoints
 
-- [ ] GET /api/public/stores -> PublicStoresListResponse
-- [ ] GET /api/public/stores/:id -> PublicStoresListResponse
-- [ ] GET /api/public/categories -> PublicCategoriesListResponse
-- [ ] GET /api/public/products/:id -> PublicProductsListResponse
+- [x] GET /api/public/stores -> PublicStoresListResponse
+- [x] GET /api/public/stores/:id -> PublicStoresListResponse
+- [x] GET /api/public/categories -> PublicCategoriesListResponse
+- [x] GET /api/public/products/:id -> PublicProductsListResponse
 - [ ] GET /api/public/get/productListing/ -> PublicProductsListResponse
-- [ ] GET /api/public/articles -> ArticlesListResponse
+- [x] GET /api/public/articles -> ArticlesListResponse
 
 ### 💳 Cart & Payment Endpoints
 
 
-- [ ] GET /api/cart/get -> CartResponse
-- [ ] POST /api/cart/update -> AddToCartResponse
-- [ ] PUT /api/cart/decrease -> UpdateCartResponse
-- [ ] DELETE /api/cart/delete/:productId/:sizeId -> RemoveFromCartResponse
-- [ ] DELETE /api/cart/delete -> ClearCartResponse
+- [x] GET /api/cart/get -> CartResponse
+- [x] POST /api/cart/update -> AddToCartResponse
+- [x] PUT /api/cart/decrease -> UpdateCartResponse
+- [x] DELETE /api/cart/delete/:productId/:sizeId -> RemoveFromCartResponse
+- [x] DELETE /api/cart/delete -> ClearCartResponse
 
 ### 🔒 Auth Endpoints
 
@@ -221,5 +228,5 @@ This document tracks the testing of backend endpoints to ensure their responses 
 - [ ] POST /api/user/auth/logout -> LogoutResponse
 - [ ] POST /api/user/auth/register -> SignUpResponse
 - [ ] GET /api/user/auth/session -> SessionResponse
-- [ ] GET /api/auth/sessions -> UserSessionsResponse
+- [x] GET /api/auth/sessions -> UserSessionsResponse
 

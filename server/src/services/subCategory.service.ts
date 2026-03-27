@@ -6,6 +6,22 @@ import subCategoryErrors from '../utils/errors/subCategory.errors';
 // Assuming utilService and the models are available in the scope
 import * as utilService from './utile.service';
 
+export const formatSubCategory = (subCategory: any): ISubCategoryAttributes => {
+  return {
+    id: subCategory.id,
+    name: subCategory.name,
+    categoryId: subCategory.categoryId,
+    userId: subCategory.userId,
+    createdAt: subCategory.createdAt,
+    updatedAt: subCategory.updatedAt,
+    category: subCategory.Category ? {
+      id: subCategory.Category.id,
+      name: subCategory.Category.name,
+      description: subCategory.Category.description,
+    } : undefined,
+  };
+};
+
 export const fetchSubCategories = async (rootUserId: string): Promise<ISubCategoryAttributes[]> => {
   try {
     // 1. Get all user IDs in the management hierarchy
@@ -35,7 +51,7 @@ export const fetchSubCategories = async (rootUserId: string): Promise<ISubCatego
       order: [[{ model: db.Category }, 'name'], ['name']],
     });
 
-    return subCategories;
+    return subCategories.map(formatSubCategory);
   } catch (error) {
     console.error('Error fetching subcategories by managed users:', error);
     throw new Error('Failed to fetch subcategories.');
@@ -47,7 +63,7 @@ export const createSubCategory = async (
 ): Promise<ISubCategoryAttributes> => {
   // Assuming the calling context passes the userId of the creator
   const subCategory = await db.SubCategory.create(data);
-  return subCategory;
+  return formatSubCategory(subCategory);
 };
 
 export const updateSubCategory = async (
@@ -62,7 +78,7 @@ export const updateSubCategory = async (
   // ✅ CRITICAL FIX: Use the update instance method to reliably save changes.
   const updatedSubCategory = await subCategory.update(data);
 
-  return updatedSubCategory;
+  return formatSubCategory(updatedSubCategory);
 };
 
 export const deleteSubCategory = async (id: string): Promise<void> => {
