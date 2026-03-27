@@ -32,7 +32,7 @@ Since this is a large task, I have completed the initial round focusing on the m
 - [ ] \`pages/settings.tsx\`
 - [ ] \`pages/shipping/\`
 - [ ] \`pages/sizes/\`
-- [ ] \`pages/subcategories/\`
+- [x] \`pages/subcategories/\` -> ISubCategories (refactored isActive->removed)
 - [ ] \`pages/taxes/\`
 - [x] \`pages/users/\` -> UserResponse, UsersListResponse
 - [x] `pages/analytics/` -> AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse

@@ -17,6 +17,11 @@ export interface ISubCategories {
 
     createdAt?: string;
     updatedAt?: string;
+    category?: {
+        id: string;
+        name: string;
+        description?: string;
+    };
 }
 
 export interface ICategoriesErrors {

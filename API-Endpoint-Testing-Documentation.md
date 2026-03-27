@@ -75,10 +75,17 @@ This document tracks the testing of backend endpoints to ensure their responses 
 
 ### 🏷️ Category Endpoints
 
-- [ ] `GET /api/categories` -> `CategoriesListResponse`
-- [ ] `POST /api/categories` -> `CreateCategoryResponse`
-- [ ] `PUT /api/categories/update/:id` -> `UpdateCategoryResponse`
-- [ ] `DELETE /api/categories/delete/:id` -> `DeleteCategoryResponse`
+- [x] `GET /api/categories` -> `CategoriesListResponse`
+- [x] `POST /api/categories` -> `CreateCategoryResponse`
+- [x] `PUT /api/categories/update/:id` -> `UpdateCategoryResponse`
+- [x] `DELETE /api/categories/delete/:id` -> `DeleteCategoryResponse`
+
+### 🏷️ Subcategory Endpoints
+
+- [x] `GET /api/subcategories` -> `SubCategoriesListResponse`
+- [x] `POST /api/subcategories` -> `CreateSubCategoryResponse`
+- [x] `PUT /api/subcategories/update/:id` -> `UpdateSubCategoryResponse`
+- [x] `DELETE /api/subcategories/delete/:id` -> `DeleteSubCategoryResponse`
 
 ### 👥 User Endpoints
 
