@@ -18,21 +18,27 @@ Since this is a large task, I have completed the initial round focusing on the m
 
 - [ ] \`pages/analytics/\`
 - [ ] \`pages/auth/\`
-- [ ] \`pages/categories/\`
+- [x] \`pages/categories/\` -> CategoryResponse, CategoriesListResponse
 - [ ] \`pages/comments/\`
 - [ ] \`pages/dashboard/\`
 - [ ] \`pages/favorites/\`
-- [x] \`pages/packages/\` -> Package, PackageResponse
-- [ ] \`pages/permissions/\`
+- [ ] \`pages/packages/\`
+- [x] \`pages/permissions/\` -> PermissionResponse, PermissionsListResponse
 - [ ] \`pages/plans.tsx\`
 - [ ] \`pages/profile.tsx\`
 - [ ] \`pages/promotions/\`
 - [ ] \`pages/returns/\`
-- [x] \`pages/roles/\` -> IRoleModel, RoleResponse
+- [x] \`pages/roles/\` -> RoleResponse, RolesListResponse
 - [ ] \`pages/settings.tsx\`
 - [ ] \`pages/shipping/\`
 - [ ] \`pages/sizes/\`
 - [ ] \`pages/subcategories/\`
 - [ ] \`pages/taxes/\`
-- [x] \`pages/users/\` -> UserModel, UserResponse
+- [x] \`pages/users/\` -> UserResponse, UsersListResponse
 - [x] `pages/analytics/` -> AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse
+
+- [x] `pages/dashboard/` -> Dashboard Analytics (SalesData, InventoryAlerts, OrderStatuses)
+
+- [x] `pages/comments/` -> Comment (CommentViewModel), Product
+
+- [x] `pages/auth/` -> Auth flows use standard SignInResponse/SignUpResponse matching auth controller outputs.

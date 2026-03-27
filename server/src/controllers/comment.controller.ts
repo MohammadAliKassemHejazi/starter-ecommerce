@@ -9,10 +9,7 @@ export const getComments = async (req: Request, res: Response) => {
     const pageSize = parseInt(req.query.limit as string) || 5;
 
     if (!productId) {
-      return res.status(400).json({
-        success: false,
-        message: 'Product ID is required',
-      });
+      return res.status(400).json({ error: 'Product ID is required' });
     }
 
     const { count, rows: comments } = await db.Comment.findAndCountAll({
@@ -28,14 +25,12 @@ export const getComments = async (req: Request, res: Response) => {
       offset: (page - 1) * pageSize,
     });
 
-    res.status(200).json({
-      success: true,
-      data: {
-        items: comments,
-        total: count,
-        page,
-        pageSize,
-      },
+    // Let responseStandardizer format it
+    res.json({
+      items: comments,
+      total: count,
+      page,
+      pageSize,
     });
   } catch (error) {
     console.error('Error getting comments:', error);
@@ -53,19 +48,13 @@ export const addComment = async (req: Request, res: Response) => {
 
     // Validate rating
     if (rating < 1 || rating > 5) {
-      return res.status(400).json({
-        success: false,
-        message: 'Rating must be between 1 and 5',
-      });
+      return res.status(400).json({ error: 'Rating must be between 1 and 5' });
     }
 
     // Check if product exists
     const product = await db.Product.findByPk(productId);
     if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: 'Product not found',
-      });
+      return res.status(404).json({ error: 'Product not found' });
     }
 
     const comment = await db.Comment.create({
@@ -85,11 +74,7 @@ export const addComment = async (req: Request, res: Response) => {
       ],
     });
 
-    res.status(201).json({
-      success: true,
-      data: commentWithUser,
-      message: 'Comment added successfully',
-    });
+    res.status(201).json(commentWithUser);
   } catch (error) {
     console.error('Error adding comment:', error);
     res.status(500).json({
@@ -110,25 +95,16 @@ export const updateComment = async (req: Request, res: Response) => {
     });
 
     if (!comment) {
-      return res.status(404).json({
-        success: false,
-        message: 'Comment not found or you do not have permission to edit it',
-      });
+      return res.status(404).json({ error: 'Comment not found or you do not have permission to edit it' });
     }
 
     if (rating && (rating < 1 || rating > 5)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Rating must be between 1 and 5',
-      });
+      return res.status(400).json({ error: 'Rating must be between 1 and 5' });
     }
 
     await comment.update({ text, rating });
 
-    res.status(200).json({
-      success: true,
-      message: 'Comment updated successfully',
-    });
+    res.json({ message: 'Comment updated successfully' });
   } catch (error) {
     console.error('Error updating comment:', error);
     res.status(500).json({
@@ -148,18 +124,12 @@ export const deleteComment = async (req: Request, res: Response) => {
     });
 
     if (!comment) {
-      return res.status(404).json({
-        success: false,
-        message: 'Comment not found or you do not have permission to delete it',
-      });
+      return res.status(404).json({ error: 'Comment not found or you do not have permission to delete it' });
     }
 
     await comment.destroy();
 
-    res.status(200).json({
-      success: true,
-      message: 'Comment deleted successfully',
-    });
+    res.json({ message: 'Comment deleted successfully' });
   } catch (error) {
     console.error('Error deleting comment:', error);
     res.status(500).json({

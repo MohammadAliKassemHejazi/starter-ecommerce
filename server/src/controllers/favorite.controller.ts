@@ -31,10 +31,7 @@ export const getFavorites = async (req: Request, res: Response) => {
       return favJson;
     });
 
-    res.status(200).json({
-      success: true,
-      data: formattedFavorites,
-    });
+    res.json(formattedFavorites);
   } catch (error) {
     console.error('Error getting favorites:', error);
     res.status(500).json({
@@ -52,10 +49,7 @@ export const addToFavorites = async (req: Request, res: Response) => {
     // Check if product exists
     const product = await db.Product.findByPk(productId);
     if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: 'Product not found',
-      });
+      return res.status(404).json({ error: 'Product not found' });
     }
 
     // Check if already in favorites
@@ -64,10 +58,7 @@ export const addToFavorites = async (req: Request, res: Response) => {
     });
 
     if (existingFavorite) {
-      return res.status(400).json({
-        success: false,
-        message: 'Product already in favorites',
-      });
+      return res.status(400).json({ error: 'Product already in favorites' });
     }
 
     const favorite = await db.Favorite.create({
@@ -75,11 +66,7 @@ export const addToFavorites = async (req: Request, res: Response) => {
       productId,
     });
 
-    res.status(201).json({
-      success: true,
-      data: favorite,
-      message: 'Product added to favorites',
-    });
+    res.status(201).json(favorite);
   } catch (error) {
     console.error('Error adding to favorites:', error);
     res.status(500).json({
@@ -99,18 +86,12 @@ export const removeFromFavorites = async (req: Request, res: Response) => {
     });
 
     if (!favorite) {
-      return res.status(404).json({
-        success: false,
-        message: 'Favorite not found',
-      });
+      return res.status(404).json({ error: 'Favorite not found' });
     }
 
     await favorite.destroy();
 
-    res.status(200).json({
-      success: true,
-      message: 'Product removed from favorites',
-    });
+    res.json({ message: 'Product removed from favorites' });
   } catch (error) {
     console.error('Error removing from favorites:', error);
     res.status(500).json({
