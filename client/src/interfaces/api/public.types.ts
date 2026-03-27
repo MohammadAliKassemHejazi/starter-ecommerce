@@ -99,13 +99,11 @@ export interface PublicCategoryResponse extends ApiResponse<{
   id: string;
   name: string;
   description?: string;
-  isActive: boolean;
   createdAt: string;
   subcategories?: Array<{
     id: string;
     name: string;
     description?: string;
-    isActive: boolean;
   }>;
 }> {}
 
@@ -113,12 +111,10 @@ export interface PublicCategoriesListResponse extends PaginatedApiResponse<{
   id: string;
   name: string;
   description?: string;
-  isActive: boolean;
   createdAt: string;
   subcategories?: Array<{
     id: string;
     name: string;
     description?: string;
-    isActive: boolean;
   }>;
 }> {}
