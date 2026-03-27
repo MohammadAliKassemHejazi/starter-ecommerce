@@ -20,12 +20,12 @@ interface OrderShipping {
   trackingNumber: string;
   carrier: string;
   status: 'PENDING' | 'SHIPPED' | 'DELIVERED';
-  Order?: {
+  order?: {
     id: string;
     orderNumber: string;
     totalPrice: number;
   };
-  ShippingMethod?: {
+  shippingMethod?: {
     id: string;
     name: string;
     cost: number;
@@ -175,7 +175,7 @@ const ShippingPage = () => {
   // Table columns for order shippings
   const orderShippingColumns = [
     {
-      key: 'Order',
+      key: 'order',
       label: 'Order',
       render: (value: any) => value ? (
         <div>

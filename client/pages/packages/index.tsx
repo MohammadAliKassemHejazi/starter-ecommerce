@@ -12,6 +12,11 @@ interface Package {
   description?: string;
   storeLimit: number;
   categoryLimit: number;
+  productLimit: number;
+  userLimit: number;
+  isSuperAdminPackage: boolean;
+  price: number;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }
