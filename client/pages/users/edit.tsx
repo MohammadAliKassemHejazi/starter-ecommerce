@@ -25,8 +25,13 @@ const EditUserModal = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!router.query.user) {
+      showToast.error("User data is missing.");
+      return;
+    }
     try {
-      await dispatch(updateUser({ id: router.query.id as string, name, email }));
+      const user = JSON.parse(router.query.user as string);
+      await dispatch(updateUser({ id: user.id as string, name, email }));
       showToast.success("User updated successfully");
       router.push("/users");
     } catch (error) {
