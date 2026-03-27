@@ -18,23 +18,23 @@ Since this is a large task, I have completed the initial round focusing on the m
 
 - [ ] \`pages/analytics/\`
 - [ ] \`pages/auth/\`
-- [x] \`pages/categories/\` -> ICategories (refactored isActive->removed)
+- [x] \`pages/categories/\` -> CategoryResponse, CategoriesListResponse
 - [ ] \`pages/comments/\`
 - [ ] \`pages/dashboard/\`
 - [ ] \`pages/favorites/\`
 - [ ] \`pages/packages/\`
-- [ ] \`pages/permissions/\`
+- [x] \`pages/permissions/\` -> PermissionResponse, PermissionsListResponse
 - [ ] \`pages/plans.tsx\`
 - [ ] \`pages/profile.tsx\`
 - [ ] \`pages/promotions/\`
 - [ ] \`pages/returns/\`
-- [ ] \`pages/roles/\`
+- [x] \`pages/roles/\` -> RoleResponse, RolesListResponse
 - [ ] \`pages/settings.tsx\`
 - [ ] \`pages/shipping/\`
 - [ ] \`pages/sizes/\`
 - [x] \`pages/subcategories/\` -> ISubCategories (refactored isActive->removed)
 - [ ] \`pages/taxes/\`
-- [ ] \`pages/users/\`
+- [x] \`pages/users/\` -> UserResponse, UsersListResponse
 - [x] `pages/analytics/` -> AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse
 
 - [x] `pages/dashboard/` -> Dashboard Analytics (SalesData, InventoryAlerts, OrderStatuses)

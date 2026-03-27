@@ -186,18 +186,18 @@ export async function generateMetadata({ params }: { params: { id: string } }, c
     }
 
     return {
-      title: store?.data?.metaTitle || store?.data?.name || "Store Page",
-      description: store?.data?.metaDescription || store?.data?.description || "Discover our products",
+      title: store?.data?.name || "Store Page",
+      description: store?.data?.description || "Discover our products",
       openGraph: {
-        title: store?.data?.metaTitle || store?.data?.name || "Store Page",
-        description: store?.data?.metaDescription || store?.data?.description || "Discover our products",
+        title: store?.data?.name || "Store Page",
+        description: store?.data?.description || "Discover our products",
         images: [{ url: store?.data?.imgUrl || "/default-store-image.jpg" }],
         url: `${process.env.NEXT_PUBLIC_BASE_URL}/stores/${params.id}`,
       },
       twitter: {
         card: "summary_large_image",
-        title: store?.data?.metaTitle || store?.data?.name || "Store Page",
-        description: store?.data?.metaDescription || store?.data?.description || "Discover our products",
+        title: store?.data?.name || "Store Page",
+        description: store?.data?.description || "Discover our products",
         image: store?.data?.imgUrl || "/default-store-image.jpg",
       },
     };

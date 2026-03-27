@@ -88,8 +88,8 @@ export const mockDatabase = {
   ] as ISubCategories[],
 
   stores: [
-    { id: "store-tech", name: "Tech Haven", description: "Your one-stop shop for premium electronics, offering the latest smartphones, audio gear, and laptops from top brands.", imgUrl: "https://images.unsplash.com/photo-1531297172864-df2240c9b1b1", categoryId: "cat-elec", userId: "user-storeowner1", createdAt: d(340), updatedAt: d(340), metaTitle: "Tech Haven Store", metaDescription: "Buy electronics online" },
-    { id: "store-fash", name: "Fashion Hub", description: "Curated styles for the modern individual. We source high-quality fabrics and unique designs from global creators.", imgUrl: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04", categoryId: "cat-fash", userId: "user-storeowner2", createdAt: d(290), updatedAt: d(290), metaTitle: "Fashion Hub Boutique", metaDescription: "Trendy clothing" },
+    { id: "store-tech", name: "Tech Haven", description: "Your one-stop shop for premium electronics, offering the latest smartphones, audio gear, and laptops from top brands.", imgUrl: "https://images.unsplash.com/photo-1531297172864-df2240c9b1b1", categoryId: "cat-elec", userId: "user-storeowner1", createdAt: d(340), updatedAt: d(340) },
+    { id: "store-fash", name: "Fashion Hub", description: "Curated styles for the modern individual. We source high-quality fabrics and unique designs from global creators.", imgUrl: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04", categoryId: "cat-fash", userId: "user-storeowner2", createdAt: d(290), updatedAt: d(290) },
     { id: "store-home", name: "Cozy Living", description: "Transform your house into a home with our exquisite collection of decor and furniture.", imgUrl: "https://images.unsplash.com/photo-1618220179428-22790b46a013", categoryId: "cat-home", userId: "user-storeowner1", createdAt: d(100), updatedAt: d(50) } // Inactive store
   ] as IStoreResponseModel[],
 

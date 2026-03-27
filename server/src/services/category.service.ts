@@ -6,18 +6,58 @@ import categoryErrors from '../utils/errors/category.errors';
 import { Op } from 'sequelize';
 import * as utilService from './utile.service';
 
-export const formatCategory = (category: any): ICategoryAttributes => {
-  return {
-    id: category.id,
-    name: category.name,
-    description: category.description,
-    userId: category.userId,
-    createdAt: category.createdAt,
-    updatedAt: category.updatedAt,
+export interface ICategoryResponse {
+  id: string;
+  name: string;
+  description?: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: {
+    id: string;
+    name: string;
+    email: string;
   };
+  subcategories?: Array<{
+    id: string;
+    name: string;
+    description?: string;
+  }>;
+}
+
+// Helper to format category for the frontend
+export const formatCategory = (category: any): ICategoryResponse => {
+  const plainCategory = category.get ? category.get({ plain: true }) : category;
+
+  const result: any = {
+    id: plainCategory.id,
+    name: plainCategory.name,
+    description: plainCategory.description,
+    userId: plainCategory.userId,
+    createdAt: plainCategory.createdAt,
+    updatedAt: plainCategory.updatedAt,
+  };
+
+  if (plainCategory.Owner) {
+    result.createdBy = {
+      id: plainCategory.Owner.id,
+      name: plainCategory.Owner.name,
+      email: plainCategory.Owner.email,
+    };
+  }
+
+  if (plainCategory.SubCategories) {
+    result.subcategories = plainCategory.SubCategories.map((sub: any) => ({
+       id: sub.id,
+       name: sub.name,
+       description: sub.description
+    }));
+  }
+
+  return result;
 };
 
-export const fetchCategories = async (rootUserId: string): Promise<ICategoryAttributes[]> => {
+export const fetchCategories = async (rootUserId: string): Promise<ICategoryResponse[]> => {
   try {
     // 1. Get all user IDs in the management hierarchy (including the root user)
     const userIds = await utilService.getManagedUserIds(rootUserId);
@@ -34,12 +74,18 @@ export const fetchCategories = async (rootUserId: string): Promise<ICategoryAttr
           [Op.in]: userIds, // Use Sequelize's Op.in to filter by the array of IDs
         },
       },
-      // Optional: Include the Owner/User details if needed for display
-      // include: [{
-      //   model: db.User,
-      //   as: 'Owner',
-      //   attributes: ['id', 'name'],
-      // }],
+      include: [
+        {
+          model: db.User,
+          as: 'Owner',
+          attributes: ['id', 'name', 'email'],
+        },
+        {
+          model: db.SubCategory,
+          as: 'SubCategories',
+          attributes: ['id', 'name', 'description']
+        }
+      ],
     });
 
     return categories.map(formatCategory);
@@ -50,13 +96,30 @@ export const fetchCategories = async (rootUserId: string): Promise<ICategoryAttr
   }
 };
 
-export const createCategory = async (data: { name: string; description?: string; userId: string }): Promise<ICategoryAttributes> => {
+export const createCategory = async (data: { name: string; description?: string; userId: string }): Promise<ICategoryResponse> => {
   const { name, description, userId } = data;
   const category = await db.Category.create({ name, description, userId });
-  return formatCategory(category);
+
+  // Refetch to get standard shape
+  const fetchedCategory = await db.Category.findByPk(category.id, {
+    include: [
+      {
+        model: db.User,
+        as: 'Owner',
+        attributes: ['id', 'name', 'email'],
+      },
+      {
+        model: db.SubCategory,
+        as: 'SubCategories',
+        attributes: ['id', 'name', 'description']
+      }
+    ],
+  });
+
+  return formatCategory(fetchedCategory);
 };
 
-export const updateCategory = async (id: string, data: { name: string; description?: string }): Promise<ICategoryAttributes> => {
+export const updateCategory = async (id: string, data: { name: string; description?: string }): Promise<ICategoryResponse> => {
   const { name, description } = data;
 
   const category = await db.Category.findByPk(id);
@@ -64,9 +127,25 @@ export const updateCategory = async (id: string, data: { name: string; descripti
     throw customError(categoryErrors.CategoryNotFound);
   }
 
-  const updatedCategory = await category.update({
+  await category.update({
     name: name,
     description: description,
+  });
+
+  // Refetch to get standard shape
+  const updatedCategory = await db.Category.findByPk(category.id, {
+    include: [
+      {
+        model: db.User,
+        as: 'Owner',
+        attributes: ['id', 'name', 'email'],
+      },
+      {
+        model: db.SubCategory,
+        as: 'SubCategories',
+        attributes: ['id', 'name', 'description']
+      }
+    ],
   });
 
   return formatCategory(updatedCategory);

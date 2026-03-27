@@ -103,7 +103,7 @@ export const pages_categories_create_tsx_mocks = {
 };
 
 export const pages_categories_edit_tsx_mocks = {
-  categoryEditFormInitialData: { id: "cat-1", name: "Electronics (Updated)", description: "Gadgets.", isActive: true } as ICategories
+  categoryEditFormInitialData: { id: "cat-1", name: "Electronics (Updated)", description: "Gadgets." } as ICategories
 };
 
 export const pages_categories_index_tsx_mocks = {
@@ -239,7 +239,7 @@ export const pages_subcategories_create_tsx_mocks = {
 };
 
 export const pages_subcategories_edit_tsx_mocks = {
-  subcategoryEditFormInitialData: { id: "sub-1", name: "Smartphones 5G", description: "Phones.", categoryId: "cat-1", isActive: true } as ISubCategories
+  subcategoryEditFormInitialData: { id: "sub-1", name: "Smartphones 5G", description: "Phones.", categoryId: "cat-1" } as ISubCategories
 };
 
 export const pages_subcategories_index_tsx_mocks = {
