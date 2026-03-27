@@ -9,10 +9,10 @@ import ProtectedRoute from '@/components/protectedRoute';
 interface ReturnRequest {
   id: string;
   reason: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'PROCESSED';
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
   refundAmount: number;
   resolutionNote?: string;
-  Order?: {
+  order?: {
     id: string;
     orderNumber: string;
     totalPrice: number;
@@ -140,7 +140,7 @@ const ReturnsPage = () => {
   // Table columns for returns
   const returnColumns = [
     {
-      key: 'Order',
+      key: 'order',
       label: 'Order',
       render: (value: any) => value ? (
         <div>
@@ -180,8 +180,7 @@ const ReturnsPage = () => {
       render: (value: string) => (
         <span className={`badge ${
           value === 'APPROVED' ? 'bg-success' :
-          value === 'REJECTED' ? 'bg-danger' :
-          value === 'PROCESSED' ? 'bg-info' : 'bg-warning'
+          value === 'REJECTED' ? 'bg-danger' : 'bg-warning'
         }`}>
           {value}
         </span>
@@ -219,7 +218,6 @@ const ReturnsPage = () => {
           <option value="PENDING">Pending</option>
           <option value="APPROVED">Approved</option>
           <option value="REJECTED">Rejected</option>
-          <option value="PROCESSED">Processed</option>
         </select>
       )
     }
@@ -244,7 +242,6 @@ const ReturnsPage = () => {
             <option value="PENDING">Pending</option>
             <option value="APPROVED">Approved</option>
             <option value="REJECTED">Rejected</option>
-            <option value="PROCESSED">Processed</option>
           </select>
         </div>
       </div>
