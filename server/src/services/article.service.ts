@@ -1,6 +1,6 @@
 import { IArticleAttributes } from '../interfaces/types/models/article.model.types';
 import db from '../models';
-import { IArticlesBodyResponse } from '../interfaces/types/controllers/article.controller.types';
+import { IArticle } from '@shared/types/article.types';
 import customError from '../utils/customError';
 import articleErrors from '../utils/errors/article.errors';
 
@@ -39,8 +39,8 @@ export const deleteArticle = async (id: string, userId: string): Promise<number>
   return response;
 };
 
-export const fetchArticleByAuthor = async (userId: string): Promise<IArticlesBodyResponse[]> => {
-  const response: IArticlesBodyResponse[] = await db.Article.findAll({ where: { userId }, raw: true }) as unknown as IArticlesBodyResponse[];
+export const fetchArticleByAuthor = async (userId: string): Promise<IArticle[]> => {
+  const response: IArticle[] = await db.Article.findAll({ where: { userId }, raw: true }) as unknown as IArticle[];
   return response;
 };
 

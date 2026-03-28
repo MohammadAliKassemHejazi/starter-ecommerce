@@ -5,7 +5,7 @@ import {
   CreatePermissionResponse,
   UpdatePermissionResponse,
   AddPermissionToRoleResponse
-} from "@/interfaces/api";
+} from "@shared/types/permission.types";
 
 export const fetchPermissions = async () => {
   const response = await httpClient.get<PermissionsListResponse>("/admin/permissions");

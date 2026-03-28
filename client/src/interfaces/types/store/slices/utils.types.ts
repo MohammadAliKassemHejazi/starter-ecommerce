@@ -1,10 +1,10 @@
-import { ISize } from "@/models/size.model";
-import { ICategories,ISubCategories } from "@/models/utils.model";
+import { ISize } from '@shared/types/product.types';
+import { ICategory, ISubCategory } from '@shared/types';
 
 export interface CategoriesState {
-    Categorie?: ICategories;
-	Categories?: ICategories[];
-	SubCategories?: ISubCategories[];
-	Size?: ISize[];
-	error?: string;
+  Categorie?: ICategory;
+  Categories?: ICategory[];
+  SubCategories?: ISubCategory[];
+  Size?: ISize[];
+  error?: string;
 }

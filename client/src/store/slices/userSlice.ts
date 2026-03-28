@@ -6,7 +6,6 @@ import * as userService from "@/services/myUsersService";
 import httpClient from "@/utils/httpClient";
 import  { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import Router from "next/router";
-import { SignInResponse } from "@/interfaces/api";
 interface SignAction {
 	email: string
 	password: string

@@ -1,12 +1,11 @@
-import { IProductModel } from "../models/product.model";
+import { IProduct, ISize } from "@shared/types/product.types";
 import { IStoreResponseModel, IStoreModel } from "../models/store.model";
-import { IArticleModel, IArticleModelWithUser } from "../models/article.model";
+import { IArticle } from "@shared/types/article.types";
 import { UserModel } from "../models/user.model";
 import { CartItem } from "../models/cart.model";
 import { IOrderModel, IOrder } from "../models/order.model";
 import { IComment } from "../models/comment.model";
 import { SignIn, SignUp } from "../models/auth.model";
-import { ISize, ISizeItem } from "../models/size.model";
 import { ICategories, ISubCategories } from "../models/utils.model";
 
 // ==========================================
@@ -27,8 +26,8 @@ export const pages_index_tsx_mocks = {
 
 export const pages_home_tsx_mocks = {
   stores: [{ id: "store-1", name: "Tech Haven", description: "Latest gadgets.", imgUrl: "https://example.com/tech.jpg", categoryId: "cat-1", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as IStoreResponseModel[],
-  articles: [{ id: "article-1", title: "Top 10 Gadgets", content: "Review...", published: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), authorId: "user-1" }] as IArticleModel[],
-  featuredProducts: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, discount: 20, stockQuantity: 50, thumbnail: "https://example.com/headphones.jpg" }] as IProductModel[]
+  articles: [{ id: "article-1", title: "Top 10 Gadgets", text: "Review...", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), userId: "user-1" }] as IArticle[],
+  featuredProducts: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, discount: 20, stockQuantity: 50, thumbnail: "https://example.com/headphones.jpg" }] as IProduct[]
 };
 
 export const pages_about_tsx_mocks = {
@@ -58,7 +57,7 @@ export const pages_api_user_AUTH_ts_mocks = {
 };
 
 export const pages_articles_pid_tsx_mocks = {
-  articleDetails: { id: "article-1", title: "Top 10 Gadgets", content: "Full review...", published: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), authorId: "user-1" } as IArticleModel
+  articleDetails: { id: "article-1", title: "Top 10 Gadgets", text: "Full review...", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), userId: "user-1" } as IArticle
 };
 
 export const pages_articles_create_tsx_mocks = {
@@ -74,7 +73,7 @@ export const pages_articles_index_tsx_mocks = {
 };
 
 export const pages_articles_list_tsx_mocks = {
-  articlesList: [{ id: "article-1", title: "Top 10 Gadgets", content: "Review...", published: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), author: { id: "user-1", name: "John Doe", email: "user@example.com" } }] as IArticleModelWithUser[]
+  articlesList: [{ id: "article-1", title: "Top 10 Gadgets", text: "Review...", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), user: { id: "user-1", name: "John Doe" } }] as IArticle[]
 };
 
 export const pages_auth_reset_password_token_tsx_mocks = {
@@ -120,7 +119,7 @@ export const pages_dashboard_index_tsx_mocks = {
 };
 
 export const pages_favorites_index_tsx_mocks = {
-  favoriteProducts: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, stockQuantity: 50, storeId: "store-1" }] as IProductModel[]
+  favoriteProducts: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, stockQuantity: 50, storeId: "store-1" }] as IProduct[]
 };
 
 export const pages_orders_user_index_tsx_mocks = {
@@ -192,16 +191,16 @@ export const pages_shipping_index_tsx_mocks = {
 };
 
 export const pages_shop_product_pid_tsx_mocks = {
-  productDetails: { id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, stockQuantity: 50, storeId: "store-1", ratings: 4.5, commentsCount: 1, sizeItems: [{ id: "size-item-1", sizeId: "sz-1", size: { size: "Standard" }, quantity: 50 }], comments: [{ id: "com-1", userName: "Alice", comment: "Great!" }] } as IProductModel,
+  productDetails: { id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, stockQuantity: 50, storeId: "store-1", ratings: 4.5, commentsCount: 1, sizeItems: [{ id: "size-item-1", sizeId: "sz-1", size: { size: "Standard" }, quantity: 50 }], comments: [{ id: "com-1", userName: "Alice", comment: "Great!" }] } as IProduct,
   availableSizes: [{ id: "sz-1", size: "Standard" }] as ISize[]
 };
 
 export const pages_shop_product_create_tsx_mocks = {
-  productCreateForm: { name: "", description: "", price: 0, originalPrice: 0, stockQuantity: 1, categoryId: "", storeId: "", photos: [] } as IProductModel
+  productCreateForm: { name: "", description: "", price: 0, originalPrice: 0, stockQuantity: 1, categoryId: "", storeId: "", photos: [] } as IProduct
 };
 
 export const pages_shop_product_edit_tsx_mocks = {
-  productEditFormInitialData: { id: "prod-1", name: "Wireless Headphones 2.0", description: "Updated headphones.", price: 189.99, originalPrice: 249.99, stockQuantity: 45, categoryId: "cat-1", storeId: "store-1" } as IProductModel
+  productEditFormInitialData: { id: "prod-1", name: "Wireless Headphones 2.0", description: "Updated headphones.", price: 189.99, originalPrice: 249.99, stockQuantity: 45, categoryId: "cat-1", storeId: "store-1" } as IProduct
 };
 
 export const pages_shop_index_tsx_mocks = {
@@ -209,7 +208,7 @@ export const pages_shop_index_tsx_mocks = {
 };
 
 export const pages_shop_list_tsx_mocks = {
-  productList: [{ id: "prod-3", name: "Smartphone 14 Pro", price: 999.99, originalPrice: 1099.99, discount: 100, stockQuantity: 30, categoryId: "cat-1", storeId: "store-1" }, { id: "prod-4", name: "Running Shoes", price: 89.99, originalPrice: 120.00, discount: 30, stockQuantity: 100, categoryId: "cat-2", storeId: "store-2" }] as IProductModel[],
+  productList: [{ id: "prod-3", name: "Smartphone 14 Pro", price: 999.99, originalPrice: 1099.99, discount: 100, stockQuantity: 30, categoryId: "cat-1", storeId: "store-1" }, { id: "prod-4", name: "Running Shoes", price: 89.99, originalPrice: 120.00, discount: 30, stockQuantity: 100, categoryId: "cat-2", storeId: "store-2" }] as IProduct[],
   filters: { categories: [{ id: "cat-1", name: "Electronics" }], priceRange: [0, 2000] }
 };
 
@@ -219,7 +218,7 @@ export const pages_sizes_index_tsx_mocks = {
 
 export const pages_store_id_tsx_mocks = {
   storeDetails: { id: "store-1", name: "Tech Haven", description: "Latest gadgets.", imgUrl: "https://example.com/tech.jpg", categoryId: "cat-1", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() } as IStoreResponseModel,
-  storeProducts: [{ id: "prod-3", name: "Smartphone 14 Pro", price: 999.99, originalPrice: 1099.99, discount: 100, stockQuantity: 30, categoryId: "cat-1", storeId: "store-1" }] as IProductModel[]
+  storeProducts: [{ id: "prod-3", name: "Smartphone 14 Pro", price: 999.99, originalPrice: 1099.99, discount: 100, stockQuantity: 30, categoryId: "cat-1", storeId: "store-1" }] as IProduct[]
 };
 
 export const pages_store_create_tsx_mocks = {

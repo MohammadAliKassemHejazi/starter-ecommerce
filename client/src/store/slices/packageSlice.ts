@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as packageService from '@/services/packageService';
 import { RootState } from '../store';
-import { Package } from '@/interfaces/types/store/slices/packageSlice.types';
+import { IPackage } from '@shared/types/package.types';
 
 interface PackageState {
-  packages: Package[];
-  selectedPackage: Package | null;
+  packages: IPackage[];
+  selectedPackage: IPackage | null;
   loading: boolean;
   error: string | null;
 }
@@ -125,7 +125,7 @@ export const packageSlice = createSlice({
     });
     builder.addCase(updatePackage.fulfilled, (state, action) => {
       state.loading = false;
-      const updatedPackage = action.payload.data as Package;
+      const updatedPackage = action.payload.data as IPackage;
       const index = state.packages.findIndex(pkg => pkg.id === updatedPackage.id);
       if (index !== -1) {
         state.packages[index] = updatedPackage;
@@ -180,134 +180,3 @@ export const selectPackageLoading = (state: RootState) => state.packages.loading
 export const selectPackageError = (state: RootState) => state.packages.error;
 
 export default packageSlice.reducer;
-//   async (packageId: string, { rejectWithValue }) => {
-//     try {
-//       const token = localStorage.getItem('token');
-//       const response = await axios.post(`${API_URL}/activate`, { packageId }, {
-//         headers: { Authorization: `Bearer ${token}` }
-//       });
-//       return response.data;
-//     } catch (error: any) {
-//       return rejectWithValue(error.response?.data?.message || 'Failed to activate package');
-//     }
-//   }
-// );
-
-// // Initial state
-// const initialState: PackageState = {
-//   packages: [],
-//   selectedPackage: null,
-//   loading: false,
-//   error: null
-// };
-
-// // Slice
-// const packageSlice = createSlice({
-//   name: 'packages',
-//   initialState,
-//   reducers: {
-//     setSelectedPackage: (state, action) => {
-//       state.selectedPackage = action.payload;
-//     },
-//     clearError: (state) => {
-//       state.error = null;
-//     }
-//   },
-//   extraReducers: (builder) => {
-//     builder
-//       // getAllPackages
-//       .addCase(getAllPackages.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(getAllPackages.fulfilled, (state, action) => {
-//         state.loading = false;
-//         state.packages = action.payload;
-//       })
-//       .addCase(getAllPackages.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       })
-      
-//       // getPackageById
-//       .addCase(getPackageById.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(getPackageById.fulfilled, (state, action) => {
-//         state.loading = false;
-//         state.selectedPackage = action.payload;
-//       })
-//       .addCase(getPackageById.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       })
-      
-//       // createPackage
-//       .addCase(createPackage.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(createPackage.fulfilled, (state, action) => {
-//         state.loading = false;
-//         state.packages.push(action.payload);
-//       })
-//       .addCase(createPackage.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       })
-      
-//       // updatePackage
-//       .addCase(updatePackage.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(updatePackage.fulfilled, (state, action) => {
-//         state.loading = false;
-//         const index = state.packages.findIndex(pkg => pkg.id === action.payload.id);
-//         if (index !== -1) {
-//           state.packages[index] = action.payload;
-//         }
-//         if (state.selectedPackage?.id === action.payload.id) {
-//           state.selectedPackage = action.payload;
-//         }
-//       })
-//       .addCase(updatePackage.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       })
-      
-//       // deletePackage
-//       .addCase(deletePackage.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(deletePackage.fulfilled, (state, action) => {
-//         state.loading = false;
-//         state.packages = state.packages.filter(pkg => pkg.id !== action.payload);
-//         if (state.selectedPackage?.id === action.payload) {
-//           state.selectedPackage = null;
-//         }
-//       })
-//       .addCase(deletePackage.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       })
-      
-//       // activatePackage
-//       .addCase(activatePackage.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(activatePackage.fulfilled, (state) => {
-//         state.loading = false;
-//       })
-//       .addCase(activatePackage.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       });
-//   }
-// });
-
-// export const { setSelectedPackage, clearError } = packageSlice.actions;
-// export default packageSlice.reducer;

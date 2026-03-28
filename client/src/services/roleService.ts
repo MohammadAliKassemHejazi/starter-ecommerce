@@ -3,7 +3,7 @@ import {
   RolesListResponse,
   CreateRoleResponse,
   UpdateRoleResponse,
-} from "@/interfaces/api";
+} from "@shared/types/role.types";
 
 export const fetchRoles = async () => {
   const response = await httpClient.get<RolesListResponse>("/admin/roles");

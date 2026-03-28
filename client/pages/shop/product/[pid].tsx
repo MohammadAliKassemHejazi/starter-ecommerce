@@ -4,7 +4,7 @@ import MySwiperComponent from "@/components/UI/General/ImagesSlider/MySwiperComp
 import { useRouter } from "next/router";
 
 import { Formik, Form, Field } from "formik";
-import { IProductModel } from "../../../src/models/product.model"; // Adjust the import path as needed
+import { IProduct } from "@shared/types/product.types";
 import {
   requestProductById,
 } from "@/services/shopService";
@@ -24,7 +24,7 @@ import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
 import { ProductViewModel, defaultProductViewModel } from "@/interfaces/viewModels";
 
 type Props = {
-  product?: IProductModel | null;
+  product?: IProduct | null;
 };
 
 const Toast = Swal.mixin({
@@ -104,7 +104,7 @@ const SingleItem = ({ product }: Props) => {
   };
 
   const handleAddToCart = (
-    product: IProductModel,
+    product: IProduct,
     size: string,
     sizeId: string,
     quantity: number

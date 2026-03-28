@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { requestProductsByStore, requestProductsListing } from '@/services/shopService';
-import { IProductModel } from '@/models/product.model';
+import { IProduct } from '@shared/types/product.types';
 
 interface SuggestedProductsProps {
-  currentProduct: IProductModel;
+  currentProduct: IProduct;
 }
 
 const SuggestedProducts: React.FC<SuggestedProductsProps> = ({ currentProduct }) => {

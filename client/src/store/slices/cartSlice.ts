@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { IProductModel } from "@/models/product.model";
-import { CartItem } from "@/models/cart.model";
+import { IProduct } from "@shared/types/product.types";
+import { ICartItem } from "@shared/types/cart.types";
 import {
   addToCart as addToCartService,
   decreaseCart as decreaseCartService,
@@ -9,7 +9,7 @@ import {
   loadCart as loadCartService,
 } from "@/services/paymentService";
 interface CartState {
-  cartItems: CartItem[];
+  cartItems: ICartItem[];
   cartTotalQuantity: number;
   cartTotalAmount: number;
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -40,9 +40,9 @@ export const fetchCart = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async (product: IProductModel, { rejectWithValue, dispatch, getState }) => {
+  async (product: IProduct, { rejectWithValue, dispatch, getState }) => {
     const state = getState() as { cart: CartState; user: { isAuthenticated: boolean } };
-    
+
     // Ensure product has required fields
     if (!product.id || !product.price) {
       return rejectWithValue("Product is missing required fields (id or price)");
@@ -94,7 +94,7 @@ export const addToCart = createAsyncThunk(
 // Decrease item quantity in the cart
 export const decreaseCart = createAsyncThunk(
   "cart/decreaseCart",
-  async (product: IProductModel, { rejectWithValue, dispatch, getState }) => {
+  async (product: IProduct, { rejectWithValue, dispatch, getState }) => {
     const state = getState() as { cart: CartState };
     const existingItem = state.cart.cartItems.find((item) => item.id === product.id);
 
@@ -106,7 +106,7 @@ export const decreaseCart = createAsyncThunk(
 
       try {
         // Perform the backend call
-        await decreaseCartService(product.id ?? "", quantity,product.sizeId!);
+        await decreaseCartService(product.id ?? "", quantity, product.sizeId!);
       } catch (error: any) {
         // Revert the Redux state if the backend call fails
         dispatch(cartSlice.actions.revertDecreaseCart({ product, quantity }));
@@ -118,7 +118,7 @@ export const decreaseCart = createAsyncThunk(
 
       try {
         // Perform the backend call
-        await removeFromCartService(product.id ?? "",product.sizeId!);
+        await removeFromCartService(product.id ?? "", product.sizeId!);
       } catch (error: any) {
         // Revert the Redux state if the backend call fails
         dispatch(cartSlice.actions.revertRemoveFromCart(product.id ?? ""));
@@ -131,13 +131,13 @@ export const decreaseCart = createAsyncThunk(
 // Remove item from the cart
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
-  async (product: IProductModel, { rejectWithValue, dispatch }) => {
+  async (product: IProduct, { rejectWithValue, dispatch }) => {
     // Optimistically remove the item from the cart
     dispatch(cartSlice.actions.removeFromCartOptimistic(product.id ?? ""));
 
     try {
       // Perform the backend call
-      await removeFromCartService(product.id ?? "",product.sizeId!);
+      await removeFromCartService(product.id ?? "", product.sizeId!);
     } catch (error: any) {
       // Revert the Redux state if the backend call fails
       dispatch(cartSlice.actions.revertRemoveFromCart(product.id ?? ""));
@@ -188,7 +188,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     // Optimistic updates
-    addToCartOptimistic: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
+    addToCartOptimistic: (state, action: PayloadAction<{ product: IProduct; quantity: number }>) => {
       const { product, quantity } = action.payload;
       const existingItem = state.cartItems.find((item) => item.id === product.id);
 
@@ -198,7 +198,7 @@ const cartSlice = createSlice({
         state.cartItems.push({ ...product, quantity: quantity, cartItemId: product.id || "" });
       }
     },
-    decreaseCartOptimistic: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
+    decreaseCartOptimistic: (state, action: PayloadAction<{ product: IProduct; quantity: number }>) => {
       const { product, quantity } = action.payload;
       const existingItem = state.cartItems.find((item) => item.id === product.id);
 
@@ -213,7 +213,7 @@ const cartSlice = createSlice({
       state.cartItems = [];
     },
     // Revert optimistic updates
-    revertAddToCart: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
+    revertAddToCart: (state, action: PayloadAction<{ product: IProduct; quantity: number }>) => {
       const { product, quantity } = action.payload;
       const existingItem = state.cartItems.find((item) => item.id === product.id);
 
@@ -223,7 +223,7 @@ const cartSlice = createSlice({
         state.cartItems = state.cartItems.filter((item) => item.id !== product.id);
       }
     },
-    revertDecreaseCart: (state, action: PayloadAction<{ product: IProductModel; quantity: number }>) => {
+    revertDecreaseCart: (state, action: PayloadAction<{ product: IProduct; quantity: number }>) => {
       const { product, quantity } = action.payload;
       const existingItem = state.cartItems.find((item) => item.id === product.id);
 

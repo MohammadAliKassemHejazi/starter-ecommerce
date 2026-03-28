@@ -6,7 +6,7 @@ import {
 	DeleteUserResponse, 
 	AssignRoleResponse, 
 	RemoveRoleResponse 
-} from "@/interfaces/api/user.types";
+} from "@shared/types/user.types";
 
 export const fetchUsersByCreator = async (): Promise<UsersListResponse> => {
   const { data: response } = await httpClient.get<UsersListResponse>("/users?createdById=me");

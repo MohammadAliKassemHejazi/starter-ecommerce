@@ -1,13 +1,13 @@
 import httpClient from "@/utils/httpClient";
-import { IOrderModel, IOrderItem } from "@/models/order.model";
-import { 
-	OrderResponse, 
-	OrdersListResponse, 
-	OrderItemsResponse 
-} from "@/interfaces/api/order.types";
+import {
+	IOrder,
+	OrderResponse,
+	OrdersListResponse,
+	OrderItemsResponse
+} from "@shared/types/order.types";
 
 interface FetchOrdersByStoreResponse {
-  orders: IOrderModel[];
+  orders: IOrder[];
   total: number;
 }
 

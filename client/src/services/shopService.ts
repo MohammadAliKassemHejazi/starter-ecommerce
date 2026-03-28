@@ -7,9 +7,9 @@ import {
 	CreateProductResponse, 
 	UpdateProductResponse, 
 	DeleteProductResponse 
-} from "@/interfaces/api/product.types";
+} from "@shared/types/product.types";
 
-import { CreatePaymentResponse } from "@/interfaces/api/payment.types";
+import { CreatePaymentResponse } from "@shared/types/payment.types";
 
 export interface IProductProps {
     id?: string; // Can be string or undefined

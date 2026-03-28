@@ -1,4 +1,4 @@
-import { IArticleModelWithUser } from "@/models/article.model";
+import { IArticle } from "@shared/types/article.types";
 import { requestAllArticles } from "@/services/articleService";
 import { GetServerSideProps } from "next";
 import React, { useState, useEffect } from "react";
@@ -17,7 +17,7 @@ const FavoritesButton = dynamic(() => import('@/components/UI/FavoritesButton'),
 });
 
 type Props = {
-  articles?: IArticleModelWithUser[];
+  articles?: IArticle[];
 };
 
 const stores = [
@@ -187,7 +187,7 @@ const About = ({ articles }: Props) => {
     </section>
   );
 
-  const ArticleCard = ({ article }: { article: IArticleModelWithUser }) => (
+  const ArticleCard = ({ article }: { article: IArticle }) => (
     <div className="col-lg-4 col-md-6 mb-4">
       <div className="card h-100 shadow-sm border-0">
         <div className="card-body d-flex flex-column">
@@ -197,12 +197,12 @@ const About = ({ articles }: Props) => {
           </div>
           <h3 className="card-title h5 mb-3">{article.title}</h3>
           <p className="card-text flex-grow-1 text-muted">
-            {article.content.length > 150 ? `${article.content.substring(0, 150)}...` : article.content}
+            {article.text.length > 150 ? `${article.text.substring(0, 150)}...` : article.text}
           </p>
           <div className="mt-auto">
             <div className="small text-muted mb-3">
               <i className="fas fa-user me-1"></i>
-              By {article.author?.name ?? "Anonymous"}
+              By {article.user?.name ?? "Anonymous"}
             </div>
             <Link href="/articles" className="btn btn-outline-primary">
               Read More <i className="fas fa-arrow-right ms-1"></i>

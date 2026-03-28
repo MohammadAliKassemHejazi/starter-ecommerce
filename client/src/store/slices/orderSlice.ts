@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as orderService from "@/services/orderService";
 import { RootState } from "../store";
-import { IOrderModel } from "@/models/order.model";
-import { stat } from "fs";
+import { IOrder } from "@shared/types/order.types";
 
 interface OrderState {
-  orders: IOrderModel[];
-  lastOrder: IOrderModel | null;
+  orders: IOrder[];
+  lastOrder: IOrder | null;
   loading: boolean;
   error: string;
   currentPage: number;
@@ -100,13 +99,13 @@ export const orderSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchOrdersByStore.fulfilled, (state, action) => {
-        
+
         state.orders = action.payload.data.items;
         state.totalOrders = action.payload.data.meta.totalItems;
         state.currentPage = action.payload.data.meta.currentPage;
         state.pageSize = action.payload.data.meta.itemsPerPage;
         state.error = "";
-   
+
         state.loading = false;
       })
       .addCase(fetchOrdersByStore.rejected, (state) => {
@@ -123,13 +122,13 @@ export const orderSlice = createSlice({
   },
 });
 
-export const ordersSelector = (state: RootState): IOrderModel[] | undefined => state.order.orders;
-export const lastOrderSelector = (state: RootState): IOrderModel | null => state.order.lastOrder;
+export const ordersSelector = (state: RootState): IOrder[] | undefined => state.order.orders;
+export const lastOrderSelector = (state: RootState): IOrder | null => state.order.lastOrder;
 export const loadingSelector = (state: RootState): boolean => state.order.loading;
 export const totalOrdersSelector = (state: RootState): number => state.order.totalOrders;
 export const pageSelector = (state: RootState): number => state.order.currentPage;
 export const pageSizeSelector = (state: RootState): number => state.order.pageSize;
-export const orderByStoreSelector = (state: RootState): IOrderModel[]| undefined => state.order.orders;
+export const orderByStoreSelector = (state: RootState): IOrder[] | undefined => state.order.orders;
 
 export const { setPage, setPageSize, setFilter, clearError } = orderSlice.actions;
 

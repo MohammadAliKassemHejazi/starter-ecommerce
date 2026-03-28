@@ -1,4 +1,3 @@
-import {  IProductModel } from "@/models/product.model"
 import httpClient from "@/utils/httpClient"
 import { ImageListType } from "react-images-uploading";
 import { 
@@ -7,7 +6,7 @@ import {
 	CreateStoreResponse, 
 	UpdateStoreResponse, 
 	DeleteStoreResponse 
-} from "@/interfaces/api/store.types";
+} from "@shared/types/store.types";
 
 export interface IProductProps {
     id?: string; // Now allows string or undefined

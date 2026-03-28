@@ -1,5 +1,4 @@
 // services/cartService.ts
-import { CartItem } from '@/models/cart.model';
 import httpClient from "@/utils/httpClient"
 import { 
 	CartResponse, 
@@ -7,7 +6,7 @@ import {
 	UpdateCartResponse, 
 	RemoveFromCartResponse, 
 	ClearCartResponse 
-} from "@/interfaces/api/cart.types";
+} from "@shared/types/cart.types";
 
 // Load cart from the backend
 export const loadCart = async (): Promise<CartResponse> => {

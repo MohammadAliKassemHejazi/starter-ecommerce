@@ -1,9 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import {
-  IProductModel,
-  IProductModelErrors,
-} from "../../../src/models/product.model";
+import { IProductFormModel as IProductModel, IProductModelErrors } from "@/models/product.model";
 import { useAppDispatch, store } from "@/store/store";
 import { createProduct } from "@/store/slices/shopSlice";
 import ImageUploadComponent from "@/components/UI/General/ImageUploadComponent/ImageUploadComponent";

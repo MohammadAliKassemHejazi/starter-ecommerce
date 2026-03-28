@@ -1,6 +1,6 @@
 import { FormPage } from "@/components/UI/PageComponents";
 import ProtectedRoute from "@/components/protectedRoute";
-import { IArticleModel } from "@/models/article.model";
+import { IArticle } from "@shared/types/article.types";
 import { requestArticleById } from "@/services/articleService";
 import { updateArticles } from "@/store/slices/articleSlice";
 import { useAppDispatch } from "@/store/store";
@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 type Props = {
-  article?: IArticleModel;
+  article?: IArticle;
 };
 
 const EditArticle = ({ article }: Props) => {
@@ -25,7 +25,7 @@ const EditArticle = ({ article }: Props) => {
   useEffect(() => {
     if (article) {
       setTitle(article.title || "");
-      setText(article.content || "");
+      setText(article.text || "");
     }
   }, [article]);
 

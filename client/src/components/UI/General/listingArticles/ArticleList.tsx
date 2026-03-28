@@ -1,8 +1,8 @@
 import React from "react";
-import { IArticleModelWithUser } from "@/models/article.model";
+import { IArticle } from "@shared/types/article.types";
 
 interface ArticleListProps {
-  articles: IArticleModelWithUser[];
+  articles: IArticle[];
 }
 
 const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
@@ -18,9 +18,9 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
                     {new Date(article.createdAt || "").toLocaleDateString()}
                   </div>
                   <h2 className="card-title h4">{article.title}</h2>
-                  <p className="card-text">{article.content}</p>
+                  <p className="card-text">{article.text}</p>
                   <p className="card-text">
-                    Author: {article.author?.name ?? "Unknown"}
+                    Author: {article.user?.name ?? "Unknown"}
                   </p>
                   <a className="btn btn-primary mt-3" href={`/articles/${article.id}`}>
                     Read more →

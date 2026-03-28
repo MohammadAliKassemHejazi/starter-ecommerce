@@ -3,8 +3,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as storeService from "@/services/storeService";
 
 import { RootState } from "../store";
-import { IStoreResponseModel } from "@/models/store.model";
-import { CreateStoreResponse } from "@/interfaces/api/store.types";
+import { IStore } from "@shared/types/store.types";
+import { CreateStoreResponse } from "@shared/types/store.types";
 
 const initialState: StoresState = {
   stores: [],
@@ -46,9 +46,6 @@ export const fetchAllStores = createAsyncThunk(
   }
 );
 
-// store/storeThunks.ts or wherever your thunks live
-
-
 export const fetchAllStoresWithFilter = createAsyncThunk(
   'store/fetch-with-filter',
   async ({
@@ -89,8 +86,6 @@ export const updateStore = createAsyncThunk(
   }
 );
 
-
-
 export const deleteStore = createAsyncThunk(
   "store/delete",
   async (id: string) => {
@@ -115,18 +110,16 @@ const storeSlice = createSlice({
     builder
       .addCase(fetchAllStoresWithFilter.fulfilled, (state, action) => {
         console.log(action.payload, " filtered stores payload");
-    state.stores = action.payload || [];
-})
-.addCase(fetchAllStoresWithFilter.rejected, (state, action) => {
-  state.error = action.error.message || "Failed to fetch filtered stores.";
-  state.stores = [];
-})
+        state.stores = action.payload || [];
+      })
+      .addCase(fetchAllStoresWithFilter.rejected, (state, action) => {
+        state.error = action.error.message || "Failed to fetch filtered stores.";
+        state.stores = [];
+      })
       .addCase(fetchStoreById.fulfilled, (state, action) => {
-
         state.store = action.payload;
       })
       .addCase(fetchStoreById.rejected, (state, action) => {
-        
         state.error = action.error.message || "Failed to fetch store.";
         state.store = undefined;
       })
@@ -138,7 +131,6 @@ const storeSlice = createSlice({
         state.stores = [];
       })
       .addCase(fetchAllStores.fulfilled, (state, action) => {
-       
         state.stores = action.payload;
       })
       .addCase(fetchAllStores.rejected, (state, action) => {
@@ -146,7 +138,7 @@ const storeSlice = createSlice({
         state.stores = [];
       })
       .addCase(createStore.fulfilled, (state, action) => {
-        state.stores?.push(action.payload.data);  // Add the new store to the list
+        state.stores?.push(action.payload.data);
       })
       .addCase(createStore.rejected, (state, action) => {
         state.error = action.error.message || "Failed to create store.";
@@ -165,7 +157,7 @@ const storeSlice = createSlice({
   },
 });
 
-export const storeSelector = (store: RootState): IStoreResponseModel[] | undefined => store.store.stores;
-export const singleStoreSelector = (store: RootState): IStoreResponseModel | undefined => store.store.store;
+export const storeSelector = (store: RootState): IStore[] | undefined => store.store.stores;
+export const singleStoreSelector = (store: RootState): IStore | undefined => store.store.store;
 
 export default storeSlice.reducer;

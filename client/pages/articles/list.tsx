@@ -1,5 +1,5 @@
 import React from "react";
-import { IArticleModelWithUser } from "@/models/article.model";
+import { IArticle } from "@shared/types/article.types";
 import { requestAllArticles } from "@/services/articleService";
 import { setAuthHeaders } from "@/utils/httpClient";
 import { GetServerSideProps } from "next";
@@ -10,17 +10,17 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 type Props = {
-  articles?: IArticleModelWithUser[];
+  articles?: IArticle[];
 };
 
 const ArticlesList = ({ articles }: Props) => {
   const router = useRouter();
 
-  const handleViewArticle = (article: IArticleModelWithUser) => {
+  const handleViewArticle = (article: IArticle) => {
     router.push(`/articles/${article.id}`);
   };
 
-  const handleEditArticle = (article: IArticleModelWithUser) => {
+  const handleEditArticle = (article: IArticle) => {
     router.push(`/articles/edit?article=${encodeURIComponent(JSON.stringify(article))}`);
   };
 

@@ -4,10 +4,9 @@ import {
   ArticleCreateBodyRequest,
   ArticleGetRequest,
   ArticlesGetRequest,
-  IArticlesBodyResponse,
 } from '../interfaces/types/controllers/article.controller.types';
 import customError from '../utils/customError';
-import { IArticleAttributes } from '../interfaces/types/models/article.model.types';
+import { IArticle } from '@shared/types/article.types';
 import articleErrors from '../utils/errors/article.errors';
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 
@@ -15,7 +14,7 @@ export const handleCreate = async (request: ArticleCreateBodyRequest, response: 
   const userId = request.UserId;
   const { title, text, type } = request.body;
   try {
-    const article: IArticleAttributes = await articleService.createArticle({
+    const article: IArticle = await articleService.createArticle({
       title,
       text,
       type,
@@ -40,7 +39,7 @@ export const handleGetByAuthor = async (request: CustomRequest, response: Respon
   const userId = request.UserId; // Assuming UserId is accessible via middleware
   if (userId) {
     try {
-      const data: IArticlesBodyResponse[] = await articleService.fetchArticleByAuthor(userId);
+      const data: IArticle[] = await articleService.fetchArticleByAuthor(userId);
       const responseData = data;
       response.json(responseData);
     } catch (error) {
@@ -56,7 +55,7 @@ export const handleGetArticleById = async (request: ArticleGetRequest, response:
     return;
   }
   try {
-    const article: IArticleAttributes = await articleService.fetchArticleById(id);
+    const article: IArticle = await articleService.fetchArticleById(id);
     response.json(article);
   } catch (error) {
     response.status(500).json({ error: 'Internal Server Error' });

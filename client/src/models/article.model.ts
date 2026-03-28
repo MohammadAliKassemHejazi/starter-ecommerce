@@ -1,26 +1,13 @@
-import { ImageListType } from "react-images-uploading";
+import { ImageListType } from 'react-images-uploading';
 
-export interface IArticleModel {
+// Re-export shared entity as the canonical article model
+export type { IArticle } from '@shared/types/article.types';
+
+// UI-only form model (used in article create/edit forms)
+export interface IArticleFormModel {
   id?: string;
   title: string;
-  slug?: string;
-  content: string;
-  authorId?: string;
-  published: boolean;
-  views?: number;
-  createdAt?: string;
-  updatedAt?: string;
+  text: string;
   photos?: ImageListType;
   images?: any;
-}
-
-export interface IArticleModelWithUser extends IArticleModel {
-  author?: IArticleAuthor;
-}
-
-export interface IArticleAuthor {
-  id: string;
-  name: string;
-  email: string;
-  avatarUrl?: string;
 }

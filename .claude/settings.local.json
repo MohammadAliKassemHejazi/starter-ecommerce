@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Bash(echo \"=== $f ===\")",
+      "Read(//c/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main/**)",
+      "Bash(done)",
+      "Bash(do echo:*)",
+      "Bash(__NEW_LINE_b289c566abb26b44__ grep:*)",
+      "Bash(__NEW_LINE_b289c566abb26b44__ done:*)",
+      "Bash(grep -rn \"from \"\"@/interfaces/api\\\\|from ''@/interfaces/api\\\\|from \"\"@/models/\\\\|from ''@/models/\" \"c:/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main/client/src/services/\")",
+      "Bash(find /c/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main/shared/types -type f -name *.ts)"
+    ]
+  }
+}

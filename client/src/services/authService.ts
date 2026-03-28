@@ -1,11 +1,10 @@
-import { GetSession, SignIn, SignUp } from "@/models/auth.model"
-import { 
-	SignInResponse, 
-	SignUpResponse, 
-	SessionResponse, 
-	UserSessionsResponse, 
-	LogoutResponse 
-} from "@/interfaces/api/auth.types";
+import {
+	SignInResponse,
+	SignUpResponse,
+	SessionResponse,
+	UserSessionsResponse,
+	LogoutResponse
+} from "@shared/types/auth.types";
 import httpClient from "@/utils/httpClient";
 
 type signProps = {
@@ -14,8 +13,8 @@ type signProps = {
 };
 
 // next local api
-export const signIn = async (user: signProps): Promise<SignIn> => {
-	const { data: response } = await httpClient.post<SignIn>(
+export const signIn = async (user: signProps): Promise<SignInResponse> => {
+	const { data: response } = await httpClient.post<SignInResponse>(
 		`/user/auth/login`,
 		user,
     {

@@ -48,14 +48,14 @@ const LatestArticles: React.FC = () => {
                     </Link>
                   </h5>
                   <p className="card-text text-muted line-clamp-3">
-                    {article.content}
+                    {article.text}
                   </p>
                 </div>
                 <div className="card-footer bg-transparent border-0 pt-0 pb-3">
                   <div className="d-flex align-items-center">
                     <div className="small">
                       <span className="text-muted">By </span>
-                      <span className="fw-bold">{article.author?.name || "Admin"}</span>
+                      <span className="fw-bold">{article.user?.name || "Admin"}</span>
                     </div>
                   </div>
                 </div>

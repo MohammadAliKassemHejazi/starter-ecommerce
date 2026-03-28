@@ -1,29 +1,17 @@
 import httpClient from "@/utils/httpClient";
-import { 
-	PackagesListResponse, 
-	UserPackageResponse, 
-	PackageLimitsResponse, 
-	AssignPackageResponse, 
-	CreatePackageResponse, 
-	UpdatePackageResponse, 
+import {
+	IPackage,
+	PackagesListResponse,
+	UserPackageResponse,
+	PackageLimitsResponse,
+	AssignPackageResponse,
+	CreatePackageResponse,
+	UpdatePackageResponse,
 	DeletePackageResponse,
 	PackageResponse,
 	ActivatePackageResponse
-} from "@/interfaces/api/package.types";
-import { CreatePaymentResponse } from "@/interfaces/api/payment.types";
-
-export interface IPackage {
-  id: string;
-  name: string;
-  description: string;
-  storeLimit: number;
-  categoryLimit: number;
-  productLimit: number;
-  userLimit: number;
-  isSuperAdminPackage: boolean;
-  price: number;
-  isActive: boolean;
-}
+} from "@shared/types/package.types";
+import { CreatePaymentResponse } from "@shared/types/payment.types";
 
 export interface IUserPackage {
   id: string;

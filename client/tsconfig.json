@@ -28,7 +28,8 @@
       "@/constants/*": ["constants/*"],
       "@/contexts/*": ["contexts/*"],
       "@/features/*": ["features/*"],
-      "@/*": ["/*"]
+      "@/*": ["/*"],
+      "@shared/*": ["../../shared/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

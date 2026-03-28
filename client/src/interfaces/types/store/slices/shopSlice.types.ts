@@ -1,9 +1,9 @@
-import { IProductModel } from "@/models/product.model";
+import { IProduct } from '@shared/types/product.types';
 
 export interface ProductsState {
-  product?: IProductModel;
-  products: IProductModel[];
-  Storeproducts?: IProductModel[];
+  product?: IProduct;
+  products: IProduct[];
+  Storeproducts?: IProduct[];
   total: number;
   page: number;
   pageSize: number;

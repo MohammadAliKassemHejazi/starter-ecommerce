@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image'; // Assuming you're using Next.js for images
 import styles from './BubbleAnimation.module.css'; // Your CSS module for styling
-import {  IStoreResponseModel } from '@/models/store.model';
+import { IStore } from '@shared/types/store.types';
 
 
 interface BubbleAnimationProps {
-  stores: IStoreResponseModel[]; 
+  stores: IStore[]; 
 }
 
 const BubbleAnimation: React.FC<BubbleAnimationProps> = ({ stores }) => {
@@ -13,7 +13,7 @@ const BubbleAnimation: React.FC<BubbleAnimationProps> = ({ stores }) => {
   return (
     <div className="container container-hidden">
       <div className={`text-center ${styles["circular-container"]}`}>
-        {stores.map((store : IStoreResponseModel, index : number) => (
+        {stores.map((store : IStore, index : number) => (
           <div
             key={index}
             className={`${styles["bubble"]} ${styles["scaling-animation"]}`}

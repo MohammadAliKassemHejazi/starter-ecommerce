@@ -5,7 +5,7 @@ import {
 	CreateCategoryResponse, 
 	UpdateCategoryResponse, 
 	DeleteCategoryResponse 
-} from "@/interfaces/api/category.types";
+} from "@shared/types/category.types";
 
 export const fetchCategories = async (): Promise<CategoriesListResponse> => {
   const { data: response } = await httpClient.get<CategoriesListResponse>("/categories");

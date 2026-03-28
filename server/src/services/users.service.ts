@@ -4,7 +4,7 @@ import { IUserAttributes } from '../interfaces/types/models/user.model.types';
 import customError from '../utils/customError';
 import authErrors from '../utils/errors/auth.errors';
 import config from '../config/config';
-import { IAuthLoginBodyResponse } from '../interfaces/types/controllers/auth.controller.types';
+import { IAuthUser } from '@shared/types/auth.types';
 import db from '../models';
 
 const passwordHashing = (password: string): string => {
@@ -29,7 +29,7 @@ const createToken = (UserId: string): string => {
   return token;
 };
 
-const mapUserResponseObject = async (userId: string, user: IUserAttributes, accessToken?: string): Promise<IAuthLoginBodyResponse> => {
+const mapUserResponseObject = async (userId: string, user: IUserAttributes, accessToken?: string): Promise<IAuthUser> => {
   // Fetch user with roles and permissions
   const userWithRoles = await db.User.findByPk(userId, {
     include: [
@@ -66,7 +66,7 @@ const mapUserResponseObject = async (userId: string, user: IUserAttributes, acce
           name: permission.name,
         })) || [],
     ) || [];
-  const response: IAuthLoginBodyResponse = {
+  const response: IAuthUser = {
     id: userId,
     email: user.email,
     name: user.name || '',
@@ -110,7 +110,7 @@ export const createUser = async (data: IUserAttributes): Promise<IUserAttributes
   return user;
 };
 
-export const userLogin = async (email: string, password: string): Promise<IAuthLoginBodyResponse> => {
+export const userLogin = async (email: string, password: string): Promise<IAuthUser> => {
   const user = await db.User.findOne({
     where: { email },
     raw: true,
@@ -127,11 +127,11 @@ export const userLogin = async (email: string, password: string): Promise<IAuthL
   comparePassword(password, user.password);
   const UserId: string = user.id;
   const accessToken = createToken(UserId);
-  const response: IAuthLoginBodyResponse = await mapUserResponseObject(UserId, user, accessToken);
+  const response: IAuthUser = await mapUserResponseObject(UserId, user, accessToken);
   return response;
 };
 
-export const userSession = async (id: string): Promise<IAuthLoginBodyResponse> => {
+export const userSession = async (id: string): Promise<IAuthUser> => {
   const user = await db.User.findOne({
     where: { id },
     raw: true,
@@ -146,16 +146,16 @@ export const userSession = async (id: string): Promise<IAuthLoginBodyResponse> =
   }
   const UserId: string = id;
   const accessToken = createToken(UserId);
-  const response: IAuthLoginBodyResponse = await mapUserResponseObject(UserId, user, accessToken);
+  const response: IAuthUser = await mapUserResponseObject(UserId, user, accessToken);
   return response;
 };
 
-export const getUserById = async (UserId: string): Promise<IAuthLoginBodyResponse> => {
+export const getUserById = async (UserId: string): Promise<IAuthUser> => {
   const user = await db.User.findOne({ where: { id: UserId }, raw: true });
   if (user == null) {
     customError(authErrors.AuthJWTError);
   }
-  const response: IAuthLoginBodyResponse = await mapUserResponseObject(UserId, user);
+  const response: IAuthUser = await mapUserResponseObject(UserId, user);
   return response;
 };
 

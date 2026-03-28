@@ -3,8 +3,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as utileService from "@/services/utileService";
 
 import { RootState } from "../store";
-import { ICategories, ISubCategories } from "@/models/utils.model";
-import { ISize } from "@/models/size.model";
+import { ICategory } from "@shared/types/category.types";
+import { ISubCategory } from "@shared/types/subcategory.types";
+import { ISize } from "@shared/types/product.types";
 
 const initialState: CategoriesState = {
   Categories: [],
@@ -74,10 +75,10 @@ export const utilsSlice = createSlice({
 
 export const utileCategoriesSelector = (
   store: RootState
-): ICategories[] | undefined => store.utils.Categories;
+): ICategory[] | undefined => store.utils.Categories;
 export const utileSubCategoriesSelector = (
   store: RootState
-): ISubCategories[] | undefined => store.utils.SubCategories;
+): ISubCategory[] | undefined => store.utils.SubCategories;
 export const utileSizes = (store: RootState): ISize[] | undefined =>
   store.utils.Size;
 

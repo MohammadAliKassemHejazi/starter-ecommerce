@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as shopService from "@/services/shopService";
 
 import { RootState } from "../store";
-import { IProductModel } from "@/models/product.model";
+import { IProduct } from "@shared/types/product.types";
 
 const initialState: ProductsState = {
   product: undefined,
@@ -23,7 +23,7 @@ export const fetchProductsListing = createAsyncThunk(
       throw new Error("Invalid page or pageSize");
     }
     const response = await shopService.requestProductsListing(page!, pageSize);
-  
+
     return response;
   }
 );
@@ -43,22 +43,22 @@ export const fetchProductsByStore = createAsyncThunk(
     page,
     pageSize,
     searchQuery = "",
-    orderBy = "",// Add searchQuery as an optional parameter
+    orderBy = "",
   }: {
     storeId: string;
     page: number;
     pageSize: number;
-      searchQuery?: string;
-   orderBy?: string
+    searchQuery?: string;
+    orderBy?: string;
   }) => {
     const response = await shopService.requestProductsByStore(
       storeId,
       page,
       pageSize,
       searchQuery,
-      orderBy// Pass searchQuery to the API
+      orderBy
     );
-  
+
     return response;
   }
 );
@@ -91,7 +91,6 @@ export const updateProductImages = createAsyncThunk(
   }
 );
 
-
 export const deleteProduct = createAsyncThunk(
   "shop/delete",
   async (id: string) => {
@@ -113,17 +112,17 @@ export const shopSlice = createSlice({
   initialState: initialState,
   reducers: {
     resetProducts: (state) => {
-      state.products = []; 
+      state.products = [];
       state.Storeproducts = [];
       state.total = 0;
-      state.page = 1; 
-      state.pageSize = 10; 
-      state.error = ""; 
-      state.product = undefined; 
-    }},
+      state.page = 1;
+      state.pageSize = 10;
+      state.error = "";
+      state.product = undefined;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchProductById.fulfilled, (state, action) => {
-      // Cast payload to any to handle type mismatches
       const payload = action.payload as any;
       state.product = payload.data || payload;
     });
@@ -141,7 +140,6 @@ export const shopSlice = createSlice({
     });
 
     builder.addCase(fetchProductsByStore.fulfilled, (state, action) => {
-     //here we replace the products array with new data
       const payload = action.payload as any;
       const data = payload.data || payload;
       state.Storeproducts = data.products;
@@ -157,46 +155,38 @@ export const shopSlice = createSlice({
       state.pageSize = 10;
     });
 
-    
+    builder.addCase(fetchProductsListing.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
 
-    
+    builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
+      state.loading = false;
+      const payload = action.payload as any;
+      const payloadData = payload.data || payload;
+      const { products, total, page, pageSize } = payloadData;
 
-builder.addCase(fetchProductsListing.pending, (state) => {
-  state.loading = true;
-  state.error = "";
-});
+      if (page === 1) {
+        state.products = products || [];
+      } else {
+        state.products = [...state.products, ...(products || [])];
+      }
 
-builder.addCase(fetchProductsListing.fulfilled, (state, action) => {
-  state.loading = false;
-  // Unwrap the data from the response (which might be wrapped by httpClient)
-  const payload = action.payload as any;
-  const payloadData = payload.data || payload;
-  const { products, total, page, pageSize } = payloadData;
+      state.total = total || 0;
+      state.page = page || 1;
+      state.pageSize = pageSize || 10;
+    });
 
-  // Replace or append based on page number
-  if (page === 1) {
-    state.products = products || [];
-  } else {
-    state.products = [...state.products, ...(products || [])];
-  }
-
-  state.total = total || 0;
-  state.page = page || 1;
-  state.pageSize = pageSize || 10;
-});
-
-builder.addCase(fetchProductsListing.rejected, (state, action) => {
-  state.loading = false;
-  state.error = action.error.message || "Failed to fetch products";
-  // We keep existing products/state in case of error, or could reset if needed
-});
-
-
+    builder.addCase(fetchProductsListing.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Failed to fetch products";
+    });
   },
 });
+
 export const { resetProducts } = shopSlice.actions;
-export const productSelector = (store: RootState): IProductModel[] | undefined => store.products.products;
-export const productByStoreSelector = (store: RootState): IProductModel[] | undefined => store.products.Storeproducts;
+export const productSelector = (store: RootState): IProduct[] | undefined => store.products.products;
+export const productByStoreSelector = (store: RootState): IProduct[] | undefined => store.products.Storeproducts;
 export const totalProductsSelector = (store: RootState): number => store.products.total;
 export const pageSelector = (store: RootState): number => store.products.page;
 export const pageSizeSelector = (store: RootState): number => store.products.pageSize;

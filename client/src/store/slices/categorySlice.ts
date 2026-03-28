@@ -2,10 +2,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as categoryService from "@/services/categoryService";
 import { RootState } from "../store";
-import { ICategories } from "@/models/utils.model";
+import { ICategory } from "@shared/types/category.types";
 
 interface CategoryState {
-  categories: ICategories[];
+  categories: ICategory[];
   error: string | null;
 }
 
@@ -17,7 +17,7 @@ const initialState: CategoryState = {
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async () => {
-    const { data  } = await categoryService.fetchCategories();
+    const { data } = await categoryService.fetchCategories();
     return data;
   }
 );
@@ -53,12 +53,12 @@ const categorySlice = createSlice({
     });
     builder.addCase(deleteCategory.fulfilled, (state, action) => {
       state.categories = state.categories.filter(
-        (cat: ICategories) => cat.id !== action.meta.arg
+        (cat: ICategory) => cat.id !== action.meta.arg
       );
     });
   },
 });
 
-export const categoriesSelector = (state: RootState): ICategories[] | undefined => state.categories.categories;
+export const categoriesSelector = (state: RootState): ICategory[] | undefined => state.categories.categories;
 
 export default categorySlice.reducer;

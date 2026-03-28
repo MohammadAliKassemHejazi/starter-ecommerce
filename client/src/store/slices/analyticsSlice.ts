@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import * as analyticsService from '../../services/analyticsService';
-import { AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse } from '../../interfaces/api/analytics.types';
+import { IIAnalyticsEvent, IIAnalyticsStats, AnalyticsListResponse, IAnalyticsStatsResponse } from '@shared/types/analytics.types';
 
 interface AnalyticsState {
-  events: AnalyticsEvent[];
-  stats: AnalyticsStats[];
+  events: IAnalyticsEvent[];
+  stats: IAnalyticsStats[];
   total: number;
   page: number;
   limit: number;
@@ -47,11 +47,11 @@ export const fetchAnalytics = createAsyncThunk<AnalyticsListResponse, any>(
   }
 );
 
-export const fetchAnalyticsStats = createAsyncThunk<AnalyticsStatsResponse, any>(
+export const fetchIAnalyticsStats = createAsyncThunk<IAnalyticsStatsResponse, any>(
   'analytics/fetchStats',
   async (params: any, { rejectWithValue }) => {
     try {
-      const response = await analyticsService.getAnalyticsStats(params);
+      const response = await analyticsService.getIAnalyticsStats(params);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch stats');
@@ -97,13 +97,13 @@ const analyticsSlice = createSlice({
 
     // Fetch Stats
     builder
-      .addCase(fetchAnalyticsStats.pending, (state) => {
+      .addCase(fetchIAnalyticsStats.pending, (state) => {
         // We don't necessarily want to show global loading for stats, or we can handle it separately
       })
-      .addCase(fetchAnalyticsStats.fulfilled, (state, action) => {
+      .addCase(fetchIAnalyticsStats.fulfilled, (state, action) => {
         state.stats = action.payload.data || [];
       })
-      .addCase(fetchAnalyticsStats.rejected, (state, action) => {
+      .addCase(fetchIAnalyticsStats.rejected, (state, action) => {
         console.error('Failed to fetch stats:', action.payload);
       });
   }
@@ -111,8 +111,8 @@ const analyticsSlice = createSlice({
 
 export const { setFilters, setPage, clearFilters } = analyticsSlice.actions;
 
-export const selectAnalyticsEvents = (state: RootState) => state.analytics.events;
-export const selectAnalyticsStats = (state: RootState) => state.analytics.stats;
+export const selectIAnalyticsEvents = (state: RootState) => state.analytics.events;
+export const selectIAnalyticsStats = (state: RootState) => state.analytics.stats;
 export const selectAnalyticsLoading = (state: RootState) => state.analytics.loading;
 export const selectAnalyticsError = (state: RootState) => state.analytics.error;
 export const selectAnalyticsFilters = (state: RootState) => state.analytics.filters;

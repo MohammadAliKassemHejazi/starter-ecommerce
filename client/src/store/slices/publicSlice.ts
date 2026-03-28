@@ -1,18 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as publicService from "@/services/publicService";
-import { requestAllPackages as getAllPackagesService, IPackage } from "@/services/packageService";
+import { requestAllPackages as getAllPackagesService } from "@/services/packageService";
 import { RootState } from "../store";
-import { IStoreResponseModel } from "@/models/store.model";
-import { IProductModel } from "@/models/product.model";
-import { IArticleModelWithUser } from "@/models/article.model";
-import { Cast } from "lucide-react";
-import { ICategories } from "@/models/utils.model";
+import { IStore } from "@shared/types/store.types";
+import { IProduct } from "@shared/types/product.types";
+import { IArticle } from "@shared/types/article.types";
+import { ICategory } from "@shared/types/category.types";
+import { IPackage } from "@shared/types/package.types";
 
 interface PublicState {
-  stores: IStoreResponseModel[];
-  products: IProductModel[];
-  articles: IArticleModelWithUser[];
-  categories: ICategories[];
+  stores: IStore[];
+  products: IProduct[];
+  articles: IArticle[];
+  categories: ICategory[];
   packages: IPackage[];
   loading: {
     stores: boolean;
@@ -141,7 +141,7 @@ const publicSlice = createSlice({
       .addCase(fetchPublicStores.fulfilled, (state, action) => {
         state.loading.stores = false;
         console.log("Fetched stores:", action.payload);
-        state.stores = (action.payload || []) as IStoreResponseModel[];
+        state.stores = (action.payload || []) as IStore[];
       })
       .addCase(fetchPublicStores.rejected, (state, action) => {
         state.loading.stores = false;
