@@ -11,7 +11,12 @@
       "Bash(__NEW_LINE_b289c566abb26b44__ grep:*)",
       "Bash(__NEW_LINE_b289c566abb26b44__ done:*)",
       "Bash(grep -rn \"from \"\"@/interfaces/api\\\\|from ''@/interfaces/api\\\\|from \"\"@/models/\\\\|from ''@/models/\" \"c:/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main/client/src/services/\")",
-      "Bash(find /c/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main/shared/types -type f -name *.ts)"
+      "Bash(find /c/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main/shared/types -type f -name *.ts)",
+      "Bash(find /c/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main/client -name .env*)",
+      "Bash(find /c/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main -path */types* -name *cart*)",
+      "Bash(/tmp/mismatch_summary.txt:*)",
+      "Read(//tmp/**)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

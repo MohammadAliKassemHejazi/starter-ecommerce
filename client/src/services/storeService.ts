@@ -25,7 +25,7 @@ export interface StoresListResponsefiltered {
 }
 export const requestStoreById = async (id: string): Promise<StoreResponse> => {
 	const { data: response } = await httpClient.get<StoreResponse>(
-		`/store/get?id=${id}`
+		`/store/get/${id}`
 	)
 	return response
 }
@@ -63,8 +63,8 @@ export const requestCreateStore = async (Store: FormData): Promise<CreateStoreRe
 	return response
 }
 
-export const requestUpdateStoreImage = async (Store: FormData): Promise<UpdateStoreResponse> => {
-	const { data: response } = await httpClient.patch<UpdateStoreResponse>("/store/update/image", Store)
+export const requestUpdateStoreImage = async (id: string, Store: FormData): Promise<UpdateStoreResponse> => {
+	const { data: response } = await httpClient.patch<UpdateStoreResponse>(`/store/update/image/${id}`, Store)
 	return response
 }
 

@@ -6,10 +6,7 @@ export const getLastOrder = async (request: CustomRequest, response: Response, n
   try {
     const userId = request.UserId; // Assuming UserId is accessible via middleware
     const lastOrder = await orderService.getLastOrder(userId!);
-
-    const responseData: any = lastOrder;
-
-    response.json(responseData);
+    response.json({ success: true, data: lastOrder });
   } catch (error) {
     next(error);
   }
@@ -33,8 +30,7 @@ export const getOrdersByDateRange = async (request: CustomRequest, response: Res
     const userId = request.UserId;
 
     const orders = await orderService.getOrdersByDateRange(userId!, from as string, to as string);
-
-    response.json(orders);
+    response.json({ success: true, data: { items: orders } });
   } catch (error) {
     next(error);
   }
@@ -53,12 +49,15 @@ export const getOrders = async (request: CustomRequest, response: Response, next
       const totalPages = Math.ceil(count / pageSizeNum);
 
       response.json({
-        items: rows,
-        meta: {
-          page: pageNum,
-          pageSize: pageSizeNum,
-          total: count,
-          totalPages,
+        success: true,
+        data: {
+          items: rows,
+          meta: {
+            page: pageNum,
+            pageSize: pageSizeNum,
+            total: count,
+            totalPages,
+          },
         },
       });
     } else {

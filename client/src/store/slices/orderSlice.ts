@@ -101,9 +101,9 @@ export const orderSlice = createSlice({
       .addCase(fetchOrdersByStore.fulfilled, (state, action) => {
 
         state.orders = action.payload.data.items;
-        state.totalOrders = action.payload.data.meta.totalItems;
-        state.currentPage = action.payload.data.meta.currentPage;
-        state.pageSize = action.payload.data.meta.itemsPerPage;
+        state.totalOrders = action.payload.data.meta.total;
+        state.currentPage = action.payload.data.meta.page;
+        state.pageSize = action.payload.data.meta.pageSize;
         state.error = "";
 
         state.loading = false;

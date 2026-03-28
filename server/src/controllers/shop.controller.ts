@@ -221,13 +221,13 @@ export const handelgetall = async (request: CustomRequest, response: Response, n
     const results = await shopService.getTopProductIds();
     response.status(200).json({
       success: true,
-      data: results.products,
-      meta: {
+      data: {
+        products: results.products,
+        total: results.products.length,
         page: 1,
         pageSize: results.products.length,
-        total: results.products.length,
-        totalPages: 1
-      }
+        totalPages: 1,
+      },
     });
   } catch (error) {
     next(error);
@@ -275,13 +275,13 @@ export const getProductsByStore = async (request: CustomRequest, response: Respo
 
     response.json({
       success: true,
-      data: result.products,
-      meta: {
+      data: {
+        products: result.products,
+        total: result.total,
         page: result.page,
         pageSize: result.pageSize,
-        total: result.total,
         totalPages: Math.ceil(result.total / result.pageSize) || 1,
-      }
+      },
     });
   } catch (error) {
     next(error);
@@ -305,13 +305,13 @@ export const getProductsListing = async (request: CustomRequest, response: Respo
 
     response.json({
       success: true,
-      data: result.products,
-      meta: {
+      data: {
+        products: result.products,
+        total: result.total,
         page: result.page,
         pageSize: result.pageSize,
-        total: result.total,
         totalPages: Math.ceil(result.total / result.pageSize) || 1,
-      }
+      },
     });
   } catch (error) {
     next(error);

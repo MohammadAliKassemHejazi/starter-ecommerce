@@ -23,8 +23,8 @@ export const fetchStoreById = createAsyncThunk(
 
 export const updateStoreImages = createAsyncThunk(
   "requestUpdateStoreImage/update",
-  async (Images: FormData) => {
-    const response = await storeService.requestUpdateStoreImage(Images);
+  async ({ id, images }: { id: string; images: FormData }) => {
+    const response = await storeService.requestUpdateStoreImage(id, images);
     return response;
   }
 );
