@@ -45,25 +45,23 @@ export const renderDate = (value: string | Date, format: 'short' | 'long' | 'tim
   );
 };
 
-export const renderImage = (src: string, alt: string, size: 'sm' | 'md' | 'lg' = 'sm') => {
-  const sizeClasses = {
-    sm: 'w-25 h-25',
-    md: 'w-50 h-50',
-    lg: 'w-75 h-75'
-  };
-  
+const FALLBACK_AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23adb5bd'%3E%3Cpath d='M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z'/%3E%3C/svg%3E";
+
+export const renderImage = (src: string | null | undefined, alt: string, size: 'sm' | 'md' | 'lg' = 'sm') => {
+  const sizePx = size === 'sm' ? 40 : size === 'md' ? 60 : 80;
+
   return (
-    <div className={`d-flex align-items-center ${sizeClasses[size]}`}>
-        <Image
-        src={src}
+    <div className="d-flex align-items-center">
+      <img
+        src={src || FALLBACK_AVATAR}
         alt={alt}
-        width={60}
-        height={60}
+        width={sizePx}
+        height={sizePx}
         className="img-thumbnail rounded"
-        style={{ maxWidth: '60px', maxHeight: '60px', objectFit: 'cover' }}
+        style={{ width: sizePx, height: sizePx, objectFit: 'cover' }}
         onError={(e) => {
-          // Optional: fallback handled by API, but you can double-fallback to static placeholder
-          e.currentTarget.src = '/placeholder-image.png';
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = FALLBACK_AVATAR;
         }}
       />
     </div>

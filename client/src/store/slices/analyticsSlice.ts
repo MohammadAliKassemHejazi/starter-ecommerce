@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import * as analyticsService from '../../services/analyticsService';
-import { IIAnalyticsEvent, IIAnalyticsStats, AnalyticsListResponse, IAnalyticsStatsResponse } from '@shared/types/analytics.types';
+import { IAnalyticsEvent, IAnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse } from '@shared/types/analytics.types';
 
 interface AnalyticsState {
   events: IAnalyticsEvent[];
@@ -47,11 +47,11 @@ export const fetchAnalytics = createAsyncThunk<AnalyticsListResponse, any>(
   }
 );
 
-export const fetchIAnalyticsStats = createAsyncThunk<IAnalyticsStatsResponse, any>(
+export const fetchIAnalyticsStats = createAsyncThunk<AnalyticsStatsResponse, any>(
   'analytics/fetchStats',
   async (params: any, { rejectWithValue }) => {
     try {
-      const response = await analyticsService.getIAnalyticsStats(params);
+      const response = await analyticsService.getAnalyticsStats(params);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch stats');
@@ -84,7 +84,7 @@ const analyticsSlice = createSlice({
       })
       .addCase(fetchAnalytics.fulfilled, (state, action) => {
         state.loading = false;
-        state.events = action.payload.data || [];
+        state.events = Array.isArray(action.payload.data) ? action.payload.data : [];
         state.total = action.payload.meta?.total || 0;
         state.totalPages = action.payload.meta?.totalPages || 0;
         state.page = action.payload.meta?.page || 1;
@@ -113,6 +113,9 @@ export const { setFilters, setPage, clearFilters } = analyticsSlice.actions;
 
 export const selectIAnalyticsEvents = (state: RootState) => state.analytics.events;
 export const selectIAnalyticsStats = (state: RootState) => state.analytics.stats;
+export const selectAnalyticsEvents = selectIAnalyticsEvents;
+export const selectAnalyticsStats = selectIAnalyticsStats;
+export const fetchAnalyticsStats = fetchIAnalyticsStats;
 export const selectAnalyticsLoading = (state: RootState) => state.analytics.loading;
 export const selectAnalyticsError = (state: RootState) => state.analytics.error;
 export const selectAnalyticsFilters = (state: RootState) => state.analytics.filters;

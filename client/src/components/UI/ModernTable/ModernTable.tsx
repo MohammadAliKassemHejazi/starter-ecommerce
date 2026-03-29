@@ -126,7 +126,7 @@ export const ModernTable = <T extends Record<string, any>>({
 
   const filteredData = useMemo(() => {
 
-    let filtered = data;
+    let filtered = Array.isArray(data) ? data : [];
 
     // Search filter
     if (searchTerm) {

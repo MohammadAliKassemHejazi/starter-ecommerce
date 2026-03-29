@@ -14,12 +14,13 @@ import router from "next/router";
 const SubCategoriesGrid = () => {
   const dispatch = useAppDispatch();
   const subCategories = useSelector(subCategoriesSelector);
-  const { isAuthenticated } = usePageData();
+  const { isAuthenticated, isAuthenticating } = usePageData();
 
   React.useEffect(() => {
-    dispatch(fetchSubCategories()).then((result) => {     console.log(result, 'Fetching subcategories...');});
-
-  }, [dispatch]);
+    if (!isAuthenticating && isAuthenticated) {
+      dispatch(fetchSubCategories()).then((result) => { console.log(result, 'Fetching subcategories...'); });
+    }
+  }, [dispatch, isAuthenticated, isAuthenticating]);
 
   const handleDeleteSubCategory = async (id: string) => {
     await dispatch(deleteSubCategory(id));

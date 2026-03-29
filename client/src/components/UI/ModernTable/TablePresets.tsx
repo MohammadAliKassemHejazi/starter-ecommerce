@@ -22,7 +22,7 @@ export const UserTablePreset = {
       width: '80px',
       align: 'center' as const,
       render: (value: any, row: any) => renderImage(
-        value || '/default-avatar.png', 
+        value, 
         row.name || 'User', 
         'sm'
       )

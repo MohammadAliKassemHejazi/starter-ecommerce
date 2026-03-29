@@ -20,9 +20,14 @@ const ClientProtectedRoute: React.FC<ProtectedRouteProps> = ({
   fallback = <div>Access Denied</div>,
   redirectTo = '/auth/signin',
 }) => {
- 
+
   const router = useRouter();
-  const { isAuthenticated, canAccessRoute, canAccess } = usePermissions();
+  const { isAuthenticated, isAuthenticating, canAccessRoute, canAccess } = usePermissions();
+
+  // Wait until session fetch completes before making any access decision
+  if (isAuthenticating) {
+    return null;
+  }
 
   // Check if user can access the current route
   const canAccessCurrentRoute = canAccessRoute(router.asPath);

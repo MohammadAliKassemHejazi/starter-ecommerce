@@ -20,7 +20,7 @@ export const handleCreate = async (request: ArticleCreateBodyRequest, response: 
       type,
       userId,
     });
-    response.status(201).json(article);
+    response.status(201).json({ success: true, data: article });
   } catch (error) {
     next(customError(articleErrors.ArticleCreateFailure));
   }
@@ -29,7 +29,7 @@ export const handleCreate = async (request: ArticleCreateBodyRequest, response: 
 export const handleGetArticles = async (request: ArticlesGetRequest, response: Response, next: NextFunction): Promise<void> => {
   try {
     const articles = await articleService.fetchArticles();
-    response.json(articles);
+    response.json({ success: true, data: articles });
   } catch (error) {
     next(error);
   }
@@ -40,8 +40,7 @@ export const handleGetByAuthor = async (request: CustomRequest, response: Respon
   if (userId) {
     try {
       const data: IArticle[] = await articleService.fetchArticleByAuthor(userId);
-      const responseData = data;
-      response.json(responseData);
+      response.json({ success: true, data });
     } catch (error) {
       next(error);
     }
@@ -56,7 +55,7 @@ export const handleGetArticleById = async (request: ArticleGetRequest, response:
   }
   try {
     const article: IArticle = await articleService.fetchArticleById(id);
-    response.json(article);
+    response.json({ success: true, data: article });
   } catch (error) {
     response.status(500).json({ error: 'Internal Server Error' });
   }
@@ -74,7 +73,7 @@ export const handleUpdate = async (request: CustomRequest, response: Response): 
 
   try {
     const article: Number[] = await articleService.updateArticle(id!, title!, text!, type!, userId);
-    response.json(article);
+    response.json({ success: true, data: article });
   } catch (error) {
     response.status(500).json({ error: 'Internal Server Error' });
   }
@@ -85,7 +84,7 @@ export const handleDelete = async (request: CustomRequest, response: Response): 
   const userId = request.UserId;
   try {
     const result: number = await articleService.deleteArticle(id, userId!);
-    response.json(result);
+    response.json({ success: true, data: result });
   } catch (error) {
     response.status(500).json({ error: 'Internal Server Error' });
   }

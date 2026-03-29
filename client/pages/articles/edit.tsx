@@ -108,10 +108,10 @@ export const getServerSideProps: GetServerSideProps = async (
   setAuthHeaders(headers);
 
   if (id) {
-    const article = await requestArticleById(id);
+    const articleResponse = await requestArticleById(id);
     return {
       props: {
-        article,
+        article: articleResponse.data ?? null,
       },
     };
   } else {
