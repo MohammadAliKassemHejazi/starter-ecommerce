@@ -16,7 +16,8 @@
       "Bash(find /c/Users/USER/OneDrive/Desktop/Projects/nodejs-nextjs-starter-template-main -path */types* -name *cart*)",
       "Bash(/tmp/mismatch_summary.txt:*)",
       "Read(//tmp/**)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)"
     ]
   }
 }
