@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -14,9 +14,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "ignoreDeprecations": "6.0",
     "baseUrl": "./src",
     "paths": {
-      "@/components/*": ["components/*"],      
+      "@/components/*": ["components/*"],
       "@/store/*": ["store/*"],
       "@/hooks/*": ["hooks/*"],
       "@/config/*": ["config/*"],
