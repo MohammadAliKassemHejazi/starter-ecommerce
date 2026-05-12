@@ -37,8 +37,7 @@ export const handleCreateRole = async (req: CustomRequest, res: Response, next: 
     const role = await roleService.createRole(name);
     res.status(201).json({
       success: true,
-      role,
-      message: 'Role created successfully',
+      data: role,
     });
   } catch (error) {
     next(customError(roleErrors.RoleCreateFailure));
@@ -99,8 +98,7 @@ export const handleUpdateRole = async (req: CustomRequest, res: Response, next: 
     const role = await roleService.updateRole(id, name);
     res.json({
       success: true,
-      role,
-      message: 'Role updated successfully',
+      data: role,
     });
   } catch (error) {
     next(customError(roleErrors.RoleUpdateFailure));

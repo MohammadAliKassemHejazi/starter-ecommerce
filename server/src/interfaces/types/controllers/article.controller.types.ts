@@ -31,18 +31,3 @@ export interface ArticleDeleteRequest extends CustomRequest {
   params: { id: string };
 }
 
-export interface IArticlesBodyResponse {
-  id: string;
-  title: string;
-  text: string;
-  createdAt: string;
-  updatedAt: string;
-  UserId: string;
-  User?: IArticleAuthor;
-}
-
-export interface IArticleAuthor {
-  id: string;
-  name: string;
-  surname: string;
-}

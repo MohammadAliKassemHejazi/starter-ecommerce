@@ -79,7 +79,7 @@ export const addToFavorites = async (req: Request, res: Response) => {
 export const removeFromFavorites = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).UserId;
-    const { productId } = req.params;
+    const productId = req.params.id;
 
     const favorite = await db.Favorite.findOne({
       where: { userId, productId },

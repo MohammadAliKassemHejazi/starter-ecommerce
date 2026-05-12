@@ -21,6 +21,8 @@ interface Package {
   isSuperAdminPackage: boolean;
   price: number;
   isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const PlansPage = () => {

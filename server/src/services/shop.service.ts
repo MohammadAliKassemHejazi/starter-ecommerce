@@ -7,53 +7,7 @@ import { promises as fsPromises } from 'fs';
 import { validate as uuidValidate } from 'uuid';
 import { IProductImageAttributes } from 'interfaces/types/models/productimage.model.types';
 import { logger } from '../config/logger';
-
-// Local interface mirroring the frontend ProductResponse
-// Including ownerId for backend controller permission checks
-export interface IProductResponse {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice: number;
-  discount: number;
-  stockQuantity: number;
-  isActive: boolean;
-  subcategoryId: string;
-  categoryId: string;
-  storeId: string;
-  ownerId: string; // Required for backend permission checks
-  thumbnail?: string;
-  metaTitle?: string;
-  metaDescription?: string;
-  ratings?: number;
-  commentsCount?: number;
-  createdAt: string;
-  updatedAt: string;
-  productImages?: Array<{
-    id: string;
-    url: string;
-    alt?: string;
-  }>;
-  store?: {
-    id: string;
-    name: string;
-  };
-  category?: {
-    id: string;
-    name: string;
-  };
-  subcategory?: {
-    id: string;
-    name: string;
-  };
-  sizeItems?: Array<{
-    id: string;
-    size: string;
-    sizeId: string;
-    quantity: number;
-  }>;
-}
+import { IProduct } from '@shared/types/product.types';
 
 // Helper to resolve base directory safely
 const getBaseDir = (): string => {
@@ -68,7 +22,7 @@ const calculateRating = (comments: any[]): number => {
 };
 
 // Helper to format product response matching frontend expectations
-const formatProduct = (product: Model<IProductAttributes> | any): IProductResponse => {
+const formatProduct = (product: Model<IProductAttributes> | any): IProduct => {
   const json = typeof product.toJSON === 'function' ? product.toJSON() : product;
 
   const ratings = calculateRating(json.Comments);
@@ -127,7 +81,7 @@ const formatProduct = (product: Model<IProductAttributes> | any): IProductRespon
   };
 };
 
-export const getProductById = async (id: string): Promise<IProductResponse | null> => {
+export const getProductById = async (id: string): Promise<IProduct | null> => {
     const product = await db.Product.findByPk(id, {
         include: [
             { model: db.ProductImage },
@@ -147,7 +101,7 @@ export const getProductById = async (id: string): Promise<IProductResponse | nul
     return formatProduct(product);
 };
 
-export const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProductResponse> => {
+export const createProductWithImages = async (productData: IShopCreateProduct, files: Express.Multer.File[]): Promise<IProduct> => {
   const transaction = await db.sequelize.transaction();
   try {
     // Step 1: Create Product
@@ -195,7 +149,7 @@ export const updateProductWithImages = async (
   productId: string,
   productData: IShopCreateProduct,
   files: Express.Multer.File[],
-): Promise<IProductResponse> => {
+): Promise<IProduct> => {
   const transaction = await db.sequelize.transaction();
   try {
     const product = await db.Product.findByPk(productId, { transaction });
@@ -284,7 +238,7 @@ export const deleteProductImage = async (imageId: string, userId: string): Promi
 };
 
 
-export const updateImages = async (productId: string, files: Express.Multer.File[]): Promise<IProductResponse | null> => {
+export const updateImages = async (productId: string, files: Express.Multer.File[]): Promise<IProduct | null> => {
     if (!files || files.length === 0) return await getProductById(productId);
 
     const imageRecords = files.map((file) => ({
@@ -297,7 +251,7 @@ export const updateImages = async (productId: string, files: Express.Multer.File
     return await getProductById(productId);
 };
 
-export const getTopProductIds = async (): Promise<{ products: IProductResponse[] }> => {
+export const getTopProductIds = async (): Promise<{ products: IProduct[] }> => {
     const products = await db.Product.findAll({
         limit: 10,
         order: [['createdAt', 'DESC']],
@@ -322,7 +276,7 @@ export const fetchProductsByStore = async ({
     pageSize,
     searchQuery,
     orderBy
-}: any): Promise<{ products: IProductResponse[], total: number, page: number, pageSize: number }> => {
+}: any): Promise<{ products: IProduct[], total: number, page: number, pageSize: number }> => {
     const offset = (page - 1) * pageSize;
     const limit = pageSize;
 
@@ -367,7 +321,7 @@ export const fetchProductsByStore = async ({
 export const fetchProductsListing = async ({
     page,
     pageSize
-}: any): Promise<{ products: IProductResponse[], total: number, page: number, pageSize: number }> => {
+}: any): Promise<{ products: IProduct[], total: number, page: number, pageSize: number }> => {
     const offset = (page - 1) * pageSize;
     const limit = pageSize;
 

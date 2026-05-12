@@ -22,7 +22,7 @@ interface SizeItem {
     id: string;
     name: string;
   };
-  Size?: {
+  size?: {
     id: string;
     size: string;
   };
@@ -171,7 +171,7 @@ const SizesPage = () => {
       render: (value: any) => value?.name || 'N/A'
     },
     {
-      key: 'Size',
+      key: 'size',
       label: 'Size',
       render: (value: any) => value?.size || 'N/A'
     },

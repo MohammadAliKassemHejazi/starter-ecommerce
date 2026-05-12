@@ -9,6 +9,7 @@ const router = express.Router();
 const Routes = [
   '/delete/:id',
   '/create',
+  '/update',
   '/update/image/:id',
   '/getall/user',
   '/getall/user/filter',
@@ -22,6 +23,9 @@ protectedRoutes(router, Routes);
 
 // Create a new store
 router.post('/create', storeController.handleCreateStore);
+
+// Update store details
+router.post('/update', storeController.handleUpdateStore);
 
 // Update store images (Bulk addition/replacement)
 router.patch('/update/image/:id', storeController.handleUpdateImages);

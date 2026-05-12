@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { IAuthUser } from "@shared/types/auth.types";
 
 export interface IAuthLoginBodyRequest extends Request {
   body: {
@@ -17,13 +18,5 @@ export interface IAuthRegisterBodyRequest extends Request {
   };
 }
 
-export interface IAuthLoginBodyResponse {
-  id: string;
-  email: string;
-  name: string;
-  address: string;
-  phone: string;
-  accessToken?: string;
-  roles?: Array<{ id: string; name: string; }>;
-  permissions?: Array<{ id: string; name: string; }>;
-}
+// Re-export shared auth user type under the legacy name for backward compatibility
+export type IAuthLoginBodyResponse = IAuthUser;

@@ -23,7 +23,7 @@ export const handleFetchUsersByCreator = async (req: Request, res: Response, nex
       };
     });
 
-    res.json(transformedUsers);
+    res.json({ success: true, data: transformedUsers });
   } catch (error) {
     next(customError(userErrors.UserFetchFailure));
   }
@@ -39,7 +39,7 @@ export const handleCreateUser = async (req: Request, res: Response, next: NextFu
 
   try {
     const user = await userService.createUser({ name, email, password });
-    res.status(201).json(user);
+    res.status(201).json({ success: true, data: user });
   } catch (error) {
     next(customError(userErrors.UserCreateFailure));
   }
@@ -56,7 +56,7 @@ export const handleUpdateUser = async (req: Request, res: Response, next: NextFu
 
   try {
     const user = await userService.updateUser(id, { name, email, phone, address, bio });
-    res.json(user);
+    res.json({ success: true, data: user });
   } catch (error) {
     next(customError(userErrors.UserUpdateFailure));
   }

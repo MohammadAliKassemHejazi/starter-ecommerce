@@ -16,7 +16,7 @@ import { setAuthHeaders } from "@/utils/httpClient";
 import ListingProductsByStore from "@/components/UI/General/listingProducts/ListingProductsByStore";
 
 import { GetStaticPaths, GetStaticProps } from "next";
-import { IProductModel } from "@/models/product.model";
+import { IProduct } from "@shared/types/product.types";
 
 interface IParams extends ParsedUrlQuery {
   id: string;
@@ -36,7 +36,7 @@ interface SingleStoreProps {
     page: number;
     pageSize: number;
     total: number;
-    products: IProductModel[];
+    products: IProduct[];
 
   }>;
 }

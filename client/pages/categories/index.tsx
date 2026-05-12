@@ -15,7 +15,7 @@ const CategoriesGrid = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const categories = useSelector(categoriesSelector);
-  const { isAdmin ,isSuperAdmin } = usePermissions();
+  const { isAdmin, isSuperAdmin, isAuthenticated, isAuthenticating } = usePermissions();
   const [loading, setLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
     show: boolean;
@@ -35,9 +35,10 @@ const CategoriesGrid = () => {
   }, [dispatch]);
   
   useEffect(() => {
-    fetchCategoriesData();
-
-  }, [fetchCategoriesData]);
+    if (!isAuthenticating && isAuthenticated) {
+      fetchCategoriesData();
+    }
+  }, [fetchCategoriesData, isAuthenticated, isAuthenticating]);
 
   const handleDeleteCategory = (category: any) => {
     setDeleteModal({ show: true, category });

@@ -1,11 +1,10 @@
-import { IProductModel } from "../models/product.model";
+import { IProduct, ISize, ISizeItem } from "@shared/types/product.types";
 import { IStoreResponseModel, IStoreModel } from "../models/store.model";
-import { IArticleModel, IArticleModelWithUser } from "../models/article.model";
+import { IArticle } from "@shared/types/article.types";
 import { UserModel } from "../models/user.model";
 import { CartItem } from "../models/cart.model";
 import { IOrderModel, IOrder } from "../models/order.model";
 import { IComment } from "../models/comment.model";
-import { ISize, ISizeItem } from "../models/size.model";
 import { ICategories, ISubCategories } from "../models/utils.model";
 
 /**
@@ -108,7 +107,7 @@ export const mockDatabase = {
     { id: "prod-202", name: "Urban Runner Sneakers", description: "Breathable mesh upper with high-rebound cushioning. Designed for city running and casual wear.", price: 120.00, originalPrice: 150.00, discount: 30, stockQuantity: 85, categoryId: "cat-fash", subcategoryId: "sub-shoes", storeId: "store-fash", thumbnail: "https://images.unsplash.com/photo-1542291026-7eec264c27ff", ratings: 4.6, commentsCount: 60, createdAt: d(45) },
     { id: "prod-203", name: "Organic Cotton T-Shirt 3-Pack", description: "Ethically sourced, 100% organic cotton basic tees. Includes black, white, and grey.", price: 45.00, originalPrice: 60.00, discount: 15, stockQuantity: 200, categoryId: "cat-fash", subcategoryId: "sub-shirts", storeId: "store-fash", thumbnail: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab", ratings: 4.7, commentsCount: 33, createdAt: d(300) },
     { id: "prod-301", name: "Modern Ceramic Vase", description: "Minimalist ceramic vase, perfect for dried flowers or as a standalone centerpiece.", price: 35.50, originalPrice: 35.50, discount: 0, stockQuantity: 40, categoryId: "cat-home", storeId: "store-home", thumbnail: "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5", ratings: 4.0, commentsCount: 2, createdAt: d(120) } // Inactive product
-  ] as IProductModel[],
+  ] as IProduct[],
 
   // Linking sizes and inventory amounts to specific products
   productSizes: [
@@ -129,9 +128,9 @@ export const mockDatabase = {
   ],
 
   articles: [
-    { id: "article-tech1", title: "The Future of Mobile Computing in 2025", content: "As AI integration becomes the standard, our smartphones are transforming into predictive assistants. Let's explore the top trends...", published: true, createdAt: d(30), updatedAt: d(29), author: { id: "user-superadmin", name: "System Administrator", email: "admin@marketplace.com" } },
-    { id: "article-fash1", title: "Sustainable Fashion: Why Organic Matters", content: "The textile industry is changing. Consumers are demanding transparency and eco-friendly materials...", published: true, createdAt: d(60), updatedAt: d(60), author: { id: "user-storeowner2", name: "Bob Builder", email: "bob@fashionhub.com" } }
-  ] as IArticleModelWithUser[],
+    { id: "article-tech1", title: "The Future of Mobile Computing in 2025", text: "As AI integration becomes the standard, our smartphones are transforming into predictive assistants. Let's explore the top trends...", createdAt: d(30), updatedAt: d(29), user: { id: "user-superadmin", name: "System Administrator" } },
+    { id: "article-fash1", title: "Sustainable Fashion: Why Organic Matters", text: "The textile industry is changing. Consumers are demanding transparency and eco-friendly materials...", createdAt: d(60), updatedAt: d(60), user: { id: "user-storeowner2", name: "Bob Builder" } }
+  ] as IArticle[],
 
   cartItems: [
     { id: "prod-102", name: "Noise-Cancelling Earbuds Z", price: 149.99, originalPrice: 149.99, discount: 0, thumbnail: "https://images.unsplash.com/photo-1590658268037-6f5947c66576", quantity: 1, size: "Universal" },

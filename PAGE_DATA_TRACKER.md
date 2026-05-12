@@ -21,19 +21,19 @@ Since this is a large task, I have completed the initial round focusing on the m
 - [x] \`pages/categories/\` -> CategoryResponse, CategoriesListResponse
 - [ ] \`pages/comments/\`
 - [ ] \`pages/dashboard/\`
-- [ ] \`pages/favorites/\`
-- [ ] \`pages/packages/\`
+- [x] \`pages/favorites/\` -> Favorite
+- [x] \`pages/packages/\` -> PackageResponse
 - [x] \`pages/permissions/\` -> PermissionResponse, PermissionsListResponse
-- [ ] \`pages/plans.tsx\`
-- [ ] \`pages/profile.tsx\`
-- [ ] \`pages/promotions/\`
-- [ ] \`pages/returns/\`
+- [x] \`pages/plans.tsx\` -> PackageResponse
+- [x] \`pages/profile.tsx\` -> ProfileViewModel
+- [x] \`pages/promotions/\` -> Promotion
+- [x] \`pages/returns/\` -> ReturnRequest
 - [x] \`pages/roles/\` -> RoleResponse, RolesListResponse
-- [ ] \`pages/settings.tsx\`
-- [ ] \`pages/shipping/\`
-- [ ] \`pages/sizes/\`
+- [x] \`pages/settings.tsx\` -> SettingsViewModel
+- [x] \`pages/shipping/\` -> ShippingMethod, OrderShipping
+- [x] \`pages/sizes/\` -> Size, SizeItem
 - [x] \`pages/subcategories/\` -> ISubCategories (refactored isActive->removed)
-- [ ] \`pages/taxes/\`
+- [x] \`pages/taxes/\` -> TaxRule
 - [x] \`pages/users/\` -> UserResponse, UsersListResponse
 - [x] `pages/analytics/` -> AnalyticsEvent, AnalyticsStats, AnalyticsListResponse, AnalyticsStatsResponse
 

@@ -1,5 +1,3 @@
-import { IProductModel } from '@/models/product.model';
-
 class LocalStorageService {
   // Check if we're in browser environment
   private isBrowser(): boolean {

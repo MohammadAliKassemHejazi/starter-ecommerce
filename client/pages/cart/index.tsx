@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import ProtectedRoute from '@/components/protectedRoute';
 import { RootState, useAppDispatch } from "@/store/store";
-import { IProductModel } from "@/models/product.model";
+import { IProduct } from "@shared/types/product.types";
 import { CartItem } from "@/models/cart.model";
 import Image from "next/image";
 import PaymentMethodSelector from "@/components/Payment/PaymentMethodSelector";
@@ -32,19 +32,19 @@ const Cart = () => {
     }
   }, [dispatch]);
 
-  const handleAddToCart = (product: IProductModel) => {
+  const handleAddToCart = (product: IProduct) => {
     dispatch(addToCart(product)).then(() => {
       dispatch(getTotals());
     });
   };
 
-  const handleDecreaseCart = (product: IProductModel) => {
+  const handleDecreaseCart = (product: IProduct) => {
     dispatch(decreaseCart(product)).then(() => {
       dispatch(getTotals());
     });
   };
 
-  const handleRemoveFromCart = (product: IProductModel) => {
+  const handleRemoveFromCart = (product: IProduct) => {
     dispatch(removeFromCart(product)).then(() => {
       dispatch(getTotals());
     });

@@ -1,16 +1,16 @@
 import { IArticleAttributes } from '../interfaces/types/models/article.model.types';
 import db from '../models';
-import { IArticlesBodyResponse } from '../interfaces/types/controllers/article.controller.types';
+import { IArticle } from '@shared/types/article.types';
 import customError from '../utils/customError';
 import articleErrors from '../utils/errors/article.errors';
 
-export const createArticle = async (data: IArticleAttributes): Promise<IArticleAttributes> => {
-  const response: IArticleAttributes = await db.Article.create(data);
-  return response;
+export const createArticle = async (data: IArticleAttributes): Promise<IArticle> => {
+  const response = await db.Article.create(data);
+  return response as unknown as IArticle;
 };
 
-export const fetchArticleById = async (id: string): Promise<IArticleAttributes> => {
-  const article: IArticleAttributes = await db.Article.findOne({
+export const fetchArticleById = async (id: string): Promise<IArticle> => {
+  const article = await db.Article.findOne({
     where: { id },
     raw: true,
   });
@@ -18,7 +18,7 @@ export const fetchArticleById = async (id: string): Promise<IArticleAttributes> 
   if (article == null) {
     customError(articleErrors.ArticleGetFailure);
   }
-  return article;
+  return article as unknown as IArticle;
 };
 
 export const updateArticle = async (id: string, title: string, text: string, type: string, userId: string): Promise<Number[]> => {
@@ -39,8 +39,8 @@ export const deleteArticle = async (id: string, userId: string): Promise<number>
   return response;
 };
 
-export const fetchArticleByAuthor = async (userId: string): Promise<IArticlesBodyResponse[]> => {
-  const response: IArticlesBodyResponse[] = await db.Article.findAll({ where: { userId }, raw: true }) as unknown as IArticlesBodyResponse[];
+export const fetchArticleByAuthor = async (userId: string): Promise<IArticle[]> => {
+  const response: IArticle[] = await db.Article.findAll({ where: { userId }, raw: true }) as unknown as IArticle[];
   return response;
 };
 

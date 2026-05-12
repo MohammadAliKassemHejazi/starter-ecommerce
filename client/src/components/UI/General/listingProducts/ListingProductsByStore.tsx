@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IProductModel } from "@/models/product.model";
+import { IProduct } from "@shared/types/product.types";
 import { fetchProductsByStore, fetchProductsListing, productByStoreSelector } from "@/store/slices/shopSlice"; 
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ interface ListingProductsByStore {
 
 const ListingProductsByStore: React.FC<ListingProductsByStore> = ({ storeId  }) => {
   const dispatch = useAppDispatch();
-  const products = useSelector(productByStoreSelector) as IProductModel[] ; 
+  const products = useSelector(productByStoreSelector) as IProduct[] ; 
   const productStatus = useSelector((state: any) => state.products.status);
   const page = useSelector((state: any) => state.products.page);
     const [sortBy, setSortBy] = useState("");
@@ -35,7 +35,7 @@ const ListingProductsByStore: React.FC<ListingProductsByStore> = ({ storeId  }) 
   })
   }, [dispatch,storeId,sortBy]);
 
-  const getTagAndColor = (product: IProductModel) => {
+  const getTagAndColor = (product: IProduct) => {
     let tag = '';
     let tagColor = '';
 

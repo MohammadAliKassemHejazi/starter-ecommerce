@@ -1,19 +1,2 @@
-
-
-export interface ISize {
-    id?: string;
-
-  size: string;
-
-}
-  
-export interface ISizeItem {
-  id?: string;
-  sizeId: string;
-  size?: { size: string };
-  quantity: number;
-}
-  
-  
-  
-  
+// Re-exported from shared — single source of truth
+export type { ISize, ISizeItem } from '@shared/types/product.types';

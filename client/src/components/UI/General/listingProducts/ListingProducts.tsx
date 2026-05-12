@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IProductModel } from "@/models/product.model";
+import { IProduct } from "@shared/types/product.types";
 import { fetchProductsListing, productSelector, totalProductsSelector, pageSelector, pageSizeSelector, selectShopLoading } from "@/store/slices/shopSlice";
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
@@ -12,7 +12,7 @@ interface ProductListProps {}
 
 const ProductList: React.FC<ProductListProps> = () => {
   const dispatch = useAppDispatch();
-  const products = useSelector(productSelector) as IProductModel[];
+  const products = useSelector(productSelector) as IProduct[];
   const loading = useSelector(selectShopLoading);
   const total = useSelector(totalProductsSelector);
   const page = useSelector(pageSelector);
@@ -25,7 +25,7 @@ const ProductList: React.FC<ProductListProps> = () => {
     dispatch(fetchProductsListing({ page: 1, pageSize: 10 }));
   }, [dispatch]);
 
-  const getTagAndColor = (product: IProductModel) => {
+  const getTagAndColor = (product: IProduct) => {
     let tag = '';
     let tagColor = '';
 

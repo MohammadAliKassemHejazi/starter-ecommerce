@@ -1,16 +1,16 @@
-import { ImageListType } from "react-images-uploading";
-import { IStoreModel } from "./store.model";
-import { IComment } from "./comment.model";
-import { ISizeItem } from "./size.model";
+import { ImageListType } from 'react-images-uploading';
 
-export interface IProductModel {
-  originalPrice: number;
+// Re-export shared entity and related types as the canonical models
+export type { IProduct, IProductImage, ISizeItem } from '@shared/types/product.types';
+
+// UI-only form model (used in product create/edit forms with image upload)
+export interface IProductFormModel {
   id?: string;
   name?: string;
-  tagColor?: string;
   description?: string;
   price?: number;
-  discount?: number | 0;
+  originalPrice?: number;
+  discount?: number;
   stockQuantity?: number;
   isActive?: boolean;
   subcategoryId?: string;
@@ -19,36 +19,24 @@ export interface IProductModel {
   ownerId?: string;
   thumbnail?: string;
   metaTitle?: string;
-  metaDescription?: string; 
+  metaDescription?: string;
   photos?: ImageListType;
   productImages?: any;
-  store?: IStoreModel;
-  ratings?: number;
-  commentsCount?: number;
-  comments?: IComment[];
-  sizeItems?: ISizeItem[];
-  quantity?: number;
-  sizeId?: string;
-  updatedAt?: string;
-  createdAt?: string;
-}
-
-export interface productresponse {
-  product: IProductModel
+  sizeItems?: Array<{ sizeId: string; quantity: number; size?: { size: string } }>;
 }
 
 export interface IProductModelErrors {
-    id?: string;
-    name: string;
-    description: string;
-    price: string;
-    stockQuantity?: string;
-    isActive?: string;
-    subcategoryId?: string; 
-    storeId?: string;
-    ownerId?: string;
-    metaTitle?: string; 
-    metaDescription?: string;
-    photos: string;
-    productImages: string;
+  id?: string;
+  name: string;
+  description: string;
+  price: string;
+  stockQuantity?: string;
+  isActive?: string;
+  subcategoryId?: string;
+  storeId?: string;
+  ownerId?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  photos: string;
+  productImages: string;
 }

@@ -2,11 +2,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '@/store/store';
 import { addToCart } from '@/store/slices/cartSlice';
-import { IProductModel } from '@/models/product.model';
+import { IProduct } from '@shared/types/product.types';
 import Swal from 'sweetalert2';
 
 interface AddToCartButtonProps {
-  product: IProductModel;
+  product: IProduct;
   variant?: 'icon' | 'button' | 'text';
   size?: 'sm' | 'md' | 'lg';
   className?: string;

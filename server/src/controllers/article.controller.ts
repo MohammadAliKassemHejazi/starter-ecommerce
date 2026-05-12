@@ -4,10 +4,9 @@ import {
   ArticleCreateBodyRequest,
   ArticleGetRequest,
   ArticlesGetRequest,
-  IArticlesBodyResponse,
 } from '../interfaces/types/controllers/article.controller.types';
 import customError from '../utils/customError';
-import { IArticleAttributes } from '../interfaces/types/models/article.model.types';
+import { IArticle } from '@shared/types/article.types';
 import articleErrors from '../utils/errors/article.errors';
 import { CustomRequest } from '../interfaces/types/middlewares/request.middleware.types';
 
@@ -15,13 +14,13 @@ export const handleCreate = async (request: ArticleCreateBodyRequest, response: 
   const userId = request.UserId;
   const { title, text, type } = request.body;
   try {
-    const article: IArticleAttributes = await articleService.createArticle({
+    const article: IArticle = await articleService.createArticle({
       title,
       text,
       type,
       userId,
     });
-    response.status(201).json(article);
+    response.status(201).json({ success: true, data: article });
   } catch (error) {
     next(customError(articleErrors.ArticleCreateFailure));
   }
@@ -30,7 +29,7 @@ export const handleCreate = async (request: ArticleCreateBodyRequest, response: 
 export const handleGetArticles = async (request: ArticlesGetRequest, response: Response, next: NextFunction): Promise<void> => {
   try {
     const articles = await articleService.fetchArticles();
-    response.json(articles);
+    response.json({ success: true, data: articles });
   } catch (error) {
     next(error);
   }
@@ -40,9 +39,8 @@ export const handleGetByAuthor = async (request: CustomRequest, response: Respon
   const userId = request.UserId; // Assuming UserId is accessible via middleware
   if (userId) {
     try {
-      const data: IArticlesBodyResponse[] = await articleService.fetchArticleByAuthor(userId);
-      const responseData = data;
-      response.json(responseData);
+      const data: IArticle[] = await articleService.fetchArticleByAuthor(userId);
+      response.json({ success: true, data });
     } catch (error) {
       next(error);
     }
@@ -56,8 +54,8 @@ export const handleGetArticleById = async (request: ArticleGetRequest, response:
     return;
   }
   try {
-    const article: IArticleAttributes = await articleService.fetchArticleById(id);
-    response.json(article);
+    const article: IArticle = await articleService.fetchArticleById(id);
+    response.json({ success: true, data: article });
   } catch (error) {
     response.status(500).json({ error: 'Internal Server Error' });
   }
@@ -75,7 +73,7 @@ export const handleUpdate = async (request: CustomRequest, response: Response): 
 
   try {
     const article: Number[] = await articleService.updateArticle(id!, title!, text!, type!, userId);
-    response.json(article);
+    response.json({ success: true, data: article });
   } catch (error) {
     response.status(500).json({ error: 'Internal Server Error' });
   }
@@ -86,7 +84,7 @@ export const handleDelete = async (request: CustomRequest, response: Response): 
   const userId = request.UserId;
   try {
     const result: number = await articleService.deleteArticle(id, userId!);
-    response.json(result);
+    response.json({ success: true, data: result });
   } catch (error) {
     response.status(500).json({ error: 'Internal Server Error' });
   }

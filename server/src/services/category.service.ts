@@ -5,28 +5,10 @@ import categoryErrors from '../utils/errors/category.errors';
 
 import { Op } from 'sequelize';
 import * as utilService from './utile.service';
-
-export interface ICategoryResponse {
-  id: string;
-  name: string;
-  description?: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-  createdBy?: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  subcategories?: Array<{
-    id: string;
-    name: string;
-    description?: string;
-  }>;
-}
+import { ICategory } from '@shared/types/category.types';
 
 // Helper to format category for the frontend
-export const formatCategory = (category: any): ICategoryResponse => {
+export const formatCategory = (category: any): ICategory => {
   const plainCategory = category.get ? category.get({ plain: true }) : category;
 
   const result: any = {
@@ -57,7 +39,7 @@ export const formatCategory = (category: any): ICategoryResponse => {
   return result;
 };
 
-export const fetchCategories = async (rootUserId: string): Promise<ICategoryResponse[]> => {
+export const fetchCategories = async (rootUserId: string): Promise<ICategory[]> => {
   try {
     // 1. Get all user IDs in the management hierarchy (including the root user)
     const userIds = await utilService.getManagedUserIds(rootUserId);
@@ -96,7 +78,7 @@ export const fetchCategories = async (rootUserId: string): Promise<ICategoryResp
   }
 };
 
-export const createCategory = async (data: { name: string; description?: string; userId: string }): Promise<ICategoryResponse> => {
+export const createCategory = async (data: { name: string; description?: string; userId: string }): Promise<ICategory> => {
   const { name, description, userId } = data;
   const category = await db.Category.create({ name, description, userId });
 
@@ -119,7 +101,7 @@ export const createCategory = async (data: { name: string; description?: string;
   return formatCategory(fetchedCategory);
 };
 
-export const updateCategory = async (id: string, data: { name: string; description?: string }): Promise<ICategoryResponse> => {
+export const updateCategory = async (id: string, data: { name: string; description?: string }): Promise<ICategory> => {
   const { name, description } = data;
 
   const category = await db.Category.findByPk(id);

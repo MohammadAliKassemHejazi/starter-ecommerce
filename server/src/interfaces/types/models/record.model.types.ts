@@ -1,6 +1,2 @@
-export interface GlobalDataResponse {
-  id: string;
-  title: string;
-  metrics: number;
-  media: string;
-}
+// Re-exported from shared — single source of truth
+export type { GlobalDataResponse } from '@shared/types/apiResponse.types';

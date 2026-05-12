@@ -7,6 +7,7 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import { validationResult } from 'express-validator';
 import { logger } from '../config/logger';
+import db from '../models';
 
 const handleCreateStore = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
   try {
@@ -29,7 +30,7 @@ const handleCreateStore = async (request: CustomRequest, response: Response, nex
     }
 
     const newStore = await storeService.createStoreWithImages(storeData, files || []);
-    response.status(201).json(newStore);
+    response.status(201).json({ success: true, data: newStore });
   } catch (error) {
     next(error);
   }
@@ -40,9 +41,9 @@ const handleGetStoreById = async (request: CustomRequest, response: Response, ne
     const storeId = request.params.id;
     const store = await storeService.getStoreById(storeId);
     if (store) {
-      response.status(200).json(store);
+      response.status(200).json({ success: true, data: store.store });
     } else {
-      response.status(404).json({ message: 'Store not found' });
+      response.status(404).json({ success: false, message: 'Store not found' });
     }
   } catch (error) {
     next(error);
@@ -53,9 +54,9 @@ const handleGetAllStores = async (request: CustomRequest, response: Response, ne
   try {
     const stores = await storeService.getAllStores();
     if (stores) {
-      response.status(200).json(stores);
+      response.status(200).json({ success: true, data: stores });
     } else {
-      response.status(404).json({ message: 'No stores found' });
+      response.status(404).json({ success: false, message: 'No stores found' });
     }
   } catch (error) {
     next(error);
@@ -95,8 +96,8 @@ const handleGetAllStoresForUser = async (request: CustomRequest, response: Respo
         response.status(400).json({ message: 'User ID is required' });
         return;
     }
-    const stores = await storeService.getAllStoresforuser(userId);
-    response.status(200).json(stores);
+    const result = await storeService.getAllStoresforuser(userId);
+    response.status(200).json({ success: true, data: result ? result.stores : [] });
   } catch (error) {
     next(error);
   }
@@ -111,17 +112,59 @@ const handleGetAllStoresForUserWithFilter = async (request: CustomRequest, respo
     }
     const { search = '', orderBy = '', page = '1', pageSize = '10' } = request.query;
 
-    const stores = await storeService.getAllStoresForUserWithFilter(
+    const pageSizeNum = parseInt(pageSize as string, 10);
+    const result = await storeService.getAllStoresForUserWithFilter(
         userId,
         search as string,
         orderBy as string,
         parseInt(page as string, 10),
-        parseInt(pageSize as string, 10)
+        pageSizeNum
     );
-    response.status(200).json(stores);
+    response.status(200).json({
+      success: true,
+      data: result.stores,
+      meta: {
+        page: result.page,
+        pageSize: pageSizeNum,
+        total: result.total,
+        totalPages: result.totalPages,
+      },
+    });
 
   } catch (error) {
       next(error);
+  }
+};
+
+const handleUpdateStore = async (request: CustomRequest, response: Response, next: NextFunction): Promise<void> => {
+  try {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      response.status(400).json({ errors: errors.array() });
+      return;
+    }
+    const storeId = request.body.storeID || request.params.id;
+    if (!storeId) {
+      response.status(400).json({ success: false, message: 'Store ID is required' });
+      return;
+    }
+    const userId = request.UserId;
+    const storeData: Partial<IStoreCreateProduct> = request.body;
+
+    const store = await storeService.getStoreById(storeId);
+    if (!store || !store.store) {
+      response.status(404).json({ success: false, message: 'Store not found' });
+      return;
+    }
+    if (store.store.userId !== userId) {
+      response.status(403).json({ success: false, message: 'Forbidden' });
+      return;
+    }
+
+    const updated = await db.Store.update(storeData, { where: { id: storeId, userId } });
+    response.status(200).json({ success: true, data: updated });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -158,5 +201,6 @@ export default {
   handleUpdateImages,
   handleGetAllStoresForUser,
   handleGetAllStoresForUserWithFilter,
-  handleDeleteStoreImage
+  handleDeleteStoreImage,
+  handleUpdateStore,
 };

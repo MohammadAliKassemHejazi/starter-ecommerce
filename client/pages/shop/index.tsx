@@ -22,14 +22,14 @@ import debounce from "lodash.debounce";
 import Moment from "react-moment";
 import Image from "next/image";
 import Link from "next/link";
-import { IProductModel } from "@/models/product.model";
+import { IProduct } from "@shared/types/product.types";
 import { IStoreResponseModel } from "@/models/store.model";
 import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
 
 const Shop = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const productList = useSelector(productByStoreSelector) as IProductModel[];
+  const productList = useSelector(productByStoreSelector) as IProduct[];
   const totalProducts = useSelector(totalProductsSelector);
   const currentPage = useSelector(pageSelector);
   const pageSize = useSelector(pageSizeSelector);
@@ -121,7 +121,7 @@ const Shop = () => {
     )
   };
 
-  const handleAddToCart = (product: IProductModel) => {
+  const handleAddToCart = (product: IProduct) => {
     if (!isAuthenticated) {
       router.push("/auth/signup");
       return;
@@ -139,11 +139,11 @@ const Shop = () => {
     showToast.success("Product added to cart!");
   };
 
-  const handleEditProduct = (product: IProductModel) => {
+  const handleEditProduct = (product: IProduct) => {
     router.push(`/shop/product/edit?id=${product.id}`);
   };
 
-  const handleViewProduct = (product: IProductModel) => {
+  const handleViewProduct = (product: IProduct) => {
     router.push(`/shop/product/${product.id}`);
   };
 
@@ -162,11 +162,11 @@ const Shop = () => {
       {productList?.map((product, idx) => (
         <div key={idx} className="col-md-4 mb-4">
           <div className="card h-100">
-            {product.photos && (
+            {product.productImages && (
               <Image
                 src={
                   process.env.NEXT_PUBLIC_BASE_URL_Images +
-                  product.photos[0]?.imageUrl
+                  product.productImages[0]?.url
                 }
                 alt={product?.name ?? ""}
                 width={300}

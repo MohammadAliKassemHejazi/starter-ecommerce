@@ -1,15 +1,10 @@
 import httpClient from "@/utils/httpClient";
-import { 
-	PublicStoresListResponse, 
-	PublicProductsListResponse, 
-	PublicCategoriesListResponse 
-} from "@/interfaces/api/public.types";
-import { 
-
-	ProductsListResponse, 
-
-} from "@/interfaces/api/product.types";
-import { ArticlesListResponse } from "@/interfaces/api/article.types";
+import {
+	PublicStoresListResponse,
+	PublicProductsListResponse,
+	PublicCategoriesListResponse
+} from "@shared/types/public.types";
+import { ArticlesListResponse } from "@shared/types/article.types";
 
 // Public API endpoints that don't require authentication
 

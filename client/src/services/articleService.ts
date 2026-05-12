@@ -6,7 +6,7 @@ import {
 	CreateArticleResponse, 
 	UpdateArticleResponse, 
 	DeleteArticleResponse 
-} from "@/interfaces/api/article.types";
+} from "@shared/types/article.types";
 
 export interface IArticleProps {
 	id?: string;

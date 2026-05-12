@@ -1,15 +1,15 @@
 import db from '../models';
-import { IPermissionAttributes } from '../interfaces/types/models/permission.model.types';
+import { IPermission } from '@shared/types/role.types';
 import { createAuditLog } from '../services/auditLog.service';
 import customError from '../utils/customError';
 import permissionErrors from '../utils/errors/permission.errors';
 
-export const fetchPermissions = async (): Promise<IPermissionAttributes[]> => {
+export const fetchPermissions = async (): Promise<IPermission[]> => {
   const permissions = await db.Permission.findAll();
   return permissions;
 };
 
-export const createPermission = async (name: string, performedById: string): Promise<IPermissionAttributes> => {
+export const createPermission = async (name: string, performedById: string): Promise<IPermission> => {
   if (!name) {
     throw customError(permissionErrors.InvalidPermissionName);
   }
@@ -20,7 +20,7 @@ export const createPermission = async (name: string, performedById: string): Pro
   return permission;
 };
 
-export const updatePermission = async (id: string, name: string, performedById: string): Promise<IPermissionAttributes> => {
+export const updatePermission = async (id: string, name: string, performedById: string): Promise<IPermission> => {
   const permission = await db.Permission.findByPk(id);
   if (!permission) {
     throw customError(permissionErrors.PermissionNotFound);
