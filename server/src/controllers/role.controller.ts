@@ -8,7 +8,7 @@ import { isSuperAdmin } from '../services/package.service';
 export const handleFetchRoles = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const roles = await roleService.fetchRoles();
-    res.json(roles);
+    res.json({ success: true, message: 'Roles retrieved successfully', data: roles });
   } catch (error) {
     next(customError(roleErrors.RoleFetchFailure));
   }
@@ -19,7 +19,7 @@ export const handleCreateRole = async (req: CustomRequest, res: Response, next: 
   const userId = req.UserId;
 
   if (!name) {
-    res.status(400).json({ error: 'Role name is required' });
+    res.status(400).json({ success: false, message: 'Role name is required', data: null });
     return;
   }
 
@@ -49,7 +49,7 @@ export const handleDeleteRole = async (req: CustomRequest, res: Response, next: 
   const userId = req.UserId;
 
   if (!id) {
-    res.status(400).json({ error: 'Role ID is required' });
+    res.status(400).json({ success: false, message: 'Role ID is required', data: null });
     return;
   }
 
@@ -80,7 +80,7 @@ export const handleUpdateRole = async (req: CustomRequest, res: Response, next: 
   const userId = req.UserId;
 
   if (!id || !name) {
-    res.status(400).json({ error: 'Role ID and name are required' });
+    res.status(400).json({ success: false, message: 'Role ID and name are required', data: null });
     return;
   }
 

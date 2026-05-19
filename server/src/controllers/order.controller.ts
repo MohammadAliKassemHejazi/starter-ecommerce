@@ -18,7 +18,7 @@ export const getOrderItems = async (request: CustomRequest, response: Response, 
     const userId = request.UserId; // Assuming UserId is accessible via middleware
 
     const orderItems = await orderService.getOrderItems(orderId, userId!);
-    response.json({ orderId, items: orderItems });
+    response.json({ success: true, message: 'Order items retrieved successfully', data: { orderId, items: orderItems } });
   } catch (error) {
     next(error);
   }

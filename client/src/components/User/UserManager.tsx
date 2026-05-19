@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { requestAllPackages, IPackage,assignPackageToUser, getUserPackageLimits, IPackageLimits } from '@/services/packageService';
+import { requestAllPackages, assignPackageToUser, getUserPackageLimits, IPackageLimits } from '@/services/packageService';
+import { IPackage } from '@shared/types/package.types';
 import { ModernTable, UserTablePreset, TableAction } from '@/components/UI/ModernTable';
 
 interface UserManagerProps {

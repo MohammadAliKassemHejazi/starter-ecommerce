@@ -20,7 +20,7 @@ const handleCreateStore = async (request: CustomRequest, response: Response, nex
     storeData.userId = request.UserId;
     const canCreate = await canCreateStore(request.UserId!);
     if (!canCreate) {
-      response.status(403).json({ message: 'Store limit reached. Upgrade your package to create more stores.' });
+      response.status(403).json({ success: false, message: 'Store limit reached. Upgrade your package to create more stores.', data: null });
       return;
     }
 
@@ -68,7 +68,7 @@ const handleDeleteStore = async (request: CustomRequest, response: Response, nex
     const storeId = request.params.id;
     const userId = request.UserId;
     const result = await storeService.deleteStore(storeId, userId!);
-    response.status(200).json(result);
+    response.status(200).json({ success: true, message: 'Store deleted successfully', data: result });
   } catch (error) {
     next(error);
   }
@@ -79,11 +79,11 @@ const handleUpdateImages = async (request: CustomRequest, response: Response, ne
     const storeId = request.params.id;
     const files = request.files as Express.Multer.File[];
     if (!files || files.length === 0) {
-       response.status(400).json({ message: 'No files uploaded' });
+       response.status(400).json({ success: false, message: 'No files uploaded', data: null });
        return;
     }
     const result = await storeService.updateImages(storeId, files);
-    response.status(200).json(result);
+    response.status(200).json({ success: true, message: 'Store images updated successfully', data: result });
   } catch (error) {
     next(error);
   }
@@ -93,11 +93,11 @@ const handleGetAllStoresForUser = async (request: CustomRequest, response: Respo
   try {
     const userId = request.UserId;
     if (!userId) {
-        response.status(400).json({ message: 'User ID is required' });
+        response.status(400).json({ success: false, message: 'User ID is required', data: null });
         return;
     }
     const result = await storeService.getAllStoresforuser(userId);
-    response.status(200).json({ success: true, data: result ? result.stores : [] });
+    response.status(200).json({ success: true, message: 'Stores retrieved successfully', data: result ? result.stores : [] });
   } catch (error) {
     next(error);
   }
@@ -107,7 +107,7 @@ const handleGetAllStoresForUserWithFilter = async (request: CustomRequest, respo
   try {
     const userId = request.UserId;
      if (!userId) {
-        response.status(400).json({ message: 'User ID is required' });
+        response.status(400).json({ success: false, message: 'User ID is required', data: null });
         return;
     }
     const { search = '', orderBy = '', page = '1', pageSize = '10' } = request.query;
@@ -122,8 +122,9 @@ const handleGetAllStoresForUserWithFilter = async (request: CustomRequest, respo
     );
     response.status(200).json({
       success: true,
-      data: result.stores,
-      meta: {
+      message: 'Stores retrieved successfully',
+      data: {
+        items: result.stores,
         page: result.page,
         pageSize: pageSizeNum,
         total: result.total,

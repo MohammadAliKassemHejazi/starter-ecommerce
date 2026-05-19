@@ -85,7 +85,7 @@ export const pages_auth_forgot_password_tsx_mocks = {
 };
 
 export const pages_auth_signin_tsx_mocks = {
-  signInSuccessResponse: { data: { id: "user-1", email: "user@example.com", name: "John Doe", address: "123 Main St", phone: "+1", accessToken: "jwt-abc", roles: [{ id: "role-1", name: "Admin" }], permissions: [] } } as SignIn
+  signInSuccessResponse: { data: { id: "user-1", email: "user@example.com", name: "John Doe", address: "123 Main St", phone: "+1", accessToken: "jwt-abc", roles: [{ id: "role-1", name: "Admin" }], permissions: [] } } as unknown as SignIn
 };
 
 export const pages_auth_signup_tsx_mocks = {
@@ -93,7 +93,7 @@ export const pages_auth_signup_tsx_mocks = {
 };
 
 export const pages_cart_index_tsx_mocks = {
-  cartItems: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, discount: 20, quantity: 2, size: "One Size" }] as CartItem[],
+  cartItems: [{ id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, discount: 20, quantity: 2, size: "One Size" }] as unknown as CartItem[],
   summary: { subtotal: 399.98, shipping: 10.00, total: 409.98 }
 };
 
@@ -191,12 +191,12 @@ export const pages_shipping_index_tsx_mocks = {
 };
 
 export const pages_shop_product_pid_tsx_mocks = {
-  productDetails: { id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, stockQuantity: 50, storeId: "store-1", ratings: 4.5, commentsCount: 1, sizeItems: [{ id: "size-item-1", sizeId: "sz-1", size: { size: "Standard" }, quantity: 50 }], comments: [{ id: "com-1", userName: "Alice", comment: "Great!" }] } as IProduct,
+  productDetails: { id: "prod-1", name: "Wireless Headphones", price: 199.99, originalPrice: 249.99, stockQuantity: 50, storeId: "store-1", ratings: 4.5, commentsCount: 1, sizeItems: [{ id: "size-item-1", sizeId: "sz-1", size: { size: "Standard" }, quantity: 50 }], comments: [{ id: "com-1", userName: "Alice", comment: "Great!" }] } as unknown as IProduct,
   availableSizes: [{ id: "sz-1", size: "Standard" }] as ISize[]
 };
 
 export const pages_shop_product_create_tsx_mocks = {
-  productCreateForm: { name: "", description: "", price: 0, originalPrice: 0, stockQuantity: 1, categoryId: "", storeId: "", photos: [] } as IProduct
+  productCreateForm: { name: "", description: "", price: 0, originalPrice: 0, stockQuantity: 1, categoryId: "", storeId: "", photos: [] } as unknown as IProduct
 };
 
 export const pages_shop_product_edit_tsx_mocks = {
@@ -234,15 +234,15 @@ export const pages_store_index_tsx_mocks = {
 };
 
 export const pages_subcategories_create_tsx_mocks = {
-  subcategoryCreateForm: { name: "", description: "", categoryId: "" } as ISubCategories
+  subcategoryCreateForm: { name: "", description: "", categoryId: "" } as unknown as ISubCategories
 };
 
 export const pages_subcategories_edit_tsx_mocks = {
-  subcategoryEditFormInitialData: { id: "sub-1", name: "Smartphones 5G", description: "Phones.", categoryId: "cat-1" } as ISubCategories
+  subcategoryEditFormInitialData: { id: "sub-1", name: "Smartphones 5G", description: "Phones.", categoryId: "cat-1" } as unknown as ISubCategories
 };
 
 export const pages_subcategories_index_tsx_mocks = {
-  subCategoriesList: [{ id: "sub-1", name: "Smartphones", description: "Phones.", categoryId: "cat-1", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as ISubCategories[]
+  subCategoriesList: [{ id: "sub-1", name: "Smartphones", description: "Phones.", categoryId: "cat-1", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] as unknown as ISubCategories[]
 };
 
 export const pages_taxes_index_tsx_mocks = {

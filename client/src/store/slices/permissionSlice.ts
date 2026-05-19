@@ -69,12 +69,8 @@ const permissionSlice = createSlice({
 
 
     // Handle adding a permission to a role
-    builder.addCase(addPermissionToRole.fulfilled, (state, action) => {
-      const { roleId, permission } = action.payload;
-      const roleIndex = state.permissions.findIndex((perm: IPermission & {permissions?: IPermission[]}) => perm.id === roleId);
-      if (roleIndex !== -1) {
-        (state.permissions[roleIndex] as any).permissions.push(permission);
-      }
+    builder.addCase(addPermissionToRole.fulfilled, (_state, _action) => {
+      // Role-permission assignment handled server-side; no flat permission list update needed
     });
 
     // Handle removing a permission from a role

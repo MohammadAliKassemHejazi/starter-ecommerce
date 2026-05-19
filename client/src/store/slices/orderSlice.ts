@@ -90,7 +90,7 @@ export const orderSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchOrdersByDate.fulfilled, (state, action) => {
-        state.orders = action.payload.data.items;
+        state.orders = action.payload.data;
       })
       .addCase(fetchOrdersByDate.rejected, (state) => {
         state.error = "Failed to fetch orders by date";
@@ -100,10 +100,10 @@ export const orderSlice = createSlice({
       })
       .addCase(fetchOrdersByStore.fulfilled, (state, action) => {
 
-        state.orders = action.payload.data.items;
-        state.totalOrders = action.payload.data.meta.total;
-        state.currentPage = action.payload.data.meta.page;
-        state.pageSize = action.payload.data.meta.pageSize;
+        state.orders = action.payload.data;
+        state.totalOrders = action.payload.meta.total;
+        state.currentPage = action.payload.meta.page;
+        state.pageSize = action.payload.meta.pageSize;
         state.error = "";
 
         state.loading = false;

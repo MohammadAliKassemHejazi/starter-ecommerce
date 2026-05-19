@@ -31,7 +31,7 @@ export const getFavorites = async (req: Request, res: Response) => {
       return favJson;
     });
 
-    res.json(formattedFavorites);
+    res.json({ success: true, message: 'Favorites retrieved successfully', data: formattedFavorites });
   } catch (error) {
     console.error('Error getting favorites:', error);
     res.status(500).json({
@@ -49,7 +49,7 @@ export const addToFavorites = async (req: Request, res: Response) => {
     // Check if product exists
     const product = await db.Product.findByPk(productId);
     if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
+      return res.status(404).json({ success: false, message: 'Product not found', data: null });
     }
 
     // Check if already in favorites
@@ -58,7 +58,7 @@ export const addToFavorites = async (req: Request, res: Response) => {
     });
 
     if (existingFavorite) {
-      return res.status(400).json({ error: 'Product already in favorites' });
+      return res.status(400).json({ success: false, message: 'Product already in favorites', data: null });
     }
 
     const favorite = await db.Favorite.create({
@@ -66,7 +66,7 @@ export const addToFavorites = async (req: Request, res: Response) => {
       productId,
     });
 
-    res.status(201).json(favorite);
+    res.status(201).json({ success: true, message: 'Product added to favorites successfully', data: favorite });
   } catch (error) {
     console.error('Error adding to favorites:', error);
     res.status(500).json({
@@ -86,12 +86,12 @@ export const removeFromFavorites = async (req: Request, res: Response) => {
     });
 
     if (!favorite) {
-      return res.status(404).json({ error: 'Favorite not found' });
+      return res.status(404).json({ success: false, message: 'Favorite not found', data: null });
     }
 
     await favorite.destroy();
 
-    res.json({ message: 'Product removed from favorites' });
+    res.json({ success: true, message: 'Product removed from favorites successfully', data: null });
   } catch (error) {
     console.error('Error removing from favorites:', error);
     res.status(500).json({

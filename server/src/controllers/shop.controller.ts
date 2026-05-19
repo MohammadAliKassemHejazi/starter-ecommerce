@@ -45,13 +45,11 @@ export const handleCreateProduct = async (
       // Process product creation with data and files
       const results = await shopService.createProductWithImages(productData, files);
 
-      const responseData: any = {
+      response.status(200).json({
         success: true,
-        product: results,
         message: 'Product created successfully',
-      };
-
-      response.status(200).json(responseData);
+        data: results,
+      });
     } else {
       throw new Error('Images are missing while creating a product');
     }
@@ -115,7 +113,7 @@ export const handleDeleteImage = async (request: CustomRequest, response: Respon
   const userId = request.UserId;
   try {
     const result: number = await shopService.deleteProductImage(id, userId!);
-    response.json(result);
+    response.json({ success: true, message: 'Product image deleted successfully', data: result });
   } catch (error) {
     next(error);
   }
@@ -142,7 +140,7 @@ export const handleUpdate = async (request: CustomRequest, response: Response, n
     const updatedProduct = await shopService.updateProductWithImages(productId, productData, files);
 
     // Step 3: Return the updated product
-    response.status(200).json({ product: updatedProduct });
+    response.status(200).json({ success: true, message: 'Product updated successfully', data: updatedProduct });
   } catch (error) {
     // Step 4: Clean up uploaded files in case of an error
     try {
@@ -192,7 +190,7 @@ export const handleUpdateImages = async (request: CustomRequest, response: Respo
     const updatedProduct = await shopService.updateImages(productId, files);
 
     // Step 3: Return the updated product
-    response.status(200).json({ product: updatedProduct });
+    response.status(200).json({ success: true, message: 'Product images updated successfully', data: updatedProduct });
   } catch (error) {
     // Step 4: Clean up uploaded files in case of an error
     try {
