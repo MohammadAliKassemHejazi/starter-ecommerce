@@ -9,7 +9,7 @@ export const initiateCartPayment = async (req: CustomRequest, res: Response, nex
     const userId = req.UserId ?? '';
     const { amount, currency, paymentMethodId } = req.body;
     const paymentResponse: IPaymentResponse = await PaymentService.processCartPayment(amount, currency, paymentMethodId, userId);
-    res.status(200).json(paymentResponse); // Return clientSecret to frontend
+    res.status(200).json({ success: true, message: 'Payment initiated', data: paymentResponse });
   } catch (error) {
     next(error);
   }
@@ -21,7 +21,7 @@ export const initiatePackagePayment = async (req: CustomRequest, res: Response, 
     const userId = req.UserId ?? '';
     const { amount, currency, paymentMethodId, packageId } = req.body;
     const paymentResponse: IPaymentResponse = await PaymentService.processPackagePayment(amount, currency, paymentMethodId, userId, packageId);
-    res.status(200).json(paymentResponse); // Return clientSecret to frontend
+    res.status(200).json({ success: true, message: 'Payment initiated', data: paymentResponse });
   } catch (error) {
     next(error);
   }

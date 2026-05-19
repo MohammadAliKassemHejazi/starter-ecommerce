@@ -123,8 +123,8 @@ const handleGetAllStoresForUserWithFilter = async (request: CustomRequest, respo
     response.status(200).json({
       success: true,
       message: 'Stores retrieved successfully',
-      data: {
-        items: result.stores,
+      data: result.stores,
+      meta: {
         page: result.page,
         pageSize: pageSizeNum,
         total: result.total,

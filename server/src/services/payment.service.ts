@@ -97,13 +97,10 @@ export const processCartPayment = async (amount: number, currency: string, payme
       userId,
     });
 
-    // Return the payment response
     return {
-      body: {
-        status: 'success',
-        transactionId: paymentIntent.id,
-        clientSecret: paymentIntent.client_secret ?? '', // Return clientSecret for frontend confirmation
-      },
+      status: 'success',
+      transactionId: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret ?? '',
     };
   } catch (error) {
     console.error('Cart payment processing error:', error);
@@ -166,11 +163,9 @@ export const processPackagePayment = async (
     });
 
     return {
-      body: {
-        status: 'success',
-        transactionId: paymentIntent.id,
-        clientSecret: paymentIntent.client_secret ?? '',
-      },
+      status: 'success',
+      transactionId: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret ?? '',
     };
   } catch (error) {
     console.error('Package payment processing error:', error);
@@ -270,10 +265,10 @@ const handleCartPaymentSuccess = async (paymentIntent: any, transaction: any) =>
     }
 
     // Subtract the purchased quantity
-    sizeItem.dataValues.quantity -= item.quantity;
+    sizeItem.quantity -= item.quantity;
 
     // If the quantity reaches 0, delete the SizeItem
-    if (sizeItem.dataValues.quantity <= 0) {
+    if (sizeItem.quantity <= 0) {
       await sizeItem.destroy({ transaction });
     } else {
       // Otherwise, save the updated quantity

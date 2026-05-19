@@ -16,7 +16,7 @@ const CheckoutGuard: React.FC<CheckoutGuardProps> = ({ children }) => {
     if (!isAuthenticated) {
       // Redirect to login with return URL
       const returnUrl = router.asPath;
-      router.push(`/auth/login?returnUrl=${encodeURIComponent(returnUrl)}`);
+      router.push(`/auth/signin?returnUrl=${encodeURIComponent(returnUrl)}`);
     }
   }, [isAuthenticated, router]);
 

@@ -58,7 +58,7 @@ export const requestAllPackages = async (): Promise<PackagesListResponse> => {
 
 // Get package by ID
 export const requestPackageById = async (id: string): Promise<PackageResponse> => {
-  const { data: response } = await httpClient.get<PackageResponse>(`/packages?id=${id}`);
+  const { data: response } = await httpClient.get<PackageResponse>(`/packages/${id}`);
   return response;
 };
 

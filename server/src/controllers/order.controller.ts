@@ -30,7 +30,7 @@ export const getOrdersByDateRange = async (request: CustomRequest, response: Res
     const userId = request.UserId;
 
     const orders = await orderService.getOrdersByDateRange(userId!, from as string, to as string);
-    response.json({ success: true, data: { items: orders } });
+    response.json({ success: true, message: 'Orders retrieved successfully', data: orders });
   } catch (error) {
     next(error);
   }
@@ -50,14 +50,13 @@ export const getOrders = async (request: CustomRequest, response: Response, next
 
       response.json({
         success: true,
-        data: {
-          items: rows,
-          meta: {
-            page: pageNum,
-            pageSize: pageSizeNum,
-            total: count,
-            totalPages,
-          },
+        message: 'Orders retrieved successfully',
+        data: rows,
+        meta: {
+          page: pageNum,
+          pageSize: pageSizeNum,
+          total: count,
+          totalPages,
         },
       });
     } else {

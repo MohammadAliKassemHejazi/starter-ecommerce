@@ -9,7 +9,6 @@ import cookie from "cookie";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const action = req.query.AUTH?.[1] as string | undefined;
-console.log(`API auth action: ${action}, method: ${req.method}`);
   if (req.method === HTTP_METHOD_POST && action === "login") {
     return handleSignIn(req, res);
   } else if (req.method === HTTP_METHOD_POST && action === "register") {
@@ -31,7 +30,7 @@ const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
     const response = await httpClient.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/login`, req.body);
   const { accessToken, ...userData } = response.data.data;
 
-    // Set HTTP-only cookie
+    // Set HTTP-only cookie for SSR requests
     setCookie(res, ACCESS_TOKEN_KEY, accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
@@ -39,8 +38,8 @@ const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
       path: "/",
     });
 
-    // Return user data (without token)
-    res.status(200).json(userData);
+    // Return user data including token so client can set Authorization header
+    res.status(200).json({ ...userData, accessToken });
   } catch (error: any) {
     console.error("Sign-in error:", error.response?.data || error.message);
     res.status(401).json({ error: "Invalid credentials" });
@@ -59,8 +58,7 @@ const handleSignUp = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handleGetSession = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    console.log("Handling get session");
-    // Extract token from cookies 
+    // Extract token from cookies
 
     const cookies = cookie.parse(req.headers.cookie || "");
     const accessToken = cookies[ACCESS_TOKEN_KEY];
@@ -86,6 +84,5 @@ const handleGetSession = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handleSignOut = async (_req: NextApiRequest, res: NextApiResponse) => {
   clearCookie(res, ACCESS_TOKEN_KEY);
-  console.log("User signed out, cookie cleared");
   res.status(200).json({ success: true, message: "Signed out" });
 };

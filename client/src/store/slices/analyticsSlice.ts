@@ -84,11 +84,12 @@ const analyticsSlice = createSlice({
       })
       .addCase(fetchAnalytics.fulfilled, (state, action) => {
         state.loading = false;
-        state.events = Array.isArray(action.payload.data) ? action.payload.data : [];
-        state.total = action.payload.meta?.total || 0;
-        state.totalPages = action.payload.meta?.totalPages || 0;
-        state.page = action.payload.meta?.page || 1;
-        state.limit = action.payload.meta?.pageSize || 10;
+        const d = action.payload.data as any;
+        state.events = d?.items || (Array.isArray(action.payload.data) ? action.payload.data : []);
+        state.total = d?.total ?? action.payload.meta?.total ?? 0;
+        state.totalPages = d?.totalPages ?? action.payload.meta?.totalPages ?? 0;
+        state.page = d?.page ?? action.payload.meta?.page ?? 1;
+        state.limit = d?.limit ?? d?.pageSize ?? action.payload.meta?.pageSize ?? 10;
       })
       .addCase(fetchAnalytics.rejected, (state, action) => {
         state.loading = false;

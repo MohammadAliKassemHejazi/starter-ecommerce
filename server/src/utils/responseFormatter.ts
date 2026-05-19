@@ -75,12 +75,10 @@ export class ResponseFormatter {
   static paginated(res: Response, data: any[], page: number, limit: number, total: number, message: string = 'Success'): Response {
     const totalPages = Math.ceil(total / limit);
 
-    // We structure the data to contain both the list and pagination info
     const responseData = {
-      // STANDARDIZED: Using 'items' consistently
       items: data,
       page,
-      limit,
+      pageSize: limit,
       total,
       totalPages,
     };

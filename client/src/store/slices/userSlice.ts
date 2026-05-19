@@ -150,7 +150,6 @@ export const userSlice = createSlice({
 			state.isAuthenticated = false;
 		});
 		builder.addCase(signIn.fulfilled, (state, action) => {
-			console.log("sign in", action.payload);
 			state.id = action.payload.data.id;
 			state.accessToken = action.payload.data.accessToken || "";
 			state.email = action.payload.data.email;
@@ -162,7 +161,6 @@ export const userSlice = createSlice({
 			state.permissions = action.payload.data.permissions || [];
 			state.isAuthenticated = true;
 			state.isAuthenticating = false;
-			console.log("User signed in:", state.isAuthenticated, state.permissions);
 		});
 		builder.addCase(signIn.rejected, (state) => {
 			state.accessToken = "";
@@ -177,7 +175,6 @@ export const userSlice = createSlice({
 		});
 		builder.addCase(fetchSession.fulfilled, (state, action) => {
 			state.isAuthenticating = false;
-			console.log("fetch session", action.payload.data);
 			if (action.payload.data && action.payload.data.email && action.payload.data.accessToken) {
 				state.accessToken = action.payload.data.accessToken || "";
 				state.id = action.payload.data.id;

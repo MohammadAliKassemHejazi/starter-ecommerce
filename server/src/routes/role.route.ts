@@ -4,8 +4,8 @@ import { protectedRoutes } from '../middlewares';
 
 const router = Router();
 
-// Define routes to protect
-const protectedRoutesList = ['/create', '/update/:id', '/delete/:id'];
+// Protect all mutation routes (POST, DELETE, PUT)
+const protectedRoutesList = ['/', '/:id'];
 protectedRoutes(router, protectedRoutesList);
 
 /**

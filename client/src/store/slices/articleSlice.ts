@@ -65,7 +65,7 @@ export const articleSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchArticleById.fulfilled, (state, action) => {
-      state.article = action.payload as any;
+      state.article = action.payload.data as any;
     });
 
     builder.addCase(fetchArticleById.rejected, (state) => {
@@ -81,7 +81,7 @@ export const articleSlice = createSlice({
     });
 
     builder.addCase(fetchAllArticles.fulfilled, (state, action) => {
-      state.articles = action.payload as any;
+      state.articles = action.payload.data as any;
     });
 
     builder.addCase(fetchAllArticles.rejected, (state) => {

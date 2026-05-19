@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as vendorService from '../../services/vendorService';
 import { RootState } from '../store';
-import { Console } from 'console';
 
 interface VendorDashboardState {
   salesData: { totalSales: number, monthlySales: { month: string, totalAmount: number }[] } | null;

@@ -84,7 +84,7 @@ export const updateProduct = createAsyncThunk(
   }
 );
 export const updateProductImages = createAsyncThunk(
-  "shop/update",
+  "shop/update/images",
   async (Images: FormData) => {
     const response = await shopService.requestUpdateProductImages(Images);
     return response;

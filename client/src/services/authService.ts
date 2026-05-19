@@ -21,7 +21,6 @@ export const signIn = async (user: signProps): Promise<SignInResponse> => {
       baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
     }
 	);
-	console.log("signIn response:", response);
 	return response;
 };
 

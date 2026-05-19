@@ -19,7 +19,6 @@ import { PackageManager } from '@/components/Package/PackageManager';
 import { PageLayout } from '@/components/UI/PageComponents';
 import ProtectedRoute from '@/components/protectedRoute';
 import { usePageData } from '@/hooks/usePageData';
-import { Console } from 'console';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();

@@ -27,10 +27,10 @@ export const deletePermission = async (id: string) => {
 };
 
 export const addPermissionToRole = async (roleId: string, permissionId: string) => {
-  const response = await httpClient.post<AddPermissionToRoleResponse>(`/admin/roles/${roleId}/permissions`, { permissionId });
+  const response = await httpClient.post<AddPermissionToRoleResponse>(`/admin/permissions/${roleId}/permissions`, { permissionId });
   return response.data.data;
 };
 
 export const removePermissionFromRole = async (roleId: string, permissionId: string) => {
-  await httpClient.delete(`/admin/roles/${roleId}/permissions/${permissionId}`);
+  await httpClient.delete(`/admin/permissions/${roleId}/permissions/${permissionId}`);
 };
