@@ -21,7 +21,7 @@ export const handleLogin = async (request: IAuthLoginBodyRequest, response: Resp
       });
     }
 
-    response.json(login);
+    response.json({ success: true, message: 'Login successful', data: login });
   } catch (error) {
     next(authErrors.AuthInvalidEmail);
   }
@@ -37,7 +37,7 @@ export const handleRegister = async (request: IAuthRegisterBodyRequest, response
       address,
       phone,
     });
-    response.status(201).json(user);
+    response.status(201).json({ success: true, message: 'User registered successfully', data: user });
   } catch (error) {
     next(authErrors.AuthRegisterFailure);
   }
@@ -47,7 +47,7 @@ export const isAuthenticated = async (request: CustomRequest, response: Response
   try {
     const UserId = request.UserId; // Assuming UserId is accessible via middleware
     const userSession = await userService.userSession(UserId!);
-    response.json(userSession);
+    response.json({ success: true, message: 'Authentication verified', data: userSession });
   } catch (e) {
     next(e);
   }
@@ -58,7 +58,7 @@ export const getUserSessions = async (request: CustomRequest, response: Response
     const UserId = request.UserId;
     const { page = 1, limit = 10 } = request.query;
     const offset = (Number(page) - 1) * Number(limit);
-    if (!UserId) {
+    if (UserId) {
       const { count, rows } = await db.UserSession.findAndCountAll({
         where: { userId: UserId },
         order: [['loginAt', 'DESC']],
@@ -68,16 +68,17 @@ export const getUserSessions = async (request: CustomRequest, response: Response
 
       response.status(200).json({
         success: true,
-        sessions: rows,
-        pagination: {
-          page: Number(page),
-          limit: Number(limit),
+        message: 'Sessions retrieved successfully',
+        data: {
+          items: rows,
           total: count,
-          pages: Math.ceil(count / Number(limit)),
+          page: Number(page),
+          pageSize: Number(limit),
+          totalPages: Math.ceil(count / Number(limit)),
         },
       });
     } else {
-      response.status(200).json({ success: true, sessions: [], pagination: null });
+      response.status(200).json({ success: true, message: 'No sessions found', data: { items: [], total: 0, page: 1, pageSize: Number(limit), totalPages: 0 } });
     }
   } catch (error) {
     console.error('Error getting user sessions:', error);
@@ -105,7 +106,7 @@ export const loggedOut = async (request: CustomRequest, response: Response): Pro
     response.status(200).json({
       success: true,
       message: 'Logged out successfully',
-      userId: UserId,
+      data: { userId: UserId },
     });
   } catch (error) {
     console.error('Error during logout:', error);

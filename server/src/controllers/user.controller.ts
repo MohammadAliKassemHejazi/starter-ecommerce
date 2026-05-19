@@ -7,7 +7,7 @@ export const handleFetchUsersByCreator = async (req: Request, res: Response, nex
   try {
     const userId = (req as any).UserId;
     if (!userId) {
-      res.status(401).json({ error: 'Unauthorized' });
+      res.status(401).json({ success: false, message: 'Unauthorized', data: null });
       return;
     }
 
@@ -23,7 +23,7 @@ export const handleFetchUsersByCreator = async (req: Request, res: Response, nex
       };
     });
 
-    res.json({ success: true, data: transformedUsers });
+    res.json({ success: true, message: 'Users fetched successfully', data: transformedUsers });
   } catch (error) {
     next(customError(userErrors.UserFetchFailure));
   }
@@ -33,13 +33,13 @@ export const handleCreateUser = async (req: Request, res: Response, next: NextFu
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    res.status(400).json({ error: 'Name, email, and password are required' });
+    res.status(400).json({ success: false, message: 'Name, email, and password are required', data: null });
     return;
   }
 
   try {
     const user = await userService.createUser({ name, email, password });
-    res.status(201).json({ success: true, data: user });
+    res.status(201).json({ success: true, message: 'User created successfully', data: user });
   } catch (error) {
     next(customError(userErrors.UserCreateFailure));
   }
@@ -50,13 +50,13 @@ export const handleUpdateUser = async (req: Request, res: Response, next: NextFu
   const { name, email, phone, address, bio } = req.body;
 
   if (!id) {
-    res.status(400).json({ error: 'User ID is required' });
+    res.status(400).json({ success: false, message: 'User ID is required', data: null });
     return;
   }
 
   try {
     const user = await userService.updateUser(id, { name, email, phone, address, bio });
-    res.json({ success: true, data: user });
+    res.json({ success: true, message: 'User updated successfully', data: user });
   } catch (error) {
     next(customError(userErrors.UserUpdateFailure));
   }
@@ -66,13 +66,13 @@ export const handleDeleteUser = async (req: Request, res: Response, next: NextFu
   const id = req.params.id;
 
   if (!id) {
-    res.status(400).json({ error: 'User ID is required' });
+    res.status(400).json({ success: false, message: 'User ID is required', data: null });
     return;
   }
 
   try {
     await userService.deleteUser(id);
-    res.json({ message: 'User deleted successfully' });
+    res.json({ success: true, message: 'User deleted successfully', data: null });
   } catch (error) {
     next(customError(userErrors.UserDeleteFailure));
   }
@@ -83,13 +83,13 @@ export const handleAssignRoleToUser = async (req: Request, res: Response, next: 
   const { roleId } = req.body;
 
   if (!userId || !roleId) {
-    res.status(400).json({ error: 'User ID and Role ID are required' });
+    res.status(400).json({ success: false, message: 'User ID and Role ID are required', data: null });
     return;
   }
 
   try {
     const result = await userService.assignRoleToUser(userId, roleId);
-    res.json(result);
+    res.json({ success: true, message: 'Role assigned to user successfully', data: result });
   } catch (error) {
     next(customError(userErrors.UserRoleAssignmentFailure));
   }
@@ -100,13 +100,13 @@ export const handleRemoveRoleFromUser = async (req: Request, res: Response, next
   const roleId = req.params.roleId;
 
   if (!userId || !roleId) {
-    res.status(400).json({ error: 'User ID and Role ID are required' });
+    res.status(400).json({ success: false, message: 'User ID and Role ID are required', data: null });
     return;
   }
 
   try {
     await userService.removeRoleFromUser(userId, roleId);
-    res.json({ message: 'Role removed successfully' });
+    res.json({ success: true, message: 'Role removed successfully', data: null });
   } catch (error) {
     next(customError(userErrors.UserRoleRemovalFailure));
   }

@@ -13,14 +13,12 @@ import { CustomRequest } from 'interfaces/types/middlewares/request.middleware.t
 export const getCart = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     if (!req.UserId) {
-      return res.status(200).json({ message: '' });
+      return res.status(200).json({ success: true, message: 'Cart is empty', data: null });
     }
     const userId = req.UserId ?? '';
     const cart = await getCartService(userId);
 
-    const responseData: any = cart;
-
-    res.status(200).json(responseData);
+    res.status(200).json({ success: true, message: 'Cart retrieved successfully', data: cart });
   } catch (error) {
     next(error);
   }
@@ -34,7 +32,7 @@ export const addToCart = async (req: CustomRequest, res: Response, next: NextFun
     const { productId, quantity, sizeId } = req.body;
     // Add item to cart
     const cartItem = await addToCartService(userId, productId, quantity, sizeId);
-    res.status(200).json(cartItem);
+    res.status(200).json({ success: true, message: 'Item added to cart successfully', data: cartItem });
   } catch (error) {
     next(error);
   }
@@ -46,7 +44,7 @@ export const decreaseCart = async (req: CustomRequest, res: Response, next: Next
     const userId = req.UserId ?? '';
     const { productId, quantity, sizeId } = req.body;
     const cartItem = await decreaseCartService(userId, productId, quantity, sizeId);
-    res.status(200).json(cartItem);
+    res.status(200).json({ success: true, message: 'Cart item quantity decreased successfully', data: cartItem });
   } catch (error) {
     next(error);
   }
@@ -58,7 +56,7 @@ export const removeFromCart = async (req: CustomRequest, res: Response, next: Ne
     const userId = req.UserId ?? '';
     const { productId, sizeId } = req.params;
     await removeFromCartService(userId, productId, sizeId);
-    res.status(204).send();
+    res.status(200).json({ success: true, message: 'Item removed from cart successfully', data: null });
   } catch (error) {
     next(error);
   }
@@ -69,7 +67,7 @@ export const clearCart = async (req: CustomRequest, res: Response, next: NextFun
   try {
     const userId = req.UserId ?? '';
     await clearCartService(userId);
-    res.status(204).send();
+    res.status(200).json({ success: true, message: 'Cart cleared successfully', data: null });
   } catch (error) {
     next(error);
   }

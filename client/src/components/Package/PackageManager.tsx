@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  requestAllPackages, 
+import {
+  requestAllPackages,
   requestCreatePackage,
 requestActivatePackage,
   requestUpdatePackage,
   requestDeletePackage,
   assignPackageToUser,
-  IPackage,
-  IUserPackage 
+  IUserPackage
 } from '@/services/packageService';
-import { Console } from 'console';
+import { IPackage } from '@shared/types/package.types';
 
 interface PackageManagerProps {
   isSuperAdmin: boolean;

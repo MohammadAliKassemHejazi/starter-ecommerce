@@ -9,7 +9,7 @@ import { isSuperAdmin } from '../services/package.service';
 export const handleFetchPermissions = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const permissions = await permissionService.fetchPermissions();
-    res.json(permissions);
+    res.json({ success: true, message: 'Permissions retrieved successfully', data: permissions });
   } catch (error) {
     next(customError(permissionErrors.PermissionFetchFailure));
   }
@@ -39,8 +39,8 @@ export const handleCreatePermission = async (req: CustomRequest, res: Response, 
     const permission = await permissionService.createPermission(name, userId!);
     res.status(201).json({
       success: true,
-      permission,
       message: 'Permission created successfully',
+      data: permission,
     });
   } catch (error) {
     next(customError(permissionErrors.PermissionCreateFailure));
@@ -59,7 +59,7 @@ export const handleUpdatePermission = async (req: CustomRequest, res: Response, 
 
   try {
     const permission = await permissionService.updatePermission(id, name, req['UserId']!);
-    res.json(permission);
+    res.json({ success: true, message: 'Permission updated successfully', data: permission });
   } catch (error) {
     next(customError(permissionErrors.PermissionUpdateFailure));
   }
@@ -76,7 +76,7 @@ export const handleDeletePermission = async (req: CustomRequest, res: Response, 
 
   try {
     await permissionService.deletePermission(id, req['UserId']!);
-    res.json({ message: 'Permission deleted successfully' });
+    res.json({ success: true, message: 'Permission deleted successfully', data: null });
   } catch (error) {
     next(customError(permissionErrors.PermissionDeleteFailure));
   }
@@ -94,7 +94,7 @@ export const handleAddPermissionToRole = async (req: CustomRequest, res: Respons
 
   try {
     const result = await permissionService.addPermissionToRole(roleId, permissionId, req['UserId']!);
-    res.json(result);
+    res.json({ success: true, message: 'Permission added to role successfully', data: result });
   } catch (error) {
     next(customError(permissionErrors.PermissionAssignmentFailure));
   }
@@ -112,7 +112,7 @@ export const handleRemovePermissionFromRole = async (req: CustomRequest, res: Re
 
   try {
     await permissionService.removePermissionFromRole(roleId, permissionId, req['UserId']!);
-    res.json({ message: 'Permission removed successfully' });
+    res.json({ success: true, message: 'Permission removed from role successfully', data: null });
   } catch (error) {
     next(customError(permissionErrors.PermissionRemovalFailure));
   }

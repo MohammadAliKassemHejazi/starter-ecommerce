@@ -6,7 +6,7 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import ProtectedRoute from '@/components/protectedRoute';
 import { ModernTable, TableColumn } from '@/components/UI/ModernTable';
-import { AnalyticsEvent } from '@/interfaces/api/analytics.types';
+import { IAnalyticsEvent as AnalyticsEvent } from '@/interfaces/api/analytics.types';
 import {
   fetchAnalytics,
   fetchAnalyticsStats,

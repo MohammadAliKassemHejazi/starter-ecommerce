@@ -7,9 +7,9 @@ export const handleUserProfile = async (request: CustomRequest, response: Respon
   const UserId = request.UserId;
   try {
     const user: IAuthLoginBodyResponse = await userService.getUserById(UserId!);
-    response.status(200).json(user);
+    response.status(200).json({ success: true, message: 'User profile retrieved successfully', data: user });
   } catch (error) {
-    response.status(500).json({ error: 'Internal Server Error' });
+    response.status(500).json({ success: false, message: 'Internal Server Error', data: null });
   }
 };
 

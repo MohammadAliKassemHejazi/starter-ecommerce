@@ -11,7 +11,7 @@ export const handleFetchSubCategories = async (req: CustomRequest, res: Response
       return next(customError(subCategoryErrors.SubCategoryFetchFailure));
     }
     const subCategories = await subCategoryService.fetchSubCategories(userId);
-    res.json(subCategories);
+    res.json({ success: true, message: 'Subcategories retrieved successfully', data: subCategories });
   } catch (error) {
     next(customError(subCategoryErrors.SubCategoryFetchFailure));
   }
@@ -24,13 +24,13 @@ export const handleCreateSubCategory = async (req: CustomRequest, res: Response,
     return next(customError(subCategoryErrors.SubCategoryFetchFailure));
   }
   if (!name || !categoryId) {
-    res.status(400).json({ error: 'Name and Category ID are required' });
+    res.status(400).json({ success: false, message: 'Name and Category ID are required', data: null });
     return;
   }
 
   try {
     const subCategory = await subCategoryService.createSubCategory({ name, categoryId, userId });
-    res.status(201).json(subCategory);
+    res.status(201).json({ success: true, message: 'Subcategory created successfully', data: subCategory });
   } catch (error) {
     next(customError(subCategoryErrors.SubCategoryCreateFailure));
   }

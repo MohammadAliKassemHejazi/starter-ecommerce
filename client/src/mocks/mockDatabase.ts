@@ -84,7 +84,7 @@ export const mockDatabase = {
     { id: "sub-laptops", name: "Laptops & PCs", description: "Computing powerhouses.", categoryId: "cat-elec", createdAt: d(390), updatedAt: d(390) },
     { id: "sub-shoes", name: "Footwear", description: "Sneakers, boots, and heels.", categoryId: "cat-fash", createdAt: d(390), updatedAt: d(390) },
     { id: "sub-shirts", name: "Tops & Tees", description: "Casual and formal shirts.", categoryId: "cat-fash", createdAt: d(390), updatedAt: d(390) }
-  ] as ISubCategories[],
+  ] as unknown as ISubCategories[],
 
   stores: [
     { id: "store-tech", name: "Tech Haven", description: "Your one-stop shop for premium electronics, offering the latest smartphones, audio gear, and laptops from top brands.", imgUrl: "https://images.unsplash.com/photo-1531297172864-df2240c9b1b1", categoryId: "cat-elec", userId: "user-storeowner1", createdAt: d(340), updatedAt: d(340) },
@@ -118,7 +118,7 @@ export const mockDatabase = {
     { id: "ps-5", productId: "prod-202", sizeId: "sz-10", quantity: 30, size: { size: "US 10" } },
     { id: "ps-6", productId: "prod-203", sizeId: "sz-lg", quantity: 100, size: { size: "L" } },
     { id: "ps-7", productId: "prod-203", sizeId: "sz-xl", quantity: 100, size: { size: "XL" } }
-  ] as (ISizeItem & { productId: string })[],
+  ] as unknown as (ISizeItem & { productId: string })[],
 
   comments: [
     { id: "com-101", productId: "prod-101", userName: "Charlie Chaplin", comment: "The camera on this phone is absolutely stunning. Worth every penny.", date: d(10) },
@@ -135,7 +135,7 @@ export const mockDatabase = {
   cartItems: [
     { id: "prod-102", name: "Noise-Cancelling Earbuds Z", price: 149.99, originalPrice: 149.99, discount: 0, thumbnail: "https://images.unsplash.com/photo-1590658268037-6f5947c66576", quantity: 1, size: "Universal" },
     { id: "prod-203", name: "Organic Cotton T-Shirt 3-Pack", price: 45.00, originalPrice: 60.00, discount: 15, thumbnail: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab", quantity: 2, size: "L" }
-  ] as CartItem[],
+  ] as unknown as CartItem[],
 
   orders: [
     {

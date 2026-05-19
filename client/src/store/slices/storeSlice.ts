@@ -3,8 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as storeService from "@/services/storeService";
 
 import { RootState } from "../store";
-import { IStore } from "@shared/types/store.types";
-import { CreateStoreResponse } from "@shared/types/store.types";
+import { IStore, CreateStoreResponse } from "@shared/types/store.types";
 
 const initialState: StoresState = {
   stores: [],

@@ -5,14 +5,14 @@ import { RootState } from "../store";
 import { IStore } from "@shared/types/store.types";
 import { IProduct } from "@shared/types/product.types";
 import { IArticle } from "@shared/types/article.types";
-import { ICategory } from "@shared/types/category.types";
+import { IPublicCategory } from "@shared/types/public.types";
 import { IPackage } from "@shared/types/package.types";
 
 interface PublicState {
   stores: IStore[];
   products: IProduct[];
   articles: IArticle[];
-  categories: ICategory[];
+  categories: IPublicCategory[];
   packages: IPackage[];
   loading: {
     stores: boolean;
