@@ -49,7 +49,7 @@ const EditRoleModal = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!isSuperAdmin) {
       Toast.fire({
         icon: "error",
@@ -59,7 +59,8 @@ const EditRoleModal = () => {
     }
 
     try {
-      await dispatch(updateRole({ id: router.query.id as string, name }));
+      const role = JSON.parse(router.query.role as string);
+      await dispatch(updateRole({ id: role.id as string, name }));
       Toast.fire({
         icon: "success",
         title: "Role updated successfully",

@@ -5,6 +5,7 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
+import httpClient from '@/utils/httpClient';
 
 interface Size {
   id: string;
@@ -32,24 +33,23 @@ interface SizeItem {
 const SizesPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { isAuthenticated } = usePageData();
+  const { isAuthenticated, isAuthenticating } = usePageData();
   const [sizes, setSizes] = useState<Size[]>([]);
   const [sizeItems, setSizeItems] = useState<SizeItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'sizes' | 'items'>('sizes');
 
   useEffect(() => {
-    fetchSizes();
-    fetchSizeItems();
-  }, []);
+    if (!isAuthenticating && isAuthenticated) {
+      fetchSizes();
+      fetchSizeItems();
+    }
+  }, [isAuthenticated, isAuthenticating]);
 
   const fetchSizes = async () => {
     try {
-      const response = await fetch('/api/sizes');
-      if (response.ok) {
-        const data = await response.json();
-        setSizes(data.data || []);
-      }
+      const { data } = await httpClient.get('/utile/getSizes');
+      setSizes(data.data || []);
     } catch (error) {
       console.error('Error fetching sizes:', error);
     }
@@ -57,11 +57,8 @@ const SizesPage = () => {
 
   const fetchSizeItems = async () => {
     try {
-      const response = await fetch('/api/sizes/items');
-      if (response.ok) {
-        const data = await response.json();
-        setSizeItems(data.data || []);
-      }
+      const { data } = await httpClient.get('/sizes/items');
+      setSizeItems(data.data || []);
     } catch (error) {
       console.error('Error fetching size items:', error);
     } finally {
@@ -79,21 +76,9 @@ const SizesPage = () => {
 
     if (result.isConfirmed) {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/sizes/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          setSizes(sizes.filter(size => size.id !== id));
-          showToast.success('Size deleted successfully');
-        } else {
-          throw new Error('Failed to delete size');
-        }
+        await httpClient.delete(`/sizes/${id}`);
+        setSizes(sizes.filter(size => size.id !== id));
+        showToast.success('Size deleted successfully');
       } catch (error) {
         console.error('Error deleting size:', error);
         showToast.error('Failed to delete size');
@@ -111,21 +96,9 @@ const SizesPage = () => {
 
     if (result.isConfirmed) {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/sizes/items/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          setSizeItems(sizeItems.filter(item => item.id !== id));
-          showToast.success('Size item deleted successfully');
-        } else {
-          throw new Error('Failed to delete size item');
-        }
+        await httpClient.delete(`/sizes/items/${id}`);
+        setSizeItems(sizeItems.filter(item => item.id !== id));
+        showToast.success('Size item deleted successfully');
       } catch (error) {
         console.error('Error deleting size item:', error);
         showToast.error('Failed to delete size item');
@@ -218,7 +191,7 @@ const SizesPage = () => {
           <span className="text-muted">
             Total Sizes: {sizes.length}
           </span>
-          <button 
+          <button
             className="btn btn-primary"
             onClick={() => router.push('/sizes/create')}
           >
@@ -264,7 +237,7 @@ const SizesPage = () => {
           <span className="text-muted">
             Total Size Items: {sizeItems.length}
           </span>
-          <button 
+          <button
             className="btn btn-primary"
             onClick={() => router.push('/sizes/items/create')}
           >
@@ -280,7 +253,7 @@ const SizesPage = () => {
       <div className="row">
         <div className="col-12">
           <h1 className="mb-4 text-center fw-bold">Size Management</h1>
-          
+
           {/* Tabs */}
           <ul className="nav nav-tabs mb-4">
             <li className="nav-item">

@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@/store/store';
 import { TablePage } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import ProtectedRoute from '@/components/protectedRoute';
 import router from 'next/router';
 import { useTranslation } from 'react-i18next';
-import { useToast } from '../../src/contexts/ToastContext';
+import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ConfirmationModal from '@/components/UI/ConfirmationModal';
+import httpClient from '@/utils/httpClient';
 
 interface Promotion {
   id: string;
@@ -21,7 +21,6 @@ interface Promotion {
 
 const PromotionsPage = () => {
   const { t } = useTranslation();
-  const { showSuccess, showError } = useToast();
   const dispatch = useAppDispatch();
   const { isAuthenticated } = usePageData();
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -30,24 +29,19 @@ const PromotionsPage = () => {
     show: boolean;
     promotion: Promotion | null;
   }>({ show: false, promotion: null });
-  
+
   const fetchPromotions = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/promotions');
-      if (response.ok) {
-        const data = await response.json();
-        setPromotions(data.data || []);
-      } else {
-        throw new Error('Failed to fetch promotions');
-      }
+      const response = await httpClient.get('/promotions');
+      setPromotions((response.data as any).data || []);
     } catch (error) {
       console.error('Error fetching promotions:', error);
-      showError('Failed to load promotions', 'Please try again later');
+      showToast.error('Failed to load promotions');
     } finally {
       setLoading(false);
     }
-  }, [showError]);
+  }, []);
 
   useEffect(() => {
     fetchPromotions();
@@ -63,24 +57,12 @@ const PromotionsPage = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/promotions/${deleteModal.promotion.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        setPromotions(promotions.filter(promo => promo.id !== deleteModal.promotion!.id));
-        showSuccess('Promotion deleted successfully');
-      } else {
-        throw new Error('Failed to delete promotion');
-      }
+      await httpClient.delete(`/promotions/${deleteModal.promotion.id}`);
+      setPromotions(promotions.filter(promo => promo.id !== deleteModal.promotion!.id));
+      showToast.success('Promotion deleted successfully');
     } catch (error) {
       console.error('Error deleting promotion:', error);
-      showError('Failed to delete promotion', 'Please try again later');
+      showToast.error('Failed to delete promotion');
     } finally {
       setDeleteModal({ show: false, promotion: null });
     }
@@ -202,7 +184,7 @@ const PromotionsPage = () => {
             <span className="text-muted">
               Total Promotions: {promotions.length}
             </span>
-            <button 
+            <button
               className="btn btn-primary"
               onClick={() => router.push('/promotions/create')}
             >

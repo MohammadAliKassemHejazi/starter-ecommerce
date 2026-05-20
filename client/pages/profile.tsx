@@ -272,33 +272,10 @@ const ProfilePage: NextPage = () => {
             <div className="modern-profile-activity">
               <h3 className="modern-profile-section-title">Recent Activity</h3>
               <div className="modern-activity-list">
-                <div className="modern-activity-item">
-                  <div className="modern-activity-icon">
-                    <i className="bi bi-cart"></i>
-                  </div>
-                  <div className="modern-activity-content">
-                    <h4 className="modern-activity-title">Order #12345 completed</h4>
-                    <p className="modern-activity-time">2 hours ago</p>
-                  </div>
-                </div>
-                <div className="modern-activity-item">
-                  <div className="modern-activity-icon">
-                    <i className="bi bi-heart"></i>
-                  </div>
-                  <div className="modern-activity-content">
-                    <h4 className="modern-activity-title">Added product to favorites</h4>
-                    <p className="modern-activity-time">1 day ago</p>
-                  </div>
-                </div>
-                <div className="modern-activity-item">
-                  <div className="modern-activity-icon">
-                    <i className="bi bi-star"></i>
-                  </div>
-                  <div className="modern-activity-content">
-                    <h4 className="modern-activity-title">Left a review</h4>
-                    <p className="modern-activity-time">3 days ago</p>
-                  </div>
-                </div>
+                <p className="text-muted">
+                  Visit <a href="/orders/user">your orders</a> or{' '}
+                  <a href="/favorites">your favorites</a> to see recent activity.
+                </p>
               </div>
             </div>
           </div>

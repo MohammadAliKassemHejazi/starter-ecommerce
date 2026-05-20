@@ -47,7 +47,8 @@ const EditSubCategoryModal = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await dispatch(updateSubCategory({ id: router.query.id as string, name, categoryId }));
+      const subCategory = JSON.parse(router.query.subcategory as string);
+      await dispatch(updateSubCategory({ id: subCategory.id as string, name, categoryId }));
       showToast.success("Subcategory updated successfully");
       router.push("/subcategories");
     } catch (error) {

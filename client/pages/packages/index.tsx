@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { TablePage } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from "@/components/protectedRoute";
+import { useAppDispatch } from '@/store/store';
+import {
+  getAllPackages,
+  deletePackage,
+  selectAllPackages,
+  selectPackageLoading,
+} from '@/store/slices/packageSlice';
 
 interface Package {
   id: string;
@@ -24,28 +32,14 @@ interface Package {
 const PackagesPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { isAuthenticated } = usePageData();
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [loading, setLoading] = useState(true);
+  const packages = useSelector(selectAllPackages) as Package[];
+  const loading = useSelector(selectPackageLoading);
 
   useEffect(() => {
-    fetchPackages();
-  }, []);
-
-  const fetchPackages = async () => {
-    try {
-      const response = await fetch('/api/packages');
-      if (response.ok) {
-        const data = await response.json();
-        setPackages(data.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching packages:', error);
-      showToast.error('Failed to load packages');
-    } finally {
-      setLoading(false);
-    }
-  };
+    dispatch(getAllPackages());
+  }, [dispatch]);
 
   const handleDeletePackage = async (id: string) => {
     const result = await showConfirm({
@@ -57,21 +51,8 @@ const PackagesPage = () => {
 
     if (result.isConfirmed) {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/packages/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          setPackages(packages.filter(pkg => pkg.id !== id));
-          showToast.success('Package deleted successfully');
-        } else {
-          throw new Error('Failed to delete package');
-        }
+        await dispatch(deletePackage(id)).unwrap();
+        showToast.success('Package deleted successfully');
       } catch (error) {
         console.error('Error deleting package:', error);
         showToast.error('Failed to delete package');
@@ -156,7 +137,7 @@ const PackagesPage = () => {
           <span className="text-muted">
             Total Packages: {packages.length}
           </span>
-          <button 
+          <button
             className="btn btn-primary"
             onClick={() => router.push('/packages/create')}
           >

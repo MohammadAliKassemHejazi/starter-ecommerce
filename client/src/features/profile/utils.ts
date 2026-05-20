@@ -12,10 +12,10 @@ export const mapUserToProfile = (user: UserState): ProfileViewModel => {
     role: user.roles && user.roles.length > 0 ? user.roles[0].name : 'User',
     status: user.isAuthenticated ? 'Active' : 'Inactive', // simplistic logic for now
     stats: {
-      ordersCount: 24, // Hardcoded in original component
-      favoritesCount: 156, // Hardcoded in original component
-      reviewsCount: 8, // Hardcoded in original component
-      rating: 4.8, // Hardcoded in original component
+      ordersCount: 0,
+      favoritesCount: 0,
+      reviewsCount: 0,
+      rating: 0,
     }
   };
 };

@@ -4,6 +4,7 @@ import {
   assignRoleToUser,
   removeRoleFromUser,
   usersSelector,
+  fetchUsersByCreator,
 } from "@/store/slices/myUsersSlice";
 import { useAppDispatch } from "@/store/store";
 import { fetchRoles, rolesSelector } from "@/store/slices/roleSlice";
@@ -33,6 +34,7 @@ const UserRoleGrid = () => {
 
   React.useEffect(() => {
     dispatch(fetchRoles());
+    dispatch(fetchUsersByCreator());
     loadUserPackage();
   }, [dispatch]);
 

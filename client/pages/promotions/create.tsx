@@ -4,6 +4,7 @@ import { FormPage } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import ProtectedRoute from '@/components/protectedRoute';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
+import httpClient from '@/utils/httpClient';
 
 const CreatePromotion = () => {
   const router = useRouter();
@@ -31,26 +32,12 @@ const CreatePromotion = () => {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/promotions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        showToast.success('Promotion created successfully');
-        router.push('/promotions');
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create promotion');
-      }
-    } catch (error) {
+      await httpClient.post('/promotions', formData);
+      showToast.success('Promotion created successfully');
+      router.push('/promotions');
+    } catch (error: any) {
       console.error('Error creating promotion:', error);
-      showToast.error(error instanceof Error ? error.message : 'Failed to create promotion');
+      showToast.error(error?.response?.data?.message || error?.message || 'Failed to create promotion');
     } finally {
       setLoading(false);
     }
@@ -89,8 +76,8 @@ const CreatePromotion = () => {
       required: true,
       min: 0,
       step: formData.type === 'PERCENTAGE' ? '1' : '0.01',
-      helpText: formData.type === 'PERCENTAGE' 
-        ? 'Enter percentage (e.g., 20 for 20%)' 
+      helpText: formData.type === 'PERCENTAGE'
+        ? 'Enter percentage (e.g., 20 for 20%)'
         : 'Enter amount in dollars'
     },
     {
