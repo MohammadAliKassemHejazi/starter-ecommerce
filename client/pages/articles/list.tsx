@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IArticle } from "@shared/types/article.types";
-import { requestAllArticles } from "@/services/articleService";
 import { setAuthHeaders } from "@/utils/httpClient";
 import { GetServerSideProps } from "next";
 import { TablePage } from "@/components/UI/PageComponents";
@@ -8,13 +7,24 @@ import SubscriptionGate from "@/components/SubscriptionGate";
 import ProtectedRoute from "@/components/protectedRoute";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useAppDispatch } from "@/store/store";
+import { useSelector } from "react-redux";
+import { fetchAllArticles, articlesSelector } from "@/store/slices/articleSlice";
 
 type Props = {
-  articles?: IArticle[];
+  initialArticles?: IArticle[];
 };
 
-const ArticlesList = ({ articles }: Props) => {
+const ArticlesList = ({ initialArticles }: Props) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const reduxArticles = useSelector(articlesSelector);
+
+  useEffect(() => {
+    dispatch(fetchAllArticles());
+  }, [dispatch]);
+
+  const articles = reduxArticles && reduxArticles.length > 0 ? reduxArticles : (initialArticles || []);
 
   const handleViewArticle = (article: IArticle) => {
     router.push(`/articles/${article.id}`);
@@ -107,10 +117,19 @@ export default function ProtectedArticlesList() {
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const headers = context.req.headers;
   setAuthHeaders(headers);
-  const articles = await requestAllArticles();
-  return {
-    props: {
-      articles,
-    },
-  };
+  try {
+    const { requestAllArticles } = await import("@/services/articleService");
+    const response = await requestAllArticles();
+    return {
+      props: {
+        initialArticles: response.data ?? [],
+      },
+    };
+  } catch {
+    return {
+      props: {
+        initialArticles: [],
+      },
+    };
+  }
 };

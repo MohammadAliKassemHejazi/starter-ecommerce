@@ -5,6 +5,7 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
+import httpClient from '@/utils/httpClient';
 
 interface TaxRule {
   id: string;
@@ -33,11 +34,8 @@ const TaxesPage = () => {
 
   const fetchTaxRules = async () => {
     try {
-      const response = await fetch('/api/taxes');
-      if (response.ok) {
-        const data = await response.json();
-        setTaxRules(data.data || []);
-      }
+      const response = await httpClient.get('/taxes');
+      setTaxRules((response.data as any).data || []);
     } catch (error) {
       console.error('Error fetching tax rules:', error);
       showToast.error('Failed to load tax rules');
@@ -56,21 +54,9 @@ const TaxesPage = () => {
 
     if (result.isConfirmed) {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/taxes/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          setTaxRules(taxRules.filter(rule => rule.id !== id));
-          showToast.success('Tax rule deleted successfully');
-        } else {
-          throw new Error('Failed to delete tax rule');
-        }
+        await httpClient.delete(`/taxes/${id}`);
+        setTaxRules(taxRules.filter(rule => rule.id !== id));
+        showToast.success('Tax rule deleted successfully');
       } catch (error) {
         console.error('Error deleting tax rule:', error);
         showToast.error('Failed to delete tax rule');
@@ -85,20 +71,8 @@ const TaxesPage = () => {
     }
 
     try {
-      const response = await fetch('/api/taxes/calculate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(calculationData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setCalculationResult(data.data);
-      } else {
-        throw new Error('Failed to calculate tax');
-      }
+      const response = await httpClient.post('/taxes/calculate', calculationData);
+      setCalculationResult((response.data as any).data);
     } catch (error) {
       console.error('Error calculating tax:', error);
       showToast.error('Failed to calculate tax');

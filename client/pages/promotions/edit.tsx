@@ -4,6 +4,7 @@ import { FormPage } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import ProtectedRoute from '@/components/protectedRoute';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
+import httpClient from '@/utils/httpClient';
 
 const EditPromotion = () => {
   const router = useRouter();
@@ -43,29 +44,20 @@ const EditPromotion = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!router.query.promotion) {
+      showToast.error('Promotion data is missing.');
+      return;
+    }
     setLoading(true);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/promotions/${router.query.id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        showToast.success('Promotion updated successfully');
-        router.push('/promotions');
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update promotion');
-      }
-    } catch (error) {
+      const promotionData = JSON.parse(router.query.promotion as string);
+      await httpClient.put(`/promotions/${promotionData.id}`, formData);
+      showToast.success('Promotion updated successfully');
+      router.push('/promotions');
+    } catch (error: any) {
       console.error('Error updating promotion:', error);
-      showToast.error(error instanceof Error ? error.message : 'Failed to update promotion');
+      showToast.error(error?.response?.data?.message || error?.message || 'Failed to update promotion');
     } finally {
       setLoading(false);
     }

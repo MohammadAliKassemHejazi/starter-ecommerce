@@ -5,6 +5,7 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
+import httpClient from '@/utils/httpClient';
 
 interface ReturnRequest {
   id: string;
@@ -39,9 +40,8 @@ const ReturnsPage = () => {
 
   const fetchReturns = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
       const queryParams = new URLSearchParams();
-      
+
       if (filters.status) {
         queryParams.append('status', filters.status);
       }
@@ -49,17 +49,8 @@ const ReturnsPage = () => {
         queryParams.append('userId', filters.userId);
       }
 
-      const response = await fetch(`/api/returns?${queryParams}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setReturns(data.data || []);
-      }
+      const response = await httpClient.get(`/returns?${queryParams.toString()}`);
+      setReturns((response.data as any).data || []);
     } catch (error) {
       console.error('Error fetching returns:', error);
       showToast.error('Failed to load returns');
@@ -74,24 +65,11 @@ const ReturnsPage = () => {
 
   const handleStatusUpdate = async (id: string, status: string, resolutionNote?: string) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/returns/${id}/status`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status, resolutionNote }),
-      });
-
-      if (response.ok) {
-        setReturns(returns.map(returnReq => 
-          returnReq.id === id ? { ...returnReq, status: status as any, resolutionNote } : returnReq
-        ));
-        showToast.success('Return status updated successfully');
-      } else {
-        throw new Error('Failed to update return status');
-      }
+      await httpClient.put(`/returns/${id}/status`, { status, resolutionNote });
+      setReturns(returns.map(returnReq =>
+        returnReq.id === id ? { ...returnReq, status: status as any, resolutionNote } : returnReq
+      ));
+      showToast.success('Return status updated successfully');
     } catch (error) {
       console.error('Error updating return status:', error);
       showToast.error('Failed to update return status');
@@ -108,21 +86,9 @@ const ReturnsPage = () => {
 
     if (result.isConfirmed) {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/returns/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          setReturns(returns.filter(returnReq => returnReq.id !== id));
-          showToast.success('Return request deleted successfully');
-        } else {
-          throw new Error('Failed to delete return request');
-        }
+        await httpClient.delete(`/returns/${id}`);
+        setReturns(returns.filter(returnReq => returnReq.id !== id));
+        showToast.success('Return request deleted successfully');
       } catch (error) {
         console.error('Error deleting return request:', error);
         showToast.error('Failed to delete return request');

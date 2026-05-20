@@ -20,10 +20,7 @@ const Orders = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   useEffect(() => {
-    // Simulate 2-second loading delay
-    setTimeout(() => {
-      dispatch(fetchLastOrder());
-    }, 2000);
+    dispatch(fetchLastOrder());
   }, [dispatch]);
 
   useEffect(() => {

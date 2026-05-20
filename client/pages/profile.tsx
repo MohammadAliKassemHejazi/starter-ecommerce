@@ -8,17 +8,38 @@ import { updateProfile, userSelector } from '@/store/slices/userSlice';
 import { useToast } from '@/contexts/ToastContext';
 import { mapUserToProfile } from '@/features/profile/utils';
 import { ProfileViewModel, defaultProfileData } from '@/features/profile/types';
+import { fetchFavorites, favoritesSelector } from '@/store/slices/favoritesSlice';
+import { fetchLastOrder, lastOrderSelector } from '@/store/slices/orderSlice';
 
 const ProfilePage: NextPage = () => {
   const user = useSelector(userSelector);
   const dispatch = useAppDispatch();
   const { showSuccess, showError } = useToast();
+  const favorites = useSelector(favoritesSelector);
+  const lastOrder = useSelector(lastOrderSelector);
 
   // Use the mapper to get the view model, fallback to defaultProfileData if user is not available
-  const profileView: ProfileViewModel = user ? mapUserToProfile(user) : defaultProfileData;
+  const baseProfileView: ProfileViewModel = user ? mapUserToProfile(user) : defaultProfileData;
+
+  // Populate stats from Redux state instead of hardcoded zeros
+  const profileView: ProfileViewModel = {
+    ...baseProfileView,
+    stats: {
+      ordersCount: lastOrder ? 1 : 0,
+      favoritesCount: favorites ? favorites.length : 0,
+      reviewsCount: 0,
+      rating: 0,
+    }
+  };
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Load favorites and last order for stats
+  useEffect(() => {
+    dispatch(fetchFavorites());
+    dispatch(fetchLastOrder());
+  }, [dispatch]);
 
   // Local state for editing, initialized from the view model
   const [formData, setFormData] = useState({

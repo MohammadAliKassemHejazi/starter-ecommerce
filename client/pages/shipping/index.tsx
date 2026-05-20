@@ -5,6 +5,7 @@ import { usePageData } from '@/hooks/usePageData';
 import { useTranslation } from 'react-i18next';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
+import httpClient from '@/utils/httpClient';
 
 interface ShippingMethod {
   id: string;
@@ -49,11 +50,8 @@ const ShippingPage = () => {
 
   const fetchShippingMethods = async () => {
     try {
-      const response = await fetch('/api/shipping/methods');
-      if (response.ok) {
-        const data = await response.json();
-        setShippingMethods(data.data || []);
-      }
+      const response = await httpClient.get('/shipping/methods');
+      setShippingMethods((response.data as any).data || []);
     } catch (error) {
       console.error('Error fetching shipping methods:', error);
     }
@@ -61,18 +59,8 @@ const ShippingPage = () => {
 
   const fetchOrderShippings = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/shipping/orders', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setOrderShippings(data.data || []);
-      }
+      const response = await httpClient.get('/shipping/orders');
+      setOrderShippings((response.data as any).data || []);
     } catch (error) {
       console.error('Error fetching order shippings:', error);
     } finally {
@@ -90,21 +78,9 @@ const ShippingPage = () => {
 
     if (result.isConfirmed) {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/shipping/methods/${id}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.ok) {
-          setShippingMethods(shippingMethods.filter(method => method.id !== id));
-          showToast.success('Shipping method deleted successfully');
-        } else {
-          throw new Error('Failed to delete shipping method');
-        }
+        await httpClient.delete(`/shipping/methods/${id}`);
+        setShippingMethods(shippingMethods.filter(method => method.id !== id));
+        showToast.success('Shipping method deleted successfully');
       } catch (error) {
         console.error('Error deleting shipping method:', error);
         showToast.error('Failed to delete shipping method');
@@ -114,24 +90,11 @@ const ShippingPage = () => {
 
   const handleUpdateShippingStatus = async (id: string, status: string) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/shipping/orders/${id}/status`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
-      });
-
-      if (response.ok) {
-        setOrderShippings(orderShippings.map(shipping => 
-          shipping.id === id ? { ...shipping, status: status as any } : shipping
-        ));
-        showToast.success('Shipping status updated successfully');
-      } else {
-        throw new Error('Failed to update shipping status');
-      }
+      await httpClient.put(`/shipping/orders/${id}/status`, { status });
+      setOrderShippings(orderShippings.map(shipping =>
+        shipping.id === id ? { ...shipping, status: status as any } : shipping
+      ));
+      showToast.success('Shipping status updated successfully');
     } catch (error) {
       console.error('Error updating shipping status:', error);
       showToast.error('Failed to update shipping status');

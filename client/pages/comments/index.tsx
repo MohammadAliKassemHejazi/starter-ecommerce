@@ -5,12 +5,14 @@ import { PageLayout } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
+import { getComments, addComment } from '@/services/commentService';
+import httpClient from '@/utils/httpClient';
 
 interface Comment {
   id: string;
   text: string;
   rating: number;
-  user: {
+  user?: {
     id: string;
     name: string;
   };
@@ -38,11 +40,8 @@ const CommentsPage = () => {
 
   const fetchComments = useCallback(async () => {
     try {
-      const response = await fetch(`/api/comments?productId=${productId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setComments(data.data || []);
-      }
+      const response = await getComments(productId as string);
+      setComments(response.data?.items || []);
     } catch (error) {
       console.error('Error fetching comments:', error);
     } finally {
@@ -52,11 +51,8 @@ const CommentsPage = () => {
 
   const fetchProduct = useCallback(async () => {
     try {
-      const response = await fetch(`/api/shop/${productId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setProduct(data.data);
-      }
+      const { data: response } = await httpClient.get(`/shop/get?id=${productId}`);
+      setProduct(response.data);
     } catch (error) {
       console.error('Error fetching product:', error);
     }
@@ -71,35 +67,17 @@ const CommentsPage = () => {
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newComment.text.trim()) {
       showToast.error('Please enter a comment');
       return;
     }
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/comments', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId,
-          text: newComment.text,
-          rating: newComment.rating
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setComments([data.data, ...comments]);
-        setNewComment({ text: '', rating: 5 });
-        showToast.success('Comment added successfully');
-      } else {
-        throw new Error('Failed to add comment');
-      }
+      const response = await addComment(productId as string, newComment.text, newComment.rating);
+      setComments([response.data, ...comments]);
+      setNewComment({ text: '', rating: 5 });
+      showToast.success('Comment added successfully');
     } catch (error) {
       console.error('Error adding comment:', error);
       showToast.error('Failed to add comment');
@@ -200,7 +178,7 @@ const CommentsPage = () => {
                 <div className="border-bottom pb-3">
                   <div className="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                      <h6 className="mb-1">{comment.user.name}</h6>
+                      <h6 className="mb-1">{comment.user?.name || 'Anonymous'}</h6>
                       <div className="text-warning">
                         {renderStars(comment.rating)}
                       </div>

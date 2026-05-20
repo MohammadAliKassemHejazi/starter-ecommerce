@@ -2,63 +2,33 @@ import { PageLayout, ActionButton } from "@/components/UI/PageComponents";
 import ProtectedRoute from "@/components/protectedRoute";
 import { usePageData } from "@/hooks/usePageData";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { showToast } from "@/components/UI/PageComponents/ToastConfig";
 import Link from "next/link";
-
-interface Article {
-  id: string;
-  title: string;
-  text: string;
-  createdAt: string;
-  updatedAt: string;
-  author?: {
-    name: string;
-    email: string;
-  };
-}
+import { useAppDispatch } from "@/store/store";
+import { useSelector } from "react-redux";
+import { fetchArticleById, deleteArticles } from "@/store/slices/articleSlice";
+import { RootState } from "@/store/store";
 
 const ArticleById = () => {
   const router = useRouter();
   const { pid } = router.query;
+  const dispatch = useAppDispatch();
   const { isAuthenticated } = usePageData();
-  const [article, setArticle] = useState<Article | null>(null);
-  const [loading, setLoading] = useState(true);
+  const article = useSelector((state: RootState) => state.article.article);
+  const loading = !article && !!pid;
 
   useEffect(() => {
-    const fetchArticle = async () => {
-        try {
-          setLoading(true);
-          const token = localStorage.getItem('token');
-          const response = await fetch(`/api/articles/${pid}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setArticle(data.data);
-          } else {
-            throw new Error('Failed to fetch article');
-          }
-        } catch (error) {
-          console.error('Error fetching article:', error);
-          showToast.error('Failed to load article');
-        } finally {
-          setLoading(false);
-        }
-      };
-
-    if (pid) {
-      fetchArticle();
+    if (pid && typeof pid === "string") {
+      dispatch(fetchArticleById(pid)).unwrap().catch(() => {
+        showToast.error('Failed to load article');
+      });
     }
-  }, [pid]);
+  }, [pid, dispatch]);
 
   const handleEdit = () => {
     if (article) {
-      router.push(`/articles/edit?id=${article.id}&article=${encodeURIComponent(JSON.stringify(article))}`);
+      router.push(`/articles/edit?id=${article.id}`);
     }
   };
 
@@ -66,23 +36,10 @@ const ArticleById = () => {
     if (!article) { return; }
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/articles/${article.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        showToast.success('Article deleted successfully');
-        router.push('/articles');
-      } else {
-        throw new Error('Failed to delete article');
-      }
+      await dispatch(deleteArticles(article.id)).unwrap();
+      showToast.success('Article deleted successfully');
+      router.push('/articles');
     } catch (error) {
-      console.error('Error deleting article:', error);
       showToast.error('Failed to delete article');
     }
   };
@@ -136,11 +93,10 @@ const ArticleById = () => {
                   <p className="lead">{article.text}</p>
                 </div>
                 
-                {article.author && (
+                {article.user && (
                   <div className="mt-4 pt-3 border-top">
                     <h6>Author Information</h6>
-                    <p className="mb-1"><strong>Name:</strong> {article.author.name}</p>
-                    <p className="mb-0"><strong>Email:</strong> {article.author.email}</p>
+                    <p className="mb-1"><strong>Name:</strong> {article.user.name}</p>
                   </div>
                 )}
                 

@@ -22,8 +22,13 @@ const EditPermissionModal = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!router.query.permission) {
+      showToast.error("Permission data is missing.");
+      return;
+    }
     try {
-      await dispatch(updatePermission({ id: router.query.id as string, name }));
+      const permission = JSON.parse(router.query.permission as string);
+      await dispatch(updatePermission({ id: permission.id as string, name }));
       showToast.success("Permission updated successfully");
       router.push("/permissions");
     } catch (error) {
