@@ -1,0 +1,44 @@
+[
+  {
+    "id": "TASK-01",
+    "description": "Remove stray tracked *.log files from git",
+    "target_files": ["client/npm_output.log", "client_output.log", "client_output_profile.log", "npm_install.log", "npm_output_profile.log", "server_output_profile.log", "server_output_profile_2.log", "server_output_profile_3.log", "server_output_sqlite.log", "server_output_sqlite_2.log", "server/logs/combined.log", "server/logs/combined1.log", "server/logs/error.log", "server/logs/exceptions.log", "server/logs/rejections.log"],
+    "verify_cmd": "git status --porcelain -- \"*.log\"",
+    "status": "done"
+  },
+  {
+    "id": "TASK-02",
+    "description": "Verify + remove dead client-side source files. VERIFICATION DONE (21 files independently grep-confirmed dead by frontend-dev, incl. barrel/re-export chain checks; tsc clean in its isolated worktree). BLOCKED in main checkout: same sandbox classifier block as TASK-03. Founder must grant the Bash permission rule or delete the 21 files manually (full list in daily-log.md).",
+    "target_files": ["client/src/components/**", "client/src/utils/**", "client/src/services/**", "client/src/hooks/**", "client/src/interfaces/**", "client/src/mocks/**"],
+    "verify_cmd": "cd client && npx tsc --noEmit",
+    "status": "blocked_needs_founder_permission"
+  },
+  {
+    "id": "TASK-03",
+    "description": "Verify + remove dead server-side source files from graphify candidate list. VERIFICATION DONE (5 files independently confirmed dead by backend-node + team-lead grep re-check: cache.middleware.ts, errorHandler.middleware.ts, permissions.service.ts, record.service.ts, tenantService.service.ts). Deletion executed successfully in the specialist's isolated worktree (tsc clean there) but BLOCKED in the main checkout: Claude Code's own sandbox auto-mode classifier refuses `git rm` on these paths as 'Irreversible Local Destruction', independent of this repo's own hooks. Needs Founder to either grant the Bash permission rule or delete these 5 files manually (list above) via their own git client.",
+    "target_files": ["server/src/middlewares/**", "server/src/services/**", "server/src/utils/**"],
+    "verify_cmd": "cd server && npx tsc --noEmit",
+    "status": "blocked_needs_founder_permission"
+  },
+  {
+    "id": "TASK-04",
+    "description": "Root-cause login/logout session flicker. DONE: race between module-level `store.dispatch(fetchSession())` in _app.tsx:16 and components (Navigation.tsx, SubscriptionGate.tsx, PermissionGate.tsx, CheckoutGuard.tsx) that read `isAuthenticated` without gating on `isAuthenticating`. CheckoutGuard.tsx:16-19 actively redirects an already-logged-in user to /auth/login during the race window. NOT a session/token strategy issue - cookie/JWT mechanism untouched. See TASK-06 for the fix.",
+    "target_files": ["client/src/store/slices/userSlice.ts", "client/src/components/Guards/CheckoutGuard.tsx", "client/pages/_app.tsx"],
+    "verify_cmd": "cd client && npx tsc --noEmit",
+    "status": "done"
+  },
+  {
+    "id": "TASK-06",
+    "description": "Implement session-flicker fix: move fetchSession() dispatch into useEffect in _app.tsx; gate Navigation.tsx/SubscriptionGate.tsx/PermissionGate.tsx/CheckoutGuard.tsx on isAuthenticating before branching auth UI. UI-lifecycle only, no auth/session/cookie strategy change. DONE: implemented by frontend-dev, mirrored into main checkout by team-lead, tsc --noEmit clean in main checkout, security-auditor reviewed all 5 files -> approved, no regressions, no authorization bypass, cookie/JWT mechanism confirmed untouched. Outstanding: before/after Playwright screenshot not captured (no DB/backend available in sandbox) - flagged as outstanding QA evidence, not blocking given security sign-off.",
+    "target_files": ["client/pages/_app.tsx", "client/src/components/Layouts/Navigation.tsx", "client/src/components/SubscriptionGate.tsx", "client/src/components/PermissionGate.tsx", "client/src/components/Guards/CheckoutGuard.tsx"],
+    "verify_cmd": "cd client && npx tsc --noEmit",
+    "status": "done"
+  },
+  {
+    "id": "TASK-05",
+    "description": "Architecture structural review (layering, circular imports, @shared consistency) via project-graph",
+    "target_files": [],
+    "verify_cmd": "node -e \"require('fs').accessSync('graphify-out/graph.json')\"",
+    "status": "done"
+  }
+]
