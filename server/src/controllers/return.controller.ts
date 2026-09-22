@@ -1,6 +1,19 @@
 import { Request, Response } from 'express';
 import db from '../models';
 import { ResponseFormatter } from '../utils/responseFormatter';
+import { computeOrderTotal } from '../services/order.service';
+
+// Order has no stored total-price column; attach it here from the
+// eager-loaded orderItems so API consumers get a real number without
+// duplicating/drifting a stored total on Order (see TASK-13).
+const withOrderTotal = (returnRequest: any) => {
+  const plain = returnRequest.toJSON ? returnRequest.toJSON() : returnRequest;
+  if (plain.Order) {
+    plain.Order.total = computeOrderTotal(plain.Order.orderItems);
+    delete plain.Order.orderItems;
+  }
+  return plain;
+};
 
 export const getReturns = async (req: Request, res: Response) => {
   try {
@@ -15,12 +28,9 @@ export const getReturns = async (req: Request, res: Response) => {
       where: whereClause,
       include: [
         {
-          // NOTE: the Order model has no orderNumber/totalPrice columns
-          // (see server/src/models/order.model.ts) -- selecting them threw
-          // "column does not exist" and 500'd this endpoint. Real order
-          // number/price display is a data-model gap, logged not guessed.
           model: db.Order,
-          attributes: ['id', 'currency', 'createdAt'],
+          attributes: ['id', 'orderNumber', 'currency', 'createdAt'],
+          include: [{ model: db.OrderItem, as: 'orderItems', attributes: ['price', 'quantity'] }],
         },
         {
           model: db.User,
@@ -32,7 +42,9 @@ export const getReturns = async (req: Request, res: Response) => {
       offset,
     });
 
-    ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Return requests retrieved successfully');
+    const mappedRows = rows.map(withOrderTotal);
+
+    ResponseFormatter.paginated(res, mappedRows, Number(page), Number(limit), count, 'Return requests retrieved successfully');
   } catch (error) {
     console.error('Error getting returns:', error);
     ResponseFormatter.error(res, 'Failed to get return requests', 500);
@@ -86,7 +98,8 @@ export const getReturnById = async (req: Request, res: Response) => {
       include: [
         {
           model: db.Order,
-          attributes: ['id', 'currency', 'createdAt'],
+          attributes: ['id', 'orderNumber', 'currency', 'createdAt'],
+          include: [{ model: db.OrderItem, as: 'orderItems', attributes: ['price', 'quantity'] }],
         },
         {
           model: db.User,
@@ -99,7 +112,7 @@ export const getReturnById = async (req: Request, res: Response) => {
       return ResponseFormatter.notFound(res, 'Return request not found');
     }
 
-    ResponseFormatter.success(res, returnRequest, 'Return request retrieved successfully');
+    ResponseFormatter.success(res, withOrderTotal(returnRequest), 'Return request retrieved successfully');
   } catch (error) {
     console.error('Error getting return request:', error);
     ResponseFormatter.error(res, 'Failed to get return request', 500);

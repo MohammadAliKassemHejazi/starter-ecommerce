@@ -1,6 +1,19 @@
 import { Request, Response } from 'express';
 import db from '../models';
 import { ResponseFormatter } from '../utils/responseFormatter';
+import { computeOrderTotal } from '../services/order.service';
+
+// Order has no stored total-price column; attach it here from the
+// eager-loaded orderItems so API consumers get a real number without
+// duplicating/drifting a stored total on Order (see TASK-13).
+const withOrderTotal = (orderShipping: any) => {
+  const plain = orderShipping.toJSON ? orderShipping.toJSON() : orderShipping;
+  if (plain.Order) {
+    plain.Order.total = computeOrderTotal(plain.Order.orderItems);
+    delete plain.Order.orderItems;
+  }
+  return plain;
+};
 
 // Shipping Methods
 export const getShippingMethods = async (req: Request, res: Response) => {
@@ -83,12 +96,9 @@ export const getOrderShippings = async (req: Request, res: Response) => {
       where: whereClause,
       include: [
         {
-          // NOTE: the Order model has no orderNumber/totalPrice columns
-          // (see server/src/models/order.model.ts) -- selecting them threw
-          // "column does not exist" and 500'd this endpoint. Real order
-          // number/price display is a data-model gap, logged not guessed.
           model: db.Order,
-          attributes: ['id', 'currency', 'createdAt'],
+          attributes: ['id', 'orderNumber', 'currency', 'createdAt'],
+          include: [{ model: db.OrderItem, as: 'orderItems', attributes: ['price', 'quantity'] }],
         },
         {
           model: db.ShippingMethod,
@@ -100,7 +110,9 @@ export const getOrderShippings = async (req: Request, res: Response) => {
       offset,
     });
 
-    ResponseFormatter.paginated(res, rows, Number(page), Number(limit), count, 'Order shippings retrieved successfully');
+    const mappedRows = rows.map(withOrderTotal);
+
+    ResponseFormatter.paginated(res, mappedRows, Number(page), Number(limit), count, 'Order shippings retrieved successfully');
   } catch (error) {
     console.error('Error getting order shippings:', error);
     ResponseFormatter.error(res, 'Failed to get order shippings', 500);

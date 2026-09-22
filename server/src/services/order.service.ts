@@ -5,6 +5,16 @@ import customError from '../utils/customError';
 import orderErrors from '../utils/errors/order.errors';
 import { Op } from 'sequelize';
 
+// Order has no stored total-price column (see TASK-13 data-model decision):
+// OrderItem.price * quantity is the source of truth, computed here rather
+// than duplicated on Order where it could silently drift on order mutation.
+// Callers must eager-load `orderItems` (attributes: ['price', 'quantity']
+// at minimum) before calling this.
+export const computeOrderTotal = (orderItems: Array<{ price: number | string; quantity: number }> = []): number => {
+  const total = orderItems.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
+  return Number(total.toFixed(2));
+};
+
 export const getLastOrder = async (userId: string): Promise<IOrderAttributes> => {
   const lastOrder = await db.Order.findOne({
     where: { userId },
@@ -156,6 +166,7 @@ export const getOrdersByStore = async (
 };
 
 export default {
+  computeOrderTotal,
   getLastOrder,
   getOrderItems,
   getOrdersByDateRange,

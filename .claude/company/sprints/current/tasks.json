@@ -165,5 +165,30 @@
     ],
     "verify_cmd": "cd server && npx tsc --noEmit && cd ../client && npx tsc --noEmit",
     "status": "done"
+  },
+  {
+    "id": "TASK-13",
+    "description": "Order model real fix: added orderNumber (unique, human-readable, ORD-YYYYMMDD-<8hex>) via a new server/src/migrations/ runner (project had no sequelize-cli; runScripts.ts's sync() only creates missing tables, never ALTERs existing ones, so migrations now run first via `npm run migrate` / wired into `npm run setup`). Total is COMPUTED (order.service.ts#computeOrderTotal from OrderItem.price*quantity), not stored -- avoids a duplicated total silently drifting on order mutation; Order has no checkout-total write path that would need to update it anyway. return.controller.ts + shipping.controller.ts now select real orderNumber + eager-load orderItems to attach a computed total; stopgap attribute-select + comments removed. Found and fixed a real pre-existing bug along the way: Order model's TS class-field declarations (`orderNumber!: string` etc.) under tsconfig target ESNext shadow Sequelize's prototype attribute accessors (useDefineForClassFields) -- the orderNumber-generation hook had to use setDataValue/getDataValue, not plain assignment, to actually persist (same shadowing already explains the pre-existing `order.dataValues.id` workaround in payment.service.ts). Migration applied + re-run idempotency-verified against the disposable docker-compose dev DB (postgres:5434); tsc --noEmit clean in the running server container; live-verified via superadmin token against GET /api/returns and GET /api/shipping/orders on :5300 -- real orderNumber (e.g. ORD-20260922-000001) and computed total (e.g. 1059.97) returned, HTTP 200, no 500s.",
+    "target_files": [
+      "server/src/models/order.model.ts",
+      "server/src/migrations/**",
+      "server/src/controllers/return.controller.ts",
+      "server/src/controllers/shipping.controller.ts",
+      "server/src/interfaces/types/models/order.model.types.ts",
+      "server/src/services/order.service.ts",
+      "server/src/scripts/runScripts.ts",
+      "server/package.json"
+    ],
+    "verify_cmd": "cd server && npx tsc --noEmit",
+    "status": "done"
+  },
+  {
+    "id": "TASK-14",
+    "description": "PRD: subscription-expiry alert + non-payment deletion (spec only, no deletion logic built). Answers: data-deletion scope options, hard vs soft-delete recommendation, admin mark-paid-in-cash mechanism against existing package/subscription records, alert-mechanism feasibility grep result, expiry/deletion trigger (cron) feasibility grep result.",
+    "target_files": [
+      "company/sprints/current/prd-subscription-expiry.md"
+    ],
+    "verify_cmd": "node -e \"require('fs').accessSync('.claude/company/sprints/current/prd-subscription-expiry.md')\"",
+    "status": "done"
   }
 ]

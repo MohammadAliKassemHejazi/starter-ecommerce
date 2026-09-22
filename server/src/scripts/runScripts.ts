@@ -1,9 +1,16 @@
 import { seedData } from './seedData';
 import db from '../models';
+import { runMigrations } from '../migrations/run';
 
 const runScripts = async () => {
   try {
     console.log('Starting database scripts...');
+
+    // Run real migrations first (ALTERs to already-existing tables, e.g.
+    // adding Order.orderNumber) — sync() below only CREATEs missing tables
+    // and never alters existing columns, so column-level changes must go
+    // through server/src/migrations/*.ts instead.
+    await runMigrations();
 
     // Sync database: creates missing tables. Intentionally NOT using
     // { alter: true } / { force: true } — those mutate/drop existing
