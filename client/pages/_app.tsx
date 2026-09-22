@@ -13,9 +13,8 @@ import { ToastProvider } from "../src/contexts/ToastContext";
 import ClientOnlyWrapper from "@/components/ClientOnlyWrapper";
 import { useAnalyticsTracker } from "@/hooks/useAnalyticsTracker";
 
-store.dispatch(fetchSession());
 function MyApp({ Component, pageProps, router }: AppProps) {
-  
+
   // update session & set token, and conditionally load favorites
   React.useEffect(() => {
     // Apply saved theme as early as possible on client
@@ -26,8 +25,10 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       }
     } catch {}
 
- 
-    
+    // Fetch session after mount (was previously dispatched at module scope,
+    // racing React's first paint and causing the login/logout UI flicker).
+    store.dispatch(fetchSession());
+
   }, []);
 
   return (

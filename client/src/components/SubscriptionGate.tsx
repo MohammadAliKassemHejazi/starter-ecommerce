@@ -18,11 +18,15 @@ const ClientSubscriptionGate: React.FC<SubscriptionGateProps> = ({
   allowedActions = [],
 }) => {
   const router = useRouter();
-  const { isAuthenticated, isAdmin, isSuperAdmin, user } = usePermissions();
+  const { isAuthenticated, isAuthenticating, isAdmin, isSuperAdmin, user } = usePermissions();
   const [hasActiveSubscription, setHasActiveSubscription] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkSubscription = async () => {
+      // Session check still in flight - stay in the loading state instead of
+      // resolving to "no subscription" for a user who is actually authenticated.
+      if (isAuthenticating) return;
+
       if (!isAuthenticated) {
         setHasActiveSubscription(false);
         return;
@@ -50,7 +54,7 @@ const ClientSubscriptionGate: React.FC<SubscriptionGateProps> = ({
     };
 
     checkSubscription();
-  }, [isAuthenticated, isAdmin, isSuperAdmin, user]);
+  }, [isAuthenticating, isAuthenticated, isAdmin, isSuperAdmin, user]);
 
   // Show loading state while checking subscription
   if (hasActiveSubscription === null) {

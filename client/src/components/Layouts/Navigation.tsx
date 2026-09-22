@@ -30,7 +30,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useSelector((state: any) => state.user);
-  const { isAnonymous, userRoles, userPermissions, isSuperAdmin, isAdmin, hasActiveSubscription, hasPermission } = usePermissions();
+  const { isAnonymous, isAuthenticating, userRoles, userPermissions, isSuperAdmin, isAdmin, hasActiveSubscription, hasPermission } = usePermissions();
   
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['main', 'user']));
@@ -455,7 +455,11 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
         </div>
         
         {/* User Info */}
-        {user && user.isAuthenticated ? (
+        {isAuthenticating ? (
+          <div className="user-info">
+            <div className="user-name">Loading...</div>
+          </div>
+        ) : user && user.isAuthenticated ? (
           <div className="user-info">
             <div className="user-name">{user.name || 'Super Admin'}</div>
             <div className="badges">
@@ -493,7 +497,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
         {/* Sidebar Menu */}
         <div className="sidebar-menu">
           {/* Core Navigation - Always visible for authenticated users */}
-          {user.isAuthenticated && (
+          {!isAuthenticating && user.isAuthenticated && (
             <div className="menu-section">
               <Link href="/dashboard" className={router.pathname === '/dashboard' ? 'active' : ''}>
                 <i className="fas fa-tachometer-alt"></i>
@@ -710,7 +714,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
           )}
           
           {/* User Actions */}
-          {user.isAuthenticated && (
+          {!isAuthenticating && user.isAuthenticated && (
             <div className="menu-section">
               <div className="section-title">Account</div>
               <Link href="/profile" className={router.pathname === '/profile' ? 'active' : ''}>
@@ -753,7 +757,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onClose }) => {
 
           {/* Authentication */}
           <div className="menu-section">
-            {user.isAuthenticated ? (
+            {isAuthenticating ? null : user.isAuthenticated ? (
               <a href="#" style={{background: 'linear-gradient(135deg, color-mix(in srgb, var(--bs-danger) 15%, transparent) 0%, color-mix(in srgb, var(--bs-danger) 10%, transparent) 100%)', color: 'var(--bs-danger)', border: '1px solid color-mix(in srgb, var(--bs-danger) 30%, transparent)'}} onClick={(e) => {
     e.preventDefault(); 
     handleSignOut();

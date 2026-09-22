@@ -22,6 +22,7 @@ const ClientPermissionGate: React.FC<PermissionGateProps> = ({
 }) => {
   const {
     isAuthenticated,
+    isAuthenticating,
     hasRole,
     hasPermission,
     hasAnyRole,
@@ -29,6 +30,13 @@ const ClientPermissionGate: React.FC<PermissionGateProps> = ({
     hasAllRoles,
     hasAllPermissions,
   } = usePermissions();
+
+  // Session check still in flight - defer any role/permission decision
+  // until it resolves, instead of denying access based on an empty
+  // roles/permissions snapshot then flipping once the session settles.
+  if (isAuthenticating) {
+    return null;
+  }
 
   // Check authentication requirement
   if (requireAuthentication && !isAuthenticated) {

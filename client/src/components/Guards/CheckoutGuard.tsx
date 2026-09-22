@@ -11,16 +11,20 @@ const CheckoutGuard: React.FC<CheckoutGuardProps> = ({ children }) => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
   const isAuthenticated = user?.isAuthenticated || false;
+  const isAuthenticating = user?.isAuthenticating || false;
 
   useEffect(() => {
+    // Don't redirect while the session check is still in flight - doing so
+    // bounces an already-logged-in user to /auth/login during the race.
+    if (isAuthenticating) return;
     if (!isAuthenticated) {
       // Redirect to login with return URL
       const returnUrl = router.asPath;
       router.push(`/auth/login?returnUrl=${encodeURIComponent(returnUrl)}`);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticating, isAuthenticated, router]);
 
-  if (!isAuthenticated) {
+  if (isAuthenticating || !isAuthenticated) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
         <div className="text-center">
