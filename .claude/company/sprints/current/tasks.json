@@ -47,5 +47,33 @@
     "target_files": ["docker-compose.yml", "client/src/utils/imageUrl.ts", "client/pages/cart/index.tsx", "client/pages/favorites/index.tsx", "client/pages/comments/index.tsx", "client/pages/store/[id].tsx", "client/pages/store/index.tsx", "client/pages/shop/index.tsx", "client/pages/shop/product/[pid].tsx", "client/src/components/UI/PageComponents/product/SuggestedProducts.tsx", "client/src/components/UI/home/bubbleanimation/BubbleAnimation.tsx", "client/src/components/UI/home/FeaturedStores.tsx", "client/src/components/UI/General/listingProducts/ListingProducts.tsx", "client/src/components/UI/General/listingProducts/ListingProductsByStore.tsx", "client/src/components/UI/General/imageViewer/imageViewer.tsx"],
     "verify_cmd": "cd client && npx tsc --noEmit",
     "status": "done"
+  },
+  {
+    "id": "TASK-08",
+    "description": "Fix container-networking duality: server-side Next.js code (SSR/API routes) called NEXT_PUBLIC_BASE_URL_API (host-only, unreachable from inside the client container), blocking login/register. Added INTERNAL_API_URL (container-network address) to docker-compose.yml client env, threaded through httpClient.ts's server-side baseURL branch; browser calls unaffected. [...AUTH].ts now uses relative paths against the shared httpClient. security-auditor reviewed (auth route touched): APPROVE, no secret/cookie/SSRF issues.",
+    "target_files": ["client/src/utils/httpClient.ts", "client/pages/api/user/[...AUTH].ts", "docker-compose.yml"],
+    "verify_cmd": "cd client && npx tsc --noEmit",
+    "status": "done"
+  },
+  {
+    "id": "TASK-09",
+    "description": "Fix GET /api/public/categories failing for anonymous callers (required req.UserId, called vendor-scoped fetchCategories). Added ownership-agnostic fetchAllCategoriesPublic()/handleFetchPublicCategories(); authenticated fetchCategories() untouched. team-lead review caught two issues in the as-committed version, both fixed: (1) PII leak -- public function's Owner include had 'email' attribute, leaking vendor email to anonymous callers via createdBy.email; removed. (2) all 4 SubCategory includes in category.service.ts (incl. the new public one) requested a nonexistent 'description' column, throwing a Postgres column-not-found error on any category with subcategories -- removed the bad attribute (pre-existing bug, same fix applied consistently, not a scoping change). Live-verified GET /api/public/categories returns 200 with real data, no email field. security-auditor reviewed: APPROVE (design correct, no IDOR/SSRF; PII fix logic confirmed sound, re-verified against the committed file post-commit per its request).",
+    "target_files": ["server/src/services/category.service.ts", "server/src/controllers/category.controller.ts", "server/src/routes/public.route.ts"],
+    "verify_cmd": "cd server && npx tsc --noEmit",
+    "status": "done"
+  },
+  {
+    "id": "TASK-10",
+    "description": "qa-devops focused pass: retest login/register/product-detail/cart/checkout (previously networking-blocked) + first-time coverage of 13 admin-dashboard rows using superadmin credential. Results: Register/Dashboard/Roles/Permissions/Orders/Categories/Articles WORKING. Login PARTIAL (BFF proxy returns unwrapped response, false-failure toast despite valid session -- auth code, not fixed, Always-Stop). Product-detail fixed inline (next.config.js image remotePattern, commit 67809d0). Cart/Checkout/Stores/Shipping/Taxes/Promotions/Returns/Comments/Users all BROKEN -- distinct bugs, logged not fixed (out of this round's scope, none are one-line/established-pattern). CRITICAL finding: GET /api/users (Users admin page's underlying call) returns bcrypt password hashes in the response body -- credential/PII leak, needs urgent security-auditor + backend-node dispatch, flagged to CEO.",
+    "target_files": ["client/next.config.js"],
+    "verify_cmd": "cd client && npx tsc --noEmit",
+    "status": "done"
+  },
+  {
+    "id": "TASK-11",
+    "description": "Fix CRITICAL password-hash leak (GET /api/users + admin create/update + public register all returned full User row incl. bcrypt hash; no model defaultScope existed). Excluded password at query level in fetchUsersByCreator (attributes.exclude) and stripped it from create/update return values in user.service.ts + users.service.ts. Grep-swept all other db.User.find*/create call sites -- none leak (existing ones already allow-list or never return the row). Also fixed: (a) admin Users-list 'No users found' -- root cause was NOT a data-binding bug as assumed, it was a client-side race where the fetch fired before the app-level session-restore effect registered the Authorization header, producing a silently-swallowed 401; gated the fetch in client/pages/users/index.tsx on isAuthenticated && !isAuthenticating. (b) login BFF proxy (pages/api/user/[...AUTH].ts handleSignIn) returned an unwrapped response with accessToken dropped entirely -- now returns {success,message,data} with accessToken in data, matching userSlice's signIn thunk expectation. Live-verified via Playwright against the docker-compose stack: GET /api/users now 200 with no password field and 8 real records rendered in the main list; login shows no false-failure toast. security-auditor reviewed all three fixes together: APPROVE, no blockers (full table in daily-log). Non-blocking follow-ups filed, not fixed: accumulating httpClient request interceptors on every login/session-fetch (frontend-dev ticket), missing .rejected case in myUsersSlice's fetchUsersByCreator, and a recommended future HIGH-tier auth/session-design review (httpOnly-cookie-only migration) -- Always-Stop, routed to CEO/Founder, not actioned here.",
+    "target_files": ["server/src/services/user.service.ts", "server/src/services/users.service.ts", "server/src/controllers/auth.controller.ts", "client/pages/api/user/[...AUTH].ts", "client/pages/users/index.tsx"],
+    "verify_cmd": "cd server && npx tsc --noEmit && cd ../client && npx tsc --noEmit",
+    "status": "done"
   }
 ]
