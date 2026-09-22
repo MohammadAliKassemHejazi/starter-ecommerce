@@ -28,7 +28,7 @@ console.log(`API auth action: ${action}, method: ${req.method}`);
 const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Forward to real backend
-    const response = await httpClient.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/login`, req.body);
+    const response = await httpClient.post(`/auth/login`, req.body);
   const { accessToken, ...userData } = response.data.data;
 
     // Set HTTP-only cookie
@@ -49,7 +49,7 @@ const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handleSignUp = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const response = await httpClient.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/register`, req.body);
+    const response = await httpClient.post(`/auth/register`, req.body);
     res.status(201).json(response.data);
   } catch (error: any) {
     console.error("Sign-up error:", error.response?.data || error.message);
@@ -69,7 +69,7 @@ const handleGetSession = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).json({ error: "No session" });
     }
 
-    const response = await httpClient.get(`${process.env.NEXT_PUBLIC_BASE_URL_API}/auth/isauthenticated`, {
+    const response = await httpClient.get(`/auth/isauthenticated`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 

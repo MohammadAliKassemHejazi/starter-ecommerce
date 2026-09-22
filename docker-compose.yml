@@ -74,6 +74,12 @@ services:
       # /user/auth/* route — was a silent 404 with this var unset). README
       # already documents this var; it was just missing from compose.
       NEXT_PUBLIC_BASE_URL_LOCAL_API: http://localhost:3001/api
+      # Container-internal, server-only (not NEXT_PUBLIC_*) URL for the client
+      # container's own server-side code (getServerSideProps/getStaticProps,
+      # pages/api/* routes) to reach the backend over the compose network —
+      # "localhost:5300" only resolves from the host/browser, not from inside
+      # this container. See client/src/utils/httpClient.ts.
+      INTERNAL_API_URL: http://server:3000/api
     ports:
       - "3001:3001"
     volumes:
