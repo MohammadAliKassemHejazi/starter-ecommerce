@@ -461,13 +461,13 @@ async function createApp(): Promise<Express> {
       body: req.method !== 'GET' ? req.body : undefined
     });
     
-    // Don't leak error details in production
+    // Stack traces are logged above (winston) but must never reach the
+    // response body, in any environment -- they leak file paths/internals.
     const errorResponse = {
       success: false,
       message: IS_PRODUCTION ? 'Internal server error' : error.message,
       ...(error.code && { code: error.code }),
-      ...(error.data && { data: error.data }),
-      ...(!IS_PRODUCTION && { stack: error.stack })
+      ...(error.data && { data: error.data })
     };
     
     res.status(error.statusCode || 500).json(errorResponse);

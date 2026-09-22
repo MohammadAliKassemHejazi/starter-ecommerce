@@ -15,8 +15,12 @@ export const getReturns = async (req: Request, res: Response) => {
       where: whereClause,
       include: [
         {
+          // NOTE: the Order model has no orderNumber/totalPrice columns
+          // (see server/src/models/order.model.ts) -- selecting them threw
+          // "column does not exist" and 500'd this endpoint. Real order
+          // number/price display is a data-model gap, logged not guessed.
           model: db.Order,
-          attributes: ['id', 'orderNumber', 'totalPrice'],
+          attributes: ['id', 'currency', 'createdAt'],
         },
         {
           model: db.User,
@@ -82,7 +86,7 @@ export const getReturnById = async (req: Request, res: Response) => {
       include: [
         {
           model: db.Order,
-          attributes: ['id', 'orderNumber', 'totalPrice'],
+          attributes: ['id', 'currency', 'createdAt'],
         },
         {
           model: db.User,

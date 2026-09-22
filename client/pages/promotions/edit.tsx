@@ -4,11 +4,13 @@ import { FormPage } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import ProtectedRoute from '@/components/protectedRoute';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
+import httpClient from '@/utils/httpClient';
 
 const EditPromotion = () => {
   const router = useRouter();
   const { promotion } = router.query;
   const { isAuthenticated } = usePageData();
+  const [promotionId, setPromotionId] = useState<string>('');
   const [formData, setFormData] = useState({
     code: '',
     type: 'PERCENTAGE' as 'PERCENTAGE' | 'FIXED',
@@ -22,6 +24,7 @@ const EditPromotion = () => {
   useEffect(() => {
     if (router.isReady && promotion) {
       const promotionData = JSON.parse(promotion as string);
+      setPromotionId(promotionData.id || '');
       setFormData({
         code: promotionData.code || '',
         type: promotionData.type || 'PERCENTAGE',
@@ -46,26 +49,12 @@ const EditPromotion = () => {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/promotions/${router.query.id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        showToast.success('Promotion updated successfully');
-        router.push('/promotions');
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update promotion');
-      }
-    } catch (error) {
+      await httpClient.put(`/promotions/${promotionId}`, formData);
+      showToast.success('Promotion updated successfully');
+      router.push('/promotions');
+    } catch (error: any) {
       console.error('Error updating promotion:', error);
-      showToast.error(error instanceof Error ? error.message : 'Failed to update promotion');
+      showToast.error(error?.message || 'Failed to update promotion');
     } finally {
       setLoading(false);
     }

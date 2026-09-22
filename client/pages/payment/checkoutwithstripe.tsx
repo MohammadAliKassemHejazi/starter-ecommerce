@@ -189,16 +189,35 @@ interface CheckoutPageProps {
   onCancel?: () => void;
 }
 
-const CheckoutPage: React.FC<CheckoutPageProps> = ({ 
-  package: pkg, 
-  onSuccess, 
-  onError, 
-  onCancel 
+const CheckoutPage: React.FC<Partial<CheckoutPageProps>> = ({
+  package: pkg,
+  onSuccess,
+  onError,
+  onCancel
 }) => {
+  // This page is only meant to be rendered with a `package` prop supplied by
+  // a parent flow (see pages/plans.tsx). It is also directly linked from
+  // navigation as a standalone route, which reaches this component with no
+  // props at all -- guard against that instead of crashing on `pkg.name`.
+  if (!pkg) {
+    return (
+      <CheckoutGuard>
+        <PageLayout title="Checkout" subtitle="No plan selected" protected={true}>
+          <div className="row justify-content-center">
+            <div className="col-lg-6 text-center">
+              <p className="mb-3">No subscription plan was selected. Please choose a plan first.</p>
+              <a href="/plans" className="btn btn-primary">View Plans</a>
+            </div>
+          </div>
+        </PageLayout>
+      </CheckoutGuard>
+    );
+  }
+
   return (
     <CheckoutGuard>
-      <PageLayout 
-        title="Checkout" 
+      <PageLayout
+        title="Checkout"
         subtitle={`Complete your subscription to ${pkg.name}`}
         protected={true}
       >

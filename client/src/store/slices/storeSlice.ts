@@ -65,7 +65,11 @@ export const fetchAllStoresWithFilter = createAsyncThunk(
       orderBy
     );
 
-    return response.data;
+    // Backend returns the standard paginated envelope
+    // (data: { items, page, pageSize, total, totalPages }), not a bare array.
+    // `StoresListResponse`'s shared type is stale (types `data` as IStore[]
+    // directly) -- same known mismatch already worked around in orderSlice.
+    return (response.data as any)?.items ?? [];
   }
 );
 

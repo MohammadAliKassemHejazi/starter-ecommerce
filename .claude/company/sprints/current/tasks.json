@@ -2,35 +2,72 @@
   {
     "id": "TASK-01",
     "description": "Remove stray tracked *.log files from git",
-    "target_files": ["client/npm_output.log", "client_output.log", "client_output_profile.log", "npm_install.log", "npm_output_profile.log", "server_output_profile.log", "server_output_profile_2.log", "server_output_profile_3.log", "server_output_sqlite.log", "server_output_sqlite_2.log", "server/logs/combined.log", "server/logs/combined1.log", "server/logs/error.log", "server/logs/exceptions.log", "server/logs/rejections.log"],
+    "target_files": [
+      "client/npm_output.log",
+      "client_output.log",
+      "client_output_profile.log",
+      "npm_install.log",
+      "npm_output_profile.log",
+      "server_output_profile.log",
+      "server_output_profile_2.log",
+      "server_output_profile_3.log",
+      "server_output_sqlite.log",
+      "server_output_sqlite_2.log",
+      "server/logs/combined.log",
+      "server/logs/combined1.log",
+      "server/logs/error.log",
+      "server/logs/exceptions.log",
+      "server/logs/rejections.log"
+    ],
     "verify_cmd": "git status --porcelain -- \"*.log\"",
     "status": "done"
   },
   {
     "id": "TASK-02",
     "description": "Verify + remove dead client-side source files. DONE: retried git rm on the 21 confirmed-dead files, no sandbox block this time (prior block was transient/session-specific, not persistent). Deleted, staged, tsc --noEmit clean in main checkout.",
-    "target_files": ["client/src/components/**", "client/src/utils/**", "client/src/services/**", "client/src/hooks/**", "client/src/interfaces/**", "client/src/mocks/**"],
+    "target_files": [
+      "client/src/components/**",
+      "client/src/utils/**",
+      "client/src/services/**",
+      "client/src/hooks/**",
+      "client/src/interfaces/**",
+      "client/src/mocks/**"
+    ],
     "verify_cmd": "cd client && npx tsc --noEmit",
     "status": "done"
   },
   {
     "id": "TASK-03",
     "description": "Verify + remove dead server-side source files from graphify candidate list. DONE: retried git rm on the 5 confirmed-dead files (cache.middleware.ts, errorHandler.middleware.ts, permissions.service.ts, record.service.ts, tenantService.service.ts), no sandbox block this time. Deleted, staged, tsc --noEmit clean in main checkout (required npm install first, node_modules was missing).",
-    "target_files": ["server/src/middlewares/**", "server/src/services/**", "server/src/utils/**"],
+    "target_files": [
+      "server/src/middlewares/**",
+      "server/src/services/**",
+      "server/src/utils/**"
+    ],
     "verify_cmd": "cd server && npx tsc --noEmit",
     "status": "done"
   },
   {
     "id": "TASK-04",
     "description": "Root-cause login/logout session flicker. DONE: race between module-level `store.dispatch(fetchSession())` in _app.tsx:16 and components (Navigation.tsx, SubscriptionGate.tsx, PermissionGate.tsx, CheckoutGuard.tsx) that read `isAuthenticated` without gating on `isAuthenticating`. CheckoutGuard.tsx:16-19 actively redirects an already-logged-in user to /auth/login during the race window. NOT a session/token strategy issue - cookie/JWT mechanism untouched. See TASK-06 for the fix.",
-    "target_files": ["client/src/store/slices/userSlice.ts", "client/src/components/Guards/CheckoutGuard.tsx", "client/pages/_app.tsx"],
+    "target_files": [
+      "client/src/store/slices/userSlice.ts",
+      "client/src/components/Guards/CheckoutGuard.tsx",
+      "client/pages/_app.tsx"
+    ],
     "verify_cmd": "cd client && npx tsc --noEmit",
     "status": "done"
   },
   {
     "id": "TASK-06",
     "description": "Implement session-flicker fix: move fetchSession() dispatch into useEffect in _app.tsx; gate Navigation.tsx/SubscriptionGate.tsx/PermissionGate.tsx/CheckoutGuard.tsx on isAuthenticating before branching auth UI. UI-lifecycle only, no auth/session/cookie strategy change. DONE: implemented by frontend-dev, mirrored into main checkout by team-lead, tsc --noEmit clean in main checkout, security-auditor reviewed all 5 files -> approved, no regressions, no authorization bypass, cookie/JWT mechanism confirmed untouched. Outstanding: before/after Playwright screenshot not captured (no DB/backend available in sandbox) - flagged as outstanding QA evidence, not blocking given security sign-off.",
-    "target_files": ["client/pages/_app.tsx", "client/src/components/Layouts/Navigation.tsx", "client/src/components/SubscriptionGate.tsx", "client/src/components/PermissionGate.tsx", "client/src/components/Guards/CheckoutGuard.tsx"],
+    "target_files": [
+      "client/pages/_app.tsx",
+      "client/src/components/Layouts/Navigation.tsx",
+      "client/src/components/SubscriptionGate.tsx",
+      "client/src/components/PermissionGate.tsx",
+      "client/src/components/Guards/CheckoutGuard.tsx"
+    ],
     "verify_cmd": "cd client && npx tsc --noEmit",
     "status": "done"
   },
@@ -44,35 +81,88 @@
   {
     "id": "TASK-07",
     "description": "Bring stack up via docker compose, full qa-devops Playwright click-through, inline-fix quick established-pattern bugs found: (1) docker-compose port conflicts + missing shared/ volume mount for @shared/* resolution, (2) client auth calls hitting wrong URL because NEXT_PUBLIC_BASE_URL_LOCAL_API was never set, (3) image URL concatenation missing '/' separator crashing next/image across ~13 files, via new getImageUrl() helper.",
-    "target_files": ["docker-compose.yml", "client/src/utils/imageUrl.ts", "client/pages/cart/index.tsx", "client/pages/favorites/index.tsx", "client/pages/comments/index.tsx", "client/pages/store/[id].tsx", "client/pages/store/index.tsx", "client/pages/shop/index.tsx", "client/pages/shop/product/[pid].tsx", "client/src/components/UI/PageComponents/product/SuggestedProducts.tsx", "client/src/components/UI/home/bubbleanimation/BubbleAnimation.tsx", "client/src/components/UI/home/FeaturedStores.tsx", "client/src/components/UI/General/listingProducts/ListingProducts.tsx", "client/src/components/UI/General/listingProducts/ListingProductsByStore.tsx", "client/src/components/UI/General/imageViewer/imageViewer.tsx"],
+    "target_files": [
+      "docker-compose.yml",
+      "client/src/utils/imageUrl.ts",
+      "client/pages/cart/index.tsx",
+      "client/pages/favorites/index.tsx",
+      "client/pages/comments/index.tsx",
+      "client/pages/store/[id].tsx",
+      "client/pages/store/index.tsx",
+      "client/pages/shop/index.tsx",
+      "client/pages/shop/product/[pid].tsx",
+      "client/src/components/UI/PageComponents/product/SuggestedProducts.tsx",
+      "client/src/components/UI/home/bubbleanimation/BubbleAnimation.tsx",
+      "client/src/components/UI/home/FeaturedStores.tsx",
+      "client/src/components/UI/General/listingProducts/ListingProducts.tsx",
+      "client/src/components/UI/General/listingProducts/ListingProductsByStore.tsx",
+      "client/src/components/UI/General/imageViewer/imageViewer.tsx"
+    ],
     "verify_cmd": "cd client && npx tsc --noEmit",
     "status": "done"
   },
   {
     "id": "TASK-08",
     "description": "Fix container-networking duality: server-side Next.js code (SSR/API routes) called NEXT_PUBLIC_BASE_URL_API (host-only, unreachable from inside the client container), blocking login/register. Added INTERNAL_API_URL (container-network address) to docker-compose.yml client env, threaded through httpClient.ts's server-side baseURL branch; browser calls unaffected. [...AUTH].ts now uses relative paths against the shared httpClient. security-auditor reviewed (auth route touched): APPROVE, no secret/cookie/SSRF issues.",
-    "target_files": ["client/src/utils/httpClient.ts", "client/pages/api/user/[...AUTH].ts", "docker-compose.yml"],
+    "target_files": [
+      "client/src/utils/httpClient.ts",
+      "client/pages/api/user/[...AUTH].ts",
+      "docker-compose.yml"
+    ],
     "verify_cmd": "cd client && npx tsc --noEmit",
     "status": "done"
   },
   {
     "id": "TASK-09",
     "description": "Fix GET /api/public/categories failing for anonymous callers (required req.UserId, called vendor-scoped fetchCategories). Added ownership-agnostic fetchAllCategoriesPublic()/handleFetchPublicCategories(); authenticated fetchCategories() untouched. team-lead review caught two issues in the as-committed version, both fixed: (1) PII leak -- public function's Owner include had 'email' attribute, leaking vendor email to anonymous callers via createdBy.email; removed. (2) all 4 SubCategory includes in category.service.ts (incl. the new public one) requested a nonexistent 'description' column, throwing a Postgres column-not-found error on any category with subcategories -- removed the bad attribute (pre-existing bug, same fix applied consistently, not a scoping change). Live-verified GET /api/public/categories returns 200 with real data, no email field. security-auditor reviewed: APPROVE (design correct, no IDOR/SSRF; PII fix logic confirmed sound, re-verified against the committed file post-commit per its request).",
-    "target_files": ["server/src/services/category.service.ts", "server/src/controllers/category.controller.ts", "server/src/routes/public.route.ts"],
+    "target_files": [
+      "server/src/services/category.service.ts",
+      "server/src/controllers/category.controller.ts",
+      "server/src/routes/public.route.ts"
+    ],
     "verify_cmd": "cd server && npx tsc --noEmit",
     "status": "done"
   },
   {
     "id": "TASK-10",
     "description": "qa-devops focused pass: retest login/register/product-detail/cart/checkout (previously networking-blocked) + first-time coverage of 13 admin-dashboard rows using superadmin credential. Results: Register/Dashboard/Roles/Permissions/Orders/Categories/Articles WORKING. Login PARTIAL (BFF proxy returns unwrapped response, false-failure toast despite valid session -- auth code, not fixed, Always-Stop). Product-detail fixed inline (next.config.js image remotePattern, commit 67809d0). Cart/Checkout/Stores/Shipping/Taxes/Promotions/Returns/Comments/Users all BROKEN -- distinct bugs, logged not fixed (out of this round's scope, none are one-line/established-pattern). CRITICAL finding: GET /api/users (Users admin page's underlying call) returns bcrypt password hashes in the response body -- credential/PII leak, needs urgent security-auditor + backend-node dispatch, flagged to CEO.",
-    "target_files": ["client/next.config.js"],
+    "target_files": [
+      "client/next.config.js"
+    ],
     "verify_cmd": "cd client && npx tsc --noEmit",
     "status": "done"
   },
   {
     "id": "TASK-11",
     "description": "Fix CRITICAL password-hash leak (GET /api/users + admin create/update + public register all returned full User row incl. bcrypt hash; no model defaultScope existed). Excluded password at query level in fetchUsersByCreator (attributes.exclude) and stripped it from create/update return values in user.service.ts + users.service.ts. Grep-swept all other db.User.find*/create call sites -- none leak (existing ones already allow-list or never return the row). Also fixed: (a) admin Users-list 'No users found' -- root cause was NOT a data-binding bug as assumed, it was a client-side race where the fetch fired before the app-level session-restore effect registered the Authorization header, producing a silently-swallowed 401; gated the fetch in client/pages/users/index.tsx on isAuthenticated && !isAuthenticating. (b) login BFF proxy (pages/api/user/[...AUTH].ts handleSignIn) returned an unwrapped response with accessToken dropped entirely -- now returns {success,message,data} with accessToken in data, matching userSlice's signIn thunk expectation. Live-verified via Playwright against the docker-compose stack: GET /api/users now 200 with no password field and 8 real records rendered in the main list; login shows no false-failure toast. security-auditor reviewed all three fixes together: APPROVE, no blockers (full table in daily-log). Non-blocking follow-ups filed, not fixed: accumulating httpClient request interceptors on every login/session-fetch (frontend-dev ticket), missing .rejected case in myUsersSlice's fetchUsersByCreator, and a recommended future HIGH-tier auth/session-design review (httpOnly-cookie-only migration) -- Always-Stop, routed to CEO/Founder, not actioned here.",
-    "target_files": ["server/src/services/user.service.ts", "server/src/services/users.service.ts", "server/src/controllers/auth.controller.ts", "client/pages/api/user/[...AUTH].ts", "client/pages/users/index.tsx"],
+    "target_files": [
+      "server/src/services/user.service.ts",
+      "server/src/services/users.service.ts",
+      "server/src/controllers/auth.controller.ts",
+      "client/pages/api/user/[...AUTH].ts",
+      "client/pages/users/index.tsx"
+    ],
+    "verify_cmd": "cd server && npx tsc --noEmit && cd ../client && npx tsc --noEmit",
+    "status": "done"
+  },
+  {
+    "id": "TASK-12",
+    "description": "Fix remaining logged-not-fixed QA items: cart 500/no-cart + global stack-trace leak; checkout pkg.name crash on direct nav; stores admin paginated-envelope .map crash; shipping/taxes/promotions/returns admin relative-fetch host bug + returns/shipping-orders 500 (nonexistent Order.orderNumber/totalPrice columns); comments infinite spinner without ?productId=.",
+    "target_files": [
+      "server/src/services/cart.service.ts",
+      "server/index.ts",
+      "client/pages/payment/checkoutwithstripe.tsx",
+      "client/src/store/slices/storeSlice.ts",
+      "server/src/controllers/return.controller.ts",
+      "server/src/controllers/shipping.controller.ts",
+      "client/pages/shipping/index.tsx",
+      "client/pages/taxes/index.tsx",
+      "client/pages/promotions/index.tsx",
+      "client/pages/promotions/create.tsx",
+      "client/pages/promotions/edit.tsx",
+      "client/pages/returns/index.tsx",
+      "client/pages/comments/index.tsx"
+    ],
     "verify_cmd": "cd server && npx tsc --noEmit && cd ../client && npx tsc --noEmit",
     "status": "done"
   }

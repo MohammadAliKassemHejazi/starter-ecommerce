@@ -27,9 +27,10 @@ export const getCart = async (userId: string): Promise<ICartAttributes> => {
       ],
     });
 
-    // If the cart is not found, throw a custom error
+    // If the cart is not found (new user, never added anything), return an
+    // empty cart rather than erroring -- no Cart row yet is not a failure.
     if (!cart) {
-      throw customError(cartErrors.CartItemNotFound);
+      return { id: undefined, userId, cartItems: [] };
     }
 
     // Convert the Sequelize instance to a plain object

@@ -6,23 +6,14 @@ import { usePageData } from '@/hooks/usePageData';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
 import { getImageUrl } from '@/utils/imageUrl';
-
-interface Comment {
-  id: string;
-  text: string;
-  rating: number;
-  user: {
-    id: string;
-    name: string;
-  };
-  createdAt: string;
-}
+import { getComments, addComment, Comment } from '@/services/commentService';
+import { requestProductById } from '@/services/shopService';
 
 interface Product {
   id: string;
   name: string;
   price: number;
-  images: Array<{ imageUrl: string }>;
+  productImages?: Array<{ imageUrl: string }>;
 }
 
 const CommentsPage = () => {
@@ -39,11 +30,8 @@ const CommentsPage = () => {
 
   const fetchComments = useCallback(async () => {
     try {
-      const response = await fetch(`/api/comments?productId=${productId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setComments(data.data || []);
-      }
+      const response = await getComments(productId as string);
+      setComments(response.data?.items || []);
     } catch (error) {
       console.error('Error fetching comments:', error);
     } finally {
@@ -53,22 +41,27 @@ const CommentsPage = () => {
 
   const fetchProduct = useCallback(async () => {
     try {
-      const response = await fetch(`/api/shop/${productId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setProduct(data.data);
-      }
+      const response = await requestProductById(productId as string);
+      setProduct(response.data as unknown as Product);
     } catch (error) {
       console.error('Error fetching product:', error);
     }
   }, [productId]);
 
   useEffect(() => {
-    if (productId) {
-      fetchComments();
-      fetchProduct();
+    // No ?productId= in the URL (e.g. direct navigation to /comments) --
+    // there is nothing to load, so stop the spinner instead of hanging
+    // forever waiting for effects that never fire.
+    if (!router.isReady) {
+      return;
     }
-  }, [productId, fetchComments, fetchProduct]);
+    if (!productId) {
+      setLoading(false);
+      return;
+    }
+    fetchComments();
+    fetchProduct();
+  }, [router.isReady, productId, fetchComments, fetchProduct]);
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,28 +72,10 @@ const CommentsPage = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/comments', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId,
-          text: newComment.text,
-          rating: newComment.rating
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setComments([data.data, ...comments]);
-        setNewComment({ text: '', rating: 5 });
-        showToast.success('Comment added successfully');
-      } else {
-        throw new Error('Failed to add comment');
-      }
+      const data = await addComment(productId as string, newComment.text, newComment.rating);
+      setComments([data.data, ...comments]);
+      setNewComment({ text: '', rating: 5 });
+      showToast.success('Comment added successfully');
     } catch (error) {
       console.error('Error adding comment:', error);
       showToast.error('Failed to add comment');
@@ -122,9 +97,9 @@ const CommentsPage = () => {
         <div className="card-body">
           <div className="row">
             <div className="col-md-3">
-              {product.images && product.images.length > 0 && (
+              {product.productImages && product.productImages.length > 0 && (
                 <Image
-                  src={getImageUrl(product.images[0].imageUrl)}
+                  src={getImageUrl(product.productImages[0].imageUrl)}
                   alt={product.name}
                   width={200}
                   height={200}
@@ -201,7 +176,7 @@ const CommentsPage = () => {
                 <div className="border-bottom pb-3">
                   <div className="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                      <h6 className="mb-1">{comment.user.name}</h6>
+                      <h6 className="mb-1">{comment.user?.name || 'Anonymous'}</h6>
                       <div className="text-warning">
                         {renderStars(comment.rating)}
                       </div>
@@ -227,6 +202,16 @@ const CommentsPage = () => {
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
+  if (!productId) {
+    return (
+      <PageLayout title="Product Reviews" protected={true}>
+        <div className="text-center text-muted py-5">
+          <p className="mb-0">No product selected. Open reviews from a product page to see and add reviews.</p>
         </div>
       </PageLayout>
     );

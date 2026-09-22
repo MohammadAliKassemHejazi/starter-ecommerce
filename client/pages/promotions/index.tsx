@@ -8,6 +8,7 @@ import router from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '../../src/contexts/ToastContext';
 import ConfirmationModal from '@/components/UI/ConfirmationModal';
+import httpClient from '@/utils/httpClient';
 
 interface Promotion {
   id: string;
@@ -34,13 +35,8 @@ const PromotionsPage = () => {
   const fetchPromotions = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/promotions');
-      if (response.ok) {
-        const data = await response.json();
-        setPromotions(data.data || []);
-      } else {
-        throw new Error('Failed to fetch promotions');
-      }
+      const { data } = await httpClient.get('/promotions');
+      setPromotions(data.data || []);
     } catch (error) {
       console.error('Error fetching promotions:', error);
       showError('Failed to load promotions', 'Please try again later');
@@ -63,21 +59,9 @@ const PromotionsPage = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/promotions/${deleteModal.promotion.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        setPromotions(promotions.filter(promo => promo.id !== deleteModal.promotion!.id));
-        showSuccess('Promotion deleted successfully');
-      } else {
-        throw new Error('Failed to delete promotion');
-      }
+      await httpClient.delete(`/promotions/${deleteModal.promotion.id}`);
+      setPromotions(promotions.filter(promo => promo.id !== deleteModal.promotion!.id));
+      showSuccess('Promotion deleted successfully');
     } catch (error) {
       console.error('Error deleting promotion:', error);
       showError('Failed to delete promotion', 'Please try again later');
