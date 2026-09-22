@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/store";
 import { useSelector } from "react-redux";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import AddToCartButton from "@/components/UI/AddToCartButton";
+import { getImageUrl } from "@/utils/imageUrl";
 
 interface ProductListProps {}
 
@@ -91,7 +92,7 @@ const ProductList: React.FC<ProductListProps> = () => {
                 <div className="product">
                   {product.thumbnail && (
                     <Image
-                      src={(process.env.NEXT_PUBLIC_BASE_URL_Images || "") + product.thumbnail}
+                      src={getImageUrl(product.thumbnail)}
                       alt=""
                       width={300}
                       height={350}

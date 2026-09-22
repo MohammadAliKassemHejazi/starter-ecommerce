@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { fetchPublicStores, selectPublicStores } from "@/store/slices/publicSlice";
 import { useAppDispatch } from "@/store/store";
+import { getImageUrl } from "@/utils/imageUrl";
 
 const FeaturedStores: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -36,8 +37,8 @@ const FeaturedStores: React.FC = () => {
                     <Image
                       src={
                         store.imgUrl
-                          ? `${process.env.NEXT_PUBLIC_BASE_URL_Images}${store.imgUrl}`
-                          : `${process.env.NEXT_PUBLIC_BASE_URL_Images}${"placeholder"}` // Fallback image
+                          ? getImageUrl(store.imgUrl)
+                          : getImageUrl("placeholder") // Fallback image
                       }
                       alt={store.name}
                       fill

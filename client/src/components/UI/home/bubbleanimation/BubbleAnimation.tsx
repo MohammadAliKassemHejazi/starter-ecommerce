@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image'; // Assuming you're using Next.js for images
 import styles from './BubbleAnimation.module.css'; // Your CSS module for styling
 import { IStore } from '@shared/types/store.types';
+import { getImageUrl } from '@/utils/imageUrl';
 
 
 interface BubbleAnimationProps {
@@ -23,7 +24,7 @@ const BubbleAnimation: React.FC<BubbleAnimationProps> = ({ stores }) => {
             }}
           >
             <div className={styles["bubble-logo"]}>
-              <Image src={ process.env.NEXT_PUBLIC_BASE_URL_Images + store.imgUrl} alt={`${store.name} logo`} width={100} height={100} />
+              <Image src={getImageUrl(store.imgUrl)} alt={`${store.name} logo`} width={100} height={100} />
             </div>
           </div>
         ))}

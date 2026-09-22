@@ -5,6 +5,7 @@ import { IProduct } from "@shared/types/product.types";
 import { fetchProductsByStore, fetchProductsListing, productByStoreSelector } from "@/store/slices/shopSlice"; 
 import { useAppDispatch } from "@/store/store"; 
 import { useSelector } from "react-redux";
+import { getImageUrl } from "@/utils/imageUrl";
 
 interface ListingProductsByStore {
     storeId: string;    
@@ -129,7 +130,7 @@ const ListingProductsByStore: React.FC<ListingProductsByStore> = ({ storeId  }) 
                 <div className="product">
                   {product.thumbnail && (
                     <Image
-                      src={(process.env.NEXT_PUBLIC_BASE_URL_Images || "") + product.thumbnail}
+                      src={getImageUrl(product.thumbnail)}
                       alt=""
                       width={300}
                       height={350}

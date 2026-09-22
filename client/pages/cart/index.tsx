@@ -13,6 +13,7 @@ import ProtectedRoute from '@/components/protectedRoute';
 import { RootState, useAppDispatch } from "@/store/store";
 import { IProduct } from "@shared/types/product.types";
 import { CartItem } from "@/models/cart.model";
+import { getImageUrl } from "@/utils/imageUrl";
 import Image from "next/image";
 import PaymentMethodSelector from "@/components/Payment/PaymentMethodSelector";
 import { usePermissions } from "@/hooks/usePermissions";
@@ -96,10 +97,7 @@ const Cart = () => {
     <div key={cartItem.id} className='productCard'>
       {cartItem?.productImages && cartItem.productImages.length > 0 && (
         <Image
-          src={
-            process.env.NEXT_PUBLIC_BASE_URL_Images +
-            cartItem.productImages[0]?.url
-          }
+          src={getImageUrl(cartItem.productImages[0]?.url)}
           alt={cartItem.name ?? ""}
           className='productImage'
           width={100}

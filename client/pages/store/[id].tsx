@@ -13,6 +13,7 @@ import { requestStoreById } from "@/services/storeService";
 import ErrorBoundary from "@/components/Error/ErrorBoundary";
 import ProtectedRoute from "@/components/protectedRoute";
 import { setAuthHeaders } from "@/utils/httpClient";
+import { getImageUrl } from "@/utils/imageUrl";
 import ListingProductsByStore from "@/components/UI/General/listingProducts/ListingProductsByStore";
 
 import { GetStaticPaths, GetStaticProps } from "next";
@@ -104,7 +105,7 @@ const SingleStore = ({ initialStore, initialProducts }: SingleStoreProps) => {
 <div className="store-header relative h-64 md:h-80 flex items-center justify-center overflow-hidden rounded-lg shadow-md">
   {/* Background Image */}
   <Image
-    src={process.env.NEXT_PUBLIC_BASE_URL_Images + store.imgUrl}
+    src={getImageUrl(store.imgUrl)}
     alt={store.name}
     fill
     priority

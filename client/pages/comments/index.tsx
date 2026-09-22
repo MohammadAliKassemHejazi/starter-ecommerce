@@ -5,6 +5,7 @@ import { PageLayout } from '@/components/UI/PageComponents';
 import { usePageData } from '@/hooks/usePageData';
 import { showToast } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
+import { getImageUrl } from '@/utils/imageUrl';
 
 interface Comment {
   id: string;
@@ -123,7 +124,7 @@ const CommentsPage = () => {
             <div className="col-md-3">
               {product.images && product.images.length > 0 && (
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL_Images}${product.images[0].imageUrl}`}
+                  src={getImageUrl(product.images[0].imageUrl)}
                   alt={product.name}
                   width={200}
                   height={200}

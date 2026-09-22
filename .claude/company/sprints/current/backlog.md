@@ -7,6 +7,7 @@
 | 3 | Root-cause login/logout session flicker | Root cause identified in auth slice / guards / httpClient interceptor / cookie issuance; fix proposed; security-auditor reviews before Done | frontend-dev | MEDIUM (HIGH if auth-design change) | M | ✅ done (security-auditor approved; Playwright screenshot outstanding — no DB in sandbox) |
 | 4 | API contract audit — grooming report | Scope of remaining ENDPOINT_TRACKER.md mismatches documented with evidence; proposed fixes listed; sent to CEO before implementation | team-lead | HIGH | L | 🔎 review (report ready) |
 | 5 | Architecture structural review | Layering, circular imports, shared-type consistency findings documented; any restructuring proposal separately gated | system-architect | HIGH | M | 🔎 review (report ready, incl. flagged stock race condition) |
+| 6 | Docker up + full QA click-through + inline-fix quick bugs | Stack live via docker compose; qa-devops Playwright pass covers full feature map; BROKEN findings that are established-pattern config/one-liners fixed with tsc clean + commit, structurally bigger ones logged not fixed | team-lead, qa-devops | MEDIUM | M | 🔧 in progress |
 
 ## Story detail
 

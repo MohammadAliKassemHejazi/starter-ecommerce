@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { requestProductsByStore, requestProductsListing } from '@/services/shopService';
 import { IProduct } from '@shared/types/product.types';
+import { getImageUrl } from '@/utils/imageUrl';
 
 interface SuggestedProductsProps {
   currentProduct: IProduct;
@@ -63,7 +64,7 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({ currentProduct })
                   <Image
                     src={
                       product.thumbnail
-                        ? (process.env.NEXT_PUBLIC_BASE_URL_Images || "") + product.thumbnail
+                        ? getImageUrl(product.thumbnail)
                         : '/images/placeholder.png'
                     }
                     alt={product.name}

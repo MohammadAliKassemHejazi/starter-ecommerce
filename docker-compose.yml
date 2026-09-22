@@ -19,7 +19,11 @@ services:
       POSTGRES_PASSWORD: devlocal_only_not_a_real_secret
       POSTGRES_DB: ecommerce_dev
     ports:
-      - "5432:5432"
+      # Host port 5434 (not 5432): another local project's postgres already
+      # holds 5432 on this machine. Internal container-to-container traffic
+      # (server -> postgres) uses the service name on 5432 regardless, so
+      # this only affects host-side tools (psql, GUI clients).
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -38,10 +42,19 @@ services:
       # not localhost, when running inside the docker network.
       DB_HOST: postgres
     ports:
-      - "3000:3000"
+      # Host port 5300 (not 3000): another local project's client container
+      # already holds host 3000 on this machine. The app listens on 3000
+      # *inside* the container regardless (server/.env PORT / Dockerfile
+      # EXPOSE) — only the host-side mapping changes, so localhost:5300 is
+      # what the browser/Playwright must hit.
+      - "5300:3000"
     volumes:
       - ./server:/app
       - /app/node_modules
+      # @shared/* resolves to ../../shared relative to baseUrl (src/), which
+      # from /app/src lands on container-root /shared — mount the repo's
+      # shared/ folder there or every @shared import fails to compile.
+      - ./shared:/shared
     depends_on:
       postgres:
         condition: service_healthy
@@ -51,13 +64,24 @@ services:
       context: ./client
     environment:
       # Non-secret, public Next.js build-time vars — safe to inline here.
-      NEXT_PUBLIC_BASE_URL_API: http://localhost:3000/api
-      NEXT_PUBLIC_BASE_URL_Images: http://localhost:3000
+      # Points at the server's new host mapping (5300, see above).
+      NEXT_PUBLIC_BASE_URL_API: http://localhost:5300/api
+      NEXT_PUBLIC_BASE_URL_Images: http://localhost:5300
+      # authService.ts's signIn/signUp/signOut/getSession calls are relative
+      # paths ("/user/auth/login" etc.) meant to hit this client's own BFF
+      # proxy (pages/api/user/[...AUTH].ts), overriding httpClient's default
+      # baseURL (which points straight at the real backend and has no
+      # /user/auth/* route — was a silent 404 with this var unset). README
+      # already documents this var; it was just missing from compose.
+      NEXT_PUBLIC_BASE_URL_LOCAL_API: http://localhost:3001/api
     ports:
       - "3001:3001"
     volumes:
       - ./client:/app
       - /app/node_modules
+      # Same @shared/* resolution requirement as the server service — see
+      # that service's comment.
+      - ./shared:/shared
     depends_on:
       - server
 

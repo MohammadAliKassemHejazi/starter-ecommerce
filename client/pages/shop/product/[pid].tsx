@@ -13,6 +13,7 @@ import ProtectedRoute from "@/components/protectedRoute";
 import { useAppDispatch } from "@/store/store";
 import { addToCart } from "@/store/slices/cartSlice";
 import Swal from "sweetalert2";
+import { getImageUrl } from "@/utils/imageUrl";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import { GetStaticPaths, GetStaticProps } from "next";
 import SuggestedProducts from "@/components/UI/PageComponents/product/SuggestedProducts";
@@ -93,9 +94,7 @@ const SingleItem = ({ product }: Props) => {
       itemCondition: "https://schema.org/NewCondition",
       availability: "https://schema.org/InStock",
     },
-    image:
-      process.env.NEXT_PUBLIC_BASE_URL_Images +
-      (productView?.productImages?.[0]?.imageUrl ?? ""),
+    image: getImageUrl(productView?.productImages?.[0]?.imageUrl),
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: productView?.ratings ?? 0,
@@ -171,9 +170,7 @@ const SingleItem = ({ product }: Props) => {
                   <MySwiperComponent
                     imageLinks={
                       productView?.productImages?.map(
-                        (photo: any) =>
-                          process.env.NEXT_PUBLIC_BASE_URL_Images +
-                          photo.imageUrl
+                        (photo: any) => getImageUrl(photo.imageUrl)
                       ) ?? []
                     }
                   />
@@ -458,9 +455,7 @@ export async function generateMetadata({
         "Product Description",
       images: [
         {
-          url:
-            process.env.NEXT_PUBLIC_BASE_URL_Images +
-            ((product?.data?.productImages?.[0] as any)?.imageUrl ?? ""),
+          url: getImageUrl((product?.data?.productImages?.[0] as any)?.imageUrl),
         },
       ],
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
@@ -472,9 +467,7 @@ export async function generateMetadata({
         product?.data?.metaDescription ??
         product?.data?.description ??
         "Product Description",
-      image:
-        process.env.NEXT_PUBLIC_BASE_URL_Images +
-        ((product?.data?.productImages?.[0] as any)?.imageUrl ?? ""),
+      image: getImageUrl((product?.data?.productImages?.[0] as any)?.imageUrl),
     },
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${pid}`,
   };

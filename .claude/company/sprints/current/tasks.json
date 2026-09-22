@@ -40,5 +40,12 @@
     "target_files": [],
     "verify_cmd": "node -e \"require('fs').accessSync('graphify-out/graph.json')\"",
     "status": "done"
+  },
+  {
+    "id": "TASK-07",
+    "description": "Bring stack up via docker compose, full qa-devops Playwright click-through, inline-fix quick established-pattern bugs found: (1) docker-compose port conflicts + missing shared/ volume mount for @shared/* resolution, (2) client auth calls hitting wrong URL because NEXT_PUBLIC_BASE_URL_LOCAL_API was never set, (3) image URL concatenation missing '/' separator crashing next/image across ~13 files, via new getImageUrl() helper.",
+    "target_files": ["docker-compose.yml", "client/src/utils/imageUrl.ts", "client/pages/cart/index.tsx", "client/pages/favorites/index.tsx", "client/pages/comments/index.tsx", "client/pages/store/[id].tsx", "client/pages/store/index.tsx", "client/pages/shop/index.tsx", "client/pages/shop/product/[pid].tsx", "client/src/components/UI/PageComponents/product/SuggestedProducts.tsx", "client/src/components/UI/home/bubbleanimation/BubbleAnimation.tsx", "client/src/components/UI/home/FeaturedStores.tsx", "client/src/components/UI/General/listingProducts/ListingProducts.tsx", "client/src/components/UI/General/listingProducts/ListingProductsByStore.tsx", "client/src/components/UI/General/imageViewer/imageViewer.tsx"],
+    "verify_cmd": "cd client && npx tsc --noEmit",
+    "status": "done"
   }
 ]

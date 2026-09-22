@@ -18,6 +18,7 @@ import { addToCart } from "@/store/slices/cartSlice";
 import FavoritesButton from "@/components/UI/FavoritesButton";
 import { ProductTablePreset } from "@/components/UI/ModernTable";
 import { showToast, showConfirm } from "@/components/UI/PageComponents/ToastConfig";
+import { getImageUrl } from "@/utils/imageUrl";
 import debounce from "lodash.debounce";
 import Moment from "react-moment";
 import Image from "next/image";
@@ -152,7 +153,7 @@ const Shop = () => {
   const transformedProducts = productList?.map((product: any) => ({
     ...product,
     productImages: product.productImages?.map((photo: any) => ({
-      url: process.env.NEXT_PUBLIC_BASE_URL_Images + photo.imageUrl
+      url: getImageUrl(photo.imageUrl)
     })) || []
   })) || [];
 
@@ -164,10 +165,7 @@ const Shop = () => {
           <div className="card h-100">
             {product.productImages && (
               <Image
-                src={
-                  process.env.NEXT_PUBLIC_BASE_URL_Images +
-                  product.productImages[0]?.url
-                }
+                src={getImageUrl(product.productImages[0]?.url)}
                 alt={product?.name ?? ""}
                 width={300}
                 height={200}

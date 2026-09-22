@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { showToast, showConfirm } from '@/components/UI/PageComponents/ToastConfig';
 import ProtectedRoute from '@/components/protectedRoute';
 import { fetchFavorites, removeFromFavorites, favoritesSelector, favoritesLoadingSelector } from '@/store/slices/favoritesSlice';
+import { getImageUrl } from '@/utils/imageUrl';
 
 interface Favorite {
   id: string;
@@ -54,7 +55,7 @@ const FavoritesPage = () => {
       <div className="card h-100">
         {favorite.product.productImages && favorite.product.productImages.length > 0 && (
           <Image
-            src={`${process.env.NEXT_PUBLIC_BASE_URL_Images}${favorite.product.productImages[0].url}`}
+            src={getImageUrl(favorite.product.productImages[0].url)}
             alt={favorite.product.name}
             className="card-img-top"
             width={300}

@@ -10,6 +10,7 @@ import ProtectedRoute from "@/components/protectedRoute";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { getImageUrl } from "@/utils/imageUrl";
 
 const Stores = () => {
   const router = useRouter();
@@ -60,7 +61,7 @@ const Stores = () => {
   // Transform stores data for the table
   const transformedStores = stores?.map((store: any) => ({
     ...store,
-    imgUrl: process.env.NEXT_PUBLIC_BASE_URL_Images + store.imgUrl
+    imgUrl: getImageUrl(store.imgUrl)
   })) || [];
 
   const totalStores = stores?.length || 0;
