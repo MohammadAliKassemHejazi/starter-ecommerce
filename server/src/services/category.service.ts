@@ -78,6 +78,34 @@ export const fetchCategories = async (rootUserId: string): Promise<ICategory[]> 
   }
 };
 
+// Public, ownership-agnostic listing: ALL categories regardless of which
+// vendor/user created them (no managed-user-hierarchy filter). Used by the
+// unauthenticated /api/public/categories endpoint — the vendor-scoped
+// fetchCategories() above stays untouched for the authenticated/admin view.
+export const fetchAllCategoriesPublic = async (): Promise<ICategory[]> => {
+  try {
+    const categories = await db.Category.findAll({
+      include: [
+        {
+          model: db.User,
+          as: 'Owner',
+          attributes: ['id', 'name', 'email'],
+        },
+        {
+          model: db.SubCategory,
+          as: 'SubCategories',
+          attributes: ['id', 'name', 'description'],
+        },
+      ],
+    });
+
+    return categories.map(formatCategory);
+  } catch (error) {
+    console.error('Error fetching public categories:', error);
+    throw new Error('Failed to fetch categories.');
+  }
+};
+
 export const createCategory = async (data: { name: string; description?: string; userId: string }): Promise<ICategory> => {
   const { name, description, userId } = data;
   const category = await db.Category.create({ name, description, userId });

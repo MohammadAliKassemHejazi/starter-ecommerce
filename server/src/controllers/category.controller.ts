@@ -17,6 +17,17 @@ export const handleFetchCategories = async (req: CustomRequest, res: Response, n
   }
 };
 
+// Public, unauthenticated listing — no req.UserId requirement, no vendor
+// hierarchy scoping. Pairs with categoryService.fetchAllCategoriesPublic().
+export const handleFetchPublicCategories = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const categories = await categoryService.fetchAllCategoriesPublic();
+    res.json({ success: true, message: 'Categories retrieved successfully', data: categories });
+  } catch (error) {
+    next(customError(categoryErrors.CategoryFetchFailure));
+  }
+};
+
 export const handleCreateCategory = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const { name, description } = req.body;
   const userId = req.UserId;

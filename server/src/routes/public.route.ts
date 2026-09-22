@@ -59,7 +59,7 @@ router.get('/stores/:storeId/products', async (req, res, next) => {
 // Get public categories (for navigation)
 router.get('/categories', async (req, res, next) => {
   try {
-    const result = await categoryController.handleFetchCategories(req, res, next);
+    const result = await categoryController.handleFetchPublicCategories(req, res, next);
     return result;
   } catch (error) {
     next(error);
