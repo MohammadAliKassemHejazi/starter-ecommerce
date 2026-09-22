@@ -64,8 +64,11 @@ export const fetchCategories = async (rootUserId: string): Promise<ICategory[]> 
         },
         {
           model: db.SubCategory,
+          // SubCategory has no 'description' column (model + DB table both
+          // define only id/name) — requesting it throws a Postgres
+          // "column does not exist" error. Pre-existing bug, fixed here.
           as: 'SubCategories',
-          attributes: ['id', 'name', 'description']
+          attributes: ['id', 'name']
         }
       ],
     });
@@ -82,6 +85,9 @@ export const fetchCategories = async (rootUserId: string): Promise<ICategory[]> 
 // vendor/user created them (no managed-user-hierarchy filter). Used by the
 // unauthenticated /api/public/categories endpoint — the vendor-scoped
 // fetchCategories() above stays untouched for the authenticated/admin view.
+// PII note: 'email' is intentionally excluded from Owner attributes here
+// (unlike fetchCategories' authenticated Owner include) — this response
+// reaches anonymous callers, so vendor email must not leak into it.
 export const fetchAllCategoriesPublic = async (): Promise<ICategory[]> => {
   try {
     const categories = await db.Category.findAll({
@@ -89,12 +95,13 @@ export const fetchAllCategoriesPublic = async (): Promise<ICategory[]> => {
         {
           model: db.User,
           as: 'Owner',
-          attributes: ['id', 'name', 'email'],
+          attributes: ['id', 'name'],
         },
         {
           model: db.SubCategory,
+          // See note in fetchCategories(): 'description' is not a real column.
           as: 'SubCategories',
-          attributes: ['id', 'name', 'description'],
+          attributes: ['id', 'name'],
         },
       ],
     });
@@ -120,8 +127,9 @@ export const createCategory = async (data: { name: string; description?: string;
       },
       {
         model: db.SubCategory,
+        // See note in fetchCategories(): 'description' is not a real column.
         as: 'SubCategories',
-        attributes: ['id', 'name', 'description']
+        attributes: ['id', 'name']
       }
     ],
   });
@@ -152,8 +160,9 @@ export const updateCategory = async (id: string, data: { name: string; descripti
       },
       {
         model: db.SubCategory,
+        // See note in fetchCategories(): 'description' is not a real column.
         as: 'SubCategories',
-        attributes: ['id', 'name', 'description']
+        attributes: ['id', 'name']
       }
     ],
   });
