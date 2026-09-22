@@ -168,7 +168,6 @@ starter-ecommerce/
 │
 ├── .claude/                     agent-team tooling (agents, skills, hooks, templates, setup, company)
 ├── .devcontainer/               optional dev container definition
-├── .jules/bolt.md               Jules agent learning log
 ├── .vscode/launch.json          "Next: Client" debug config
 ├── scripts/whats-next.mjs       cross-tool sprint orientation script
 ├── AGENTS.md / CLAUDE.md        template-level agent instructions (see §10 for drift)
@@ -231,7 +230,7 @@ RBAC and return **403** (not 500) on denial.
 | `/api/utile` | `utile.route.ts` | countries/currencies-style helpers |
 | `/api/users` | `user.route.ts` | user profile endpoints |
 | `/api/articles`, `/api/categories`, `/api/comments`, `/api/promotions`, `/api/analytics`, `/api/translations`, `/api/packages`, `/api/shipping`, `/api/sizes`, `/api/taxes`, `/api/returns`, `/api/favorites` | one module each | |
-| `/api/public` | `public.route.ts` | anonymous storefront reads, mounted with the **generous** public rate limiter |
+| `/api/public` | `public.route.ts` | anonymous storefront reads, mounted with the **generous** public rate limiter. Sub-routes (verified against source): `GET /stores`, `GET /stores/:id`, `GET /stores/:storeId/products`, `GET /products`, `GET /products/:id`, `GET /categories`, `GET /articles`, `GET /get/productListing` |
 | `/api/admin/users` | `users.route.ts` | admin user management |
 | `/api/admin/orders` | `order.route.ts` **re-used** | alias: the same router object is exported twice in `routes/index.ts`, so `/api/admin/orders/*` and `/api/orders/*` are the same handlers |
 | `/api/admin/permissions`, `/api/admin/roles`, `/api/admin/subcategories`, `/api/admin/inventory`, `/api/admin/audit-logs` | `permission`, `role`, `subcategory`, `dashboard`, `auditLog` | |
@@ -280,9 +279,9 @@ explicit form.
 | Pages vs. `src/` | `client/pages` + `client/src` | Pages are thin: they read the view model from Redux and render components |
 | State | `client/src/store/store.ts`, `slices/` | Redux Toolkit; network calls are `createAsyncThunk`; state typed through `client/src/interfaces/types/store/slices/*` |
 | API layer | `client/src/services/*Service.ts` | One module per domain, all going through `httpClient` |
-| Auth guard | `client/src/components/Guards/` + `hooks/usePermissions.ts` + `constants/permissions.ts` | Route-level role/permission gates; `config/navigation.ts` builds the whole nav tree per role (admin/vendor/user), including a "Demo Pages" group |
+| Auth guard | `client/src/components/Guards/` + `hooks/usePermissions.ts` + `constants/permissions.ts` | Route-level role/permission gates; `config/navigation.ts` builds the whole nav tree per role (admin/vendor/user), including a "Demo Pages" group. `usePermissions()` exposes `hasRole`/`hasPermission`/`hasAnyRole`/`hasAllPermissions`/`canManage`/`canView`/`isSuperAdmin`/`isAdmin`/`isVendor`/`isCustomer`; `components/PermissionGate.tsx` does conditional rendering (+ convenience wrappers `AdminOnly`/`SuperAdminOnly`/`VendorOnly`/`CustomerOnly`/`AuthenticatedOnly`); `components/protectedRoute.tsx` guards whole routes the same way; `utils/permissionUtils.ts` has permission-string helpers (`getPermissionCategory`, `hasHigherPrivileges`, etc.) |
 | View models & fallbacks | `client/src/interfaces/viewModels/`, `hooks/usePageData.ts` | Each page declares its view model and a default/fallback object so a failed API call still renders |
-| Styling | `client/styles/scss/` | Bootstrap 5 SCSS with overrides, CSS variables for theming, three shipped themes (`_normal`, `_christmas`, `_black-friday`) |
+| Styling | `client/styles/scss/` | Bootstrap 5 SCSS with overrides, CSS variables for theming. Three shipped themes in `scss/themes/` (verified in `main-theme.scss`): **Normal** (default; purple `#8b5cf6`/indigo `#6366f1`, clean/professional), **Black Friday** (orange `#ff6b35`/red `#d32f2f`/black, dark+animated), **Christmas** (red/green/gold, festive with snow animation). Switched via `[data-theme="…"]` CSS attribute selectors defined in `main-theme.scss`, toggled by `components/ThemeSwitcher.tsx` |
 | i18n | `client/src/i18n/` | `i18next` + language detector; `en`/`ar`/`fr`/`es` JSON in `locales/` (`es`/`fr` are ~3.5× larger than `en`/`ar`) |
 | Uploads | `components/UI/General/ImageUploadComponent`, `dynamicSizeImage`, `imageViewer`, `ImagesSlider` | Crop/compress client-side, `multer`+`sharp` server-side |
 | Tables & charts | `components/UI/ModernTable`, `chart.js` + `react-chartjs-2` | Shared admin table with actions + analytics/vendor charts |
@@ -311,14 +310,17 @@ capture) — never by a client redirect:
 Front end: `client/pages/payment/checkoutwithstripe.tsx`, `components/Payment/*`,
 `@paypal/react-paypal-js`, `store/slices/paymentSlice.ts`. Environment keys:
 `Stripe_Key`, `WebhookSecret`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENVIRONMENT`
-(see `PAYPAL_SETUP.md`).
+(see §6 below). PayPal developer setup: create an app at the
+[PayPal Developer Dashboard](https://developer.paypal.com/), choose "Web", copy the Client ID/Secret
+into `client/.env` (`NEXT_PUBLIC_PAYPAL_CLIENT_ID`) and `server/.env` (`PAYPAL_CLIENT_ID`,
+`PAYPAL_CLIENT_SECRET`); use sandbox accounts for testing before switching `PAYPAL_ENVIRONMENT` to `live`.
 
 ## 6. Environment variables
 
-There is **no `.env.example` in the repo** — the variable names below were extracted from
-`server/src/config/config.ts`, `client/src/utils/httpClient.ts`, `client/pages/api/user/[...AUTH].ts`
-and `PAYPAL_SETUP.md`. Create `.env` in each package (`server/.env` and `client/.env`); both are
-git-ignored.
+There is **no `.env.example` in the repo** — the variable names below were extracted directly from
+`server/src/config/config.ts`, `client/src/utils/httpClient.ts` and
+`client/pages/api/user/[...AUTH].ts`. Create `.env` in each package (`server/.env` and `client/.env`);
+both are git-ignored.
 
 ### `server/.env`
 
@@ -333,11 +335,12 @@ git-ignored.
 | `WebhookSecret` | `config.stripeWebhookSecret` | Stripe webhook signing secret |
 | `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENVIRONMENT` | `config.paypal` | `sandbox` (default) or `live` |
 | `CLIENT_URL` | `config.client` | intended CORS/redirect origin — note `cors()` is currently called with no options (§11) |
-| `FRONTEND_URL` | PayPal redirect flows | documented in `PAYPAL_SETUP.md` |
+| `FRONTEND_URL` | PayPal redirect flows | e.g. `http://localhost:3000`; used to build PayPal redirect URLs |
 
 `server/src/config/db.config.ts` reads the same `DB_*` values for the Sequelize CLI path, so keep both
-consistent. Tests additionally use a SQLite storage env (see `server/testing.py` and the
-`README_SUBMISSION.md` note about `DB_DIALECT=sqlite`, `DB_STORAGE=:memory:`).
+consistent. `server/testing.py` (§9.2, embeds hardcoded credentials, delete-candidate) hints at a
+SQLite test env (`DB_DIALECT=sqlite`, `DB_STORAGE=:memory:`) — not independently verified against
+current config code, treat as unconfirmed.
 
 ### `client/.env`
 
@@ -374,6 +377,14 @@ cd client && npm run dev            # next dev           → http://localhost:30
 **3000** (`next dev`, and `playwright.config.ts` `baseURL`). The previous README claimed 3000/3001 —
 that is wrong for this tree; `next.config.js` additionally whitelists remote images from **:5300**.
 
+### Default superadmin credentials
+
+Running `npm run setup` creates a super-admin user with these credentials:
+- **Email:** `admin@admin.com`
+- **Password:** `123456` (not `admin` — this was previously documented incorrectly)
+
+Use these to log in to the admin dashboard at `/admin`. The `npm run create-admin` and `npm run assign-admin-role` commands are **broken** (see §11 item 1-2) — `npm run setup` is the only working path to bootstrap a superadmin.
+
 ### Available scripts
 
 | Package | Script | Effect |
@@ -392,7 +403,8 @@ that is wrong for this tree; `next.config.js` additionally whitelists remote ima
 * **Client (Playwright, 10 specs):** `cd client && npx playwright test` (headless),
   `npx playwright test --ui`, `npx playwright show-report`. Specs: `auth`, `home`, `shop`,
   `packages`, `permissions`, `promotions`, `returns`, `roles`, `shipping`, `users` — all driven by
-  API mocks in `client/tests/mocks.ts`, so a running backend is not required. See `client/TESTING.md`.
+  API mocks in `client/tests/mocks.ts`, so a running backend is not required. Requires
+  `npx playwright install --with-deps` once (Chromium/Firefox/WebKit) before first run.
 * **Server (bun, 5 files):** `store.service.test.ts`, `store.service.spec.ts`,
   `src/tests/services/shop.service.test.ts`, `utils/customError.test.ts`, `routes/user.route.spec.ts`
   → `cd server && npm test` (or `bun test`).
@@ -401,26 +413,22 @@ that is wrong for this tree; `next.config.js` additionally whitelists remote ima
 
 ## 8. Documentation index (what to believe, and what not)
 
+Per Founder direction, every other markdown doc in the repo (root-level trackers/plans/setup guides,
+plus the `client/`, `server/`, `.jules/` and per-component READMEs) was deleted in a repo-wide cleanup —
+this file is now the **only** documentation file in the tree besides the template-level `AGENTS.md`/
+`CLAUDE.md`. Anything true and still useful from the deleted files was verified against source and
+folded in above (superadmin credentials in §7, permission-system reference and theming in §5.5, public
+API endpoint list in §5.3); anything false (e.g. the old `admin@admin.com`/`admin` password claim) or
+redundant was dropped rather than preserved. The still-open item from `PRODUCTION_PLAN.md`/
+`ENDPOINT_TRACKER.md` (~17 unverified endpoint rows) lives in
+`.claude/company/sprints/current/grooming-report.md`, pending Founder approval — not lost, just moved.
+
 | File | Status | What it is |
 |---|---|---|
 | `README.md` | ✅ authoritative | This document |
 | `AGENTS.md` | ⚠️ template-level | Agent/engineering rules for the *template*; several stack claims do not match this tree (§10) |
 | `CLAUDE.md` | ⚠️ template-level | Agent roster + feature/endpoint tables; useful as intent, verify paths before trusting |
 | `.claude/docs/CONVENTIONS.md` | ✅ policy | The binding coding standard for agent-assisted changes (20 KB) |
-| `DATA_CONTRACT.md` | ✅ useful | Explains the client↔server contract philosophy and the service-layer mapping approach |
-| `PRODUCTION_PLAN.md` | ⚠️ historical | Audit of 14 contract bugs found + how each was fixed. Valuable history, but it is a past-sprint changelog, not current state |
-| `ADMIN_SETUP.md` | ⚠️ partly stale | Admin credentials, RBAC + navigation model. Documents `npm run create-admin`, which is broken (§11) |
-| `PAYPAL_SETUP.md` | ✅ useful | PayPal env vars, developer-dashboard steps, endpoint list, go-live checklist |
-| `ENDPOINT_TRACKER.md` | ⚠️ stale notes | Manually ticked endpoint checklist with per-endpoint response types. Paths use the *BFF* prefix (`/api/user/auth/…`), not the Express prefix (`/api/auth/…`) |
-| `PAGE_DATA_TRACKER.md` | ⚠️ stale notes | Which page consumes which interface; written by an agent, partly malformed |
-| `API-Endpoint-Testing-Documentation.md` | ⚠️ unverified | Its own opening note says endpoints were never tested live (Postgres refused connections in that sandbox). The `[x]` ticks were written by `check-routes.js` scanning source, not by running tests |
-| `client/PAGE_INTERFACE_ROADMAP.md` | ⚠️ corrupted | A `sed` script replaced every `- [ ]` with the literal string `pattern applied`; hard to read now |
-| `client/TESTING.md` | ✅ useful | Playwright install/run instructions, spec inventory, mock explanation |
-| `client/TEST_SCENARIOS.md` | ✅ useful | Manual/QA scenario list per page |
-| `client/PUBLIC_API_ENDPOINTS.md` | ✅ useful | Contract spec for the anonymous storefront endpoints |
-| `README_SUBMISSION.md` | ❌ delete | A submitter's "what I did / what is missing" note — superseded, see §9.1 |
-| `ENHANCEMENT_SUMMARY.md` | ❌ move | Changelog of the **agent-team package**, not of this app — see §9.4 |
-| `generate_api_test_script.md` | ❌ delete | A prompt-style guide that generated the throwaway `test_all_apis.js` — see §9.1 |
 
 ## 9. File inventory: what to keep, what to delete
 
@@ -505,13 +513,13 @@ new readers (wrong ports, wrong route prefixes, "couldn't be tested" caveats). R
 
 | Path | Recommendation |
 |---|---|
-| `API-Endpoint-Testing-Documentation.md` | **Delete or date-stamp.** Its checkboxes were machine-written by `check-routes.js` from source scanning, and its own intro admits no live testing happened |
-| `PAGE_DATA_TRACKER.md` | **Delete** once §5.5/§5.6 here is trusted — it is a half-finished agent work-queue |
-| `ENDPOINT_TRACKER.md` | **Keep only if genuinely maintained**; otherwise delete. It is the only per-endpoint response-type inventory besides the Swagger schema |
-| `PRODUCTION_PLAN.md` | **Archive** (e.g. `docs/history/`): excellent history of the contract-alignment sprint, misleading as current status |
-| `client/PAGE_INTERFACE_ROADMAP.md` | **Delete** — already corrupted by `update-roadmap.sh` (every unchecked box became the literal text `pattern applied`) |
-| `client/TEST_SCENARIOS.md` | **Keep** — the only human-readable QA plan |
-| `ENHANCEMENT_SUMMARY.md` | **Move** next to the agent tooling (e.g. `.claude/`): it is the changelog of the *agent-team package*, not of this e-commerce app |
+| `API-Endpoint-Testing-Documentation.md` | **Deleted.** Its checkboxes were machine-written by `check-routes.js` from source scanning, and its own intro admitted no live testing happened |
+| `PAGE_DATA_TRACKER.md` | **Deleted** — §5.5/§5.6 above are the trusted replacement; it was a half-finished agent work-queue |
+| `ENDPOINT_TRACKER.md` | **Deleted** in the follow-up Founder-directed doc cleanup; its still-open ~17-row verification is captured in `.claude/company/sprints/current/grooming-report.md`, not lost |
+| `PRODUCTION_PLAN.md` | **Deleted** in the same pass — its still-open content is likewise captured in `grooming-report.md` |
+| `client/PAGE_INTERFACE_ROADMAP.md` | **Deleted** — already corrupted by `update-roadmap.sh` (every unchecked box became the literal text `pattern applied`), nothing worth recovering |
+| `client/TEST_SCENARIOS.md` | **Deleted** per Founder direction (keep only this README) — its per-page scenarios were not verified against current UI behavior before deletion, so nothing was folded in rather than risk preserving stale QA claims |
+| `ENHANCEMENT_SUMMARY.md` | **Deleted** — it was the changelog of the *agent-team package*, not of this e-commerce app; wrong scope for this repo |
 
 ### 9.5 🟡 Orphaned code — real code, but nothing uses it
 
@@ -547,9 +555,14 @@ lockfile), `client/tsconfig.json`, `server/tsconfig.json`, `client/next.config.j
 `client/playwright.config.ts`, `client/.eslintrc.js`, `.gitignore`.
 Generated-but-served: `server/src/routes/swaggerSchema/**` (the spec behind `/api-docs`).
 Tooling/workflow: `.claude/**`, `AGENTS.md`, `CLAUDE.md`, `.devcontainer/`, `.vscode/launch.json`,
-`.jules/bolt.md`, `scripts/whats-next.mjs`, `repomix.config.json`, `.mcp.json`.
-Docs worth keeping: `client/README.md`, `client/TESTING.md`, `client/TEST_SCENARIOS.md`,
-`client/PUBLIC_API_ENDPOINTS.md`, `ADMIN_SETUP.md`, `PAYPAL_SETUP.md`, `DATA_CONTRACT.md`.
+`scripts/whats-next.mjs`, `repomix.config.json`, `.mcp.json`.
+Docs: **none besides this file** — `client/README.md` (generic `create-next-app` boilerplate),
+`client/TESTING.md`, `client/PUBLIC_API_ENDPOINTS.md`, `ADMIN_SETUP.md`, `PAYPAL_SETUP.md`,
+`DATA_CONTRACT.md`, `server/README.md` (one-line template stub), `.jules/bolt.md`,
+`client/src/components/permissions/README.md`, `client/styles/README.md` (described a `theme-config.css`
+system that doesn't exist in this tree — false, dropped), and `client/styles/scss/README.md` were all
+deleted per Founder direction; anything true and non-duplicate from them is folded into §5.3/§5.5/§7
+above.
 Optional-but-intentional: `server/benchmarks/**`, `server/src/benchmarks/**`.
 
 ### 9.8 The cleanup command (review first — it deletes, it does not move to a bin)
@@ -680,8 +693,10 @@ All of the following is verifiable in the tree; none of it was "fixed" during th
    * Fix: capture the buffer globally with
      `express.json({ verify: (req, _res, buf) => { (req as any).rawBody = buf } })`, or mount a
      `express.raw()` webhook route **before** `express.json()`. Verify with a Stripe CLI replay.
-7. Default credentials exist and are documented (`ADMIN_SETUP.md`: `admin@admin.com` / `admin`;
-   `server/testing.py`: `admin@store.com` / `admin123`). Rotate and remove the test script (§9.2).
+7. Default credentials exist and are documented. The Super Admin created by `npm run setup` is
+   `admin@admin.com` / `123456` (NOT `admin` — `ADMIN_SETUP.md` documents this incorrectly).
+   The test script `server/testing.py` also embeds hardcoded credentials (`admin@store.com` / `admin123`).
+   Rotate both and remove the test script (§9.2).
 8. No CSRF token strategy for cookie-authenticated writes; `sameSite: 'strict'` is the only
    mitigation. `helmet()` is enabled, but CSP is explicitly **disabled in development**
    (`contentSecurityPolicy: false`) and left at helmet's default in production rather than configured.
