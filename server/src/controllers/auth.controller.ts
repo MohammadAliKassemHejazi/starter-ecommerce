@@ -30,7 +30,7 @@ export const handleLogin = async (request: IAuthLoginBodyRequest, response: Resp
 export const handleRegister = async (request: IAuthRegisterBodyRequest, response: Response, next: any): Promise<void> => {
   const { email, password, name, address, phone } = request.body;
   try {
-    const user: IUserAttributes = await userService.createUser({
+    const user: Omit<IUserAttributes, 'password'> = await userService.createUser({
       email,
       password,
       name,

@@ -10,11 +10,17 @@ import { usePageData } from "@/hooks/usePageData";
 const UsersGrid = () => {
   const dispatch = useAppDispatch();
   const users = useSelector(usersSelector);
-  const { isSuperAdmin, loading } = usePageData({ loadUserPackage: true });
+  const { isSuperAdmin, loading, isAuthenticated, isAuthenticating } = usePageData({ loadUserPackage: true });
 
   useEffect(() => {
-    dispatch(fetchUsersByCreator());
-  }, [dispatch]);
+    // Guard against firing this request before the app-level session restore
+    // (pages/_app.tsx) has registered the Authorization header — child effects
+    // commit before the parent's, so an unguarded dispatch here races ahead of
+    // the auth token and gets a 401, leaving the list empty ("No users found").
+    if (!isAuthenticating && isAuthenticated) {
+      dispatch(fetchUsersByCreator());
+    }
+  }, [dispatch, isAuthenticating, isAuthenticated]);
 
   const handleDeleteUser = async (id: string) => {
     await dispatch(deleteUser(id));

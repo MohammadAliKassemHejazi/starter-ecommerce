@@ -3,9 +3,10 @@ import { IUserAttributes } from '../interfaces/types/models/user.model.types';
 import customError from '../utils/customError';
 import userErrors from '../utils/errors/user.errors';
 
-export const fetchUsersByCreator = async (creatorId: string): Promise<IUserAttributes[]> => {
+export const fetchUsersByCreator = async (creatorId: string): Promise<Omit<IUserAttributes, 'password'>[]> => {
   const users = await db.User.findAll({
     where: { createdById: creatorId },
+    attributes: { exclude: ['password'] },
     include: [
       {
         model: db.Role,
@@ -22,13 +23,14 @@ export const fetchUsersByCreator = async (creatorId: string): Promise<IUserAttri
   return users;
 };
 
-export const createUser = async (data: { name: string; email: string; password: string }): Promise<IUserAttributes> => {
+export const createUser = async (data: { name: string; email: string; password: string }): Promise<Omit<IUserAttributes, 'password'>> => {
   const { name, email, password } = data;
   const user = await db.User.create({ name, email, password });
-  return user;
+  const { password: _password, ...safeUser } = user.get({ plain: true }) as IUserAttributes;
+  return safeUser;
 };
 
-export const updateUser = async (id: string, data: { name?: string; email?: string; phone?: string; address?: string; bio?: string }): Promise<IUserAttributes> => {
+export const updateUser = async (id: string, data: { name?: string; email?: string; phone?: string; address?: string; bio?: string }): Promise<Omit<IUserAttributes, 'password'>> => {
   const user = await db.User.findByPk(id);
   if (!user) {
     throw customError(userErrors.UserNotFound);
@@ -41,7 +43,8 @@ export const updateUser = async (id: string, data: { name?: string; email?: stri
   if (data.bio !== undefined) user.bio = data.bio;
 
   await user.save();
-  return user;
+  const { password: _password, ...safeUser } = user.get({ plain: true }) as IUserAttributes;
+  return safeUser;
 };
 
 export const deleteUser = async (id: string): Promise<void> => {

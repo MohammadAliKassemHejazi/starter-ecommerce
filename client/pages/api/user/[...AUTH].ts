@@ -29,9 +29,9 @@ const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Forward to real backend
     const response = await httpClient.post(`/auth/login`, req.body);
-  const { accessToken, ...userData } = response.data.data;
+    const { accessToken, ...userData } = response.data.data;
 
-    // Set HTTP-only cookie
+    // Set HTTP-only cookie (used by SSR calls via setAuthHeaders)
     setCookie(res, ACCESS_TOKEN_KEY, accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
@@ -39,11 +39,18 @@ const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
       path: "/",
     });
 
-    // Return user data (without token)
-    res.status(200).json(userData);
+    // Return the standard { success, message, data } envelope with accessToken
+    // included in data — the frontend auth thunk (userSlice.signIn) and the
+    // SignInResponse/IAuthUser shared type both expect accessToken in data,
+    // since the client also keeps a bearer token for the Axios interceptor.
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: { accessToken, ...userData },
+    });
   } catch (error: any) {
     console.error("Sign-in error:", error.response?.data || error.message);
-    res.status(401).json({ error: "Invalid credentials" });
+    res.status(401).json({ success: false, message: "Invalid credentials", data: null });
   }
 };
 

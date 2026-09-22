@@ -79,7 +79,7 @@ const mapUserResponseObject = async (userId: string, user: IUserAttributes, acce
   return response;
 };
 
-export const createUser = async (data: IUserAttributes): Promise<IUserAttributes> => {
+export const createUser = async (data: IUserAttributes): Promise<Omit<IUserAttributes, 'password'>> => {
   data.password = passwordHashing(data.password);
 
   // Find admin user to set as createdByUser
@@ -91,7 +91,7 @@ export const createUser = async (data: IUserAttributes): Promise<IUserAttributes
     data.createdById = adminUser.id;
   }
 
-  const user: IUserAttributes = await db.User.create(data);
+  const user = await db.User.create(data);
 
   // Assign default free package to new user
   const freePackage = await db.Package.findOne({
@@ -107,7 +107,8 @@ export const createUser = async (data: IUserAttributes): Promise<IUserAttributes
     });
   }
 
-  return user;
+  const { password: _password, ...safeUser } = user.get({ plain: true }) as IUserAttributes;
+  return safeUser;
 };
 
 export const userLogin = async (email: string, password: string): Promise<IAuthUser> => {
