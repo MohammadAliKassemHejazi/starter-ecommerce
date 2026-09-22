@@ -1,0 +1,76 @@
+# Local development stack for the multi-vendor e-commerce platform.
+# Not for production use (see server/Dockerfile and client/Dockerfile).
+#
+# Quick start:
+#   docker compose up -d postgres
+#   docker compose run --rm server npm run setup   # first-time DB setup/seed (manual, see note below)
+#   docker compose up -d
+#
+# server/.env is generated separately (gitignored, not part of this file) —
+# see the repo README's "Environment variables" section for the full list.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      # LOCAL-DEV-ONLY credential: throwaway, container-internal password.
+      # Never reused for any real environment or secret.
+      POSTGRES_PASSWORD: devlocal_only_not_a_real_secret
+      POSTGRES_DB: ecommerce_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  server:
+    build:
+      context: ./server
+    env_file:
+      - ./server/.env
+    environment:
+      # Overrides env_file: the app connects to the compose service name,
+      # not localhost, when running inside the docker network.
+      DB_HOST: postgres
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  client:
+    build:
+      context: ./client
+    environment:
+      # Non-secret, public Next.js build-time vars — safe to inline here.
+      NEXT_PUBLIC_BASE_URL_API: http://localhost:3000/api
+      NEXT_PUBLIC_BASE_URL_Images: http://localhost:3000
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:
+
+# NOTE on `npm run setup` (DB migrate/seed):
+# Chosen as a MANUAL step (`docker compose run --rm server npm run setup`),
+# not an automatic on-boot command, because:
+#   1. Auto-running it in the server service's CMD/entrypoint would re-run
+#      seedData() on every container restart, not just first boot — risky
+#      against a dev DB that already has real-looking data (live-data
+#      safety guardrail).
+#   2. A reliable "first boot only" auto-run needs a marker-file/entrypoint
+#      script; keeping it manual is simpler and safer for now. Revisit if
+#      onboarding friction becomes a real problem.
