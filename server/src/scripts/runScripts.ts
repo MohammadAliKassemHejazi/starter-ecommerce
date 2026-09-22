@@ -5,8 +5,10 @@ const runScripts = async () => {
   try {
     console.log('Starting database scripts...');
 
-    // Sync database (optional: { force: true } will drop tables)
-    // await db.sequelize.sync({ alter: true });
+    // Sync database: creates missing tables. Intentionally NOT using
+    // { alter: true } / { force: true } — those mutate/drop existing
+    // schema and are unsafe to run unattended against a shared DB.
+    await db.sequelize.sync();
 
     // Run main seed data script (contains all logic)
     await seedData();
