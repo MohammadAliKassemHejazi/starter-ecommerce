@@ -33,3 +33,12 @@ server/127.0.0.1
 
 # Tool-generated backups
 *.graphify-bak
+
+# Claude Code specialist worktrees (transient runtime state, not repo content —
+# each has its own .git worktree link to an absolute local path)
+.claude/worktrees/
+
+# Installer-proposed graphify skill directory — unreviewed, pending Founder
+# approval per guardrail 8 (external tool boundaries). See
+# .claude/setup/.snapshots/ and RESUME-POINT.md for the pending decision.
+.claude/skills/graphify/
