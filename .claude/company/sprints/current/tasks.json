@@ -8,17 +8,17 @@
   },
   {
     "id": "TASK-02",
-    "description": "Verify + remove dead client-side source files. VERIFICATION DONE (21 files independently grep-confirmed dead by frontend-dev, incl. barrel/re-export chain checks; tsc clean in its isolated worktree). BLOCKED in main checkout: same sandbox classifier block as TASK-03. Founder must grant the Bash permission rule or delete the 21 files manually (full list in daily-log.md).",
+    "description": "Verify + remove dead client-side source files. DONE: retried git rm on the 21 confirmed-dead files, no sandbox block this time (prior block was transient/session-specific, not persistent). Deleted, staged, tsc --noEmit clean in main checkout.",
     "target_files": ["client/src/components/**", "client/src/utils/**", "client/src/services/**", "client/src/hooks/**", "client/src/interfaces/**", "client/src/mocks/**"],
     "verify_cmd": "cd client && npx tsc --noEmit",
-    "status": "blocked_needs_founder_permission"
+    "status": "done"
   },
   {
     "id": "TASK-03",
-    "description": "Verify + remove dead server-side source files from graphify candidate list. VERIFICATION DONE (5 files independently confirmed dead by backend-node + team-lead grep re-check: cache.middleware.ts, errorHandler.middleware.ts, permissions.service.ts, record.service.ts, tenantService.service.ts). Deletion executed successfully in the specialist's isolated worktree (tsc clean there) but BLOCKED in the main checkout: Claude Code's own sandbox auto-mode classifier refuses `git rm` on these paths as 'Irreversible Local Destruction', independent of this repo's own hooks. Needs Founder to either grant the Bash permission rule or delete these 5 files manually (list above) via their own git client.",
+    "description": "Verify + remove dead server-side source files from graphify candidate list. DONE: retried git rm on the 5 confirmed-dead files (cache.middleware.ts, errorHandler.middleware.ts, permissions.service.ts, record.service.ts, tenantService.service.ts), no sandbox block this time. Deleted, staged, tsc --noEmit clean in main checkout (required npm install first, node_modules was missing).",
     "target_files": ["server/src/middlewares/**", "server/src/services/**", "server/src/utils/**"],
     "verify_cmd": "cd server && npx tsc --noEmit",
-    "status": "blocked_needs_founder_permission"
+    "status": "done"
   },
   {
     "id": "TASK-04",
